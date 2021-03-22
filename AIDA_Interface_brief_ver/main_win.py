@@ -209,7 +209,12 @@ class MainWindow(QWidget):
 
 
 if __name__ == '__main__':
+    print('test')
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
     app.exec_()
+
+
+
+
