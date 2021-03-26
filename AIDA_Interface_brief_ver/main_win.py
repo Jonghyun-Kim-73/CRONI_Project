@@ -4,6 +4,10 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
+class StatusPanel(QListWidget):
+    def __init__(self):
+        super(StatusPanel, self).__init__()
+
 
 class AlarmPanel(QListWidget):
     def __init__(self):
@@ -181,12 +185,15 @@ class MainWindow(QWidget):
 
         # --------------------------------------------------------------------------------------------------------------
         # Alarm panel
+        self.status_panel = StatusPanel()
         self.alarm_panel = AlarmPanel()
         self.alarm_procedure_panel = AlarmProcedurePanel()
         self.alarm_reason_panel = AlarmReasonPanel()
         self.alarm_result_panel = AlarmResultPanel()
         self.alarm_auto_action_panel = AlarmActionPanel()
         # --------------------------------------------------------------------------------------------------------------
+        main_window_layout.addWidget(QLabel('Status Panel'))
+        main_window_layout.addWidget(self.status_panel)
         main_window_layout.addWidget(QLabel('Alarm Panel'))
         main_window_layout.addWidget(self.alarm_panel)
         main_window_layout.addWidget(QLabel('Alarm Suggested Procedure Panel'))
@@ -208,8 +215,8 @@ class MainWindow(QWidget):
         self.alarm_auto_action_panel.update()
 
 
+
 if __name__ == '__main__':
-    print('test')
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
