@@ -5,6 +5,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from AIDA_Interface_brief_ver.main_title_bar import MainTitleBar
+from AIDA_Interface_brief_ver.main_left_alarm_area import MainLeftAlarmArea
+
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -21,7 +23,7 @@ class Mainwindow(QWidget):
         super(Mainwindow, self).__init__()
         self.top_window = parnet
         # --------------------------------------------------------------------------------------------------------------
-        self.setGeometry(300, 300, 800, 700)    # initial window size
+        self.setGeometry(300, 300, 1200, 700)    # initial window size
         self.setStyleSheet(self.qss)
         self.setObjectName('MainWin')
 
@@ -32,25 +34,30 @@ class Mainwindow(QWidget):
         self.setMask(mask)
         # Main 프레임 특징 정의
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)   # 프레임 날리고 | 창은 항상 위
-        self.setWindowOpacity(0.95)                                              # 프레임 투명도
+        self.setWindowOpacity(0.95)                                             # 프레임 투명도
 
         # 레이아웃과 타이틀바 위젯 생성
-        window_vbox = QVBoxLayout(self)
+        window_vbox = QVBoxLayout()
         window_vbox.setContentsMargins(0, 0, 0, 0)
-
+        window_vbox.setSpacing(0)
         titlebar_widget = MainTitleBar(self)
 
-        content_vbox = QVBoxLayout()
-        content_vbox.setContentsMargins(0, 0, 0, 0)
-
-        # 타이틀바와 컨텐츠 박스 안의 내용물을 생성
-        content_textedit = QTextEdit()
+        # 1] 하단 섹션
+        content_hbox = QHBoxLayout()
+        content_hbox.setContentsMargins(0, 0, 0, 0)
+        content_hbox.setSpacing(0)
+        # 1.1] 왼족 알람 섹션
+        alarm_area = MainLeftAlarmArea(self)
 
         # 각 항목을 레이아웃에 배치
-        content_vbox.addWidget(content_textedit)
+        content_hbox.addWidget(alarm_area)
+        content_hbox.addWidget(QLabel('Empty'))
 
         window_vbox.addWidget(titlebar_widget)
-        window_vbox.addLayout(content_vbox)
+        window_vbox.addLayout(content_hbox)
+
+        self.setLayout(window_vbox)
+        self.setContentsMargins(0, 0, 0, 0)
 
 
 if __name__ == '__main__':

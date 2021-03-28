@@ -56,6 +56,7 @@ class MainTitleBar(QWidget):
         label.setFixedWidth(70)
 
         widget1 = TimeBar(self, load_realtime=True)
+        widget1.setFixedHeight(self.bar_height)
         widget1.setFixedWidth(200)
 
         label2 = ConditionBar(self)
@@ -146,6 +147,12 @@ class TimeBar(QWidget):
 
         self.setLayout(layout)
 
+        # timer section
+        timer = QTimer(self)
+        timer.setInterval(1000)
+        timer.timeout.connect(self.dis_update)
+        timer.start()
+
     def dis_update(self):
         """ 타이머 디스플레이 업데이트 """
         if self.load_realtime:
@@ -163,7 +170,6 @@ class ConditionBar(QLabel):
             background: rgb(62, 74, 84);
             border-radius: 6px;
             font: bold 14px;
-            text-align:center;
             color: rgb(255, 255, 255);
             padding: 4px 4px;
         }
