@@ -99,16 +99,15 @@ class MainTitleBar(QWidget):
         if event.button() == Qt.LeftButton:
             self.parent.is_moving = True
             self.parent.offset = event.pos()
+        else:
+            self.parent.is_moving = False
 
     def mouseMoveEvent(self, event):
         """오버로딩: 마우스 이동 이벤트
         - 제목 표시줄 드래그시 창 이동
         """
-        try:
-            if self.parent.is_moving:
-                self.parent.move(event.globalPos() - self.parent.offset)
-        except:
-            pass
+        if self.parent.is_moving:
+            self.parent.move(event.globalPos() - self.parent.offset)
 
 
 class TimeBar(QWidget):
