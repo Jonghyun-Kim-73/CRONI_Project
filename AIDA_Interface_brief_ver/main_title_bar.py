@@ -25,20 +25,21 @@ class MainTitleBar(QWidget):
         }
           
         QPushButton {
-            background: rgb(189, 64, 82);
+            background: rgb(248, 108, 107);
             border-radius: 6px;
             border: none;
         }
         QPushButton:hover {
-            background: rgb(189, 64, 82);
+            background: rgb(248, 108, 107);
         }
         QPushButton:pressed {
             background: rgb(220, 152, 162);
         }
     """
+
     def __init__(self, parent=None):
         super(MainTitleBar, self).__init__()
-        self.setAttribute(Qt.WA_StyledBackground, True)     # 상위 스타일 상속
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
 
         self.bar_height = 30
         self.parent = parent
@@ -129,7 +130,7 @@ class TimeBar(QWidget):
         super(TimeBar, self).__init__()
         self.parent = parent
         self.load_realtime = load_realtime
-        self.setAttribute(Qt.WA_StyledBackground, True)     # 상위 스타일 상속
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
 
         self.setObjectName('TimeBar')
         self.setStyleSheet(self.qss)
@@ -177,10 +178,10 @@ class ConditionBar(QLabel):
             background: rgb(96, 186, 70);
         }
         QLabel#ConditionBar[Condition="Emergency"] {
-            background: rgb(189, 64, 82);
+            background: rgb(248, 108, 107);
         }
         QLabel#ConditionBar[Condition="Abnormal"] {
-            background: rgb(214, 150, 90);
+            background: rgb(255, 193, 7);
         }
         
     """
@@ -189,7 +190,7 @@ class ConditionBar(QLabel):
         super(ConditionBar, self).__init__()
         self.parent = parent
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter) # 텍스트 정렬
+        self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
 
         self.setObjectName('ConditionBar')
         self.setStyleSheet(self.qss)
