@@ -104,10 +104,11 @@ class AlarmTable(QTableWidget):
         criteria_id = db.loc[alarm_id, "criteria_id"]
 
         item_1 = AlarmItemTimer(self)                                         # item 인스턴스 생성
-        item_2 = AlarmItemInfo(self, str(alarm_name_))
-        item_3 = AlarmItemInfo(self, str(criteria))
+        item_2 = AlarmItemInfo(self, alarm_info = str(alarm_name_))
+        item_3 = AlarmItemInfo(self, alarm_info = str(criteria))
         item_4 = AlarmItemInfo(self, '0')
-        item_5 = AlarmItemCondition(self, urgent=urgent, blink=True)          # item 인스턴스 생성
+        item_5 = AlarmItemCondition(self, alarm_info = str(alarm_name_),
+                                    urgent=urgent, blink=True)                # item 인스턴스 생성
 
         self.setCellWidget(row_, 0, item_1)
         self.setCellWidget(row_, 1, item_2)
@@ -138,7 +139,7 @@ class AlarmItemInfo(QLabel):
         }
     """
 
-    def __init__(self, parent, alarm_name):
+    def __init__(self, parent, alarm_info):
         super(AlarmItemInfo, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.parent = parent
@@ -146,7 +147,7 @@ class AlarmItemInfo(QLabel):
         self.setStyleSheet(self.qss)
         self.setObjectName('AlarmItemInfo')
 
-        self.dis_update(alarm_name)
+        self.dis_update(alarm_info)
 
     def dis_update(self, alarm_name):
         """ 알람 정보 디스플레이 업데이트 """
@@ -226,14 +227,17 @@ class AlarmItemCondition(QLabel):
         }
     """
 
-    def __init__(self, parent, urgent=False, blink=False, blink_time=500):
+    def __init__(self, parent, alarm_info, urgent=False, blink=False, blink_time=500):
         super(AlarmItemCondition, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.parent = parent
+        self.procedure_area = self.parent.parent.parent.procedure_area
 
         self.setStyleSheet(self.qss)
         self.setObjectName('AlarmItemCondition')
 
+        # procedure area 로 넘겨서 알람의 정보에 대한 절차서 찾을수 있는 힌트 제공
+        self.alarm_info = alarm_info
         self.setProperty("Urgent", urgent)
         if blink:
             self.setProperty("Blink", True)
@@ -249,3 +253,16 @@ class AlarmItemCondition(QLabel):
         else:
             self.setProperty("Blink", True)
         self.setStyleSheet(self.qss)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            if self.procedure_area.fold_cond is False:
+                """ 경보 절차서 디스플레이가 접힌 상태로 클릭시 펼쳐짐 """
+                # procedure area 로 넘겨서 알람의 정보에 대한 절차서 찾을수 있는 힌트 제공
+                self.procedure_area.run_fold(self, True, self.alarm_info)
+            else:
+                """ 경보 절차서가 펼쳐진 상태에 동일 알람 눌러야 꺼짐 아니면 내용만 업데이트"""
+                if self == self.procedure_area.who_clicked:
+                    self.procedure_area.run_fold(self, False, self.alarm_info)
+                else:
+                    self.procedure_area.run_update_info(self, self.alarm_info)
