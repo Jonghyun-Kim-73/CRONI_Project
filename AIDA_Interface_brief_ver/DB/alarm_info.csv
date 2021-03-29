@@ -1,0 +1,3 @@
+﻿alarm_id,alarm_name,criteria,criteria_id
+0,가압기 온도 초과,100,KLAMPO1
+1,가압기 압력 초과,200,KLAMPO2
