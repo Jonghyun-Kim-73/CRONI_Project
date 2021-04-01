@@ -14,7 +14,10 @@ class MainLeftAlarmArea(QWidget):
     """ 왼쪽 알람 디스플레이 위젯 """
     qss = """
         QWidget {
-            background: rgb(14, 22, 24);
+            background: rgb(14, 22, 24);  
+        }
+        QPushButton {
+            background: rgb(255, 255, 255);          
         }
     """
 
@@ -28,14 +31,31 @@ class MainLeftAlarmArea(QWidget):
         self.setMaximumWidth(int(self.parent.width()/5) * 2)                          # 1/3 부분을 차지
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
-        layout = QHBoxLayout(self)
+        layout = QVBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)
 
         alarm_table_wid = AlarmTable(self)
+        # self.alram_reset_btn()
 
         layout.addWidget(alarm_table_wid)
-        self.setLayout(layout)
 
+        # layout1 = QHBoxLayout(self)
+
+        self.Reset = QPushButton('Reset')
+        # print(self.Reset)
+        layout.addWidget(self.Reset)
+
+        self.History = QPushButton('History')
+        layout.addWidget(self.History)
+
+        self.setLayout(layout)
+    #
+    # def alram_reset_btn(self):
+    #     self.alram_reset_btn_1 = QPushButton('reset')
+    #     self.alram_reset_btn_1.clicked.connect(self.test1)
+    #
+    # def test1(self):
+    #     print('test1')
 
 class AlarmTable(QTableWidget):
     """ 알람 테이블 위젯 """
@@ -116,6 +136,17 @@ class AlarmTable(QTableWidget):
         self.setCellWidget(row_, 3, item_4)
         self.setCellWidget(row_, 4, item_5)
         pass
+
+class AlarmButton(QPushButton):
+    """알람 history 및 reset 버튼"""
+    qss = """
+        QPushbutton#History {
+            background: rgb(213, 213, 213);          
+        }
+         QPushbutton#AlarmButton {
+            background: rgb(246, 246, 246);         
+        }  
+    """
 
 
 class AlarmItemInfo(QLabel):
@@ -266,3 +297,4 @@ class AlarmItemCondition(QLabel):
                     self.procedure_area.run_fold(self, False, self.alarm_info)
                 else:
                     self.procedure_area.run_update_info(self, self.alarm_info)
+
