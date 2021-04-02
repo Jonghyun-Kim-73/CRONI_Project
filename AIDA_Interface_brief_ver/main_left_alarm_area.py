@@ -17,7 +17,11 @@ class MainLeftAlarmArea(QWidget):
             background: rgb(14, 22, 24);  
         }
         QPushButton {
-            background: rgb(255, 255, 255);          
+            background: rgb(62, 74, 84);
+            border-radius: 3px;
+            border: 2px inset rgb(62, 74, 84);
+            font: bold 12px;
+            color: rgb(255, 255, 255);          
         }
     """
 
@@ -41,21 +45,14 @@ class MainLeftAlarmArea(QWidget):
 
         # layout1 = QHBoxLayout(self)
 
-        self.Reset = QPushButton('Reset')
-        # print(self.Reset)
+        self.Reset = QPushButton('Update')
+        self.Reset.clicked.connect(self.test1)
         layout.addWidget(self.Reset)
 
-        self.History = QPushButton('History')
-        layout.addWidget(self.History)
-
         self.setLayout(layout)
-    #
-    # def alram_reset_btn(self):
-    #     self.alram_reset_btn_1 = QPushButton('reset')
-    #     self.alram_reset_btn_1.clicked.connect(self.test1)
-    #
-    # def test1(self):
-    #     print('test1')
+
+    def test1(self):
+        print('Alarm Update')
 
 class AlarmTable(QTableWidget):
     """ 알람 테이블 위젯 """
