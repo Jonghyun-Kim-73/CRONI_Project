@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 
 from AIDA_Interface_brief_ver.main_window import Mainwindow
 
+
 class StartPoint(QWidget):
     def __init__(self):
         super(StartPoint, self).__init__()
@@ -35,6 +36,7 @@ class StartPoint(QWidget):
             self.main_window.show()
         else:
             self.main_window = None
+
 
 if __name__ == '__main__':
     print('test')
