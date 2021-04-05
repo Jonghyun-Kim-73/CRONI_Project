@@ -6,6 +6,7 @@ from datetime import datetime
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtChart import *
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -135,6 +136,41 @@ class PrognosisArea(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.parent = parent
         self.setStyleSheet(self.qss)
+
+        self.prognosis_plot = PrognosisPlot(parent=self)
+
+        layer = QHBoxLayout()
+        layer.setContentsMargins(0, 0, 0, 0)# , 5, 5, 5)
+        layer.addWidget(QLabel('Prognosis Area'))
+        layer.addWidget(self.prognosis_plot)
+
+        self.setLayout(layer)
+
+
+class PrognosisPlot(QChartView):
+    def __init__(self, parent=None):
+        super(PrognosisPlot, self).__init__(parent)
+        self.parent = parent
+
+        self.series = QLineSeries()
+
+        chart = QChart()
+
+        chart.addSeries(self.series)
+        chart.createDefaultAxes()
+
+        self.setChart(chart)
+        self.setRenderHint(QPainter.Antialiasing)
+
+        self.chart().addSeries(self.series)
+
+        self.add_data()
+        chart.update()
+
+    def add_data(self):
+        self.series.append(0, 1)
+        self.series.append(10, 10)
+
 
 
 # ======================================================================================================================
