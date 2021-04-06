@@ -153,23 +153,47 @@ class PrognosisPlot(QChartView):
         self.parent = parent
 
         self.series = QLineSeries()
+        self.series.append(0, 0)
+        self.series.append(1, 10)
+        self.series.append(2, 20)
 
-        chart = QChart()
+        self.chart_area = QChart()
+        self.chart_area.legend().hide()
+        self.chart_area.addSeries(self.series)
+        
+        axisX = QValueAxis()
+        axisY = QValueAxis()
+        self.chart_area.addAxis(axisX, Qt.AlignBottom)
+        self.chart_area.addAxis(axisY, Qt.AlignRight)
+        self.series.attachAxis(axisX)
+        self.series.attachAxis(axisY)
+        self.chart_area.layout().setContentsMargins(0, 0, 0, 0)
 
-        chart.addSeries(self.series)
-        chart.createDefaultAxes()
-
-        self.setChart(chart)
+        self.setChart(self.chart_area)
         self.setRenderHint(QPainter.Antialiasing)
 
-        self.chart().addSeries(self.series)
+    def contextMenuEvent(self, event) -> None:
+        """ ChartArea 에 기능 올리기  """
+        menu = QMenu(self)
+        add_input = menu.addAction("Add input")
+        add_input.triggered.connect(self._add_input)
+        menu.exec_(event.globalPos())
 
-        self.add_data()
-        chart.update()
+    def _add_input(self):
+        print(self.series.__len__())
+        self.series.append(self.series.__len__(), (self.series.__len__() ** 2) * 10)
+        self._update_axis()
 
-    def add_data(self):
-        self.series.append(0, 1)
-        self.series.append(10, 10)
+    def _update_axis(self):
+        pvs = self.series.pointsVector()
+        dtStart = pvs[0]
+        dtEnd = pvs[-1]
+
+        ax = self.chart_area.axisX()
+        ax.setRange(dtStart.x(), dtEnd.x())
+
+        ay = self.chart_area.axisY()
+        ay.setRange(dtStart.y(), dtEnd.y())
 
 
 
