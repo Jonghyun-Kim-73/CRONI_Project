@@ -12,21 +12,17 @@ from AIDA_Interface_brief_ver.main_right_digprog_area import MainRightDiagnosisP
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
+from AIDA_Interface_brief_ver.Thmem_qss import qss
+
 
 class Mainwindow(QWidget):
     """메인 윈도우"""
-    qss = """
-        QWidget {
-            background: rgb(14, 22, 24);
-        }
-    """
-
     def __init__(self, parnet):
         super(Mainwindow, self).__init__()
         self.top_window = parnet
         # --------------------------------------------------------------------------------------------------------------
         self.setGeometry(300, 300, 1200, 700)    # initial window size
-        self.setStyleSheet(self.qss)
+        self.setStyleSheet(qss)
         self.setObjectName('MainWin')
 
         # Main 프레임 모양 정의
@@ -36,7 +32,7 @@ class Mainwindow(QWidget):
         self.setMask(mask)
         # Main 프레임 특징 정의
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)   # 프레임 날리고 | 창은 항상 위
-        self.setWindowOpacity(0.95)                                             # 프레임 투명도
+        self.setWindowOpacity(0.99)                                             # 프레임 투명도
 
         # 레이아웃과 타이틀바 위젯 생성
         window_vbox = QVBoxLayout()

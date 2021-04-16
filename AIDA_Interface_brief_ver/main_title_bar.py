@@ -11,32 +11,6 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 class MainTitleBar(QWidget):
     """제목 표시줄 위젯"""
-    qss = """
-        QWidget {
-            background: rgb(31, 39, 42);
-        }
-        
-        QLabel#TitleName{
-            background: rgb(62, 74, 84);
-            border-radius: 6px;
-            font: bold 14px;
-            color: rgb(255, 255, 255);
-            padding: 4px 4px;
-        }
-          
-        QPushButton {
-            background: rgb(248, 108, 107);
-            border-radius: 6px;
-            border: none;
-        }
-        QPushButton:hover {
-            background: rgb(248, 108, 107);
-        }
-        QPushButton:pressed {
-            background: rgb(220, 152, 162);
-        }
-    """
-
     def __init__(self, parent=None):
         super(MainTitleBar, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -44,14 +18,12 @@ class MainTitleBar(QWidget):
         self.bar_height = 30
         self.parent = parent
         self.has_clicked = False
-        self.setStyleSheet(self.qss)
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QHBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)
 
         label = QLabel("AIDAA")
-        label.setObjectName('TitleName')
         label.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
         label.setFixedHeight(self.bar_height)
         label.setFixedWidth(70)
@@ -65,12 +37,12 @@ class MainTitleBar(QWidget):
         label2.setFixedWidth(120)
 
         label3 = QLabel("APR-1400")
-        label3.setObjectName('TitleName')
         label3.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
         label3.setFixedHeight(self.bar_height)
         label3.setFixedWidth(150)
 
         btn_close = self.create_btn_with_image('close.png')
+        btn_close.setObjectName('Exit')
         btn_close.clicked.connect(self.close)
 
         # 타이틀에 들어가는 순서 (왼쪽부터 오른쪽 순으로) --------------------------------------------------------------------
@@ -112,35 +84,17 @@ class MainTitleBar(QWidget):
 
 
 class TimeBar(QWidget):
-    qss = """
-        QWidget#TimeBar {
-            background: rgb(31, 39, 42);
-        }
-        
-        QLabel#TimeBarLabel{
-            background: rgb(62, 74, 84);
-            border-radius: 6px;
-            font: bold 14px;
-            color: rgb(255, 255, 255);
-            padding: 4px 4px;
-        }
-    """
-
     def __init__(self, parent, load_realtime: bool = False):
         super(TimeBar, self).__init__()
         self.parent = parent
         self.load_realtime = load_realtime
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
 
-        self.setObjectName('TimeBar')
-        self.setStyleSheet(self.qss)
-
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
 
         self.timebarlabel = QLabel('test')
         self.timebarlabel.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
-        self.timebarlabel.setObjectName('TimeBarLabel')
         self.dis_update()
 
         layout.addWidget(self.timebarlabel)
@@ -165,27 +119,6 @@ class TimeBar(QWidget):
 
 
 class ConditionBar(QLabel):
-    qss = """
-        QLabel#ConditionBar {
-            background: rgb(62, 74, 84);
-            border-radius: 6px;
-            font: bold 14px;
-            color: rgb(255, 255, 255);
-            padding: 4px 4px;
-        }
-        
-        QLabel#ConditionBar[Condition="Normal"] {
-            background: rgb(96, 186, 70);
-        }
-        QLabel#ConditionBar[Condition="Emergency"] {
-            background: rgb(248, 108, 107);
-        }
-        QLabel#ConditionBar[Condition="Abnormal"] {
-            background: rgb(255, 193, 7);
-        }
-        
-    """
-
     def __init__(self, parent, init_condition: str = 'Normal'):
         super(ConditionBar, self).__init__()
         self.parent = parent
@@ -193,14 +126,12 @@ class ConditionBar(QLabel):
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
 
         self.setObjectName('ConditionBar')
-        self.setStyleSheet(self.qss)
-
         self.update_condition(init_condition)
 
     def update_condition(self, condition: str):
         self.setProperty("Condition", condition)
         self.setText(condition)
-        self.setStyleSheet(self.qss)
+        self.style().polish(self)
 
     def contextMenuEvent(self, event) -> None:
         """ Condition Bar 기능 테스트 """

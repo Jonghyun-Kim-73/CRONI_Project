@@ -28,8 +28,6 @@ class MainRightDiagnosisProgArea(QWidget):
         super(MainRightDiagnosisProgArea, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.parent = parent
-        self.setStyleSheet(self.qss)
-
         self.setMinimumHeight(self.parent.height() - 40)                              # 아래섹션의 기준 크기 <-
         # self.setMaximumWidth(int(self.parent.width()/5) * 2)                          # 1/3 부분을 차지
 
@@ -49,19 +47,11 @@ class MainRightDiagnosisProgArea(QWidget):
 
 
 class DiagnosisArea(QWidget):
-    qss = """
-            QWidget {
-                background: rgb(31, 39, 42);
-                border-radius: 6px;
-            }
-
-        """
-
     def __init__(self, parent=None):
         super(DiagnosisArea, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.parent = parent
-        self.setStyleSheet(self.qss)
+        # self.setObjectName('SubWin')
 
         self.setFixedHeight(int(self.parent.height() * 2 / 3))
 
@@ -79,18 +69,10 @@ class DiagnosisArea(QWidget):
 
 
 class DiagnosisAreaCanvases(QWidget):
-    qss = """
-        QWidget {
-            background: rgb(62, 74, 84);
-            border-radius: 6px;
-        }
-    """
-
     def __init__(self, parent=None):
         super(DiagnosisAreaCanvases, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.parent = parent
-        self.setStyleSheet(self.qss)
 
         for i in range(0, 4):
             for j in range(0, 4):
@@ -202,20 +184,12 @@ class PrognosisPlot(QChartView):
 
 
 class CircleProgress(QWidget):
-    qss = """
-        QLabel {
-            background: rgb(31, 39, 42);
-            border-radius: 6px;
-            color: rgb(255, 255, 255);
-        }
-    """
-
+    """ 원형 프로그래스 바 """
     def __init__(self, parent=None, x=0, y=0, w=30, h=30):
         super(CircleProgress, self).__init__(parent=parent)     # 부모 클래스 상속
-        # self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속 <- 독자적으로 사용 예정..
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속 <- 독자적으로 사용 예정..
         self.parent = parent
-        self.setStyleSheet(self.qss)
-        self.setObjectName('CircleProgress')
+        # self.setObjectName('CircleProgress')
 
         # set-up circle size
         self.setGeometry(x, y, w, h)
@@ -225,6 +199,7 @@ class CircleProgress(QWidget):
         # info & display
         self.percent = 0
         self.percent_label = QLabel(f'{self.percent} [%]')
+        self.parent.setObjectName('CircleProgress')
         self.percent_label.setFixedWidth(self.width() - 30)
         self.percent_label.setFixedHeight(20)
         self.percent_label.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)
@@ -248,7 +223,6 @@ class CircleProgress(QWidget):
             self.is_moved = True
         else:
             self.is_moved = False
-
 
         if event.button() == Qt.MiddleButton:
             self.percent = 0 if self.percent >= 100 else self.percent.__add__(5)

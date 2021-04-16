@@ -29,19 +29,20 @@ class MainLeftAlarmArea(QWidget):
         super(MainLeftAlarmArea, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.parent = parent
-        self.setStyleSheet(self.qss)
+        self.setObjectName('SubW')
+        # self.setStyleSheet(self.qss)
 
         self.setMinimumHeight(self.parent.height() - 40)                              # 아래섹션의 기준 크기 <-
         self.setMaximumWidth(int(self.parent.width()/5) * 2)                          # 1/3 부분을 차지
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setContentsMargins(15, 15, 15, 15)
 
-        alarm_table_wid = AlarmTable(self)
+        # alarm_table_wid = AlarmTable(self)
         # self.alram_reset_btn()
 
-        layout.addWidget(alarm_table_wid)
+        # layout.addWidget(alarm_table_wid)
 
         # layout1 = QHBoxLayout(self)
 
@@ -53,6 +54,7 @@ class MainLeftAlarmArea(QWidget):
 
     def test1(self):
         print('Alarm Update')
+
 
 class AlarmTable(QTableWidget):
     """ 알람 테이블 위젯 """
@@ -133,6 +135,7 @@ class AlarmTable(QTableWidget):
         self.setCellWidget(row_, 3, item_4)
         self.setCellWidget(row_, 4, item_5)
         pass
+
 
 class AlarmButton(QPushButton):
     """알람 history 및 reset 버튼"""
