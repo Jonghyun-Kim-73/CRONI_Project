@@ -47,7 +47,7 @@ class Mainwindow(QWidget):
         # 1.1] 왼족 알람 섹션
         self.alarm_area = MainLeftAlarmArea(self)
 
-        # 1.2] 가운데 경보 절차서 폴딩 섹션
+        # 1.2] 가운데 진단 영역
         self.procedure_area = MainCenterProcedureArea(self)
 
         # 1.3] 오른쪽 절차서 진단 및 예지 섹션
@@ -55,7 +55,7 @@ class Mainwindow(QWidget):
 
         # 각 항목을 레이아웃에 배치
         content_hbox.addWidget(self.alarm_area)
-        # content_hbox.addWidget(self.procedure_area)
+        content_hbox.addWidget(self.procedure_area)
         # content_hbox.addWidget(self.diagnosis_prog_area)
 
         window_vbox.addWidget(titlebar_widget)

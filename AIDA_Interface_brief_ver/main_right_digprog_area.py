@@ -372,3 +372,36 @@ class SlideButton(QWidget):
             painter.drawText(QRect(self.__pos_ball, 5, 20, 20), Qt.AlignCenter, 'Off')
 
         painter.end()
+
+
+
+
+    #     #
+    #     # self.fold_cond = False
+    #     # self.who_clicked = None
+    #     # self.setMaximumWidth(0)
+    #     #
+    #     # self.fold_time = 200
+    #     # self.fold_max_pos, self.fold_min_pos = 200, 0
+    #     #
+    #     # self.ani = QPropertyAnimation(self, b'maximumWidth')
+    #     # self.ani.setDuration(self.fold_time)
+    #
+    # def run_update_info(self, who, info):
+    #     self.who_clicked = who
+    #     self.label1.setText(info)
+    #     self.fold_cond = True
+    #
+    # def run_fold(self, who, fold, info):
+    #     self.who_clicked = who
+    #     if fold:
+    #         self.label1.setText(info)
+    #         self.ani.setStartValue(self.fold_min_pos)
+    #         self.ani.setEndValue(self.fold_max_pos)
+    #         self.ani.start()
+    #         self.fold_cond = True
+    #     else:
+    #         self.ani.setStartValue(self.fold_max_pos)
+    #         self.ani.setEndValue(self.fold_min_pos)
+    #         self.ani.start()
+    #         self.fold_cond = False

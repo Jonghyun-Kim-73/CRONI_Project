@@ -26,6 +26,7 @@ class MainTitleBar(QWidget):
         layout.setContentsMargins(5, 5, 5, 5)
 
         label = QLabel("AIDAA")
+        label.setObjectName('TitleLabel')
         label.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
         label.setFixedHeight(self.bar_height)
         label.setFixedWidth(70)
@@ -39,6 +40,7 @@ class MainTitleBar(QWidget):
         label2.setFixedWidth(120)
 
         label3 = QLabel("APR-1400")
+        label3.setObjectName('TitleLabel')
         label3.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
         label3.setFixedHeight(self.bar_height)
         label3.setFixedWidth(150)
@@ -96,6 +98,7 @@ class TimeBar(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
 
         self.timebarlabel = QLabel('test')
+        self.timebarlabel.setObjectName('TitleLabel')
         self.timebarlabel.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
         self.dis_update()
 

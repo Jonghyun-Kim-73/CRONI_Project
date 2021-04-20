@@ -11,65 +11,66 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 class MainCenterProcedureArea(QWidget):
-    """ 가운데 경보 절차서 디스플레이 위젯 """
-    qss = """
-        QWidget {
-            background: rgb(14, 22, 24);
-        }
-        QLabel {
-            background: rgb(31, 39, 42);
-            border-radius: 6px;
-            color: rgb(255, 255, 255);
-        }
-    """
+    """ 가운데 절차서 진단 디스플레이 위젯 """
 
     def __init__(self, parent=None):
-        super(MainCenterProcedureArea, self).__init__()
+        super(MainCenterProcedureArea, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.parent = parent
-        self.setStyleSheet(self.qss)
-
-        self.setMinimumHeight(self.parent.height() - 40)                              # 아래섹션의 기준 크기 <-
-        # self.setMaximumWidth(int(self.parent.width()/5) * 2)                          # 1/3 부분을 차지
+        self.setObjectName('SubW')
+        self.setMaximumWidth(int(self.parentWidget().width() / 5) * 2)  # 1/3 부분을 차지
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 5, 5, 5)                                         # 왼쪽 여백 고려 x
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
-        """
-        main_left_alarm_arae 의 하위 AlarmItemCondition 을 클릭하면 옆의 정보 받아서 업데이트됨.
-        """
-        self.label1 = QLabel('-')
+        # 1. 절차서 Table
+        procedure_label = QLabel('절차서 Area')
+        procedure_label.setMinimumHeight(30)
+        procedure_area = ProcedureArea(self)
 
-        layout.addWidget(self.label1)
+        # --------------------------------------------------------------------------------------------------------------
+        layout.addWidget(procedure_label)
+        layout.addWidget(procedure_area)
+
         self.setLayout(layout)
 
-        #
-        self.fold_cond = False
-        self.who_clicked = None
-        self.setMaximumWidth(0)
+class ProcedureArea(QWidget):
+    def __init__(self, parent):
+        super(ProcedureArea, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('SubArea')
 
-        self.fold_time = 200
-        self.fold_max_pos, self.fold_min_pos = 200, 0
+        # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
-        self.ani = QPropertyAnimation(self, b'maximumWidth')
-        self.ani.setDuration(self.fold_time)
+        self.procedure_table = ProcedureTable(self)
 
-    def run_update_info(self, who, info):
-        self.who_clicked = who
-        self.label1.setText(info)
-        self.fold_cond = True
+        # --------------------------------------------------------------------------------------------------------------
 
-    def run_fold(self, who, fold, info):
-        self.who_clicked = who
-        if fold:
-            self.label1.setText(info)
-            self.ani.setStartValue(self.fold_min_pos)
-            self.ani.setEndValue(self.fold_max_pos)
-            self.ani.start()
-            self.fold_cond = True
-        else:
-            self.ani.setStartValue(self.fold_max_pos)
-            self.ani.setEndValue(self.fold_min_pos)
-            self.ani.start()
-            self.fold_cond = False
+        layout.addWidget(self.procedure_table)
+        self.setLayout(layout)
+
+class ProcedureTable(QTableWidget):
+    def __init__(self, parent):
+        super(ProcedureTable, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('ProcedureTable')
+
+        # 테이블 프레임 모양 정의
+        self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+
+        # 테이블 셋업
+        col_info = [('비정상 절차서 명', 230), ('AI확신도', 100), ('진입 조건 확인', 100), ('긴급', 0)]
+
+        self.setColumnCount(len(col_info))
+
+        col_names = []
+        for i, (l, w) in enumerate(col_info):
+            self.setColumnWidth(i, w)
+            col_names.append(l)
+
+        self.setHorizontalHeaderLabels(col_names)
+        self.horizontalHeader().setStretchLastSection(True)

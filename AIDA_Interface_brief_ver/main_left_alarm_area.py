@@ -20,23 +20,55 @@ class MainLeftAlarmArea(QWidget):
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 10, 10, 10)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
-        alarm_table_wid = AlarmTable(self)
-        # self.alram_reset_btn()
+        # 1. 알람 Table
+        alarm_label = QLabel('경보 Area')
+        alarm_label.setMinimumHeight(30)
+        alarm_table_wid = ArarmArea(self)
+        # 2. 알람 Table btn
+        alarm_tabel_btn = QPushButton('Btn')
+        alarm_tabel_btn.setObjectName('Btn')
+        # 3. 예지 Area
+        prog_label = QLabel('예지 Area')
+        prog_label.setMinimumHeight(30)
+        prog_area = ProgArea(self)
 
+        # --------------------------------------------------------------------------------------------------------------
+        layout.addWidget(alarm_label)
         layout.addWidget(alarm_table_wid)
-
-        # layout1 = QHBoxLayout(self)
-
-        self.Reset = QPushButton('Update')
-        self.Reset.clicked.connect(self.test1)
-        # layout.addWidget(self.Reset)
+        layout.addSpacing(5)
+        layout.addWidget(alarm_tabel_btn)
+        layout.addSpacing(30)
+        layout.addWidget(prog_label)
+        layout.addWidget(prog_area)
 
         self.setLayout(layout)
 
     def test1(self):
         print('Alarm Update')
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class ArarmArea(QWidget):
+    def __init__(self, parent):
+        super(ArarmArea, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('SubArea')
+
+        # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        self.alarm_table = AlarmTable(self)
+
+        # --------------------------------------------------------------------------------------------------------------
+
+        layout.addWidget(self.alarm_table)
+        self.setLayout(layout)
 
 
 class AlarmTable(QTableWidget):
@@ -50,7 +82,7 @@ class AlarmTable(QTableWidget):
         self.verticalHeader().setVisible(False)     # Row 넘버 숨기기
 
         # 테이블 셋업
-        col_info = [('경과 시간', 115), ('경보명', 175), ('현재값', 55), ('설정치', 55), ('긴급여부', 0)]
+        col_info = [('긴급여부', 60), ('경보명', 175), ('현재값', 55), ('설정치', 55), ('발생시간', 0)]
 
         self.setColumnCount(len(col_info))
 
@@ -58,7 +90,6 @@ class AlarmTable(QTableWidget):
         for i, (l, w) in enumerate(col_info):
             self.setColumnWidth(i, w)
             col_names.append(l)
-
 
         self.setHorizontalHeaderLabels(col_names)
         self.horizontalHeader().setStretchLastSection(True)
@@ -259,4 +290,33 @@ class AlarmItemCondition(QLabel):
                     self.procedure_area.run_fold(self, False, self.alarm_info)
                 else:
                     self.procedure_area.run_update_info(self, self.alarm_info)
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class ProgArea(QWidget):
+    def __init__(self, parent):
+        super(ProgArea, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('SubArea')
+        self.setMinimumHeight(250)
+
+        # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(10, 10, 10, 10)
+        layout.setSpacing(0)
+
+        label1 = QLabel('Trip 예정 시간')
+
+        label2 = QLabel('Trip 예상 기여 변수')
+
+        # --------------------------------------------------------------------------------------------------------------
+        layout.addWidget(label1)
+        layout.addSpacing(100)
+        layout.addWidget(label2)
+        layout.addSpacing(100)
+
+        self.setLayout(layout)
+
+
 
