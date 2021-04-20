@@ -3,14 +3,14 @@ qss = """
     /* 위젯 정보                                                                      */
     /* ----------------------------------------------------------------------------- */
     
-    QWidget {background: rgb(255, 255, 255);}       /* 메인 위젯 색 */
+    QWidget {background: rgb(255, 255, 255);}       /* 메인 위젯 Back color 색 */
     
-    QWidget#SubW {                                  /* 서브 위젯 색 */
-        background: rgb(0, 249, 250);           
+    QWidget#SubW {                                  /* 서브 위젯 */
+        background: rgb(240, 240, 240);             /* 서브 위젯 Back color */    
         border-style: outset;
-        border-width: 2px;
-        border-radius: 6px;
-        border-color: beige;
+        border-width: 1px;                          /* 서브 위젯 테두리 선 두께 */
+        border-radius: 10px;
+        border-color: rgb(120, 120, 120);           /* 서브 위젯 테두리 선 색 */
     }          
     
     /* ----------------------------------------------------------------------------- */
@@ -42,6 +42,28 @@ qss = """
             border-radius: 6px;
             font: bold 8px;
             color: rgb(255, 255, 255);
+    }
+    
+    /* ----------------------------------------------------------------------------- */
+    /* 테이블 정보                                                                    */
+    /* ----------------------------------------------------------------------------- */
+    
+    
+    /* AlarmTable */
+    QTableWidget#AlarmTable {
+            border: none;
+            border-radius: 8px;
+            padding: 1px 1px;
+    }
+    QTableWidget#AlarmTable QHeaderView{
+            background: rgb(255, 255, 255);             /* 메인 위젯 Back color 색 */
+    }
+    QTableWidget#AlarmTable QHeaderView::section {
+            background: rgb(255, 255, 255);             /* 메인 위젯 Back color 색 */
+            border-style: outset;
+            border-width: 1px;                          /* 서브 위젯 테두리 선 두께 */
+            border-radius: 8px;
+            border-color: rgb(120, 120, 120);           /* 서브 위젯 테두리 선 색 */    
     }
     
     

@@ -42,7 +42,7 @@ class Mainwindow(QWidget):
 
         # 1] 하단 섹션
         content_hbox = QHBoxLayout()
-        content_hbox.setContentsMargins(0, 0, 0, 0)
+        content_hbox.setContentsMargins(5, 5, 5, 5)
         content_hbox.setSpacing(0)
         # 1.1] 왼족 알람 섹션
         self.alarm_area = MainLeftAlarmArea(self)
@@ -55,8 +55,8 @@ class Mainwindow(QWidget):
 
         # 각 항목을 레이아웃에 배치
         content_hbox.addWidget(self.alarm_area)
-        content_hbox.addWidget(self.procedure_area)
-        content_hbox.addWidget(self.diagnosis_prog_area)
+        # content_hbox.addWidget(self.procedure_area)
+        # content_hbox.addWidget(self.diagnosis_prog_area)
 
         window_vbox.addWidget(titlebar_widget)
         window_vbox.addLayout(content_hbox)

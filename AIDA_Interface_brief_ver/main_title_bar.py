@@ -19,6 +19,8 @@ class MainTitleBar(QWidget):
         self.parent = parent
         self.has_clicked = False
 
+        self.setMaximumHeight(45)
+
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QHBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)

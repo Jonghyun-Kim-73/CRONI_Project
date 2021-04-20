@@ -12,43 +12,26 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 class MainLeftAlarmArea(QWidget):
     """ 왼쪽 알람 디스플레이 위젯 """
-    qss = """
-        QWidget {
-            background: rgb(14, 22, 24);  
-        }
-        QPushButton {
-            background: rgb(62, 74, 84);
-            border-radius: 3px;
-            border: 2px inset rgb(62, 74, 84);
-            font: bold 12px;
-            color: rgb(255, 255, 255);          
-        }
-    """
-
     def __init__(self, parent=None):
-        super(MainLeftAlarmArea, self).__init__()
+        super(MainLeftAlarmArea, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.parent = parent
         self.setObjectName('SubW')
-        # self.setStyleSheet(self.qss)
-
-        self.setMinimumHeight(self.parent.height() - 40)                              # 아래섹션의 기준 크기 <-
-        self.setMaximumWidth(int(self.parent.width()/5) * 2)                          # 1/3 부분을 차지
+        self.setMaximumWidth(int(self.parentWidget().width()/5) * 2)                          # 1/3 부분을 차지
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(15, 15, 15, 15)
+        layout.setContentsMargins(10, 10, 10, 10)
 
-        # alarm_table_wid = AlarmTable(self)
+        alarm_table_wid = AlarmTable(self)
         # self.alram_reset_btn()
 
-        # layout.addWidget(alarm_table_wid)
+        layout.addWidget(alarm_table_wid)
 
         # layout1 = QHBoxLayout(self)
 
         self.Reset = QPushButton('Update')
         self.Reset.clicked.connect(self.test1)
-        layout.addWidget(self.Reset)
+        # layout.addWidget(self.Reset)
 
         self.setLayout(layout)
 
@@ -58,32 +41,10 @@ class MainLeftAlarmArea(QWidget):
 
 class AlarmTable(QTableWidget):
     """ 알람 테이블 위젯 """
-    qss = """
-        QTableWidget#AlarmTable {
-            background: rgb(31, 39, 42);
-            border-radius: 6px;
-            border: none;
-        }
-        
-        QTableWidget#AlarmTable QHeaderView::section {
-            background: rgb(31, 39, 42);
-            border-radius: 3px;
-            border: 2px inset rgb(62, 74, 84);
-            font: bold 12px;
-            color: rgb(255, 255, 255);
-        }
-    """
-
     def __init__(self, parent):
-        super(AlarmTable, self).__init__()
+        super(AlarmTable, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.parent = parent
-
-        self.setStyleSheet(self.qss)
         self.setObjectName('AlarmTable')
-
-        self.setFixedWidth(self.parent.width() - 10)
-        self.setFixedHeight(self.parent.height() - 10)
 
         # 테이블 프레임 모양 정의
         self.verticalHeader().setVisible(False)     # Row 넘버 숨기기
@@ -97,6 +58,7 @@ class AlarmTable(QTableWidget):
         for i, (l, w) in enumerate(col_info):
             self.setColumnWidth(i, w)
             col_names.append(l)
+
 
         self.setHorizontalHeaderLabels(col_names)
         self.horizontalHeader().setStretchLastSection(True)
