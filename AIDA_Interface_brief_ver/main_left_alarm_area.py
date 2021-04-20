@@ -16,7 +16,7 @@ class MainLeftAlarmArea(QWidget):
         super(MainLeftAlarmArea, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubW')
-        self.setMaximumWidth(int(self.parentWidget().width()/5) * 2)                          # 1/3 부분을 차지
+        self.setMaximumWidth(int(self.parentWidget().width()/5) * 3)                          # 1/3 부분을 차지
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QVBoxLayout(self)
@@ -28,7 +28,7 @@ class MainLeftAlarmArea(QWidget):
         alarm_label.setMinimumHeight(30)
         alarm_table_wid = ArarmArea(self)
         # 2. 알람 Table btn
-        alarm_tabel_btn = QPushButton('Btn')
+        alarm_tabel_btn = QPushButton('Suppression Btn')
         alarm_tabel_btn.setObjectName('Btn')
         # 3. 예지 Area
         prog_label = QLabel('예지 Area')
@@ -40,7 +40,7 @@ class MainLeftAlarmArea(QWidget):
         layout.addWidget(alarm_table_wid)
         layout.addSpacing(5)
         layout.addWidget(alarm_tabel_btn)
-        layout.addSpacing(30)
+        layout.addSpacing(10)
         layout.addWidget(prog_label)
         layout.addWidget(prog_area)
 
@@ -64,7 +64,6 @@ class ArarmArea(QWidget):
         layout.setSpacing(0)
 
         self.alarm_table = AlarmTable(self)
-
         # --------------------------------------------------------------------------------------------------------------
 
         layout.addWidget(self.alarm_table)
@@ -82,7 +81,7 @@ class AlarmTable(QTableWidget):
         self.verticalHeader().setVisible(False)     # Row 넘버 숨기기
 
         # 테이블 셋업
-        col_info = [('긴급여부', 60), ('경보명', 175), ('현재값', 55), ('설정치', 55), ('발생시간', 0)]
+        col_info = [('긴급여부', 60), ('경보명', 250), ('현재값', 55), ('설정치', 55), ('발생시간', 0)]
 
         self.setColumnCount(len(col_info))
 
@@ -91,8 +90,23 @@ class AlarmTable(QTableWidget):
             self.setColumnWidth(i, w)
             col_names.append(l)
 
+        max_cell = 10
+
+        for i in range(0, max_cell):
+            self.insertRow(i)
+
+        cell_height = self.rowHeight(0)
+        total_height = self.horizontalHeader().height() + cell_height * max_cell + 4        # TODO 4 매번 계산.
+
+        self.parent().setMaximumHeight(total_height)
+        self.setMaximumHeight(total_height)
+
+        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.verticalScrollBar().setSingleStep(cell_height/3)
+
         self.setHorizontalHeaderLabels(col_names)
         self.horizontalHeader().setStretchLastSection(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
     def contextMenuEvent(self, event) -> None:
         """ AlarmTable 기능 테스트 """
@@ -106,27 +120,34 @@ class AlarmTable(QTableWidget):
 
     def add_alarm(self, alarm_id: int, urgent: bool):
         """ Alarm 1개 추가 기능 """
-        row_ = self.rowCount()
-        self.insertRow(row_)         # 마지막 Row 에 섹션 추가
-
         # db load
         db = pd.read_csv('./DB/alarm_info.csv')
         alarm_name_ = db.loc[alarm_id, "alarm_name"]
         criteria = db.loc[alarm_id, "criteria"]
         criteria_id = db.loc[alarm_id, "criteria_id"]
 
-        item_1 = AlarmItemTimer(self)                                         # item 인스턴스 생성
+        item_1 = AlarmItemCondition(self, alarm_info=str(alarm_name_),
+                                    urgent=urgent, blink=True)                  # item 인스턴스 생성
         item_2 = AlarmItemInfo(self, alarm_info = str(alarm_name_))
         item_3 = AlarmItemInfo(self, alarm_info = str(criteria))
         item_4 = AlarmItemInfo(self, '0')
-        item_5 = AlarmItemCondition(self, alarm_info = str(alarm_name_),
-                                    urgent=urgent, blink=True)                # item 인스턴스 생성
+        item_5 = AlarmItemTimer(self)                                           # item 인스턴스 생성
+
+        row_ = self.rowCount()
+        self.insertRow(row_)  # 마지막 Row 에 섹션 추가
 
         self.setCellWidget(row_, 0, item_1)
         self.setCellWidget(row_, 1, item_2)
         self.setCellWidget(row_, 2, item_3)
         self.setCellWidget(row_, 3, item_4)
         self.setCellWidget(row_, 4, item_5)
+
+        if self.cellWidget(0, 0) is None:
+            # 비어있는 경우 맨 윗줄 지우기
+            self.removeRow(0)
+        else:
+            pass
+        self.scrollToBottom()
         pass
 
 
@@ -252,10 +273,8 @@ class AlarmItemCondition(QLabel):
     """
 
     def __init__(self, parent, alarm_info, urgent=False, blink=False, blink_time=500):
-        super(AlarmItemCondition, self).__init__()
+        super(AlarmItemCondition, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.parent = parent
-        self.procedure_area = self.parent.parent.parent.procedure_area
 
         self.setStyleSheet(self.qss)
         self.setObjectName('AlarmItemCondition')
@@ -278,28 +297,26 @@ class AlarmItemCondition(QLabel):
             self.setProperty("Blink", True)
         self.setStyleSheet(self.qss)
 
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            if self.procedure_area.fold_cond is False:
-                """ 경보 절차서 디스플레이가 접힌 상태로 클릭시 펼쳐짐 """
-                # procedure area 로 넘겨서 알람의 정보에 대한 절차서 찾을수 있는 힌트 제공
-                self.procedure_area.run_fold(self, True, self.alarm_info)
-            else:
-                """ 경보 절차서가 펼쳐진 상태에 동일 알람 눌러야 꺼짐 아니면 내용만 업데이트"""
-                if self == self.procedure_area.who_clicked:
-                    self.procedure_area.run_fold(self, False, self.alarm_info)
-                else:
-                    self.procedure_area.run_update_info(self, self.alarm_info)
+    # def mousePressEvent(self, event):
+    #     if event.button() == Qt.LeftButton:
+    #         if self.procedure_area.fold_cond is False:
+    #             """ 경보 절차서 디스플레이가 접힌 상태로 클릭시 펼쳐짐 """
+    #             # procedure area 로 넘겨서 알람의 정보에 대한 절차서 찾을수 있는 힌트 제공
+    #             self.procedure_area.run_fold(self, True, self.alarm_info)
+    #         else:
+    #             """ 경보 절차서가 펼쳐진 상태에 동일 알람 눌러야 꺼짐 아니면 내용만 업데이트"""
+    #             if self == self.procedure_area.who_clicked:
+    #                 self.procedure_area.run_fold(self, False, self.alarm_info)
+    #             else:
+    #                 self.procedure_area.run_update_info(self, self.alarm_info)
 
 # ----------------------------------------------------------------------------------------------------------------------
-
 
 class ProgArea(QWidget):
     def __init__(self, parent):
         super(ProgArea, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubArea')
-        self.setMinimumHeight(250)
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QVBoxLayout(self)
@@ -312,9 +329,9 @@ class ProgArea(QWidget):
 
         # --------------------------------------------------------------------------------------------------------------
         layout.addWidget(label1)
-        layout.addSpacing(100)
+        layout.addSpacing(50)
         layout.addWidget(label2)
-        layout.addSpacing(100)
+        layout.addSpacing(120)
 
         self.setLayout(layout)
 

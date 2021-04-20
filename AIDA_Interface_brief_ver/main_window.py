@@ -43,7 +43,7 @@ class Mainwindow(QWidget):
         # 1] 하단 섹션
         content_hbox = QHBoxLayout()
         content_hbox.setContentsMargins(5, 5, 5, 5)
-        content_hbox.setSpacing(0)
+        content_hbox.setSpacing(10)
         # 1.1] 왼족 알람 섹션
         self.alarm_area = MainLeftAlarmArea(self)
 
