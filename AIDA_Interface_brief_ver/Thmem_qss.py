@@ -45,13 +45,13 @@ qss = """
         font: bold 14px;
     } 
     QLabel#ConditionBar[Condition="Normal"] {
-        background: rgb(96, 186, 70);
+        background: rgb(74, 182, 146);
     }
     QLabel#ConditionBar[Condition="Emergency"] {
-        background: rgb(248, 108, 107);
+        background: rgb(184, 25, 28);
     }
     QLabel#ConditionBar[Condition="Abnormal"] {
-        background: rgb(255, 193, 7);
+        background: rgb(255, 181, 71);
     }
     
     /* AlarmTableItem Info and Timer */
@@ -87,7 +87,7 @@ qss = """
     
     /* CircleProgress */
     QLabel#CircleProgress {
-            background: rgb(31, 39, 42);
+            background: rgb(0, 0, 0);
             border-radius: 6px;
             font: bold 8px;
             color: rgb(255, 255, 255);
@@ -144,15 +144,15 @@ qss = """
     
     /* 종료 버튼 */
     QPushButton#Exit {
-        background: rgb(248, 108, 107);
+        background: rgb(184, 25, 28);
         border-radius: 6px;
         border: none;
     }
     QPushButton#Exit:hover {
-        background: rgb(248, 108, 107);
+        background: rgb(184, 25, 28);
     }
     QPushButton#Exit:pressed {
-        background: rgb(220, 152, 162);
+        background: rgb(215, 25, 28);
     }
     
     /* ----------------------------------------------------------------------------- */
