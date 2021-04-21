@@ -126,10 +126,9 @@ class AlarmTable(QTableWidget):
         criteria = db.loc[alarm_id, "criteria"]
         criteria_id = db.loc[alarm_id, "criteria_id"]
 
-        item_1 = AlarmItemCondition(self, alarm_info=str(alarm_name_),
-                                    urgent=urgent, blink=True)                  # item 인스턴스 생성
-        item_2 = AlarmItemInfo(self, alarm_info = str(alarm_name_))
-        item_3 = AlarmItemInfo(self, alarm_info = str(criteria))
+        item_1 = AlarmItemInfo(self, alarm_info='R' if urgent else 'N')
+        item_2 = AlarmItemInfo(self, alarm_info=str(alarm_name_))
+        item_3 = AlarmItemInfo(self, alarm_info=str(criteria))
         item_4 = AlarmItemInfo(self, '0')
         item_5 = AlarmItemTimer(self)                                           # item 인스턴스 생성
 
@@ -165,31 +164,9 @@ class AlarmButton(QPushButton):
 
 class AlarmItemInfo(QLabel):
     """ 긴급 여부 판단 아이템 """
-    qss = """
-        QLabel#AlarmItemInfo {
-            background: rgb(62, 72, 84);
-            border-radius: 3px;
-            font-size: 11px;
-            color: rgb(255, 255, 255);
-        }
-
-        QLabel#AlarmItemInfo:hover {
-            background: rgb(255, 193, 7);
-            color: rgb(31, 39, 42);
-        }
-
-        QLabel#AlarmItemInfo:selected {
-            background: rgb(255, 193, 7);
-            color: rgb(31, 39, 42);
-        }
-    """
-
     def __init__(self, parent, alarm_info):
-        super(AlarmItemInfo, self).__init__()
+        super(AlarmItemInfo, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.parent = parent
-
-        self.setStyleSheet(self.qss)
         self.setObjectName('AlarmItemInfo')
 
         self.dis_update(alarm_info)
@@ -202,33 +179,10 @@ class AlarmItemInfo(QLabel):
 
 class AlarmItemTimer(QLabel):
     """ 발생 시간 타이머 아이템 """
-    qss = """
-            QLabel#AlarmItemTimer {
-                background: rgb(62, 72, 84);
-                border-radius: 3px;
-                font-size: 11px;
-                color: rgb(255, 255, 255);
-            }
-
-            QLabel#AlarmItemTimer:hover {
-                background: rgb(255, 193, 7);
-                color: rgb(31, 39, 42);
-            }
-
-            QLabel#AlarmItemTimer:selected {
-                background: rgb(255, 193, 7);
-                color: rgb(31, 39, 42);
-            }
-    """
-
     def __init__(self, parent):
-        super(AlarmItemTimer, self).__init__()
+        super(AlarmItemTimer, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.parent = parent
-
-        self.setStyleSheet(self.qss)
-        self.setObjectName('AlarmItemTimer')
-
+        self.setObjectName('AlarmItemInfo')
         self.dis_update()
 
     def dis_update(self, load_realtime=True):
@@ -241,74 +195,6 @@ class AlarmItemTimer(QLabel):
         self.setText(real_time)
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
 
-
-class AlarmItemCondition(QLabel):
-    """ 긴급 여부 판단 아이템 """
-    qss = """
-        QLabel#AlarmItemCondition {
-            background: rgb(62, 72, 84);
-            border-radius: 3px;
-            color: rgb(255, 255, 255);
-        }
-        
-        QLabel#AlarmItemCondition:hover {
-            background: rgb(255, 193, 7);
-            color: rgb(31, 39, 42);
-        }
-        
-        QLabel#AlarmItemCondition:selected {
-            background: rgb(255, 193, 7);
-            color: rgb(31, 39, 42);
-        }
-        
-        QLabel#AlarmItemCondition[Blink=true][Urgent=true] {
-            background: rgb(248, 108, 107);
-        }
-        QLabel#AlarmItemCondition[Blink=true][Urgent=false] {
-            background: rgb(255, 193, 7);
-        }
-        QLabel#AlarmItemCondition[Blink=false] {
-            background: rgb(62, 72, 84);
-        }
-    """
-
-    def __init__(self, parent, alarm_info, urgent=False, blink=False, blink_time=500):
-        super(AlarmItemCondition, self).__init__(parent=parent)
-        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-
-        self.setStyleSheet(self.qss)
-        self.setObjectName('AlarmItemCondition')
-
-        # procedure area 로 넘겨서 알람의 정보에 대한 절차서 찾을수 있는 힌트 제공
-        self.alarm_info = alarm_info
-        self.setProperty("Urgent", urgent)
-        if blink:
-            self.setProperty("Blink", True)
-            # timer section
-            timer = QTimer(self)
-            timer.setInterval(blink_time)
-            timer.timeout.connect(self.dis_update)
-            timer.start()
-
-    def dis_update(self):
-        if self.property("Blink"):
-            self.setProperty("Blink", False)
-        else:
-            self.setProperty("Blink", True)
-        self.setStyleSheet(self.qss)
-
-    # def mousePressEvent(self, event):
-    #     if event.button() == Qt.LeftButton:
-    #         if self.procedure_area.fold_cond is False:
-    #             """ 경보 절차서 디스플레이가 접힌 상태로 클릭시 펼쳐짐 """
-    #             # procedure area 로 넘겨서 알람의 정보에 대한 절차서 찾을수 있는 힌트 제공
-    #             self.procedure_area.run_fold(self, True, self.alarm_info)
-    #         else:
-    #             """ 경보 절차서가 펼쳐진 상태에 동일 알람 눌러야 꺼짐 아니면 내용만 업데이트"""
-    #             if self == self.procedure_area.who_clicked:
-    #                 self.procedure_area.run_fold(self, False, self.alarm_info)
-    #             else:
-    #                 self.procedure_area.run_update_info(self, self.alarm_info)
 
 # ----------------------------------------------------------------------------------------------------------------------
 

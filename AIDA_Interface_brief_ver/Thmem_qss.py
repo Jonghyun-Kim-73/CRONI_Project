@@ -54,6 +54,13 @@ qss = """
         background: rgb(255, 193, 7);
     }
     
+    /* AlarmTableItem Info and Timer */
+    QLabel#AlarmItemInfo {
+            background: rgb(58, 58, 58);
+            font-size: 11px;
+            color: rgb(212, 178, 46);
+    }
+    
     /* CircleProgress */
     QLabel#CircleProgress {
             background: rgb(31, 39, 42);
@@ -73,10 +80,11 @@ qss = """
             border-color: rgb(0, 0, 0);                 /* 서브 위젯 테두리 선 색 */ 
     }
     QTableWidget#AlarmTable QHeaderView{
-            background: rgb(128, 128, 128);             /* 메인 위젯 Back color 색 */
+            background: rgb(129, 122, 96);             /* 메인 위젯 Back color 색 */
     }
     QTableWidget#AlarmTable QHeaderView::section {
-            background: rgb(128, 128, 128);             /* 메인 위젯 Back color 색 */
+            background: rgb(200, 195, 169);             /* 테이블 위젯 Back color 색 */
+            font: bord;
             border-style: outset;
             border-width: 1px;                          /* 서브 위젯 테두리 선 두께 */
             border-color: rgb(0, 0, 0);                 /* 서브 위젯 테두리 선 색 */    
