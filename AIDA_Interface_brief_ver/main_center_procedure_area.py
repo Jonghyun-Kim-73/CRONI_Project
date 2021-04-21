@@ -279,10 +279,10 @@ class SymptomXAIArea(QWidget):
 
         self.Hlayout = QHBoxLayout()
         self.Hlayout.setContentsMargins(0, 0, 0, 0)
-        self.Hlayout.setSpacing(0)
+        self.Hlayout.setSpacing(2)
 
         self.Symptom_area = SymptomArea(self)
-        self.XAI_area = QLabel('Xai')
+        self.XAI_area = XAIArea(self)
         # --------------------------------------------------------------------------------------------------------------
         self.Hlayout.addWidget(self.Symptom_area)
         self.Hlayout.addWidget(self.XAI_area)
@@ -343,19 +343,227 @@ class SymptomArea(QWidget):
         layer.setContentsMargins(2, 2, 2, 2)
         layer.setSpacing(5)
 
-        label1 = QLabel('Symptom Check')
+        label0 = QLabel('Symptom Check')
+        label0.setFixedHeight(30)
+
+        label1 = QLabel('경보 및 증상 Check')
         label1.setFixedHeight(30)
 
-        label2 = QLabel('Symptom Check2')
-        label1.setFixedHeight(30)
+        label2 = QLabel('자동동작사항 Check')
+        label2.setFixedHeight(30)
 
         # --------------------------------------------------------------------------------------------------------------
+        layer.addWidget(label0)
         layer.addWidget(label1)
+        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 1', cond=False))
+        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 2', cond=False))
+        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 3', cond=True))
+        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 4', cond=False))
+        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 5', cond=True))
         layer.addWidget(label2)
+        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 1', cond=True))
+        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 2', cond=True))
+        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 3', cond=False))
+        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 4', cond=False))
+        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 5', cond=False))
 
-        # layer.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Ignored, QSizePolicy.Expanding))
+        layer.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Ignored, QSizePolicy.Expanding))
 
         self.setLayout(layer)
+
+        # TODO CNS 업데이트 모듈 만들어야함.
+
+
+class SymptomWidget(QWidget):
+    def __init__(self, parent, txt, cond=False):
+        super(SymptomWidget, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('SymptomW')
+
+        self.curent_cond = cond
+
+        # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
+        layer = QHBoxLayout(self)
+
+        layer.setContentsMargins(2, 2, 2, 2)
+        layer.setSpacing(5)
+
+        txt_label = QLabel(txt)
+        self.txt_dis = SymptomDisLabel(self, cond)
+
+        # --------------------------------------------------------------------------------------------------------------
+        layer.addWidget(self.txt_dis)
+        layer.addWidget(txt_label)
+        self.setLayout(layer)
+
+    def update_condition(self, cond: bool):
+        self.curent_cond = self.txt_dis.update_condition(cond)
+
+
+class SymptomDisLabel(QLabel):
+    def __init__(self, parent, cond=False):
+        super(SymptomDisLabel, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('SymptomDisLabel')
+
+        self.setFixedWidth(15)
+        self.setFixedHeight(15)
+
+        self.curent_cond = cond
+        self.update_condition(self.curent_cond)
+
+    def update_condition(self, condition: bool):
+        cond = 'True' if condition else 'False'
+        self.curent_cond = condition
+        self.setProperty("Condition", cond)
+        self.style().polish(self)
+        return self.curent_cond
+
+    # def mousePressEvent(self, e) -> None:
+    #     self.update_condition(True)
+
+
+class XAIArea(QWidget):
+    def __init__(self, parent):
+        super(XAIArea, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('SubArea')
+
+        self.setMaximumWidth(260)
+
+        # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
+        layer = QVBoxLayout(self)
+        layer.setContentsMargins(0, 0, 0, 0)
+        layer.setSpacing(0)
+
+        self.xai_table = XAITable(self)
+
+        # --------------------------------------------------------------------------------------------------------------
+        layer.addWidget(self.xai_table)
+        self.setLayout(layer)
+
+
+class XAITable(QTableWidget):
+    def __init__(self, parent):
+        super(XAITable, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('ProcedureTable')             # ProcedureTable 와 동일
+
+        # self.setMaximumWidth(self.parent().width())
+
+        # 테이블 프레임 모양 정의
+        self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+
+        # 테이블 셋업
+        col_info = [('변수 명', 150), ('가중치', 0)]
+
+        self.setColumnCount(len(col_info))
+
+        col_names = []
+        for i, (l, w) in enumerate(col_info):
+            self.setColumnWidth(i, w)
+            col_names.append(l)
+
+        self.max_cell = 5
+
+        for i in range(0, self.max_cell):
+            self.add_empty_procedure(i)
+
+        cell_height = self.rowHeight(0)
+        total_height = self.horizontalHeader().height() + cell_height * self.max_cell + 4  # TODO 4 매번 계산.
+
+        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.verticalScrollBar().setSingleStep(cell_height / 3)
+
+        self.setHorizontalHeaderLabels(col_names)
+        self.horizontalHeader().setStretchLastSection(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+
+    def add_empty_procedure(self, i):
+        self.insertRow(i)
+        [self.setCellWidget(i, _, ProcedureEmptyCell(self)) for _ in range(0, 2)]
+
+    def add_value(self, row, name, weight):
+        """
+        테이블에 진단 결과 정보 저장하기
+
+        :param name:
+        :param ai_prob:
+        :param if_prob:
+        :param em:
+        :return:
+        """
+        item1 = XAITableInfoCell(self, name)
+        item2 = XAITableProbCell(self, name, weight)
+        self.setCellWidget(row, 0, item1)
+        self.setCellWidget(row, 1, item2)
+
+    def contextMenuEvent(self, event) -> None:
+        """ XAITable 에 기능 올리기  """
+        menu = QMenu(self)
+        add_value = menu.addAction("Add procedure")
+        add_value.triggered.connect(self._test)
+        menu.exec_(event.globalPos())
+
+    def _test(self):
+        self.add_value(0, 'PZR압력', 95)
+        self.add_value(1, 'PZR수위', 50)
+        self.add_value(2, 'RCSAvgTemp', 20)
+        self.add_value(3, 'RCSLoop1Temp', 10)
+        self.add_value(4, 'RCSLoop2Temp', 5)
+
+
+class XAITableEmptyCell(QLabel):
+    """ 공백 Cell """
+    def __init__(self, parent):
+        super(XAITableEmptyCell, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True) # 상위 스타일 상속
+        self.setObjectName('ProcedureItemEmpty')
+        self.isempty = True
+
+
+class XAITableProbCell(QWidget):
+    """ 변수 가중치 """
+    def __init__(self, parent, para_name, weight):
+        super(XAITableProbCell, self).__init__(parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+
+        self.isempty = False
+        self.para_name = para_name
+
+        layer = QHBoxLayout()
+        layer.setContentsMargins(0, 0, 0, 0)
+        layer.setSpacing(0)
+
+        prg_bar = QProgressBar()
+        prg_bar.setObjectName('ProcedureItemProgress')
+        prg_bar.setValue(weight)
+        prg_bar.setTextVisible(False)
+
+        prg_label = QLabel()
+        prg_label.setObjectName('ProcedureItemProgressLabel')
+        prg_label.setFixedWidth(30)
+        prg_label.setAlignment(Qt.AlignRight | Qt.AlignCenter)  # 텍스트 가운데 정렬
+        prg_label.setText(f'{weight}%')
+
+        layer.addWidget(prg_bar)
+        layer.addWidget(prg_label)
+
+        self.setLayout(layer)
+
+
+class XAITableInfoCell(QLabel):
+    """ 절차서 Info Cell """
+    def __init__(self, parent, para_name):
+        super(XAITableInfoCell, self).__init__(parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('ProcedureItemInfo')
+        self.isempty = False
+
+        self.para_name = para_name
+        self.setText(para_name)
+
+        self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
 
 
 # ----------------------------------------------------------------------------------------------------------------------

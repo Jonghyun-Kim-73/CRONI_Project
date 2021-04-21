@@ -20,6 +20,12 @@ qss = """
         border-color: rgb(0, 0, 0);                 /* 서브 위젯 테두리 선 색 */
     }              
     
+    QWidget#SymptomW{
+        background: rgb(128, 128, 128);
+        font: bold 12px;
+        color: rgb(0, 0, 0);
+    }
+    
     /* ----------------------------------------------------------------------------- */
     /* 라벨 정보                                                                      */
     /* ----------------------------------------------------------------------------- */
@@ -84,6 +90,28 @@ qss = """
         font: bold 12px;
         color: rgb(0, 0, 0);
     }
+    
+    /* SymptomLabel */
+    QLabel#SymptomLabel{
+        background: rgb(128, 128, 128);
+        font: bold 12px;
+        color: rgb(0, 0, 0);
+    }
+    
+    /* SymptomDisLabel */
+    QLabel#SymptomDisLabel{
+        background: rgb(128, 128, 128);
+        border-style: outset;
+        border-width: 1px;                          /* 서브 위젯 테두리 선 두께 */
+        border-color: rgb(0, 0, 0);                 /* 서브 위젯 테두리 선 색 */
+    }
+    QLabel#SymptomDisLabel[Condition="False"] {
+        background: rgb(128, 128, 128);
+    }
+    QLabel#SymptomDisLabel[Condition="True"] {
+        background: rgb(184, 25, 28);
+    }
+    
     
     /* CircleProgress */
     QLabel#CircleProgress {
