@@ -12,8 +12,9 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 class MainLeftAlarmArea(QWidget):
     """ 왼쪽 알람 디스플레이 위젯 """
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, mem=None):
         super(MainLeftAlarmArea, self).__init__(parent=parent)
+        self.mem = mem
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubW')
         self.setMaximumWidth(int(self.parentWidget().width()/5) * 3)                          # 1/3 부분을 차지
@@ -26,9 +27,9 @@ class MainLeftAlarmArea(QWidget):
         # 1. 알람 Table
         alarm_label = QLabel('경보 Area')
         alarm_label.setMinimumHeight(30)
-        alarm_table_wid = ArarmArea(self)
+        alarm_table_wid = ArarmArea(self, self.mem)
         # 2. 알람 Table btn
-        alarm_tabel_btn = AlarmSuppressionButton(self) # 'Suppression Btn')
+        alarm_tabel_btn = AlarmSuppressionButton(self)  # 'Suppression Btn')
         # 3. 예지 Area
         prog_label = QLabel('예지 Area')
         prog_label.setMinimumHeight(30)
@@ -52,8 +53,9 @@ class MainLeftAlarmArea(QWidget):
 
 
 class ArarmArea(QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, mem=None):
         super(ArarmArea, self).__init__(parent=parent)
+        self.mem = mem
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubArea')
 
@@ -62,7 +64,7 @@ class ArarmArea(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.alarm_table = AlarmTable(self)
+        self.alarm_table = AlarmTable(self, self.mem)
         # --------------------------------------------------------------------------------------------------------------
 
         layout.addWidget(self.alarm_table)
@@ -71,8 +73,9 @@ class ArarmArea(QWidget):
 
 class AlarmTable(QTableWidget):
     """ 알람 테이블 위젯 """
-    def __init__(self, parent):
+    def __init__(self, parent, mem):
         super(AlarmTable, self).__init__(parent=parent)
+        self.mem = mem
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('AlarmTable')
 
@@ -107,6 +110,38 @@ class AlarmTable(QTableWidget):
         self.horizontalHeader().setStretchLastSection(True)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
+        self.emergec_alarm_dict = {
+
+        }
+
+        if self.mem != None:
+            # timer section
+            timer = QTimer(self)
+            timer.setInterval(1000)
+            timer.timeout.connect(self._update_mem_to_alarm_panel)
+            timer.start()
+
+    def _update_mem_to_alarm_panel(self):
+        self.local_mem = self.mem.get_shmem_db()
+        print(self.local_mem['KLAMPO271']['Val'], self.local_mem['ZVCT']['Val'])
+
+        if self._check_alarm_cond('KLAMPO251'):
+            self.emergec_alarm_dict['KLAMPO251'] = 'On'
+            self._add_alarm('KLAMPO251', self.local_mem['XPIRM']['Val'], self.local_mem['CIRFH']['Val'], False)
+
+        if self._check_alarm_cond('KLAMPO271'):
+            self.emergec_alarm_dict['KLAMPO271'] = 'On'
+            self._add_alarm('KLAMPO271', self.local_mem['ZVCT']['Val'], self.local_mem['CZVCT6']['Val'], False)
+
+    def _check_alarm_cond(self, para):
+        if self.local_mem[para]['Val'] == 1:
+            if not para in self.emergec_alarm_dict.keys():
+                return True
+            else:
+                return False
+        else:
+            return False
+
     def contextMenuEvent(self, event) -> None:
         """ AlarmTable 기능 테스트 """
         menu = QMenu(self)
@@ -128,11 +163,13 @@ class AlarmTable(QTableWidget):
         alarm_name_ = db.loc[alarm_id, "alarm_name"]
         criteria = db.loc[alarm_id, "criteria"]
         criteria_id = db.loc[alarm_id, "criteria_id"]
+        self._add_alarm(alarm_name_, 0, criteria, urgent)
 
+    def _add_alarm(self, alarm_name_, currnet, criteria, urgent):
         item_1 = AlarmItemInfo(self, alarm_info='R' if urgent else 'N')
         item_2 = AlarmItemInfo(self, alarm_info=str(alarm_name_))
-        item_3 = AlarmItemInfo(self, alarm_info=str(criteria))
-        item_4 = AlarmItemInfo(self, '0')
+        item_3 = AlarmItemInfo(self, alarm_info=str(currnet))
+        item_4 = AlarmItemInfo(self, alarm_info=str(criteria))
         item_5 = AlarmItemTimer(self)                                           # item 인스턴스 생성
 
         # 비어 있지 않은 셀 탐색 후 아래에서 위로 데이터 쌓기

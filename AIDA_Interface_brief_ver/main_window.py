@@ -17,9 +17,10 @@ from AIDA_Interface_brief_ver.Thmem_qss import qss
 
 class Mainwindow(QWidget):
     """메인 윈도우"""
-    def __init__(self, parnet):
+    def __init__(self, parnet, mem=None):
         super(Mainwindow, self).__init__()
         self.top_window = parnet
+        self.mem = mem
         # --------------------------------------------------------------------------------------------------------------
         self.setGeometry(300, 300, 1200, 700)    # initial window size
         self.setStyleSheet(qss)
@@ -45,7 +46,7 @@ class Mainwindow(QWidget):
         content_hbox.setContentsMargins(5, 5, 5, 5)
         content_hbox.setSpacing(10)
         # 1.1] 왼족 알람 섹션
-        self.alarm_area = MainLeftAlarmArea(self)
+        self.alarm_area = MainLeftAlarmArea(self, self.mem)
 
         # 1.2] 가운데 진단 영역
         self.procedure_area = MainCenterProcedureArea(self)
