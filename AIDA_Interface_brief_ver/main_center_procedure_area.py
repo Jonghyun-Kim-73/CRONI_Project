@@ -2,6 +2,7 @@ import os
 import sys
 import pandas as pd
 from datetime import datetime
+import time
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -24,20 +25,21 @@ class MainCenterProcedureArea(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(5)
 
-        # 1. 절차서 Table
-        procedure_label = QLabel('절차서 Area')
-        procedure_label.setMinimumHeight(30)
-        procedure_area = ProcedureArea(self)
         # 2. 증상 및 XAI Area
         self.Symptomxai_area = SymptomXAIArea(self)
 
         # 3. 절차서 x 일때 조치 Area
         self.non_procedure_area = NonProcedureArea(self)
 
+        # 1. 절차서 Table
+        procedure_label = QLabel('절차서 Area')
+        procedure_label.setMinimumHeight(30)
+        procedure_area = ProcedureArea(self, self.Symptomxai_area, self.non_procedure_area)
+
         # 4. 기능 복구 조치 Btn
         non_procedure_btn = QPushButton('기능 복구 조치 Btn')
         non_procedure_btn.setObjectName('Btn')
-        non_procedure_btn.clicked.connect(lambda a: self.open_area(type='nonprocedure'))
+        non_procedure_btn.clicked.connect(self.open_area)
 
         # --------------------------------------------------------------------------------------------------------------
         layout.addWidget(procedure_label)
@@ -48,33 +50,19 @@ class MainCenterProcedureArea(QWidget):
 
         self.setLayout(layout)
 
-    def contextMenuEvent(self, event) -> None:
-        """ DiagnosisArea 에 기능 올리기  """
-        menu = QMenu(self)
-        add_symtomxai = menu.addAction("Open symtomxai")
-        add_symtomxai.triggered.connect(lambda a: self.open_area(type='symtomxai'))
-        menu.exec_(event.globalPos())
-
-    def open_area(self, type):
-        if type == 'symtomxai':
-            if self.Symptomxai_area.cond_visibel:
-                self.Symptomxai_area.open_area(cond=False)
-            else:
-                self.Symptomxai_area.open_area(cond=True)
+    def open_area(self):
+        if self.non_procedure_area.cond_visible:
             self.non_procedure_area.open_area(cond=False)
         else:
-            if self.non_procedure_area.cond_visibel:
-                self.non_procedure_area.open_area(cond=False)
-            else:
-                self.non_procedure_area.open_area(cond=True)
-            self.Symptomxai_area.open_area(cond=False)
+            self.non_procedure_area.open_area(cond=True)
+        self.Symptomxai_area.open_area(cond=False)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 
 class ProcedureArea(QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, symxai, nonpro):
         super(ProcedureArea, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubArea')
@@ -84,7 +72,7 @@ class ProcedureArea(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.procedure_table = ProcedureTable(self)
+        self.procedure_table = ProcedureTable(self, symxai, nonpro)
 
         # --------------------------------------------------------------------------------------------------------------
 
@@ -93,10 +81,13 @@ class ProcedureArea(QWidget):
 
 
 class ProcedureTable(QTableWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, symxai, nonpro):
         super(ProcedureTable, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('ProcedureTable')
+
+        # SymXai과 Nonpro 위젯 메모리 주소 받기
+        self.symxai, self.nonpro = symxai, nonpro
 
         # 테이블 프레임 모양 정의
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
@@ -143,10 +134,10 @@ class ProcedureTable(QTableWidget):
         :param em:
         :return:
         """
-        item1 = ProcedureNameCell(self, name)
-        item2 = ProcedureAIProbCell(self, name, ai_prob)
-        item3 = ProcedureInfoCell(self, if_prob)
-        item4 = ProcedureInfoCell(self, em)
+        item1 = ProcedureNameCell(self, name, self.symxai, self.nonpro)
+        item2 = ProcedureAIProbCell(self, name, ai_prob, self.symxai, self.nonpro)
+        item3 = ProcedureInfoCell(self, if_prob, self.symxai, self.nonpro)
+        item4 = ProcedureInfoCell(self, em, self.symxai, self.nonpro)
         self.setCellWidget(row, 0, item1)
         self.setCellWidget(row, 1, item2)
         self.setCellWidget(row, 2, item3)
@@ -179,10 +170,42 @@ class ProcedureEmptyCell(QLabel):
         self.isempty = True
 
 
-class ProcedureNameCell(QLabel):
+class ProcedureBaseCell(QLabel):
+    """ 셀 Label 공통 """
+    def __init__(self, parent, symxai, nonpro):
+        super(ProcedureBaseCell, self).__init__(parent=parent)
+        # SymXai과 Nonpro 위젯 메모리 주소 받기
+        self.symxai, self.nonpro = symxai, nonpro
+
+        self.procedure_name = ''
+
+    def mousePressEvent(self, e) -> None:
+        if self.nonpro.cond_visible:
+            self.nonpro.open_area(cond=False)
+        else:
+            self.symxai.open_area(cond=True, abnomal_name=self.procedure_name)
+
+
+class ProcedureBaseWidget(QWidget):
+    """ 셀 Widget 공통 """
+    def __init__(self, parent, symxai, nonpro):
+        super(ProcedureBaseWidget, self).__init__(parent=parent)
+        # SymXai과 Nonpro 위젯 메모리 주소 받기
+        self.symxai, self.nonpro = symxai, nonpro
+
+        self.procedure_name = ''
+
+    def mousePressEvent(self, e) -> None:
+        if self.nonpro.cond_visible:
+            self.nonpro.open_area(cond=False)
+        else:
+            self.symxai.open_area(cond=True, abnomal_name=self.procedure_name)
+
+
+class ProcedureNameCell(ProcedureBaseCell):
     """ 절차서 명 Cell """
-    def __init__(self, parent, name):
-        super(ProcedureNameCell, self).__init__(parent=parent)
+    def __init__(self, parent, name, symxai, nonpro):
+        super(ProcedureNameCell, self).__init__(parent, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('ProcedureItemInfo')
         self.isempty = False
@@ -193,10 +216,10 @@ class ProcedureNameCell(QLabel):
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
 
 
-class ProcedureAIProbCell(QWidget):
+class ProcedureAIProbCell(ProcedureBaseWidget):
     """ AI 확신도 """
-    def __init__(self, parent, name, aiprob):
-        super(ProcedureAIProbCell, self).__init__(parent=parent)
+    def __init__(self, parent, name, aiprob, symxai, nonpro):
+        super(ProcedureAIProbCell, self).__init__(parent, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
 
         self.isempty = False
@@ -224,10 +247,10 @@ class ProcedureAIProbCell(QWidget):
         self.setLayout(layer)
 
 
-class ProcedureInfoCell(QLabel):
+class ProcedureInfoCell(ProcedureBaseCell):
     """ 절차서 Info Cell """
-    def __init__(self, parent, name):
-        super(ProcedureInfoCell, self).__init__(parent=parent)
+    def __init__(self, parent, name, symxai, nonpro):
+        super(ProcedureInfoCell, self).__init__(parent, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('ProcedureItemInfo')
         self.isempty = False
@@ -248,43 +271,92 @@ class SymptomXAIArea(QWidget):
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         self.Vlayout = QVBoxLayout(self)
-        self.Vlayout.setContentsMargins(5, 5, 5, 5)
+        self.Vlayout.setContentsMargins(0, 0, 0, 0)
         self.Vlayout.setSpacing(0)
 
-        self.Symptom_area = QLabel('Sym')
+        self.Abnormal_procedure_name = QLabel('')
+        self.Abnormal_procedure_name.setFixedHeight(30)
+
+        self.Hlayout = QHBoxLayout()
+        self.Hlayout.setContentsMargins(0, 0, 0, 0)
+        self.Hlayout.setSpacing(0)
+
+        self.Symptom_area = SymptomArea(self)
         self.XAI_area = QLabel('Xai')
         # --------------------------------------------------------------------------------------------------------------
-        self.Vlayout.addWidget(self.Symptom_area)
-        self.Vlayout.addWidget(self.XAI_area)
+        self.Hlayout.addWidget(self.Symptom_area)
+        self.Hlayout.addWidget(self.XAI_area)
+
+        self.Vlayout.addWidget(self.Abnormal_procedure_name)
+        self.Vlayout.addLayout(self.Hlayout)
+
         self.setLayout(self.Vlayout)
 
         self.fold_time = 200
         self.ani_symptomxai_area = QPropertyAnimation(self, b'minimumHeight')
         self.ani_symptomxai_area.setDuration(self.fold_time)
 
-        self._visibel(False)
-        self.cond_visibel = False
+        self._visible(False)
+        self.cond_visible = False
+        self.abnomal_name = ''
 
-    def _visibel(self, trig):
+    def _visible(self, trig):
         self.Symptom_area.setVisible(trig)
         self.XAI_area.setVisible(trig)
+        self.Abnormal_procedure_name.setVisible(trig)
+
         if trig:
             self.Vlayout.setContentsMargins(5, 5, 5, 5)
         else:
             self.Vlayout.setContentsMargins(0, 0, 0, 0)
-        self.cond_visibel = trig
+        self.cond_visible = trig
 
-    def open_area(self, cond):
+    def open_area(self, cond, abnomal_name=''):
+        if cond == True and abnomal_name == self.abnomal_name:
+            cond = False
+
         if cond:
-            self._visibel(True)
+            self._visible(True)
+            self.Abnormal_procedure_name.setText(f'{abnomal_name}')
+            self.abnomal_name = abnomal_name
+
+            # self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setEndValue(458)
             self.ani_symptomxai_area.start()
         else:
-            self._visibel(False)
+            self._visible(False)
+            self.abnomal_name = ''
             self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setEndValue(0)
             self.ani_symptomxai_area.start()
+
+
+class SymptomArea(QWidget):
+    def __init__(self, parent):
+        super(SymptomArea, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('SubArea')
+
+        # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
+        layer = QVBoxLayout(self)
+        layer.setContentsMargins(2, 2, 2, 2)
+        layer.setSpacing(5)
+
+        label1 = QLabel('Symptom Check')
+        label1.setFixedHeight(30)
+
+        label2 = QLabel('Symptom Check2')
+        label1.setFixedHeight(30)
+
+        # --------------------------------------------------------------------------------------------------------------
+        layer.addWidget(label1)
+        layer.addWidget(label2)
+
+        # layer.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Ignored, QSizePolicy.Expanding))
+
+        self.setLayout(layer)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -309,26 +381,26 @@ class NonProcedureArea(QWidget):
         self.ani_non_procedure_area = QPropertyAnimation(self, b'minimumHeight')
         self.ani_non_procedure_area.setDuration(self.fold_time)
 
-        self._visibel(False)
-        self.cond_visibel = False
+        self._visible(False)
+        self.cond_visible = False
 
 
-    def _visibel(self, trig):
+    def _visible(self, trig):
         self.non_procedure_label.setVisible(trig)
         if trig:
             self.Vlayout.setContentsMargins(5, 5, 5, 5)
         else:
             self.Vlayout.setContentsMargins(0, 0, 0, 0)
-        self.cond_visibel = trig
+        self.cond_visible = trig
 
     def open_area(self, cond):
         if cond:
-            self._visibel(True)
+            self._visible(True)
             self.ani_non_procedure_area.setStartValue(self.height())
             self.ani_non_procedure_area.setEndValue(458)
             self.ani_non_procedure_area.start()
         else:
-            self._visibel(False)
+            self._visible(False)
             self.ani_non_procedure_area.setStartValue(self.height())
             self.ani_non_procedure_area.setEndValue(0)
             self.ani_non_procedure_area.start()
