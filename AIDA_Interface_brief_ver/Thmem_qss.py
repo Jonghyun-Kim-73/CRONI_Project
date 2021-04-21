@@ -61,6 +61,30 @@ qss = """
             color: rgb(212, 178, 46);
     }
     
+    /* AlarmTableItem Empty */
+    QLabel#AlarmItemEmpty {
+            background: rgb(129, 122, 96);
+    }
+    
+    /* ProcedureTableItem Info and Timer */
+    QLabel#ProcedureItemInfo {
+            background: rgb(128, 128, 128);
+            font-size: 11px;
+            color: rgb(0, 0, 0);
+    }
+    
+    /* ProcedureTableItem Empty */
+    QLabel#ProcedureItemEmpty {
+            background: rgb(128, 128, 128);
+    }
+    
+    /* ProcedureTableItem ProcedureAIProbCell */
+    QLabel#ProcedureItemProgressLabel {                                        
+        background: rgb(128, 128, 128);             
+        font: bold 12px;
+        color: rgb(0, 0, 0);
+    }
+    
     /* CircleProgress */
     QLabel#CircleProgress {
             background: rgb(31, 39, 42);
@@ -79,6 +103,7 @@ qss = """
             border-width: 2px;                          /* 서브 위젯 테두리 선 두께 */
             border-color: rgb(0, 0, 0);                 /* 서브 위젯 테두리 선 색 */ 
     }
+    
     QTableWidget#AlarmTable QHeaderView{
             background: rgb(129, 122, 96);             /* 메인 위젯 Back color 색 */
     }
@@ -128,6 +153,17 @@ qss = """
     }
     QPushButton#Exit:pressed {
         background: rgb(220, 152, 162);
+    }
+    
+    /* ----------------------------------------------------------------------------- */
+    /* 진단 바 정보                                                                    */
+    /* ----------------------------------------------------------------------------- */
+    
+    QProgressBar#ProcedureItemProgress {       
+        color: rgb(128, 128, 128);
+    }
+    QProgressBar#ProcedureItemProgress::chunk {
+        background-color: rgb(58, 58, 58);
     }
     
     /* End ------------------------------------------------------------------------- */

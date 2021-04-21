@@ -70,8 +70,6 @@ class MainCenterProcedureArea(QWidget):
             self.Symptomxai_area.open_area(cond=False)
 
 
-
-
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -113,8 +111,131 @@ class ProcedureTable(QTableWidget):
             self.setColumnWidth(i, w)
             col_names.append(l)
 
+        self.max_cell = 3
+
+        for i in range(0, self.max_cell):
+            self.add_empty_procedure(i)
+
+        cell_height = self.rowHeight(0)
+        total_height = self.horizontalHeader().height() + cell_height * self.max_cell + 4  # TODO 4 매번 계산.
+
+        # self.parent().setMaximumHeight(total_height)
+        # self.setMaximumHeight(total_height)
+
+        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.verticalScrollBar().setSingleStep(cell_height / 3)
+
         self.setHorizontalHeaderLabels(col_names)
         self.horizontalHeader().setStretchLastSection(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+
+    def add_empty_procedure(self, i):
+        self.insertRow(i)
+        [self.setCellWidget(i, _, ProcedureEmptyCell(self)) for _ in range(0, 4)]
+
+    def add_procedure(self, row, name, ai_prob, if_prob, em):
+        """
+        테이블에 진단 결과 정보 저장하기
+
+        :param name:
+        :param ai_prob:
+        :param if_prob:
+        :param em:
+        :return:
+        """
+        item1 = ProcedureNameCell(self, name)
+        item2 = ProcedureAIProbCell(self, name, ai_prob)
+        item3 = ProcedureInfoCell(self, if_prob)
+        item4 = ProcedureInfoCell(self, em)
+        self.setCellWidget(row, 0, item1)
+        self.setCellWidget(row, 1, item2)
+        self.setCellWidget(row, 2, item3)
+        self.setCellWidget(row, 3, item4)
+
+    def update_procedure(self):
+        self.add_procedure(0, '비정상00', 50, '12/12', 'Y')
+        self.add_procedure(1, '비정상02', 30, '2/4', 'N')
+        self.add_procedure(2, '비정상03', 20, '0/5', 'N')
+
+    def contextMenuEvent(self, event) -> None:
+        """ ProcedureTable 에 기능 올리기  """
+        menu = QMenu(self)
+        add_procedure = menu.addAction("Add procedure")
+        update_procedure = menu.addAction("Update procedure")
+        get_net = menu.addAction("Get_pronet")
+
+        add_procedure.triggered.connect(lambda a: self.add_procedure(0, '비정상00', 95, '10/12', 'Y'))
+        update_procedure.triggered.connect(lambda a: self.add_procedure(0, '비정상01', 80, '10/12', 'Y'))
+        get_net.triggered.connect(self.update_procedure)
+        menu.exec_(event.globalPos())
+
+
+class ProcedureEmptyCell(QLabel):
+    """ 공백 Cell """
+    def __init__(self, parent):
+        super(ProcedureEmptyCell, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True) # 상위 스타일 상속
+        self.setObjectName('ProcedureItemEmpty')
+        self.isempty = True
+
+
+class ProcedureNameCell(QLabel):
+    """ 절차서 명 Cell """
+    def __init__(self, parent, name):
+        super(ProcedureNameCell, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('ProcedureItemInfo')
+        self.isempty = False
+
+        self.procedure_name = name
+
+        self.setText(name)
+        self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
+
+
+class ProcedureAIProbCell(QWidget):
+    """ AI 확신도 """
+    def __init__(self, parent, name, aiprob):
+        super(ProcedureAIProbCell, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+
+        self.isempty = False
+
+        self.procedure_name = name
+
+        layer = QHBoxLayout()
+        layer.setContentsMargins(0, 0, 0, 0)
+        layer.setSpacing(5)
+
+        prg_bar = QProgressBar()
+        prg_bar.setObjectName('ProcedureItemProgress')
+        prg_bar.setValue(aiprob)
+        prg_bar.setTextVisible(False)
+
+        prg_label = QLabel()
+        prg_label.setObjectName('ProcedureItemProgressLabel')
+        prg_label.setFixedWidth(30)
+        prg_label.setAlignment(Qt.AlignRight | Qt.AlignCenter)  # 텍스트 가운데 정렬
+        prg_label.setText(f'{aiprob}%')
+
+        layer.addWidget(prg_bar)
+        layer.addWidget(prg_label)
+
+        self.setLayout(layer)
+
+
+class ProcedureInfoCell(QLabel):
+    """ 절차서 Info Cell """
+    def __init__(self, parent, name):
+        super(ProcedureInfoCell, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('ProcedureItemInfo')
+        self.isempty = False
+
+        self.procedure_name = name
+
+        self.setText(name)
+        self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -157,7 +278,7 @@ class SymptomXAIArea(QWidget):
         if cond:
             self._visibel(True)
             self.ani_symptomxai_area.setStartValue(self.height())
-            self.ani_symptomxai_area.setEndValue(300)
+            self.ani_symptomxai_area.setEndValue(458)
             self.ani_symptomxai_area.start()
         else:
             self._visibel(False)
@@ -204,7 +325,7 @@ class NonProcedureArea(QWidget):
         if cond:
             self._visibel(True)
             self.ani_non_procedure_area.setStartValue(self.height())
-            self.ani_non_procedure_area.setEndValue(300)
+            self.ani_non_procedure_area.setEndValue(458)
             self.ani_non_procedure_area.start()
         else:
             self._visibel(False)

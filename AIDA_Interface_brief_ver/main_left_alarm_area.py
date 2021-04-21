@@ -28,8 +28,7 @@ class MainLeftAlarmArea(QWidget):
         alarm_label.setMinimumHeight(30)
         alarm_table_wid = ArarmArea(self)
         # 2. 알람 Table btn
-        alarm_tabel_btn = QPushButton('Suppression Btn')
-        alarm_tabel_btn.setObjectName('Btn')
+        alarm_tabel_btn = AlarmSuppressionButton(self) # 'Suppression Btn')
         # 3. 예지 Area
         prog_label = QLabel('예지 Area')
         prog_label.setMinimumHeight(30)
@@ -90,13 +89,13 @@ class AlarmTable(QTableWidget):
             self.setColumnWidth(i, w)
             col_names.append(l)
 
-        max_cell = 10
+        self.max_cell = 10
 
-        for i in range(0, max_cell):
-            self.insertRow(i)
+        for i in range(0, self.max_cell):
+            self.add_empty_alarm(i)
 
         cell_height = self.rowHeight(0)
-        total_height = self.horizontalHeader().height() + cell_height * max_cell + 4        # TODO 4 매번 계산.
+        total_height = self.horizontalHeader().height() + cell_height * self.max_cell + 4        # TODO 4 매번 계산.
 
         self.parent().setMaximumHeight(total_height)
         self.setMaximumHeight(total_height)
@@ -118,6 +117,10 @@ class AlarmTable(QTableWidget):
         test_action2.triggered.connect(lambda a, alarm_id=1, urgent=False: self.add_alarm(alarm_id, urgent))
         menu.exec_(event.globalPos())
 
+    def add_empty_alarm(self, i):
+        self.insertRow(i)
+        [self.setCellWidget(i, _, AlarmEmptyCell(self)) for _ in range(0, 5)]
+
     def add_alarm(self, alarm_id: int, urgent: bool):
         """ Alarm 1개 추가 기능 """
         # db load
@@ -132,34 +135,52 @@ class AlarmTable(QTableWidget):
         item_4 = AlarmItemInfo(self, '0')
         item_5 = AlarmItemTimer(self)                                           # item 인스턴스 생성
 
-        row_ = self.rowCount()
-        self.insertRow(row_)  # 마지막 Row 에 섹션 추가
+        # 비어 있지 않은 셀 탐색 후 아래에서 위로 데이터 쌓기
+        add_row_pos = 0
+        for _ in range(0, self.rowCount()):
+            if self.cellWidget(_, 0).isempty:
+                add_row_pos += 1
 
-        self.setCellWidget(row_, 0, item_1)
-        self.setCellWidget(row_, 1, item_2)
-        self.setCellWidget(row_, 2, item_3)
-        self.setCellWidget(row_, 3, item_4)
-        self.setCellWidget(row_, 4, item_5)
+        self.insertRow(add_row_pos)  # 마지막 Row 에 섹션 추가
 
-        if self.cellWidget(0, 0) is None:
+        self.setCellWidget(add_row_pos, 0, item_1)
+        self.setCellWidget(add_row_pos, 1, item_2)
+        self.setCellWidget(add_row_pos, 2, item_3)
+        self.setCellWidget(add_row_pos, 3, item_4)
+        self.setCellWidget(add_row_pos, 4, item_5)
+
+        if self.cellWidget(0, 0).isempty:
             # 비어있는 경우 맨 윗줄 지우기
             self.removeRow(0)
         else:
             pass
-        self.scrollToBottom()
+        self.scrollToTop()
         pass
 
 
-class AlarmButton(QPushButton):
-    """알람 history 및 reset 버튼"""
-    qss = """
-        QPushbutton#History {
-            background: rgb(213, 213, 213);          
-        }
-         QPushbutton#AlarmButton {
-            background: rgb(246, 246, 246);         
-        }  
-    """
+class AlarmSuppressionButton(QPushButton):
+    """알람 Suppression 버튼"""
+    def __init__(self, parent):
+        super(AlarmSuppressionButton, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('Btn')
+
+        self.setText('Suppression Btn')
+
+        self.clicked.connect(self._run)
+
+    def _run(self):
+        # TODO Suppresion 버튼 기능 추가.
+        print(self, 'Suppression Btn clicked')
+
+
+class AlarmEmptyCell(QLabel):
+    """ 공백 Cell """
+    def __init__(self, parent):
+        super(AlarmEmptyCell, self).__init__(parent=parent)
+        self.setAttribute(Qt.WA_StyledBackground, True) # 상위 스타일 상속
+        self.setObjectName('AlarmItemEmpty')
+        self.isempty = True
 
 
 class AlarmItemInfo(QLabel):
@@ -168,7 +189,7 @@ class AlarmItemInfo(QLabel):
         super(AlarmItemInfo, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('AlarmItemInfo')
-
+        self.isempty = False
         self.dis_update(alarm_info)
 
     def dis_update(self, alarm_name):
@@ -183,6 +204,7 @@ class AlarmItemTimer(QLabel):
         super(AlarmItemTimer, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('AlarmItemInfo')
+        self.isempty = False
         self.dis_update()
 
     def dis_update(self, load_realtime=True):
