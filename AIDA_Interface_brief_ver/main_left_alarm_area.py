@@ -466,7 +466,14 @@ class AlarmItemInfo(QLabel):
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
 
     def mousePressEvent(self, e) -> None:
-        print(self.alarm_name)
+        """ 알람 row 클릭 시 해당 경보 절차서 Open """
+        MainCenterProcedureArea = self.parent().parent().parent().parent().parent().procedure_area
+        symxai, nonpro = MainCenterProcedureArea.Symptomxai_area, MainCenterProcedureArea.non_procedure_area
+        if nonpro.cond_visible:
+            nonpro.open_area(cond=False)
+        else:
+            symxai.open_area(cond=True, abnomal_name=f'경보_{self.alarm_name}')
+
 
 class AlarmItemTimer(QLabel):
     """ 발생 시간 타이머 아이템 """

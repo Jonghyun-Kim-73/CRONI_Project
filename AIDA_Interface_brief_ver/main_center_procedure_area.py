@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
+# from AIDA_Interface_brief_ver.main_center_precedure_area_symptom import *
+
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -144,9 +146,9 @@ class ProcedureTable(QTableWidget):
         self.setCellWidget(row, 3, item4)
 
     def update_procedure(self):
-        self.add_procedure(0, '비정상00', 50, '12/12', 'Y')
-        self.add_procedure(1, '비정상02', 30, '2/4', 'N')
-        self.add_procedure(2, '비정상03', 20, '0/5', 'N')
+        self.add_procedure(0, '비정상_00', 50, '12/12', 'Y')
+        self.add_procedure(1, '비정상_02', 30, '2/4', 'N')
+        self.add_procedure(2, '비정상_03', 20, '0/5', 'N')
 
     def contextMenuEvent(self, event) -> None:
         """ ProcedureTable 에 기능 올리기  """
@@ -155,8 +157,8 @@ class ProcedureTable(QTableWidget):
         update_procedure = menu.addAction("Update procedure")
         get_net = menu.addAction("Get_pronet")
 
-        add_procedure.triggered.connect(lambda a: self.add_procedure(0, '비정상00', 95, '10/12', 'Y'))
-        update_procedure.triggered.connect(lambda a: self.add_procedure(0, '비정상01', 80, '10/12', 'Y'))
+        add_procedure.triggered.connect(lambda a: self.add_procedure(0, '비정상_00', 95, '10/12', 'Y'))
+        update_procedure.triggered.connect(lambda a: self.add_procedure(0, '비정상_01', 80, '10/12', 'Y'))
         get_net.triggered.connect(self.update_procedure)
         menu.exec_(event.globalPos())
 
@@ -260,6 +262,7 @@ class ProcedureInfoCell(ProcedureBaseCell):
         self.setText(name)
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
 
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -300,9 +303,12 @@ class SymptomXAIArea(QWidget):
         self.cond_visible = False
         self.abnomal_name = ''
 
-    def _visible(self, trig):
+    def _visible(self, trig, get_info=['경보', '비정상']):
         self.Symptom_area.setVisible(trig)
-        self.XAI_area.setVisible(trig)
+        if get_info[0] == '경보':
+            self.XAI_area.setVisible(False)
+        else:
+            self.XAI_area.setVisible(trig)
         self.Abnormal_procedure_name.setVisible(trig)
 
         if trig:
@@ -312,11 +318,13 @@ class SymptomXAIArea(QWidget):
         self.cond_visible = trig
 
     def open_area(self, cond, abnomal_name=''):
+        get_info = abnomal_name.split('_')      # 경보 비정상 나누는 기준
+
         if cond == True and abnomal_name == self.abnomal_name:
             cond = False
 
         if cond:
-            self._visible(True)
+            self._visible(True, get_info)
             self.Abnormal_procedure_name.setText(f'{abnomal_name}')
             self.abnomal_name = abnomal_name
 
@@ -325,7 +333,7 @@ class SymptomXAIArea(QWidget):
             self.ani_symptomxai_area.setEndValue(558)
             self.ani_symptomxai_area.start()
         else:
-            self._visible(False)
+            self._visible(False, get_info)
             self.abnomal_name = ''
             self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setEndValue(0)
