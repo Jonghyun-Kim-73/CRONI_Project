@@ -216,11 +216,6 @@ class CNS:
             self.mem['KLAMPO253']['Val'] = 1
         else:
             self.mem['KLAMPO253']['Val'] = 0
-        # --------- L3  Control bank D full rod withdrawl(220 steps)
-        if self.mem['KZBANK4']['Val'] > 220:
-            self.mem['KLAMPO253']['Val'] = 1
-        else:
-            self.mem['KLAMPO253']['Val'] = 0
         # --------- L4  Control bank lo-lo limit
         # ******* Insertion limit(Reference : KNU 5&6 PLS)
         #
@@ -511,8 +506,8 @@ class CNS:
                   2: self.mem['WSTM2']['Val'] * 0.1,
                   3: self.mem['WSTM3']['Val'] * 0.1}
         if (((self.mem['WSTM1']['Val'] - self.mem['WFWLN1']['Val']) > RSTFWD[1]) or
-                ((self.mem['WSTM2']['Val'] - self.mem['WFWLN2']['Val']) > RSTFWD[1]) or
-                ((self.mem['WSTM3']['Val'] - self.mem['WFWLN3']['Val']) > RSTFWD[1])):
+                ((self.mem['WSTM2']['Val'] - self.mem['WFWLN2']['Val']) > RSTFWD[2]) or
+                ((self.mem['WSTM3']['Val'] - self.mem['WFWLN3']['Val']) > RSTFWD[3])):
             self.mem['KLAMPO320']['Val'] = 1
         else:
             self.mem['KLAMPO320']['Val'] = 0
