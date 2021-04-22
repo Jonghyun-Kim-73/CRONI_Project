@@ -592,7 +592,7 @@ class CNS:
         else:
             self.mem['KLAMPO333']['Val'] = 0
         # --------- R34  Condensate pump flow lo(1400 gpm=88.324 kg/s)
-        if self.mem['WCDPO']['Val'] > self.mem['CWCDPO']['Val']:
+        if self.mem['WCDPO']['Val'] * 0.047 > self.mem['CWCDPO']['Val']:
             self.mem['KLAMPO334']['Val'] = 1
         else:
             self.mem['KLAMPO334']['Val'] = 0

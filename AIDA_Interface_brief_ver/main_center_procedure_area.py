@@ -322,7 +322,7 @@ class SymptomXAIArea(QWidget):
 
             # self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setStartValue(self.height())
-            self.ani_symptomxai_area.setEndValue(458)
+            self.ani_symptomxai_area.setEndValue(558)
             self.ani_symptomxai_area.start()
         else:
             self._visible(False)
@@ -605,7 +605,7 @@ class NonProcedureArea(QWidget):
         if cond:
             self._visible(True)
             self.ani_non_procedure_area.setStartValue(self.height())
-            self.ani_non_procedure_area.setEndValue(458)
+            self.ani_non_procedure_area.setEndValue(558)
             self.ani_non_procedure_area.start()
         else:
             self._visible(False)

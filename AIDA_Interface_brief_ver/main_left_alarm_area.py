@@ -17,7 +17,7 @@ class MainLeftAlarmArea(QWidget):
         self.mem = mem
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubW')
-        self.setMaximumWidth(int(self.parentWidget().width()/5) * 3)                          # 1/3 부분을 차지
+        self.setFixedWidth(int(self.parentWidget().width()/7) * 4)                          # 1/3 부분을 차지
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QVBoxLayout(self)
@@ -27,7 +27,7 @@ class MainLeftAlarmArea(QWidget):
         # 1. 알람 Table
         alarm_label = QLabel('경보 Area')
         alarm_label.setMinimumHeight(30)
-        alarm_table_wid = ArarmArea(self, self.mem)
+        self.alarm_table_wid = ArarmArea(self, self.mem)
         # 2. 알람 Table btn
         alarm_tabel_btn = AlarmSuppressionButton(self)  # 'Suppression Btn')
         # 3. 예지 Area
@@ -37,7 +37,7 @@ class MainLeftAlarmArea(QWidget):
 
         # --------------------------------------------------------------------------------------------------------------
         layout.addWidget(alarm_label)
-        layout.addWidget(alarm_table_wid)
+        layout.addWidget(self.alarm_table_wid)
         layout.addSpacing(5)
         layout.addWidget(alarm_tabel_btn)
         layout.addSpacing(10)
@@ -83,7 +83,7 @@ class AlarmTable(QTableWidget):
         self.verticalHeader().setVisible(False)     # Row 넘버 숨기기
 
         # 테이블 셋업
-        col_info = [('긴급여부', 60), ('경보명', 250), ('현재값', 55), ('설정치', 55), ('발생시간', 0)]
+        col_info = [('긴급여부', 60), ('경보명', 400), ('현재값', 100), ('설정치', 100), ('발생시간', 0)]
 
         self.setColumnCount(len(col_info))
 
@@ -92,7 +92,7 @@ class AlarmTable(QTableWidget):
             self.setColumnWidth(i, w)
             col_names.append(l)
 
-        self.max_cell = 10
+        self.max_cell = 13
 
         for i in range(0, self.max_cell):
             self.add_empty_alarm(i)
@@ -114,12 +114,18 @@ class AlarmTable(QTableWidget):
 
         }
 
+        self.call_refresh = False
+
         if self.mem != None:
             # timer section
             timer = QTimer(self)
             timer.setInterval(1000)
-            timer.timeout.connect(self._update_mem_to_alarm_panel)
+            timer.timeout.connect(self._update)
             timer.start()
+
+    def _update(self):
+        if not self.call_refresh:
+            self._update_mem_to_alarm_panel()
 
     def _update_mem_to_alarm_panel(self):
         self.local_mem = self.mem.get_shmem_db()
@@ -182,15 +188,15 @@ class AlarmTable(QTableWidget):
             # 'KLAMPO251': {'Urgent': False, 'CurPara': '', 'Criteria': '', 'Descrip': '...'}
             'KLAMPO251': {'U': False, 'CurP': 'XPIRM',   'CriP': 'CIRFH',   'D': 'Intermediate range high flux rod stop(20% of FP)'},
             'KLAMPO252': {'U': False, 'CurP': 'QPROREL', 'CriP': 'CPRFH',   'D': 'Power range overpower rod stop(103% of FP)'},
-            'KLAMPO253': {'U': False, 'CurP': 'KZBANK4', 'CriP': '',     'D': 'Control bank D full rod withdrawl(220 steps)'},
+            'KLAMPO253': {'U': False, 'CurP': 'KZBANK4', 'CriP': '',        'D': 'Control bank D full rod withdrawl(220 steps)'},
             'KLAMPO254': {'U': False, 'CurP': '',        'CriP': '',        'D': 'Control bank lo-lo limit'},
             'KLAMPO255': {'U': False, 'CurP': '',        'CriP': '',        'D': 'Two or more rod at bottom(ref:A-II-8 p.113 & KAERI87-39)'},
 
-            'KLAMPO256': {'U': False, 'CurP': 'CAXOFF',  'CriP': '',        'D': 'Axial power distribution limit(3% ~ -12%)'},
-            'KLAMPO257': {'U': False, 'CurP': 'UCCWIN',  'CriP': 'CUCCWH',  'D': 'CCWS outlet temp hi(49.0 deg C)'},
-            'KLAMPO258': {'U': False, 'CurP': 'PINSTA',  'CriP': 'CINSTP',  'D': 'Instrument air press lo(6.3 kg/cm2)'},
-            'KLAMPO259': {'U': False, 'CurP': 'ZRWST',   'CriP': 'CZRWSLL', 'D': 'RWST level lo-lo(5%)'},
-            'KLAMPO260': {'U': False, 'CurP': 'WNETLD',  'CriP': 'CIRFH',   'D': 'L/D HX outlet flow lo(15 m3/hr)'},
+            'KLAMPO256': {'U': False, 'CurP': 'CAXOFF',  'CriP': '',        'D': 'Axial power distribution limit'},
+            'KLAMPO257': {'U': False, 'CurP': 'UCCWIN',  'CriP': 'CUCCWH',  'D': 'CCWS outlet temp hi (49.0 deg C)'},
+            'KLAMPO258': {'U': False, 'CurP': 'PINSTA',  'CriP': 'CINSTP',  'D': 'Instrument air press lo (6.3 kg/cm2)'},
+            'KLAMPO259': {'U': False, 'CurP': 'ZRWST',   'CriP': 'CZRWSLL', 'D': 'RWST level lo-lo (5%)'},
+            'KLAMPO260': {'U': False, 'CurP': '',        'CriP': '',        'D': 'L/D HX outlet flow lo (15 m3/hr)'},
 
             'KLAMPO261': {'U': False, 'CurP': 'UNRHXUT', 'CriP': 'CULDHX',  'D': 'L/D HX outlet temp hi(58 deg C)'},
             'KLAMPO262': {'U': False, 'CurP': 'URHXUT',  'CriP': 'CURHX',   'D': 'RHX L/D outlet temp hi(202 deg C)'},
@@ -198,76 +204,82 @@ class AlarmTable(QTableWidget):
             'KLAMPO264': {'U': False, 'CurP': 'PVCT',    'CriP': 'CPVCTL',  'D': 'VCT press lo(0.7 kg/cm2)'},
             'KLAMPO265': {'U': False, 'CurP': '',        'CriP': 'CWRCPS',  'D': 'RCP seal inj wtr flow lo(1.4 m3/hr)'},
 
-            'KLAMPO266': {'U': False, 'CurP': 'WCHGNO',  'CriP': 'CWCHGL',  'D': 'Charging flow cont flow lo(5 m3/hr)'},
+            'KLAMPO266': {'U': False, 'CurP': '',        'CriP': '',  'D': 'Charging flow cont flow lo(5 m3/hr)'},
             'KLAMPO267': {'U': False, 'CurP': '',        'CriP': '',        'D': 'Not used'},
             'KLAMPO268': {'U': False, 'CurP': 'WNETLD',  'CriP': 'CWLHXH',  'D': 'L/D HX outlet flow hi (30  m3/hr)'},
             'KLAMPO269': {'U': False, 'CurP': '',        'CriP': '',        'D': 'PRZ press lo SI'},
             'KLAMPO270': {'U': False, 'CurP': 'KCTMTSP', 'CriP': '',        'D': 'CTMT spray actuated'},
 
-            'KLAMPO271': {'U': False, 'CurP': 'ZVCT', 'CriP': 'CZVCT6', 'D': 'VCT level hi(80 %)'},
-            'KLAMPO272': {'U': False, 'CurP': 'PVCT', 'CriP': 'CPVCTH', 'D': 'VCT press hi (4.5 kg/cm2)'},
-            'KLAMPO273': {'U': False, 'CurP': 'KCISOB', 'CriP': '', 'D': 'CTMT phase B iso actuated'},
-            'KLAMPO274': {'U': False, 'CurP': 'WCHGNO', 'CriP': 'CWCHGH', 'D': 'Charging flow cont flow hi(27 m3/hr)'},
+            'KLAMPO271': {'U': False, 'CurP': 'ZVCT',    'CriP': 'CZVCT6',  'D': 'VCT level hi(80 %)'},
+            'KLAMPO272': {'U': False, 'CurP': 'PVCT',    'CriP': 'CPVCTH',  'D': 'VCT press hi (4.5 kg/cm2)'},
+            'KLAMPO273': {'U': False, 'CurP': 'KCISOB',  'CriP': '',        'D': 'CTMT phase B iso actuated'},
+            'KLAMPO274': {'U': False, 'CurP': 'WCHGNO',  'CriP': 'CWCHGH',  'D': 'Charging flow cont flow hi(27 m3/hr)'},
+            'KLAMPO295': {'U': False, 'CurP': 'ZSUMP',   'CriP': '',        'D': 'CTMT sump level hi'},
 
-            'KLAMPO295': {'U': False, 'CurP': 'ZSUMP', 'CriP': '', 'D': 'CTMT sump level hi'},
+            'KLAMPO296': {'U': False, 'CurP': 'ZSUMP',   'CriP': '',        'D': 'CTMT sump level hi-hi'},
+            'KLAMPO297': {'U': False, 'CurP': 'UCTMT',   'CriP': 'CUCTMT',  'D': 'CTMT air temp hi(48.89 deg C)'},
+            'KLAMPO298': {'U': False, 'CurP': 'HUCTMT',  'CriP': 'CHCTMT',  'D': 'CTMT moisture hi(70% of R.H.)'},
 
-            'KLAMPO296': {'U': False, 'CurP': 'ZSUMP', 'CriP': '', 'D': 'CTMT sump level hi-hi'},
-            'KLAMPO297': {'U': False, 'CurP': 'UCTMT', 'CriP': 'CUCTMT', 'D': 'CTMT air temp hi(48.89 deg C)'},
-            'KLAMPO298': {'U': False, 'CurP': 'HUCTMT', 'CriP': 'CHCTMT', 'D': 'CTMT moisture hi(70% of R.H.)'},
+            'KLAMPO301': {'U': False, 'CurP': '',        'CriP': '',        'D': 'Rad hi alarm'},
+            'KLAMPO302': {'U': False, 'CurP': '',        'CriP': '',        'D': 'CTMT press hi 1 alert'},
+            'KLAMPO303': {'U': False, 'CurP': '',        'CriP': '',        'D': 'CTMT press hi 2 alert'},
+            'KLAMPO304': {'U': False, 'CurP': '',        'CriP': '',        'D': 'CTMT press hi 3 alert'},
+            'KLAMPO305': {'U': False, 'CurP': 'PACCTK',  'CriP': 'CPACCL',  'D': 'Accum. Tk press lo (43.4 kg/cm2)'},
 
-            'KLAMPO301': {'U': False, 'CurP': '', 'CriP': '', 'D': 'Rad hi alarm'},
-            'KLAMPO302': {'U': False, 'CurP': '', 'CriP': '', 'D': 'CTMT press hi 1 alert'},
-            'KLAMPO303': {'U': False, 'CurP': '', 'CriP': '', 'D': 'CTMT press hi 2 alert'},
-            'KLAMPO304': {'U': False, 'CurP': '', 'CriP': '', 'D': 'CTMT press hi 3 alert'},
-            'KLAMPO305': {'U': False, 'CurP': 'PACCTK', 'CriP': 'CPACCL', 'D': 'Accum. Tk press lo (43.4 kg/cm2)'},
+            'KLAMPO306': {'U': False, 'CurP': 'PACCTK',  'CriP': 'CPACCH',  'D': 'Accum. Tk press hi (43.4 kg/cm2)'},
+            'KLAMPO307': {'U': False, 'CurP': 'PPRZ',    'CriP': 'CPPRZH',  'D': 'PRZ press hi alert(162.4 kg/cm2)'},
+            'KLAMPO308': {'U': False, 'CurP': 'PPRZ',    'CriP': 'CPPRZL',  'D': 'PRZ press lo alert(153.6 kg/cm2)'},
+            'KLAMPO309': {'U': False, 'CurP': 'BPORV',   'CriP': '',        'D': 'PRZ PORV opening(164.2 kg/cm2)'},
+            'KLAMPO310': {'U': False, 'CurP': '',        'CriP': '',        'D': 'PRZ cont level hi heater on(over 5%)'},
 
-            'KLAMPO306': {'U': False, 'CurP': 'PACCTK', 'CriP': 'CPACCH', 'D': 'Accum. Tk press hi (43.4 kg/cm2)'},
-            'KLAMPO307': {'U': False, 'CurP': 'PPRZ', 'CriP': 'CPPRZH', 'D': 'PRZ press hi alert(162.4 kg/cm2)'},
-            'KLAMPO308': {'U': False, 'CurP': 'PPRZ', 'CriP': 'CPPRZL', 'D': 'PRZ press lo alert(153.6 kg/cm2)'},
-            'KLAMPO309': {'U': False, 'CurP': 'BPORV', 'CriP': '', 'D': 'PRZ PORV opening(164.2 kg/cm2)'},
-            'KLAMPO310': {'U': False, 'CurP': '', 'CriP': '', 'D': 'PRZ cont level hi heater on(over 5%)'},
+            'KLAMPO311': {'U': False, 'CurP': '',        'CriP': '',        'D': 'PRZ cont level lo heater off(17%)'},
+            'KLAMPO312': {'U': False, 'CurP': '',        'CriP': '',        'D': 'PRZ press lo back-up heater on(153.6 kg/cm2)'},
+            'KLAMPO313': {'U': False, 'CurP': '',        'CriP': '',        'D': 'Tref/Auct. Tavg Deviation(1.67 deg C)'},
+            'KLAMPO314': {'U': False, 'CurP': 'UAVLEGM', 'CriP': 'CUTAVG',  'D': 'RCS 1,2,3 Tavg hi(312.78 deg C)'},
+            'KLAMPO315': {'U': False, 'CurP': '',        'CriP': '',        'D': 'RCS 1,2,3 Tavg/auct Tavg hi/lo(1.1 deg C)'},
 
-            'KLAMPO311': {'U': False, 'CurP': '', 'CriP': '', 'D': 'PRZ cont level lo heater off(17%)'},
-            'KLAMPO312': {'U': False, 'CurP': '', 'CriP': '', 'D': 'PRZ press lo back-up heater on(153.6 kg/cm2)'},
-            'KLAMPO313': {'U': False, 'CurP': '', 'CriP': '', 'D': 'Tref/Auct. Tavg Deviation(1.67 deg C)'},
-            'KLAMPO314': {'U': False, 'CurP': 'UAVLEGM', 'CriP': 'CUTAVG', 'D': 'RCS 1,2,3 Tavg hi(312.78 deg C)'},
-            'KLAMPO315': {'U': False, 'CurP': '', 'CriP': '', 'D': 'RCS 1,2,3 Tavg/auct Tavg hi/lo(1.1 deg C)'},
+            'KLAMPO316': {'U': False, 'CurP': '',        'CriP': '',        'D': 'RCS 1,2,3 lo flow alert(92%)'},
+            'KLAMPO317': {'U': False, 'CurP': 'UPRT',    'CriP': 'CUPRT',   'D': 'PRT temp hi(45deg C )'},
+            'KLAMPO318': {'U': False, 'CurP': '',        'CriP': 'CPPRT',   'D': 'PRT  press hi( 0.6kg/cm2)'},
+            'KLAMPO319': {'U': False, 'CurP': '',        'CriP': 'CZSGW',   'D': 'SG 1,2,3 level lo(25% of span)'},
+            'KLAMPO320': {'U': False, 'CurP': '',        'CriP': '',        'D': 'SG 1,2,3 stm/FW flow deviation(10% of loop flow)'},
 
-            'KLAMPO316': {'U': False, 'CurP': '', 'CriP': '', 'D': 'RCS 1,2,3 lo flow alert(92%)'},
-            'KLAMPO317': {'U': False, 'CurP': 'UPRT', 'CriP': 'CUPRT', 'D': 'PRT temp hi(45deg C )'},
-            'KLAMPO318': {'U': False, 'CurP': '', 'CriP': 'CPPRT', 'D': 'PRT  press hi( 0.6kg/cm2)'},
-            'KLAMPO319': {'U': False, 'CurP': '', 'CriP': 'CZSGW', 'D': 'SG 1,2,3 level lo(25% of span)'},
-            'KLAMPO320': {'U': False, 'CurP': '', 'CriP': '', 'D': 'SG 1,2,3 stm/FW flow deviation(10% of loop flow)'},
+            'KLAMPO321': {'U': False, 'CurP': '',        'CriP': '',        'D': 'RCP 1,2,3 trip'},
+            'KLAMPO322': {'U': False, 'CurP': 'ZCNDTK',  'CriP': '',        'D': 'Condensate stor Tk level lo'},
+            'KLAMPO323': {'U': False, 'CurP': '',        'CriP': '',        'D': 'Condensate stor Tk level lo-lo'},
+            'KLAMPO324': {'U': False, 'CurP': 'ZCNDTK',  'CriP': 'CZCTKH',  'D': 'Condensate stor Tk level hi'},
+            'KLAMPO325': {'U': False, 'CurP': '',        'CriP': '',        'D': 'MSIV tripped'},
 
-            'KLAMPO321': {'U': False, 'CurP': '', 'CriP': '', 'D': 'RCP 1,2,3 trip'},
-            'KLAMPO322': {'U': False, 'CurP': 'ZCNDTK', 'CriP': '', 'D': 'Condensate stor Tk level  lo'},
-            'KLAMPO323': {'U': False, 'CurP': '', 'CriP': '', 'D': 'Condensate stor Tk level lo-lo'},
-            'KLAMPO324': {'U': False, 'CurP': 'ZCNDTK', 'CriP': 'CZCTKH', 'D': 'Condensate stor Tk level hi'},
-            'KLAMPO325': {'U': False, 'CurP': '', 'CriP': '', 'D': 'MSIV tripped'},
+            'KLAMPO326': {'U': False, 'CurP': '',        'CriP': '',        'D': 'MSL press rate hi steam iso'},
+            'KLAMPO327': {'U': False, 'CurP': '',        'CriP': 'CMSLH',   'D': 'MSL 1,2,3 press rate hi(-7.03 kg/cm*2/sec = 6.89E5 Pa/sec)'},
+            'KLAMPO328': {'U': False, 'CurP': '',        'CriP': 'CPSTML',  'D': 'MSL 1,2,3 press low(41.1 kg/cm*2 = 0.403E7 pas)'},
+            'KLAMPO329': {'U': False, 'CurP': '',        'CriP': '',        'D': 'AFW(MD) actuated'},
+            'KLAMPO330': {'U': False, 'CurP': 'ZCOND',   'CriP': 'CZCNDL',  'D': 'Condenser level lo(27")'},
 
-            'KLAMPO326': {'U': False, 'CurP': '', 'CriP': '', 'D': 'MSL press rate hi steam iso'},
-            'KLAMPO327': {'U': False, 'CurP': '', 'CriP': 'CMSLH', 'D': 'MSL 1,2,3 press rate hi(-7.03 kg/cm*2/sec = 6.89E5 Pa/sec)'},
-            'KLAMPO328': {'U': False, 'CurP': '', 'CriP': 'CPSTML', 'D': 'MSL 1,2,3 press low(41.1 kg/cm*2 = 0.403E7 pas)'},
-            'KLAMPO329': {'U': False, 'CurP': '', 'CriP': '', 'D': 'AFW(MD) actuated'},
-            'KLAMPO330': {'U': False, 'CurP': 'ZCOND', 'CriP': 'CZCNDL', 'D': 'Condenser level lo(27")'},
+            'KLAMPO331': {'U': False, 'CurP': 'PFWPOUT', 'CriP': 'CPFWOH',  'D': 'FW pump discharge header press hi'},
+            'KLAMPO332': {'U': False, 'CurP': '',        'CriP': '',        'D': 'FW pump trip'},
+            'KLAMPO333': {'U': False, 'CurP': 'UFDW',    'CriP': 'CUFWH',   'D': 'FW temp hi(231.1 deg C)'},
+            'KLAMPO334': {'U': False, 'CurP': 'WCDPO',   'CriP': 'CWCDPO',  'D': 'Condensate pump flow lo(1400 gpm=88.324 kg/s)'},
+            'KLAMPO335': {'U': False, 'CurP': 'PVAC',    'CriP': 'CPVACH',  'D': 'Condenser abs press hi(633. mmmHg)'},
 
-            'KLAMPO331': {'U': False, 'CurP': 'PFWPOUT', 'CriP': 'CPFWOH', 'D': 'FW pump discharge header press hi'},
-            'KLAMPO332': {'U': False, 'CurP': '', 'CriP': '', 'D': 'FW pump trip'},
-            'KLAMPO333': {'U': False, 'CurP': 'UFDW', 'CriP': 'CUFWH', 'D': 'FW temp hi(231.1 deg C)'},
-            'KLAMPO334': {'U': False, 'CurP': 'WCDPO', 'CriP': 'CWCDPO', 'D': 'Condensate pump flow lo(1400 gpm=88.324 kg/s)'},
-            'KLAMPO335': {'U': False, 'CurP': 'PVAC', 'CriP': 'CPVACH', 'D': 'Condenser abs press hi(633. mmmHg)'},
+            'KLAMPO336': {'U': False, 'CurP': 'ZCOND',   'CriP': 'CZCNDH',  'D': 'Condenser level hi (45" )'},
+            'KLAMPO337': {'U': False, 'CurP': '',        'CriP': '',        'D': 'TBN trip P-4'},
+            'KLAMPO338': {'U': False, 'CurP': '',        'CriP': '',        'D': 'SG 1,2,3 wtr level hi-hi TBN trip'},
+            'KLAMPO339': {'U': False, 'CurP': '',        'CriP': '',        'D': 'Condenser vacuum lo TBN trip'},
+            'KLAMPO340': {'U': False, 'CurP': '',        'CriP': '',        'D': 'TBN overspeed hi TBN trip'},
 
-            'KLAMPO336': {'U': False, 'CurP': 'ZCOND', 'CriP': 'CZCNDH', 'D': 'Condenser level hi (45" )'},
-            'KLAMPO337': {'U': False, 'CurP': '', 'CriP': '', 'D': 'TBN trip P-4'},
-            'KLAMPO338': {'U': False, 'CurP': '', 'CriP': '', 'D': 'SG 1,2,3 wtr level hi-hi TBN trip'},
-            'KLAMPO339': {'U': False, 'CurP': '', 'CriP': '', 'D': 'Condenser vacuum lo TBN trip'},
-            'KLAMPO340': {'U': False, 'CurP': '', 'CriP': '', 'D': 'TBN overspeed hi TBN trip'},
-
-            'KLAMPO341': {'U': False, 'CurP': 'KGENB', 'CriP': '', 'D': 'Gen. brk open'},
+            'KLAMPO341': {'U': False, 'CurP': 'KGENB',   'CriP': '',        'D': 'Gen. brk open'},
             # End
         }
         for para_key in self.alarm_info_db.keys():
             self._check_alarm(para_key)
+
+        # 발생한 알람 현재 값 받아서 업데이트
+        # 전체 row 를 순회하면서 해당 cell의 3번째 정보창이 비어있지 않으면, 해당셀에 저장된 para 값을 받아서 업데이트
+        for i in range(0, self.rowCount()):
+            if not self.cellWidget(i, 2).isempty:
+                curp, crip = self._check_curp_crip(self.cellWidget(i, 2).alarm_name)
+                self.cellWidget(i, 2).dis_update(curp)
 
     def _check_alarm_cond(self, para):
         """ 발생한 알람 dict 에서 이전에 발생여부 확인후 참/거짓 반환  """
@@ -279,49 +291,64 @@ class AlarmTable(QTableWidget):
         else:
             return False
 
+    def _check_curp_crip(self, para):
+        # 현재 값이나 기준치가 모호한 경우 공백으로 처리
+        curp = '' if self.alarm_info_db[para]['CurP'] == '' else self.local_mem[self.alarm_info_db[para]['CurP']]['Val']
+        crip = '' if self.alarm_info_db[para]['CriP'] == '' else self.local_mem[self.alarm_info_db[para]['CriP']]['Val']
+
+        # 추가적으로 변수에따라 입력되는 값.
+        if True:
+            if para == 'KLAMPO253': crip = '200'
+            if para == 'KLAMPO256':
+                curp = f"{round(self.local_mem['CAXOFF']['Val'], 2)}"
+                crip = '0.3 ~ 0.12'
+            if para == 'KLAMPO258': crip = crip - 1.5
+            if para == 'KLAMPO270': crip = '1'
+            if para == 'KLAMPO273': crip = '1'
+        if True:
+            if para == 'KLAMPO295': crip = '2.492'
+            if para == 'KLAMPO296': crip = '2.9238'
+            if para == 'KLAMPO302':
+                curp = str(self.local_mem['PCTMT']['Val'] * self.mem['PAKGCM']['Val'])
+                crip = '0.3515'
+            if para == 'KLAMPO303':
+                curp = str(self.local_mem['PCTMT']['Val'] * self.mem['PAKGCM']['Val'])
+                crip = '1.02'
+            if para == 'KLAMPO304':
+                curp = str(self.local_mem['PCTMT']['Val'] * self.mem['PAKGCM']['Val'])
+                crip = '1.62'
+        if True:
+            if para == 'KLAMPO308':
+                curp = f"{self.local_mem['PPRZ']['Val'] / 1e+5 : 3.2f}"
+                crip = f"{self.local_mem['CPPRZL']['Val'] / 1e+5 : 3.2f}"
+            if para == 'KLAMPO309': crip = '0.01'
+            if para == 'KLAMPO318':
+                curp = str(self.local_mem['PPRT']['Val'] - 0.98E5)
+            if para == 'KLAMPO319':
+                curp = f"{self.local_mem['ZINST78']['Val']:3.2f}"
+                crip = f"{self.local_mem['CZSGW']['Val'] * 100:3.2f}"
+            if para == 'KLAMPO322': crip = '8.55'
+            if para == 'KLAMPO323': crip = '7.57'
+            if para == 'KLAMPO332':
+                curp = str(
+                    self.local_mem['KFWP1']['Val'] + self.local_mem['KFWP2']['Val'] + self.local_mem['KFWP3']['Val'])
+                crip = '0'
+            if para == 'KLAMPO334': curp = str(self.local_mem['WCDPO']['Val'] * 0.047)
+            if para == 'KLAMPO335':
+                curp = f'{curp:3.3f}'
+                crip = f'{crip:3.3f}'
+            if para == 'KLAMPO338':
+                crip = '0.78'
+            if para == 'KLAMPO341': crip = '0'
+        return curp, crip
+
     def _check_alarm(self, para):
         """ para 를 self.alarm_info_db에서 탐색후 해당 정보를 할당 """
         if self._check_alarm_cond(para):
-            self.emergec_alarm_dict[para] = self.alarm_info_db['D'][para]
-            # 현재 값이나 기준치가 모호한 경우 공백으로 처리
-            curp = '' if self.alarm_info_db[para]['Crip'] == '' else self.local_mem[self.alarm_info_db[para]['CurP']]['Val']
-            crip = '' if self.alarm_info_db[para]['Crip'] == '' else self.local_mem[self.alarm_info_db[para]['CriP']]['Val']
-
-            # 추가적으로 변수에따라 입력되는 값.
-            if True:
-                if para == 'KLAMPO253': crip = '200'
-                if para == 'KLAMPO256': crip = '3% ~ 12%'
-                if para == 'KLAMPO258': crip = crip - 1.5
-                if para == 'KLAMPO270': crip = '1'
-                if para == 'KLAMPO273': crip = '1'
-            if True:
-                if para == 'KLAMPO295': crip = '2.492'
-                if para == 'KLAMPO296': crip = '2.9238'
-                if para == 'KLAMPO302':
-                    curp = str(self.local_mem['PCTMT']['Val'] * self.mem['PAKGCM']['Val'])
-                    crip = '0.3515'
-                if para == 'KLAMPO303':
-                    curp = str(self.local_mem['PCTMT']['Val'] * self.mem['PAKGCM']['Val'])
-                    crip = '1.02'
-                if para == 'KLAMPO304':
-                    curp = str(self.local_mem['PCTMT']['Val'] * self.mem['PAKGCM']['Val'])
-                    crip = '1.62'
-            if True:
-                if para == 'KLAMPO309': crip = '0.01'
-                if para == 'KLAMPO318':
-                    curp = str(self.local_mem['PPRT']['Val'] - 0.98E5)
-                if para == 'KLAMPO322': crip = '8.55'
-                if para == 'KLAMPO323': crip = '7.57'
-                if para == 'KLAMPO332':
-                    curp = str(self.local_mem['KFWP1']['Val'] + self.local_mem['KFWP2']['Val'] + self.local_mem['KFWP3']['Val'])
-                    crip = '0'
-                if para == 'KLAMPO338':
-                    crip = '0.78'
-                if para == 'KLAMPO341': crip = '0'
-
+            self.emergec_alarm_dict[para] = self.alarm_info_db[para]['D']
+            curp, crip = self._check_curp_crip(para)
             urgent = self.alarm_info_db[para]['U']
             self._add_alarm(para, None, curp, crip, urgent)
-
 
     def contextMenuEvent(self, event) -> None:
         """ AlarmTable 기능 테스트 """
@@ -380,6 +407,22 @@ class AlarmTable(QTableWidget):
         self.scrollToTop()
         pass
 
+    def refresh(self):
+        """ suppression btn 용 """
+        # TODO 아직 시간이나 주요 기능 없음
+        print('Refresh!')
+        self.call_refresh = True
+
+        self.emergec_alarm_dict.clear()
+
+        for i in range(self.rowCount()):
+            self.removeRow(0)
+
+        for i in range(0, self.max_cell):
+            self.add_empty_alarm(i)
+
+        self.call_refresh = False
+
 
 class AlarmSuppressionButton(QPushButton):
     """알람 Suppression 버튼"""
@@ -394,7 +437,7 @@ class AlarmSuppressionButton(QPushButton):
 
     def _run(self):
         # TODO Suppresion 버튼 기능 추가.
-        print(self, 'Suppression Btn clicked')
+        self.parent().alarm_table_wid.alarm_table.refresh()
 
 
 class AlarmEmptyCell(QLabel):
@@ -419,9 +462,11 @@ class AlarmItemInfo(QLabel):
 
     def dis_update(self, alarm_info):
         """ 알람 정보 디스플레이 업데이트 """
-        self.setText(alarm_info)
+        self.setText(str(alarm_info))
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
 
+    def mousePressEvent(self, e) -> None:
+        print(self.alarm_name)
 
 class AlarmItemTimer(QLabel):
     """ 발생 시간 타이머 아이템 """
