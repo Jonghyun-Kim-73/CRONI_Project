@@ -1,9 +1,10 @@
 #
-
 import sys
 import multiprocessing
 from copy import deepcopy
 import time
+import json
+
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
 from PyQt5.QtCore import QTimer
@@ -34,9 +35,14 @@ class MyForm(QWidget):
         self.ui.setupUi(self)
 
         # ----------- ADD !!! -------------- (20210419 for 효진)
-        self.setGeometry(0, 0, 269, 500)
+        self.setGeometry(0, 0, 269, 550)
         self.auto_data_info_list = AutoDataList(parent=self)
         self.auto_data_info_list.setGeometry(20, 380, 225, 100)
+
+        # ----------- ADD 절차서 정보 입력 용 ---------------------
+        self.call_procedure_editor = QPushButton('Show Procedure Editor', self)
+        self.call_procedure_editor.setGeometry(20, 500, 225, 30)
+        self.call_procedure_editor.clicked.connect(self.show_procedure_editor)
 
         # ---- UI 초기 세팅
         self.ui.Cu_SP.setText(str(self.shmem.get_logic('Speed')))
@@ -120,6 +126,10 @@ class MyForm(QWidget):
         # Controller와 동시 실행
         pass
 
+    def show_procedure_editor(self):
+        self.procedure_editor_wid = PrcedureEditor(self, mem=self.shmem)
+        self.procedure_editor_wid.show()
+
 
 class AutoDataList(QListWidget):
     def __init__(self, parent):
@@ -175,3 +185,143 @@ class AutoDataList(QListWidget):
 
     def _run_cns(self):
         self.run_tirg = True
+
+
+class PrcedureEditor(QWidget):
+    def __init__(self, parent, mem):
+        super(PrcedureEditor, self).__init__()
+        self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowStaysOnTopHint)
+        self.setGeometry(500, 100, 1000, 500)
+
+        layer = QVBoxLayout()
+        layer.setContentsMargins(0, 0, 0, 0)
+        # --------------------------------------------------------------------------------------------------------------
+        self.cns_para_info = {}
+        with open('db.txt', 'r') as f:
+            while True:
+                temp_ = f.readline().split('\t')
+                if temp_[0] == '':  # if empty space -> break
+                    break
+                if temp_[0] == '#':  # Pass this value. We don't require this value.
+                    pass  # These values are normally static values in SMABRES Code.
+                else:
+                    self.cns_para_info[temp_[0]] = {'Des': temp_[2]}
+        # --------------------------------------------------------------------------------------------------------------
+        with open('Procedure/procedure.json', 'r', encoding='UTF-8-sig') as f:
+            self.procedure_db = json.load(f)
+
+        # 절차서 콤보 박스
+        layer_top = QHBoxLayout()
+        layer_top.setContentsMargins(0, 0, 0, 0)
+
+        self.procedure_combo = QComboBox(self)
+        self.procedure_combo.setMinimumWidth(200)
+
+        for procedure_name in self.procedure_db.keys():
+            self.procedure_combo.addItem(procedure_name)
+
+        self.procedure_combo.currentTextChanged.connect(self.change_procedure_name)
+
+        self.procedure_combo_add = QPushButton('Add Prcedure', self)
+        self.procedure_combo_add.clicked.connect(self.add_procedure)
+
+        layer_top.addWidget(self.procedure_combo)
+        layer_top.addWidget(self.procedure_combo_add)
+
+        # --------------------------------------------------------------------------------------------------------------
+        self.procedure_table = QTableWidget(self)
+        self.procedure_table.itemChanged.connect(self.update_db)
+
+        col_info = [('단계', 50), ('절차', 400), ('CNS 변수', 100), ('CNS 실제 값', 100), ('CNS 변수 Des', 0)]
+        self.procedure_table.setColumnCount(len(col_info))
+
+        col_names = []
+        for i, (l, w) in enumerate(col_info):
+            self.procedure_table.setColumnWidth(i, w)
+            col_names.append(l)
+
+        self.procedure_table.setHorizontalHeaderLabels(col_names)
+        self.procedure_table.horizontalHeader().setStretchLastSection(True)
+        self.procedure_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+
+        # --------------------------------------------------------------------------------------------------------------
+        layer.addLayout(layer_top)
+        layer.addWidget(self.procedure_table)
+
+        self.setLayout(layer)
+
+        # CNS info
+        self.mem = mem
+
+    def keyPressEvent(self, e) -> None:
+        if e.key() == QtCore.Qt.Key_Insert:
+            # Row 삽입
+            self.add_row()
+
+        if e.key() == QtCore.Qt.Key_Delete:
+            # Row 삭제
+            self.remove_select_row()
+
+    def contextMenuEvent(self, event) -> None:
+        """ Procedure Editor 에 기능 올리기  """
+        menu = QMenu(self)
+        remove_procedure = menu.addAction("Remove Select Row [Delete]")
+        add_procedure = menu.addAction("Add Row [Insert]")
+        save_all = menu.addAction("Save DB")
+
+        save_all.triggered.connect(self.save_all_db)
+        remove_procedure.triggered.connect(self.remove_select_row)
+        add_procedure.triggered.connect(self.add_row)
+        menu.exec_(event.globalPos())
+
+    def update_db(self):
+        items = self.procedure_table.selectedItems()
+        for item in items:
+            if item is None:
+                pass
+            else:
+                print(item.row(), item.column())
+
+    def change_procedure_name(self):
+        get_procedure_name = self.procedure_combo.currentText()
+
+        for _ in range(0, self.procedure_table.rowCount()):
+            self.procedure_table.removeRow(0)
+
+        for row, str_row in enumerate(self.procedure_db[get_procedure_name]):
+
+            info = self.procedure_db[get_procedure_name][str_row]
+            step_ = QTableWidgetItem(info['단계'])
+            proc_ = QTableWidgetItem(info['절차'])
+            para_ = QTableWidgetItem(info['CNS변수'])
+            cnsv_ = QTableWidgetItem('0')
+            des__ = QTableWidgetItem(self.cns_para_info[info['CNS변수']]['Des'])
+
+            self.procedure_table.insertRow(row)
+
+            self.procedure_table.setItem(row, 0, step_)
+            self.procedure_table.setItem(row, 1, proc_)
+            self.procedure_table.setItem(row, 2, para_)
+            self.procedure_table.setItem(row, 3, cnsv_)
+            self.procedure_table.setItem(row, 4, des__)
+
+    def remove_select_row(self):
+        """ 선택된 열 지우기 """
+        indexes = self.procedure_table.selectionModel().selectedRows()
+        for index in sorted(indexes):
+            self.procedure_table.removeRow(index.row())
+
+    def add_row(self):
+        self.procedure_table.insertRow(self.procedure_table.rowCount())
+
+    def save_all_db(self):
+        print('Save')
+        with open('Procedure/procedure.json', 'w', encoding='UTF-8-sig') as file:
+            file.write(json.dumps(self.procedure_db, ensure_ascii=False, indent="\t"))
+
+    def add_procedure(self):
+        text, ok = QInputDialog.getText(self, '신규 절차서 추가', '신규절차서 명을 입력하세요.:')
+
+        if ok:
+            self.procedure_db[text] = {}
+            self.procedure_combo.addItem(str(text))
