@@ -230,7 +230,7 @@ class PrcedureEditor(QWidget):
 
         # --------------------------------------------------------------------------------------------------------------
         self.procedure_table = QTableWidget(self)
-        self.procedure_table.itemChanged.connect(self.update_db)
+        self.procedure_table.itemChanged.connect(self.change_cell_info)
 
         col_info = [('단계', 50), ('절차', 400), ('CNS 변수', 100), ('CNS 실제 값', 100), ('CNS 변수 Des', 0)]
         self.procedure_table.setColumnCount(len(col_info))
@@ -274,19 +274,50 @@ class PrcedureEditor(QWidget):
         add_procedure.triggered.connect(self.add_row)
         menu.exec_(event.globalPos())
 
-    def update_db(self):
+    def change_cell_info(self):
+        # CNS info
+        self.local_mem = self.mem.get_shmem_db()
+
         items = self.procedure_table.selectedItems()
         for item in items:
             if item is None:
                 pass
             else:
-                print(item.row(), item.column())
+                step_ = self.procedure_table.item(item.row(), 0).text() if self.procedure_table.item(item.row(), 0) is not None else ''
+                proc_ = self.procedure_table.item(item.row(), 1).text() if self.procedure_table.item(item.row(), 1) is not None else ''
+                para_ = self.procedure_table.item(item.row(), 2).text() if self.procedure_table.item(item.row(), 2) is not None else ''
+                cnsv_ = self.procedure_table.item(item.row(), 3).text() if self.procedure_table.item(item.row(), 3) is not None else ''
+                des__ = self.procedure_table.item(item.row(), 4).text() if self.procedure_table.item(item.row(), 4) is not None else ''
+
+                if para_ != '':
+                    # CNS 변수 인지 체크
+                    if para_ in self.cns_para_info.keys():
+                        # 실제 잘 작성된 파라
+                        if des__ == '':
+                            des__item = QTableWidgetItem(f'{self.cns_para_info[para_]["Des"]}')
+                            self.procedure_table.setItem(item.row(), 4, des__item)
+                        else:
+                            self.procedure_table.item(item.row(), 4).setText(f'{self.cns_para_info[para_]["Des"]}')
+
+                        cnsv_ = self.local_mem[para_]['Val']
+                        self.procedure_table.item(item.row(), 3).setText(f'{cnsv_}')
+                    else:
+                        # 잘못 작성
+                        self.procedure_table.item(item.row(), 2).setText('ERROR')
+                        self.procedure_table.item(item.row(), 3).setText(f'-')
+                        self.procedure_table.item(item.row(), 4).setText(f'-')
+                combo_ = self.procedure_combo.currentText()
+                self.procedure_db[combo_][f'{item.row()}'] = {'단계': f'{step_}',
+                                                              '절차': f'{proc_}',
+                                                              'CNS변수': f'{para_}'}
 
     def change_procedure_name(self):
         get_procedure_name = self.procedure_combo.currentText()
 
         for _ in range(0, self.procedure_table.rowCount()):
             self.procedure_table.removeRow(0)
+
+        # reload db
 
         for row, str_row in enumerate(self.procedure_db[get_procedure_name]):
 
@@ -295,7 +326,13 @@ class PrcedureEditor(QWidget):
             proc_ = QTableWidgetItem(info['절차'])
             para_ = QTableWidgetItem(info['CNS변수'])
             cnsv_ = QTableWidgetItem('0')
-            des__ = QTableWidgetItem(self.cns_para_info[info['CNS변수']]['Des'])
+
+            cns_para = info['CNS변수']
+            if cns_para in self.cns_para_info.keys():
+                des__ = QTableWidgetItem(self.cns_para_info[cns_para]['Des'])
+            else:
+                des__ = QTableWidgetItem('')
+                para_ = QTableWidgetItem('ERROR')
 
             self.procedure_table.insertRow(row)
 
@@ -307,12 +344,37 @@ class PrcedureEditor(QWidget):
 
     def remove_select_row(self):
         """ 선택된 열 지우기 """
-        indexes = self.procedure_table.selectionModel().selectedRows()
+        indexes = self.procedure_table.selectionModel().selectedIndexes()
+
         for index in sorted(indexes):
             self.procedure_table.removeRow(index.row())
+            get_index_row = index.row()
+
+        get_procedure_name = self.procedure_combo.currentText()
+
+        del self.procedure_db[get_procedure_name][f'{get_index_row}']
+        print(self.procedure_db[get_procedure_name], get_index_row)
+
+        new_info = {}
+        for i, _ in enumerate(self.procedure_db[get_procedure_name].keys()):
+            new_info[f'{i}'] = self.procedure_db[get_procedure_name][_]
+
+        self.procedure_db[get_procedure_name] = new_info
 
     def add_row(self):
         self.procedure_table.insertRow(self.procedure_table.rowCount())
+
+        step_ = QTableWidgetItem('')
+        proc_ = QTableWidgetItem('')
+        para_ = QTableWidgetItem('')
+        cnsv_ = QTableWidgetItem('-')
+        des__ = QTableWidgetItem('-')
+
+        self.procedure_table.setItem(self.procedure_table.rowCount(), 0, step_)
+        self.procedure_table.setItem(self.procedure_table.rowCount(), 1, proc_)
+        self.procedure_table.setItem(self.procedure_table.rowCount(), 2, para_)
+        self.procedure_table.setItem(self.procedure_table.rowCount(), 3, cnsv_)
+        self.procedure_table.setItem(self.procedure_table.rowCount(), 4, des__)
 
     def save_all_db(self):
         print('Save')
