@@ -5,6 +5,7 @@ from AIDA_Interface_brief_ver.TOOL.TOOL_Cool import CoolingRATE
 from AIDA_Interface_brief_ver.TOOL import TOOL_etc, TOOL_PTCurve, TOOL_CSF
 
 import pandas as pd
+import random
 
 
 class CMem:
@@ -443,6 +444,22 @@ class ENVCNS(CNS):
         AMod = A
 
         if isinstance(A, int):      # A=0 인경우
+            if A == 1:
+                # 16.0
+                for _tar, _val in zip(['WAFWS1', 'WAFWS2', 'WAFWS3'], ['KSWO143', 'KSWO152', 'KSWO155']):
+                    if self.mem[_tar]['Val'] < 20:
+                        if self.CMem.CTIME >= self.FixedRad + 1325: self._send_control_save([_val], [1])
+                # 17.2
+                if self.CMem.CTIME == self.FixedRad + 1750: self._send_control_save(['KSWO208'], [1])
+
+                # 20.4
+                if self.CMem.CTIME == self.FixedRad + 2000: self._send_control_save(['KSWO115'], [1])
+                if self.CMem.CTIME == self.FixedRad + 2300: self._send_control_save(['KSWO123'], [1])
+
+                # 21.3
+                if self.CMem.CTIME == self.FixedRad + 2600: self._send_control_save(['KSWO132'], [0])
+                if self.CMem.CTIME == self.FixedRad + 2650: self._send_control_save(['KSWO133'], [0])
+                if self.CMem.CTIME == self.FixedRad + 2700: self._send_control_save(['KSWO134'], [0])
             pass
         elif isinstance(A, dict):   # A = { ... } 각 AI 모듈에 정보가 들어있는 경우
             if A['EM'] is not None:
@@ -499,6 +516,8 @@ class ENVCNS(CNS):
         self._append_val_to_list()
         # 3] ENVStep 초기화
         self.ENVStep = 0
+        # 5 FIX RADVAL
+        self.FixedRad = random.randint(0, 20) * 5
         return 0
 
 
