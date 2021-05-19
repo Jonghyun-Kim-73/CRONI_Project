@@ -49,7 +49,7 @@ class Mainwindow(QWidget):
         self.alarm_area = MainLeftAlarmArea(self, self.mem)
 
         # 1.2] 가운데 진단 영역
-        self.procedure_area = MainCenterProcedureArea(self)
+        self.procedure_area = MainCenterProcedureArea(self, self.mem)
 
         # 1.3] 오른쪽 절차서 진단 및 예지 섹션
         self.diagnosis_prog_area = MainRightDiagnosisProgArea(self)
