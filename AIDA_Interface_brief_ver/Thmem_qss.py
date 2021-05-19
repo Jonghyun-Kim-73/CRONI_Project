@@ -3,10 +3,10 @@ qss = """
     /* 위젯 정보                                                                      */
     /* ----------------------------------------------------------------------------- */
     
-    QWidget {background: rgb(222, 225, 230);}       /* 메인 위젯 Back color 색 */
+    QWidget {background: rgb(254, 254, 254);}       /* 메인 위젯 Back color 색 */
     
     QWidget#SubW {                                  /* 서브 위젯 */
-        background: rgb(222, 225, 230);             /* 서브 위젯 Back color */    
+        background: rgb(254, 254, 254);             /* 서브 위젯 Back color */    
         border-style: outset;
         border-width: 0px;                          /* 서브 위젯 테두리 선 두께 */
         border-radius: 10px;
@@ -31,7 +31,7 @@ qss = """
     /* ----------------------------------------------------------------------------- */
     
     QLabel {                                        /* 기본 라벨 컨샙 */
-        background: rgb(222, 225, 230);             /* 메인 위젯 Back color 색 */
+        background: rgb(254, 254, 254);             /* 메인 위젯 Back color 색 */
         font: bold 14px;
         color: rgb(0, 0, 0);
     }

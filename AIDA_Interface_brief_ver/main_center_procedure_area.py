@@ -97,7 +97,7 @@ class ProcedureTable(QTableWidget):
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
 
         # 테이블 셋업
-        col_info = [('비정상 절차서 명', 230), ('AI확신도', 100), ('진입 조건 확인', 100), ('긴급', 0)]
+        col_info = [('비정상 절차서 명', 300), ('AI확신도', 100), ('진입 조건 확인', 100), ('긴급', 0)]
 
         self.setColumnCount(len(col_info))
 
