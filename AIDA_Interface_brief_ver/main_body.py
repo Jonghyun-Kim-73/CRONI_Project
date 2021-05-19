@@ -8,18 +8,26 @@ from AIDA_Interface_brief_ver.db import db_make
 from AIDA_Interface_brief_ver.CNS_Platform_controller import InterfaceFun
 from AIDA_Interface_brief_ver.CNS_All_module import All_Function_module
 
+import socket
+ip_reg = {
+    # 자기 본래 아이피 : {'내부망 아이피' ...}
+    '192.168.142.1': {'comip': '192.168.142.1', 'comport':7101, 'cnsip':'192.168.142.129', 'cnsport':7101}, # 상원
+    '192.168.32.1': {'comip': '192.168.32.1', 'comport':7101, 'cnsip':'192.168.32.135', 'cnsport':7101}, # 혜선
+    '192.168.0.122': {'comip': '192.168.0.122', 'comport':7101, 'cnsip':'192.168.32.135', 'cnsport':7101} # 테스트
+}
+
 
 class Body:
     def __init__(self):
         # from AUTO_UI_TO_PY import AutoUiToPy
         # AutoUiToPy._ui_to_py()
-
+        get_com_ip = socket.gethostbyname(socket.getfqdn())
         # 초기 입력 인자 전달 --------------------------------------------------------------------------------------------
         parser = argparse.ArgumentParser(description='CNS 플랫폼_Ver0')
-        parser.add_argument('--comip', type=str, default='', required=False, help="현재 컴퓨터의 ip [default='']")
-        parser.add_argument('--comport', type=int, default=7101, required=False, help="현재 컴퓨터의 port [default=7001]")
-        parser.add_argument('--cnsip', type=str, default='192.168.142.129', required=False, help="CNS 컴퓨터의 ip [default='']")
-        parser.add_argument('--cnsport', type=int, default=7101, required=False, help="CNS 컴퓨터의 port [default=7001]")
+        parser.add_argument('--comip', type=str, default=ip_reg[get_com_ip]['comip'], required=False, help="현재 컴퓨터의 ip [default='']")
+        parser.add_argument('--comport', type=int, default=ip_reg[get_com_ip]['comport'], required=False, help="현재 컴퓨터의 port [default=7001]")
+        parser.add_argument('--cnsip', type=str, default=ip_reg[get_com_ip]['cnsip'], required=False, help="CNS 컴퓨터의 ip [default='']")
+        parser.add_argument('--cnsport', type=int, default=ip_reg[get_com_ip]['cnsport'], required=False, help="CNS 컴퓨터의 port [default=7001]")
         self.args = parser.parse_args()
         print('=' * 25 + '초기입력 파라메터' + '=' * 25)
 
@@ -30,6 +38,7 @@ class Body:
         manager.start()
 
         shmem = manager.SHMem(cnsinfo=(self.args.cnsip, self.args.cnsport),
+                              remoteinfo=(self.args.comip, self.args.comport),
                               max_len_deque=20,
                               )
         # Build Process ------------------------------------------------------------------------------------------------
@@ -49,8 +58,9 @@ class Body:
 
 
 class SHMem:
-    def __init__(self, cnsinfo, max_len_deque):
+    def __init__(self, cnsinfo, remoteinfo, max_len_deque):
         self.cnsip, self.cnsport = cnsinfo
+        self.remoteip, self.remoteport = remoteinfo
         # 0] 기능 동작 로직
         self.AI = True          # AI 모듈들 동작 허용
         self.XAI = True         # XAI 모듈 동작
@@ -145,6 +155,9 @@ class SHMem:
 
     def get_cns_info(self):
         return self.cnsip, self.cnsport
+
+    def get_remote_info(self):
+        return self.remoteip, self.remoteport
 
     def get_shmem_val(self, val_name):
         return self.mem[val_name]['Val']

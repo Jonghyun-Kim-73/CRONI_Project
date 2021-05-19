@@ -18,7 +18,9 @@ class All_Function_module(multiprocessing.Process):
         # 1 CNS 환경 생성 ----------------------------------------------------
         # CNS 정보 읽기
         self.cns_ip, self.cns_port = self.shmem.get_cns_info()
-        self.cns_env = ENVCNS(Name='EnvCNS', IP=self.cns_ip, PORT=int(self.cns_port))
+        self.remote_ip, self.remote_port = self.shmem.get_remote_info()
+        self.cns_env = ENVCNS(Name='EnvCNS', IP=self.cns_ip, PORT=int(self.cns_port),
+                              RIP=self.remote_ip, RPORT=int(self.remote_port))
 
     def pr_(self, s):
         head_ = 'AllFuncM'
