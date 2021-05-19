@@ -93,14 +93,14 @@ class All_Function_module(multiprocessing.Process):
                     # end AI
                 # One Step CNS -------------------------------------------------------------------------------------
                 Action_dict = {}  # 향후 액션 추가
-                self.cns_env.step(0)
+                self.cns_env.step(1) # 1초 돌 때 (5tick)
 
                 # Update All mem -----------------------------------------------------------------------------------
                 self._update_cnsenv_to_sharedmem()
 
                 # 자동 멈춤 조건
-                # if self.cns_env.mem['KCNTOMS']['Val'] > 3000:
-                #     self.shmem.change_logic_val('Run', False)
+                if self.cns_env.mem['KCNTOMS']['Val'] > 7500:
+                    self.shmem.change_logic_val('Run', False)
 
             else:
                 self.check_init()
