@@ -3,8 +3,6 @@ import sys
 import pandas as pd
 from datetime import datetime
 import time
-from diagnosis_AI import Data_module, Model_module
-
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -66,7 +64,7 @@ class MainCenterProcedureArea(QWidget):
 
 
 class ProcedureArea(QWidget):
-    def __init__(self, parent, symxai, nonpro, mem=None):
+    def __init__(self, parent, symxai, nonpro, mem):
         super(ProcedureArea, self).__init__(parent=parent)
         self.mem = mem
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -83,6 +81,7 @@ class ProcedureArea(QWidget):
 
         layout.addWidget(self.procedure_table)
         self.setLayout(layout)
+
 
 class ProcedureTable(QTableWidget):
     def __init__(self, parent, symxai, nonpro, mem):
@@ -125,27 +124,15 @@ class ProcedureTable(QTableWidget):
         self.horizontalHeader().setStretchLastSection(True)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        self.Data_module1 = Data_module()
-        self.Model_module1 = Model_module()
-        self.Model_module1.load_model()
-
-        self.call_refresh = False
         if self.mem != None:
             print('yes')
             timer1 = QTimer(self)
             timer1.setInterval(1000)
-            timer1.timeout.connect(self._update_result)
+            timer1.timeout.connect(self._update_procedure)
             timer1.start()
             if timer1.isActive():
                 print('running...')
             else: print('None')
-
-    def _update_result(self):
-        if not self.call_refresh:
-            self.minmax_data = self.Data_module1.make_input_data(self.mem)
-            self.Model_module1.AI_abnormal_procedure_classifier(self.minmax_data)
-            self.diagnosis_result = self.Model_module1.Determine_procedure()
-            self._update_procedure()
 
     def add_empty_procedure(self, i):
         self.insertRow(i)
@@ -176,9 +163,11 @@ class ProcedureTable(QTableWidget):
         self.add_procedure(2, '비정상_03', 20, '0/5', 'N')
 
     def _update_procedure(self):
-        self.add_procedure(0, self.diagnosis_result[0]['N'], self.diagnosis_result[0]['P'], '12/12', 'Y')
-        self.add_procedure(1, self.diagnosis_result[1]['N'], self.diagnosis_result[1]['P'], '2/4', 'Y')
-        self.add_procedure(2, self.diagnosis_result[2]['N'], self.diagnosis_result[2]['P'], '0/5', 'Y')
+        ab_dig_result = self.mem.get_logic('Ab_Dig_Result')
+        if not ab_dig_result == {}:
+            self.add_procedure(0, ab_dig_result[0]['N'], ab_dig_result[0]['P'], '12/12', 'Y')
+            self.add_procedure(1, ab_dig_result[1]['N'], ab_dig_result[1]['P'], '2/4', 'Y')
+            self.add_procedure(2, ab_dig_result[2]['N'], ab_dig_result[2]['P'], '0/5', 'Y')
 
     def contextMenuEvent(self, event) -> None:
         """ ProcedureTable 에 기능 올리기  """
@@ -247,6 +236,7 @@ class ProcedureNameCell(ProcedureBaseCell):
         self.setText(name)
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
 
+
 class ProcedureAIProbCell(ProcedureBaseWidget):
     """ AI 확신도 """
     def __init__(self, parent, name, aiprob, symxai, nonpro):
@@ -277,6 +267,7 @@ class ProcedureAIProbCell(ProcedureBaseWidget):
 
         self.setLayout(layer)
 
+
 class ProcedureInfoCell(ProcedureBaseCell):
     """ 절차서 Info Cell """
     def __init__(self, parent, name, symxai, nonpro):
@@ -295,7 +286,7 @@ class ProcedureInfoCell(ProcedureBaseCell):
 
 
 class SymptomXAIArea(QWidget):
-    def __init__(self, parent, mem=None):
+    def __init__(self, parent, mem):
         super(SymptomXAIArea, self).__init__(parent=parent)
         self.mem = mem
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -518,11 +509,6 @@ class XAITable(QTableWidget):
         self.horizontalHeader().setStretchLastSection(True)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        self.Data_module1 = Data_module()
-        self.Model_module1 = Model_module()
-        self.Model_module1.load_model()
-
-        self.call_refresh = False
         if self.mem != None:
             print('yes_XAI')
             timer1 = QTimer(self)
@@ -534,12 +520,11 @@ class XAITable(QTableWidget):
             else: print('None')
 
     def _update_result(self):
-        if not self.call_refresh:
-            self.minmax_data = self.Data_module1.make_input_data(self.mem)
-            self.Model_module1.AI_abnormal_procedure_classifier(self.minmax_data)
-            self.Model_module1.XAI_explainer(self.minmax_data)
-            self.add_value(0, self.Model_module1.shap_name_1()[0], self.Model_module1.shap_val_1()[0])
-            self._update_XAI()
+        # self.minmax_data = self.Data_module1.make_input_data(self.mem)
+        # self.Model_module1.AI_abnormal_procedure_classifier(self.minmax_data)
+        # self.Model_module1.XAI_explainer(self.minmax_data)
+        # self.add_value(0, self.Model_module1.shap_name_1()[0], self.Model_module1.shap_val_1()[0])
+        self._update_XAI()
 
     def add_empty_procedure(self, i):
         self.insertRow(i)
@@ -568,19 +553,15 @@ class XAITable(QTableWidget):
         menu.exec_(event.globalPos())
 
     def _update_XAI(self):
-        print('[XAI] 변수명: ', self.Model_module1.shap_name_1()[0])
-        print('[XAI] SHAP 값: ', self.Model_module1.shap_val_1()[0])
-        self.add_value(1, self.Model_module1.shap_name_1()[1], self.Model_module1.shap_val_1()[1])
-        self.add_value(2, self.Model_module1.shap_name_1()[2], self.Model_module1.shap_val_1()[2])
-        self.add_value(3, self.Model_module1.shap_name_1()[3], self.Model_module1.shap_val_1()[3])
-        self.add_value(4, self.Model_module1.shap_name_1()[4], self.Model_module1.shap_val_1()[4])
-
-    # def contextMenuEvent(self, event) -> None:
-    #     """ XAITable 에 기능 올리기  """
-    #     menu = QMenu(self)
-    #     add_value = menu.addAction("Add procedure")
-    #     add_value.triggered.connect(self._test)
-    #     menu.exec_(event.globalPos())
+        shap_result = self.mem.get_logic('Ab_Xai_Result')
+        if not shap_result == {}:
+            pass
+            # print('[XAI] 변수명: ', self.Model_module1.shap_name_1()[0])
+            # print('[XAI] SHAP 값: ', self.Model_module1.shap_val_1()[0])
+            # self.add_value(1, self.Model_module1.shap_name_1()[1], self.Model_module1.shap_val_1()[1])
+            # self.add_value(2, self.Model_module1.shap_name_1()[2], self.Model_module1.shap_val_1()[2])
+            # self.add_value(3, self.Model_module1.shap_name_1()[3], self.Model_module1.shap_val_1()[3])
+            # self.add_value(4, self.Model_module1.shap_name_1()[4], self.Model_module1.shap_val_1()[4])
 
     def _test(self):
         self.add_value(0, 'PZR압력', 95)

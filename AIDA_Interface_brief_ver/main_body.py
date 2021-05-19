@@ -52,14 +52,17 @@ class SHMem:
     def __init__(self, cnsinfo, max_len_deque):
         self.cnsip, self.cnsport = cnsinfo
         # 0] 기능 동작 로직
-        self.AI = False
+        self.AI = True          # AI 모듈들 동작 허용
+        self.XAI = True         # XAI 모듈 동작
+        self.ProDiag = True     # 절차서 진단용 AI 모듈 동작
 
         # 1] CNS 변수용 shmem
         self.mem = db_make().make_mem_structure(max_len_deque)
         print('Main 메모리 생성 완료')
         # 2] Trig 변수용 shmem
-        self.logic = {'Run': False, 'UpdateUI': False,
+        self.logic = {'Run': False,
                       'Run_ai': self.AI,
+                      'Run_XAI': self.XAI, 'Run_ProDiag': self.ProDiag,
 
                       'Initial_condition': False,
                       'Init_Call': False, 'Init_nub': 1,
@@ -73,6 +76,9 @@ class SHMem:
 
                       'Operation_Strategy': 'N',  # Normal, Abnormal, Em
                       'Operation_Strategy_list': deque(maxlen=2),
+
+                      'Ab_Dig_Result': {},
+                      'Ab_Xai_Result': {},
                       }
         print('Trig 메모리 생성 완료')
         # 3] 변수 그래픽 표기용
@@ -81,8 +87,9 @@ class SHMem:
         }
 
     def call_init(self, init_nub):
-        self.logic = {'Run': False, 'UpdateUI': False,
+        self.logic = {'Run': False,
                       'Run_ai': self.AI,
+                      'Run_XAI': self.XAI, 'Run_ProDiag': self.ProDiag,
 
                       'Initial_condition': True,
                       'Init_Call': True, 'Init_nub': init_nub,
@@ -96,6 +103,9 @@ class SHMem:
 
                       'Operation_Strategy': 'N',  # Normal, Abnormal, Em
                       'Operation_Strategy_list': deque(maxlen=2),
+
+                      'Ab_Dig_Result': {},
+                      'Ab_Xai_Result': {},
                       }
 
         for key in self.save_mem:

@@ -1,3 +1,4 @@
+import socket
 import numpy as np
 from time import sleep
 from AIDA_Interface_brief_ver.TOOL.TOOL_CNS_UDP_FAST import CNS
@@ -109,7 +110,7 @@ class ENVCNS(CNS):
     def __init__(self, Name, IP, PORT):
         super(ENVCNS, self).__init__(threrad_name=Name,
                                      CNS_IP=IP, CNS_Port=PORT,
-                                     Remote_IP='192.168.32.1', Remote_Port=PORT, Max_len=10)
+                                     Remote_IP=socket.gethostbyname(socket.getfqdn()), Remote_Port=PORT, Max_len=10)
         self.Name = Name  # = id
         self.ENVStep = 0
         self.LoggerPath = 'DB'

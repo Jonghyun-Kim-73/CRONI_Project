@@ -3,6 +3,8 @@ import numpy as np
 import copy
 #
 from AIDA_Interface_brief_ver.ENVCNS import ENVCNS
+# AI Module
+from diagnosis_AI import IC_Diagnosis_Pack
 
 import time
 
@@ -33,7 +35,6 @@ class All_Function_module(multiprocessing.Process):
             self.cns_env.reset(file_name='cns_log', initial_nub=self.shmem.get_logic('Init_nub'))
             self._update_cnsenv_to_sharedmem()
             self.shmem.change_logic_val('Init_Call', False)
-            self.shmem.change_logic_val('UpdateUI', True)
             self.pr_('Initial End!')
 
             # 버그 수정 2번째 초기조건에서 0으로 초기화 되지 않는 현상 수정
@@ -67,7 +68,8 @@ class All_Function_module(multiprocessing.Process):
         # - 공유 메모리에서 logic 부분을 취득 후 사용되는 AI 네트워크 정보 취득
         local_logic = self.shmem.get_logic_info()
         if local_logic['Run_ai']:
-            pass
+            # AI Module 초기화
+            self.IC_Pack = IC_Diagnosis_Pack()   # min_max 용
 
         while True:
             local_logic = self.shmem.get_logic_info()
@@ -79,16 +81,20 @@ class All_Function_module(multiprocessing.Process):
                     # Make action from AI ------------------------------------------------------------------------------
                     # - 동작이 허가된 AI 모듈이 cns_env 에서 상태를 취득하여 액션을 계산함.
                     # TODO 향후 cns_env에서 노멀라이제이션까지 모두 처리 할 것.
+                    if local_logic['Run_XAI']:
+                        ab_dig_result = self.IC_Pack.get_Dig_result(self.cns_env.mem)
+                        self.shmem.change_logic_val('Ab_Dig_Result', ab_dig_result)
+                    if local_logic['Run_ProDiag']:
+                        shap_result = self.IC_Pack.get_XAI_result(self.cns_env.mem)
+                        self.shmem.change_logic_val('Ab_Xai_Result', shap_result)
 
-                    pass
-
+                    # end AI
                 # One Step CNS -------------------------------------------------------------------------------------
                 Action_dict = {}  # 향후 액션 추가
                 self.cns_env.step(0)
 
                 # Update All mem -----------------------------------------------------------------------------------
                 self._update_cnsenv_to_sharedmem()
-                self.shmem.change_logic_val('UpdateUI', True)
 
                 # 자동 멈춤 조건
                 # if self.cns_env.mem['KCNTOMS']['Val'] > 3000:

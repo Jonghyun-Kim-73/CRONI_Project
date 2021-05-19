@@ -1,120 +1,41 @@
 import pickle
 import numpy as np
 
-
-class Data_module:
+class IC_Diagnosis_Pack:
     def __init__(self):
+        self._set_up()
+
+    def _set_up(self):
+        # 1. Minmax_scaler 공통
         with open('./DB/min_max_scaler.pkl', 'rb') as f:
             self.minmax_scaler = pickle.load(f)
+        # 2. 모델 로드
+        self.multiple_xgbclassification = pickle.load(
+            open('model/Lightgbm_max_depth_feature_137_200825.h5', 'rb'))  # multiclassova
+        self.explainer = pickle.load(open('model/explainer.pkl', 'rb'))  # pickle로 저장하여 로드하면 더 빠름.
 
-    def make_input_data(self, mem):
-        # input_data = [
-        #     mem['BPV145']['Val'], mem['ZCNDTK']['Val'], mem['CIODMPC']['Val'], mem['UCHGUT']['Val'],
-        #     mem['BLV614']['Val'],
-        #     mem['QPRZH']['Val'], mem['ZREAC']['Val'], mem['ZINST63']['Val'], mem['UNRHXUT']['Val'],
-        #     mem['ZINST65']['Val'],
-        #     mem['ZVCT']['Val'], mem['BHTV']['Val'], mem['CAXOFF']['Val'], mem['UPRZ']['Val'], mem['CRETIV']['Val'],
-        #     mem['ZINST85']['Val'], mem['ZINST56']['Val'], mem['ZINST87']['Val'], mem['WSPRAY']['Val'],
-        #     mem['BHV1']['Val'],
-        #     mem['BRHCV']['Val'], mem['ZINST66']['Val'], mem['ZINST103']['Val'], mem['ZINST86']['Val'],
-        #     mem['CXEMPCM']['Val'],
-        #     mem['URHXUT']['Val'], mem['ZCOND']['Val'], mem['ZINST108']['Val'], mem['ZINST68']['Val'],
-        #     mem['ZINST1']['Val'],
-        #     mem['BPORV']['Val'], mem['BFV122']['Val'], mem['WBOAC']['Val'], mem['WFWLN1']['Val'], mem['WFWLN2']['Val'],
-        #     mem['UHOLEG2']['Val'], mem['ZINST81']['Val'], mem['ZINST67']['Val'], mem['ULPHOUT']['Val'],
-        #     mem['ZINST72']['Val'],
-        #     mem['ZINST78']['Val'], mem['ZINST69']['Val'], mem['UFUELM']['Val'], mem['QOVER']['Val'],
-        #     mem['UUPPPL']['Val'],
-        #     mem['ZINST101']['Val'], mem['KBCDO15']['Val'], mem['ZINST79']['Val'], mem['KBCDO7']['Val'],
-        #     mem['BFV488']['Val'],
-        #     mem['WFWLN3']['Val'], mem['UAVLEG1']['Val'], mem['BFV479']['Val'], mem['UPRT']['Val'],
-        #     mem['ZINST100']['Val'],
-        #     mem['ZINST74']['Val'], mem['ZINST99']['Val'], mem['BFV478']['Val'], mem['ZINST2']['Val'],
-        #     mem['ZINST80']['Val'],
-        #     mem['UHOLEG1']['Val'], mem['ZINST71']['Val'], mem['WCHGNO']['Val'], mem['ZINST121']['Val'],
-        #     mem['BPSV10']['Val'],
-        #     mem['UCOLEG1']['Val'], mem['ZINST15']['Val'], mem['WDEWT']['Val'], mem['UAVLEG2']['Val'],
-        #     mem['BFV498']['Val'],
-        #     mem['UCOND']['Val'], mem['QPROLD']['Val'], mem['ZINST70']['Val'], mem['ZINST73']['Val'],
-        #     mem['ZINST124']['Val'],
-        #     mem['ZINST76']['Val'], mem['UCTMT']['Val'], mem['ZINST102']['Val'], mem['BLV459']['Val'],
-        #     mem['BFV499']['Val'],
-        #     mem['UCOLEG2']['Val'], mem['BFV489']['Val'], mem['ZINST77']['Val'], mem['ZINST75']['Val'],
-        #     mem['UAVLEG3']['Val'],
-        #     mem['EBOAC']['Val'], mem['UHOLEG3']['Val'], mem['UCOLEG3']['Val'], mem['ZAFWTK']['Val'],
-        #     mem['UAVLEGM']['Val'],
-        #     mem['BTV418']['Val'], mem['ZINST48']['Val'], mem['KLAMPO119']['Val'], mem['KLAMPO118']['Val'],
-        #     mem['FRQGEN']['Val'],
-        #     mem['PVAC']['Val'], mem['KBCDO22']['Val'], mem['BHV2']['Val'], mem['KLAMPO117']['Val'], mem['PVCT']['Val'],
-        #     mem['KLAMPO28']['Val'], mem['KBCDO11']['Val'], mem['ZINST36']['Val'], mem['UAVLEGS']['Val'],
-        #     mem['BHV6']['Val'],
-        #     mem['ZINST3']['Val'], mem['KBCDO19']['Val'], mem['KBCDO6']['Val'], mem['ZINST26']['Val'],
-        #     mem['KBCDO16']['Val'],
-        #     mem['BHTBY']['Val'], mem['FSRMDPM']['Val'], mem['H2CONC']['Val'], mem['BHV22']['Val'], mem['BHV302']['Val'],
-        #     mem['KLAMPO29']['Val'], mem['BFV13']['Val'], mem['KBCDO8']['Val'], mem['ZINST22']['Val'],
-        #     mem['BHSV']['Val'],
-        #     mem['KLAMPO15']['Val'], mem['BLV48']['Val'], mem['KBCDO5']['Val'], mem['KBCDO20']['Val'],
-        #     mem['KBCDO10']['Val'],
-        #     mem['BTV143']['Val'], mem['KLAMPO48']['Val'], mem['KLAMPO9']['Val'], mem['KLAMPO69']['Val'],
-        #     mem['KBCDO4']['Val'],
-        #     mem['KLAMPO221']['Val'], mem['KLAMPO241']['Val'], mem['KLAMPO234']['Val'], mem['KLAMPO198']['Val'],
-        #     mem['BHV41']['Val'],
-        #     mem['KLAMPO195']['Val'], mem['KFV610']['Val']
-        # ]
-
-        self.input_data = [
-            mem.get_shmem_val('BPV145'), mem.get_shmem_val('ZCNDTK'), mem.get_shmem_val('CIODMPC'),
-            mem.get_shmem_val('UCHGUT'), mem.get_shmem_val('BLV614'), mem.get_shmem_val('QPRZH'),
-            mem.get_shmem_val('ZREAC'), mem.get_shmem_val('ZINST63'), mem.get_shmem_val('UNRHXUT'),
-            mem.get_shmem_val('ZINST65'), mem.get_shmem_val('ZVCT'), mem.get_shmem_val('BHTV'),
-            mem.get_shmem_val('CAXOFF'), mem.get_shmem_val('UPRZ'), mem.get_shmem_val('CRETIV'),
-            mem.get_shmem_val('ZINST85'), mem.get_shmem_val('ZINST56'), mem.get_shmem_val('ZINST87'),
-            mem.get_shmem_val('WSPRAY'), mem.get_shmem_val('BHV1'), mem.get_shmem_val('BRHCV'),
-            mem.get_shmem_val('ZINST66'), mem.get_shmem_val('ZINST103'), mem.get_shmem_val('ZINST86'),
-            mem.get_shmem_val('CXEMPCM'), mem.get_shmem_val('URHXUT'), mem.get_shmem_val('ZCOND'),
-            mem.get_shmem_val('ZINST108'), mem.get_shmem_val('ZINST68'), mem.get_shmem_val('ZINST1'),
-            mem.get_shmem_val('BPORV'), mem.get_shmem_val('BFV122'), mem.get_shmem_val('WBOAC'),
-            mem.get_shmem_val('WFWLN1'), mem.get_shmem_val('WFWLN2'), mem.get_shmem_val('UHOLEG2'),
-            mem.get_shmem_val('ZINST81'), mem.get_shmem_val('ZINST67'), mem.get_shmem_val('ULPHOUT'),
-            mem.get_shmem_val('ZINST72'), mem.get_shmem_val('ZINST78'), mem.get_shmem_val('ZINST69'),
-            mem.get_shmem_val('UFUELM'), mem.get_shmem_val('QOVER'), mem.get_shmem_val('UUPPPL'),
-            mem.get_shmem_val('ZINST101'), mem.get_shmem_val('KBCDO15'), mem.get_shmem_val('ZINST79'),
-            mem.get_shmem_val('KBCDO7'), mem.get_shmem_val('BFV488'), mem.get_shmem_val('WFWLN3'),
-            mem.get_shmem_val('UAVLEG1'), mem.get_shmem_val('BFV479'), mem.get_shmem_val('UPRT'),
-            mem.get_shmem_val('ZINST100'), mem.get_shmem_val('ZINST74'), mem.get_shmem_val('ZINST99'),
-            mem.get_shmem_val('BFV478'), mem.get_shmem_val('ZINST2'), mem.get_shmem_val('ZINST80'),
-            mem.get_shmem_val('UHOLEG1'), mem.get_shmem_val('ZINST71'), mem.get_shmem_val('WCHGNO'),
-            mem.get_shmem_val('ZINST121'), mem.get_shmem_val('BPSV10'), mem.get_shmem_val('UCOLEG1'),
-            mem.get_shmem_val('ZINST15'), mem.get_shmem_val('WDEWT'), mem.get_shmem_val('UAVLEG2'),
-            mem.get_shmem_val('BFV498'), mem.get_shmem_val('UCOND'), mem.get_shmem_val('QPROLD'),
-            mem.get_shmem_val('ZINST70'), mem.get_shmem_val('ZINST73'), mem.get_shmem_val('ZINST124'),
-            mem.get_shmem_val('ZINST76'), mem.get_shmem_val('UCTMT'), mem.get_shmem_val('ZINST102'),
-            mem.get_shmem_val('BLV459'), mem.get_shmem_val('BFV499'), mem.get_shmem_val('UCOLEG2'),
-            mem.get_shmem_val('BFV489'), mem.get_shmem_val('ZINST77'), mem.get_shmem_val('ZINST75'),
-            mem.get_shmem_val('UAVLEG3'), mem.get_shmem_val('EBOAC'), mem.get_shmem_val('UHOLEG3'),
-            mem.get_shmem_val('UCOLEG3'), mem.get_shmem_val('ZAFWTK'), mem.get_shmem_val('UAVLEGM'),
-            mem.get_shmem_val('BTV418'), mem.get_shmem_val('ZINST48'), mem.get_shmem_val('KLAMPO119'),
-            mem.get_shmem_val('KLAMPO118'), mem.get_shmem_val('FRQGEN'), mem.get_shmem_val('PVAC'),
-            mem.get_shmem_val('KBCDO22'), mem.get_shmem_val('BHV2'), mem.get_shmem_val('KLAMPO117'),
-            mem.get_shmem_val('PVCT'), mem.get_shmem_val('KLAMPO28'), mem.get_shmem_val('KBCDO11'),
-            mem.get_shmem_val('ZINST36'), mem.get_shmem_val('UAVLEGS'), mem.get_shmem_val('BHV6'),
-            mem.get_shmem_val('ZINST3'), mem.get_shmem_val('KBCDO19'), mem.get_shmem_val('KBCDO6'),
-            mem.get_shmem_val('ZINST26'), mem.get_shmem_val('KBCDO16'), mem.get_shmem_val('BHTBY'),
-            mem.get_shmem_val('FSRMDPM'), mem.get_shmem_val('H2CONC'), mem.get_shmem_val('BHV22'),
-            mem.get_shmem_val('BHV302'), mem.get_shmem_val('KLAMPO29'), mem.get_shmem_val('BFV13'),
-            mem.get_shmem_val('KBCDO8'), mem.get_shmem_val('ZINST22'), mem.get_shmem_val('BHSV'),
-            mem.get_shmem_val('KLAMPO15'), mem.get_shmem_val('BLV48'), mem.get_shmem_val('KBCDO5'),
-            mem.get_shmem_val('KBCDO20'), mem.get_shmem_val('KBCDO10'), mem.get_shmem_val('BTV143'),
-            mem.get_shmem_val('KLAMPO48'), mem.get_shmem_val('KLAMPO9'), mem.get_shmem_val('KLAMPO69'),
-            mem.get_shmem_val('KBCDO4'), mem.get_shmem_val('KLAMPO221'), mem.get_shmem_val('KLAMPO241'),
-            mem.get_shmem_val('KLAMPO234'), mem.get_shmem_val('KLAMPO198'), mem.get_shmem_val('BHV41'),
-            mem.get_shmem_val('KLAMPO195'), mem.get_shmem_val('KFV610')
-        ]
-        self.out_minmax = self.minmax_scaler.transform([self.input_data])
-        return self.out_minmax
-
-class Model_module:
-    def __init__(self):
+        # 3. 입렵 정보
+        self.input_data = ['BPV145', 'ZCNDTK', 'CIODMPC', 'UCHGUT', 'BLV614', 'QPRZH', 'ZREAC', 'ZINST63', 'UNRHXUT',
+                           'ZINST65', 'ZVCT', 'BHTV', 'CAXOFF', 'UPRZ', 'CRETIV', 'ZINST85', 'ZINST56', 'ZINST87',
+                           'WSPRAY', 'BHV1', 'BRHCV', 'ZINST66', 'ZINST103', 'ZINST86', 'CXEMPCM', 'URHXUT', 'ZCOND',
+                           'ZINST108', 'ZINST68', 'ZINST1', 'BPORV', 'BFV122', 'WBOAC', 'WFWLN1', 'WFWLN2', 'UHOLEG2',
+                           'ZINST81', 'ZINST67', 'ULPHOUT', 'ZINST72', 'ZINST78', 'ZINST69', 'UFUELM', 'QOVER',
+                           'UUPPPL',
+                           'ZINST101', 'KBCDO15', 'ZINST79', 'KBCDO7', 'BFV488', 'WFWLN3', 'UAVLEG1', 'BFV479', 'UPRT',
+                           'ZINST100', 'ZINST74', 'ZINST99', 'BFV478', 'ZINST2', 'ZINST80', 'UHOLEG1', 'ZINST71',
+                           'WCHGNO',
+                           'ZINST121', 'BPSV10', 'UCOLEG1', 'ZINST15', 'WDEWT', 'UAVLEG2', 'BFV498', 'UCOND', 'QPROLD',
+                           'ZINST70', 'ZINST73', 'ZINST124', 'ZINST76', 'UCTMT', 'ZINST102', 'BLV459', 'BFV499',
+                           'UCOLEG2',
+                           'BFV489', 'ZINST77', 'ZINST75', 'UAVLEG3', 'EBOAC', 'UHOLEG3', 'UCOLEG3', 'ZAFWTK',
+                           'UAVLEGM',
+                           'BTV418', 'ZINST48', 'KLAMPO119', 'KLAMPO118', 'FRQGEN', 'PVAC', 'KBCDO22', 'BHV2',
+                           'KLAMPO117',
+                           'PVCT', 'KLAMPO28', 'KBCDO11', 'ZINST36', 'UAVLEGS', 'BHV6', 'ZINST3', 'KBCDO19', 'KBCDO6',
+                           'ZINST26', 'KBCDO16', 'BHTBY', 'FSRMDPM', 'H2CONC', 'BHV22', 'BHV302', 'KLAMPO29', 'BFV13',
+                           'KBCDO8', 'ZINST22', 'BHSV', 'KLAMPO15', 'BLV48', 'KBCDO5', 'KBCDO20', 'KBCDO10', 'BTV143',
+                           'KLAMPO48', 'KLAMPO9', 'KLAMPO69', 'KBCDO4', 'KLAMPO221', 'KLAMPO241',
+                           'KLAMPO234', 'KLAMPO198', 'BHV41', 'KLAMPO195', 'KFV610']
         self.text_set = {
             0: 'Normal: 정상',
             1: 'Ab21_01: 가압기 압력 채널 고장 "고"',
@@ -273,165 +194,48 @@ class Model_module:
             136: {'N': 'KFV610', 'D': 'BORIC ACID INJECTION VALVE (FV610) STATUS'}
         }
 
-    def load_model(self):
-        self.multiple_xgbclassification = pickle.load(
-            open('model/Lightgbm_max_depth_feature_137_200825.h5', 'rb'))  # multiclassova
-        self.explainer = pickle.load(open('model/explainer.pkl', 'rb'))  # pickle로 저장하여 로드하면 더 빠름.
+    def _minmax(self, mem):
+        """ 데이터 min max 처리 """
+        return self.minmax_scaler.transform([[mem[_]['Val'] for _ in self.input_data]])
 
-    def AI_abnormal_procedure_classifier(self, data):
-        self.abnormal_procedure_prediction = self.multiple_xgbclassification.predict(data) # Softmax 예측 값 출력
-        self.sort_abnormal_procedure = np.argsort(self.abnormal_procedure_prediction, axis=1)[:,::-1] # softmax 값에 대한 index 내림차순 정렬
-        # return self.abnormal_procedure_prediction, self.diagnosed_scenario
-        return self.abnormal_procedure_prediction, self.sort_abnormal_procedure
+    def _AI_abnormal_procedure_classifier(self, mem):
+        """ 비정상 절차서 진단 AI """
+        # 1. 진단 결과 생성
+        ab_procedure_prediction=self.multiple_xgbclassification.predict(self._minmax(mem)) # Softmax 예측 값 출력
+        sort_abnormal_procedure = np.argsort(ab_procedure_prediction, axis=1)[:,::-1]  # softmax 값에 대한 index 내림차순 정렬
+        # 2. 결과 reshape
+        ab_predict = ab_procedure_prediction[0]
+        ab_sort_predict = sort_abnormal_procedure[0]
+        return ab_predict, ab_sort_predict
 
-    def XAI_explainer(self, data):
-        self.shap_value = self.explainer.shap_values(data)  # Shap_value 출력
+    def get_Dig_result(self, mem):
+        # 1. 비정상 절차서 진단
+        ab_predict, ab_sort_predict = self._AI_abnormal_procedure_classifier(mem)
+        # 2. 결과 반환
+        # ab_dig_result = {0: {'N': 절차서명, 'P': 1번째 확률값}, ... }
+        ab_dig_result = {i: {'N': self.text_set[ab_sort_predict[i]],
+                             'P': round(ab_predict[ab_sort_predict[i]] * 100, 2)}
+                         for i in [0, 1, 2]}
+        return ab_dig_result
 
-        self.shap_1stab = abs(self.shap_value[self.sort_abnormal_procedure[0][0]])
-        self.shap_1stab_sort = np.argsort(self.shap_1stab, axis=1)[:, ::-1]
-
-        self.shap_2ndab = abs(self.shap_value[self.sort_abnormal_procedure[0][1]])
-        self.shap_2ndab_sort = np.argsort(self.shap_2ndab, axis=1)[:, ::-1]
-
-        self.shap_3rdab = abs(self.shap_value[self.sort_abnormal_procedure[0][2]])
-        self.shap_3rdab_sort = np.argsort(self.shap_3rdab, axis=1)[:, ::-1]
-
-        return self.shap_1stab, self.shap_2ndab, self.shap_3rdab, self.shap_1stab_sort, self.shap_2ndab_sort, self.shap_3rdab_sort
-
-    def shap_val_1(self):
-        self.shap_val_1stab = [
-            round(self.shap_1stab[:, self.shap_1stab_sort[0][0]][0] / np.sum(self.shap_1stab) * 100, 0),
-            round(self.shap_1stab[:, self.shap_1stab_sort[0][1]][0] / np.sum(self.shap_1stab) * 100, 0),
-            round(self.shap_1stab[:, self.shap_1stab_sort[0][2]][0] / np.sum(self.shap_1stab) * 100, 0),
-            round(self.shap_1stab[:, self.shap_1stab_sort[0][3]][0] / np.sum(self.shap_1stab) * 100, 0),
-            round(self.shap_1stab[:, self.shap_1stab_sort[0][4]][0] / np.sum(self.shap_1stab) * 100, 0)
-        ]
-        return self.shap_val_1stab
-
-    def shap_val_2(self):
-        self.shap_val_2ndab = [
-            round(self.shap_2ndab[:, self.shap_2ndab_sort[0][0]][0] / np.sum(self.shap_2ndab) * 100, 0),
-            round(self.shap_2ndab[:, self.shap_2ndab_sort[0][1]][0] / np.sum(self.shap_2ndab) * 100, 0),
-            round(self.shap_2ndab[:, self.shap_2ndab_sort[0][2]][0] / np.sum(self.shap_2ndab) * 100, 0),
-            round(self.shap_2ndab[:, self.shap_2ndab_sort[0][3]][0] / np.sum(self.shap_2ndab) * 100, 0),
-            round(self.shap_2ndab[:, self.shap_2ndab_sort[0][4]][0] / np.sum(self.shap_2ndab) * 100, 0)
-        ]
-        return self.shap_val_2ndab
-
-    def shap_val_3(self):
-        self.shap_val_3rdab = [
-            round(self.shap_3rdab[:, self.shap_3rdab_sort[0][0]][0] / np.sum(self.shap_3rdab) * 100, 0),
-            round(self.shap_3rdab[:, self.shap_3rdab_sort[0][1]][0] / np.sum(self.shap_3rdab) * 100, 0),
-            round(self.shap_3rdab[:, self.shap_3rdab_sort[0][2]][0] / np.sum(self.shap_3rdab) * 100, 0),
-            round(self.shap_3rdab[:, self.shap_3rdab_sort[0][3]][0] / np.sum(self.shap_3rdab) * 100, 0),
-            round(self.shap_3rdab[:, self.shap_3rdab_sort[0][4]][0] / np.sum(self.shap_3rdab) * 100, 0)
-        ]
-        return self.shap_val_3rdab
-
-    def shap_name_1(self):
-        self.shap_name_1stab = [
-            str(self.parms_dict[self.shap_1stab_sort[0][0]]['N'].strip()),
-            str(self.parms_dict[self.shap_1stab_sort[0][1]]['N'].strip()),
-            str(self.parms_dict[self.shap_1stab_sort[0][2]]['N'].strip()),
-            str(self.parms_dict[self.shap_1stab_sort[0][3]]['N'].strip()),
-            str(self.parms_dict[self.shap_1stab_sort[0][4]]['N'].strip())
-        ]
-        return self.shap_name_1stab
-
-    def shap_name_2(self):
-        self.shap_name_2ndab = [
-            str(self.parms_dict[self.shap_2ndab_sort[0][0]]['N'].strip()),
-            str(self.parms_dict[self.shap_2ndab_sort[0][1]]['N'].strip()),
-            str(self.parms_dict[self.shap_2ndab_sort[0][2]]['N'].strip()),
-            str(self.parms_dict[self.shap_2ndab_sort[0][3]]['N'].strip()),
-            str(self.parms_dict[self.shap_2ndab_sort[0][4]]['N'].strip())
-        ]
-        return self.self.shap_name_2ndab
-
-    def shap_name_3(self):
-        self.shap_name_3rdab = [
-            str(self.parms_dict[self.shap_3rdab_sort[0][0]]['N'].strip()),
-            str(self.parms_dict[self.shap_3rdab_sort[0][1]]['N'].strip()),
-            str(self.parms_dict[self.shap_3rdab_sort[0][2]]['N'].strip()),
-            str(self.parms_dict[self.shap_3rdab_sort[0][3]]['N'].strip()),
-            str(self.parms_dict[self.shap_3rdab_sort[0][4]]['N'].strip())
-        ]
-        return self.shap_name_3rdab
-
-    def shap_descr_1(self):
-        self.shap_desc_1stab = [
-            self.parms_dict[self.shap_1stab_sort[0][0]]['D'].strip(),
-            self.parms_dict[self.shap_1stab_sort[0][1]]['D'].strip(),
-            self.parms_dict[self.shap_1stab_sort[0][2]]['D'].strip(),
-            self.parms_dict[self.shap_1stab_sort[0][3]]['D'].strip(),
-            self.parms_dict[self.shap_1stab_sort[0][4]]['D'].strip()
-        ]
-        return self.shap_desc_1stab
-
-    def shap_descr_2(self):
-        self.shap_desc_2ndab = [
-            self.parms_dict[self.shap_2ndab_sort[0][0]]['D'].strip(),
-            self.parms_dict[self.shap_2ndab_sort[0][1]]['D'].strip(),
-            self.parms_dict[self.shap_2ndab_sort[0][2]]['D'].strip(),
-            self.parms_dict[self.shap_2ndab_sort[0][3]]['D'].strip(),
-            self.parms_dict[self.shap_2ndab_sort[0][4]]['D'].strip()
-        ]
-        return self.shap_desc_2ndab
-
-    def shap_descr_3(self):
-        self.shap_desc_3rdab = [
-            self.parms_dict[self.shap_3rdab_sort[0][0]]['D'].strip(),
-            self.parms_dict[self.shap_3rdab_sort[0][1]]['D'].strip(),
-            self.parms_dict[self.shap_3rdab_sort[0][2]]['D'].strip(),
-            self.parms_dict[self.shap_3rdab_sort[0][3]]['D'].strip(),
-            self.parms_dict[self.shap_3rdab_sort[0][4]]['D'].strip()
-        ]
-        return self.shap_desc_3rdab
-
-
-
-
-        # # 상위 첫번째 시나리오에 대한 XAI 결과
-        # shap_1stab = abs(self.shap_value[self.abnormal_procedure_prediction[0][0]])
-        # shap_1stab_sort = np.argsort(shap_1stab)[:, ::-1]
-        # # 상위 5개 진단 근거
-        # self.shap_1st_1 = round(shap_1stab[:, shap_1stab_sort[0][0]][0] / np.sum(shap_1stab)*100, 2)
-        # self.shap_1st_2 = round(shap_1stab[:, shap_1stab_sort[0][1]][0] / np.sum(shap_1stab)*100, 2)
-        # self.shap_1st_3 = round(shap_1stab[:, shap_1stab_sort[0][2]][0] / np.sum(shap_1stab)*100, 2)
-        # self.shap_1st_4 = round(shap_1stab[:, shap_1stab_sort[0][3]][0] / np.sum(shap_1stab)*100, 2)
-        # self.shap_1st_5 = round(shap_1stab[:, shap_1stab_sort[0][4]][0] / np.sum(shap_1stab)*100, 2)
-        #
-        # # 상위 두번째 시나리오에 대한 XAI 결과
-        # shap_2ndab = abs(self.shap_value[self.abnormal_procedure_prediction[0][1]])
-        # shap_2ndab_sort = np.argsort(shap_2ndab)[:, ::-1]
-        # self.shap_2nd_1 = round(shap_2ndab[:, shap_2ndab_sort[0][0]][0] / np.sum(shap_2ndab)*100, 2)
-        # self.shap_2nd_2 = round(shap_2ndab[:, shap_2ndab_sort[0][1]][0] / np.sum(shap_2ndab)*100, 2)
-        # self.shap_2nd_3 = round(shap_2ndab[:, shap_2ndab_sort[0][2]][0] / np.sum(shap_2ndab)*100, 2)
-        # self.shap_2nd_4 = round(shap_2ndab[:, shap_2ndab_sort[0][3]][0] / np.sum(shap_2ndab)*100, 2)
-        # self.shap_2nd_5 = round(shap_2ndab[:, shap_2ndab_sort[0][4]][0] / np.sum(shap_2ndab)*100, 2)
-        #
-        # # 상위 세번째 시나리오에 대한 XAI 결과
-        # shap_3rdab = abs(self.shap_value[self.abnormal_procedure_prediction[0][2]])
-        # shap_3rdab_sort = np.argsort(shap_3rdab)[:, ::-1]
-        # self.shap_3rd_1 = round(shap_3rdab[:, shap_3rdab_sort[0][0]][0] / np.sum(shap_3rdab)*100, 2)
-        # self.shap_3rd_2 = round(shap_3rdab[:, shap_3rdab_sort[0][1]][0] / np.sum(shap_3rdab)*100, 2)
-        # self.shap_3rd_3 = round(shap_3rdab[:, shap_3rdab_sort[0][2]][0] / np.sum(shap_3rdab)*100, 2)
-        # self.shap_3rd_4 = round(shap_3rdab[:, shap_3rdab_sort[0][3]][0] / np.sum(shap_3rdab)*100, 2)
-        # self.shap_3rd_5 = round(shap_3rdab[:, shap_3rdab_sort[0][4]][0] / np.sum(shap_3rdab)*100, 2)
-
-    def Determine_procedure(self):
-        self.first_ab_name = self.text_set[self.sort_abnormal_procedure[0][0]]
-        self.second_ab_name = self.text_set[self.sort_abnormal_procedure[0][1]]
-        self.third_ab_name = self.text_set[self.sort_abnormal_procedure[0][2]]
-        self.first_ab_prob = round(self.abnormal_procedure_prediction[0][self.sort_abnormal_procedure[0][0]]*100, 2)
-        self.second_ab_prob = round(self.abnormal_procedure_prediction[0][self.sort_abnormal_procedure[0][1]]*100, 2)
-        self.third_ab_prob = round(self.abnormal_procedure_prediction[0][self.sort_abnormal_procedure[0][2]]*100, 2)
-        print(self.first_ab_prob)
-        print(self.second_ab_prob)
-        print(self.third_ab_prob)
-        self.diagnosis_result = {
-            0: {'N': self.first_ab_name, 'P': self.first_ab_prob},
-            1: {'N': self.second_ab_name, 'P': self.second_ab_prob},
-            2: {'N': self.third_ab_name, 'P': self.third_ab_prob}
-        }
-        return self.diagnosis_result
+    def get_XAI_result(self, mem):
+        """ 비정상 XAI """
+        # 1. shap_value 생성
+        shap_value = self.explainer.shap_values(self._minmax(mem))  # Shap_value 출력
+        # 2. 비정상 절차서 진단
+        ab_predict, ab_sort_predict = self._AI_abnormal_procedure_classifier(mem)
+        # 3. 가공
+        p_nub, v_nub = 3, 5 # 절차서 3개 shap 값 5개 # TODO  XAITable 의 Max Cell이 v_nub 임. 동일하게 값 맞출 것
+        shap_ab = [abs(shap_value[ab_sort_predict[i]]) for i in range(p_nub)]  # 절차서 3개까지 보여줌
+        shap_ab_sort = [np.argsort(_, axis=1)[:, ::-1][0] for _ in shap_ab]
+        # 4. shap value, name 계산
+        shap_result = {}
+        for pro_nub in range(p_nub):
+            for val_nub in range(v_nub):
+                shap_result[pro_nub][f'SHAP_VAL{val_nub}'] = round(shap_ab[:, shap_ab_sort[val_nub]][0] / np.sum(shap_ab) * 100, 0)
+                shap_result[pro_nub][f'SHAP_NAME{val_nub}'] = self.parms_dict[shap_ab_sort[val_nub]]['N']
+                shap_result[pro_nub][f'SHAP_DESC{val_nub}'] = self.parms_dict[shap_ab_sort[val_nub]]['D']
+        # shap_result { 0 번 절차서: {'SHAP_VAL1': .. , 'SHAP_NAME1': ... , 2.... 3... 4... 5...,
+        #             { 1 번 ....
+        #             { 2 번 ....
+        return shap_result
