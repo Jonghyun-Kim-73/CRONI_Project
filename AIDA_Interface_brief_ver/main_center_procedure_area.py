@@ -304,7 +304,7 @@ class SymptomXAIArea(QWidget):
         self.Hlayout.setContentsMargins(0, 0, 0, 0)
         self.Hlayout.setSpacing(2)
 
-        self.Symptom_area = SymptomArea(self)
+        self.Symptom_area = SymptomArea(self, self.mem)
         self.XAI_area = XAIArea(self, self.mem)
         # --------------------------------------------------------------------------------------------------------------
         self.Hlayout.addWidget(self.Symptom_area)
@@ -347,6 +347,7 @@ class SymptomXAIArea(QWidget):
             self._visible(True, get_info)
             self.Abnormal_procedure_name.setText(f'{abnomal_name}')
             self.abnomal_name = abnomal_name
+            self.Symptom_area.abnormal_name = self.abnomal_name
 
             # self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setStartValue(self.height())
@@ -355,17 +356,18 @@ class SymptomXAIArea(QWidget):
         else:
             self._visible(False, get_info)
             self.abnomal_name = ''
+            self.Symptom_area.abnormal_name = self.abnomal_name
             self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setEndValue(0)
             self.ani_symptomxai_area.start()
 
 
 class SymptomArea(QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, mem):
         super(SymptomArea, self).__init__(parent=parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubArea')
-
+        self.mem = mem
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layer = QVBoxLayout(self)
         layer.setContentsMargins(2, 2, 2, 2)
@@ -374,32 +376,54 @@ class SymptomArea(QWidget):
         label0 = QLabel('Symptom Check')
         label0.setFixedHeight(30)
 
-        label1 = QLabel('경보 및 증상 Check')
-        label1.setFixedHeight(30)
+        self.label1 = QLabel('경보 및 증상 Check')
+        self.label1.setFixedHeight(30)
 
         label2 = QLabel('자동동작사항 Check')
         label2.setFixedHeight(30)
 
         # --------------------------------------------------------------------------------------------------------------
         layer.addWidget(label0)
-        layer.addWidget(label1)
-        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 1', cond=False))
-        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 2', cond=False))
-        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 3', cond=True))
-        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 4', cond=False))
-        layer.addWidget(SymptomWidget(self, txt='경보 및 증상 5', cond=True))
-        layer.addWidget(label2)
-        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 1', cond=True))
-        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 2', cond=True))
-        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 3', cond=False))
-        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 4', cond=False))
-        layer.addWidget(SymptomWidget(self, txt='자동 동작 사항 5', cond=False))
-
+        self.sym_layer = QVBoxLayout()
+        self.sym_dict = {
+            i: SymptomWidget(self, txt='', cond=False) for i in range(10)
+        }
+        [self.sym_layer.addWidget(self.sym_dict[i]) for i in self.sym_dict.keys()]
         layer.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Ignored, QSizePolicy.Expanding))
-
+        layer.addLayout(self.sym_layer)
         self.setLayout(layer)
 
+        self.abnormal_name = ''
+
         # TODO CNS 업데이트 모듈 만들어야함.
+
+        timer1 = QTimer(self)
+        timer1.setInterval(1000)
+        timer1.timeout.connect(self._update)
+        timer1.start()
+
+    def _update(self):
+        # self.sym_layer.removeWidget()
+        local_mem = self.mem.get_shmem_db()
+        self._clear_txt_cond()
+
+        if self.abnormal_name == 'Normal: 정상':
+            # 절차 입력
+            self.sym_dict[0].update_text('압력 만족')
+            self.sym_dict[1].update_text('압력 만족')
+            self.sym_dict[2].update_text('압력 만족')
+            self.sym_dict[3].update_text('압력 만족')
+            self.sym_dict[4].update_text('압력 만족')
+            self.sym_dict[5].update_text('압력 만족')
+
+            # 절차 만족 로직
+            if local_mem['PPRZ']['Val'] > 15311339.0:
+                self.sym_dict[0].update_condition(True)
+
+    def _clear_txt_cond(self):
+        for key in self.sym_dict.keys():
+            self.sym_dict[key].update_condition(False)
+            self.sym_dict[key].update_text('')
 
 
 class SymptomWidget(QWidget):
@@ -416,16 +440,19 @@ class SymptomWidget(QWidget):
         layer.setContentsMargins(2, 2, 2, 2)
         layer.setSpacing(5)
 
-        txt_label = QLabel(txt)
+        self.txt_label = QLabel(txt)
         self.txt_dis = SymptomDisLabel(self, cond)
 
         # --------------------------------------------------------------------------------------------------------------
         layer.addWidget(self.txt_dis)
-        layer.addWidget(txt_label)
+        layer.addWidget(self.txt_label)
         self.setLayout(layer)
 
     def update_condition(self, cond: bool):
         self.curent_cond = self.txt_dis.update_condition(cond)
+
+    def update_text(self,txt: str):
+        self.txt_label.setText(txt)
 
 
 class SymptomDisLabel(QLabel):

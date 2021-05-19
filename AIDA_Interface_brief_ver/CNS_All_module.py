@@ -83,10 +83,10 @@ class All_Function_module(multiprocessing.Process):
                     # Make action from AI ------------------------------------------------------------------------------
                     # - 동작이 허가된 AI 모듈이 cns_env 에서 상태를 취득하여 액션을 계산함.
                     # TODO 향후 cns_env에서 노멀라이제이션까지 모두 처리 할 것.
-                    if local_logic['Run_XAI']:
+                    if local_logic['Run_ProDiag']:
                         ab_dig_result = self.IC_Pack.get_Dig_result(self.cns_env.mem)
                         self.shmem.change_logic_val('Ab_Dig_Result', ab_dig_result)
-                    if local_logic['Run_ProDiag']:
+                    if local_logic['Run_XAI']:
                         shap_result = self.IC_Pack.get_XAI_result(self.cns_env.mem)
                         self.shmem.change_logic_val('Ab_Xai_Result', shap_result)
 

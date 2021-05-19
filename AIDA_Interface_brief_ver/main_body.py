@@ -11,8 +11,8 @@ from AIDA_Interface_brief_ver.CNS_All_module import All_Function_module
 import socket
 ip_reg = {
     # 자기 본래 아이피 : {'내부망 아이피' ...}
-    '192.168.142.1': {'comip': '192.168.142.1', 'comport':7101, 'cnsip':'192.168.142.129', 'cnsport':7101}, # 상원
-    '192.168.32.1': {'comip': '192.168.32.1', 'comport':7101, 'cnsip':'192.168.32.135', 'cnsport':7101}, # 혜선
+    '203.237.121.221': {'comip': '192.168.142.1', 'comport':7101, 'cnsip':'192.168.142.129', 'cnsport':7101}, # 상원
+    '203.237.111.148': {'comip': '192.168.32.1', 'comport':7101, 'cnsip':'192.168.32.135', 'cnsport':7101}, # 혜선
     '192.168.0.122': {'comip': '192.168.0.122', 'comport':7101, 'cnsip':'192.168.32.135', 'cnsport':7101} # 테스트
 }
 
