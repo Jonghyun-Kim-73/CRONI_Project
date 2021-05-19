@@ -56,7 +56,7 @@ class MyForm(QWidget):
         self.ui.Apply_Sp.clicked.connect(self.go_speed)
         self.ui.Go_db.clicked.connect(self.go_save)
 
-        self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowStaysOnTopHint)
+        # self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowStaysOnTopHint)
         self.show()
 
         # Call
@@ -190,7 +190,7 @@ class AutoDataList(QListWidget):
 class PrcedureEditor(QWidget):
     def __init__(self, parent, mem):
         super(PrcedureEditor, self).__init__()
-        self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowStaysOnTopHint)
+        # self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowStaysOnTopHint)
         self.setGeometry(500, 100, 1000, 500)
 
         layer = QVBoxLayout()

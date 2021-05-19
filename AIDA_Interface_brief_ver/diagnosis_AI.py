@@ -225,26 +225,15 @@ class IC_Diagnosis_Pack:
         # 2. 비정상 절차서 진단
         ab_predict, ab_sort_predict = self._AI_abnormal_procedure_classifier(mem)
         # 3. 가공
-        p_nub, v_nub = 3, 5 # 절차서 3개 shap 값 5개 # TODO  XAITable 의 Max Cell이 v_nub 임. 동일하게 값 맞출 것
-
-        shap_value = np.array(shap_value).reshape(len(self.procedure_des), len(self.parms_dict))
-        print(np.shape(shap_value)) # (16, 137)
-
-        shap_ab = [abs(shap_value[ab_sort_predict[i]]) for i in range(p_nub)]  # 절차서 3개까지 보여줌
-        # shap_ab shape => (3, 137)
-        print(np.shape(np.argsort(shap_ab[0], axis=1)[:, ::-1])) # (1, 137)
-
-        shap_ab_sort = [np.argsort(_, axis=1)[:, ::-1][0] for _ in shap_ab] # _ (1, 137)
-
-        print(shap_ab_sort[0][0])
-        print(np.shape(shap_ab))
-        print(shap_ab[:, shap_ab_sort[0][0]][0])
-
+        p_nub, v_nub = 3, 5  # 절차서 3개 shap 값 5개 # TODO  XAITable 의 Max Cell이 v_nub 임. 동일하게 값 맞출 것
+        shap_ab = np.abs(np.array(shap_value)).reshape(len(self.procedure_des), len(self.parms_dict))[:3]
+        shap_ab_sort = shap_ab.argsort()[:, ::-1]  # (3, 137)
         # 4. shap value, name 계산
-        shap_result = {}
+        shap_result = {_: {} for _ in range(p_nub)}
         for pro_nub in range(p_nub):
             for val_nub in range(v_nub):
-                shap_result[pro_nub][f'SHAP_VAL{val_nub}'] = round(shap_ab[:, shap_ab_sort[pro_nub][val_nub]][0] / np.sum(shap_ab) * 100, 0)
+                top_5 = list(np.sort(shap_ab[pro_nub])[::-1][:v_nub])
+                shap_result[pro_nub][f'SHAP_VAL{val_nub}'] = round(top_5[val_nub] / np.sum(shap_ab[pro_nub]) * 100, 0)
                 shap_result[pro_nub][f'SHAP_NAME{val_nub}'] = self.parms_dict[shap_ab_sort[pro_nub][val_nub]]['N']
                 shap_result[pro_nub][f'SHAP_DESC{val_nub}'] = self.parms_dict[shap_ab_sort[pro_nub][val_nub]]['D']
         # shap_result { 0 번 절차서: {'SHAP_VAL1': .. , 'SHAP_NAME1': ... , 2.... 3... 4... 5...,

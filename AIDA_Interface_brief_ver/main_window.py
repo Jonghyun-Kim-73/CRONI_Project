@@ -32,7 +32,7 @@ class Mainwindow(QWidget):
         mask = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(mask)
         # Main 프레임 특징 정의
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)   # 프레임 날리고 | 창은 항상 위
+        # self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)   # 프레임 날리고 | 창은 항상 위
         self.setWindowOpacity(0.99)                                             # 프레임 투명도
 
         # 레이아웃과 타이틀바 위젯 생성
@@ -72,3 +72,4 @@ if __name__ == '__main__':
     window = Mainwindow(None)
     window.show()
     app.exec_()
+
