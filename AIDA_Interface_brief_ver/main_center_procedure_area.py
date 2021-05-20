@@ -425,31 +425,27 @@ class SymptomArea(QWidget):
         with open('./Procedure/procedure.json', 'rb') as f:
             json_data = json.load(f)
 
-        if self.abnormal_name == 'Normal: 정상':
-            # 절차 입력
-            self.sym_dict[0].update_text('압력 만족')
-            self.sym_dict[1].update_text('압력 만족')
-            self.sym_dict[2].update_text('압력 만족')
-            self.sym_dict[3].update_text('압력 만족')
-            self.sym_dict[4].update_text('압력 만족')
-            self.sym_dict[5].update_text('압력 만족')
+        if self.abnormal_name == '':
+            pass
+        else:
+            if self.abnormal_name in json_data.keys():
+                get_steps_in_procedure = len(json_data[self.abnormal_name])
 
-            # 절차 만족 로직
-            if local_mem['PPRZ']['Val'] > 15311339.0:
-                self.sym_dict[0].update_condition(True)
+                # TODO 만약에 Json 파일에 절차서 명과 이미 등록된 절차서 명이 다르면 오류 발생함.
+                try:
+                    for i in range(get_steps_in_procedure):
+                        if i <= len(self.sym_dict):
+                            self.sym_dict[i].update_text(json_data[self.abnormal_name][f"{i}"]["절차"])
+                except Exception as e:
+                    print('절차서 명 에러 부분 TODO 확인...', e)
+        # --------------------------------------------------------------------------------------------------------------
+        # 경보
 
+
+
+        # --------------------------------------------------------------------------------------------------------------
+        # 비정상
         if self.abnormal_name == 'Ab63_02: 제어봉의 계속적인 삽입':
-            self.sym_dict[0].update_text('제어봉 위치 지시계와 스텝계수기상의 계속적인 제어봉 삽입')
-            self.sym_dict[1].update_text('원자로 출력 감소')
-            self.sym_dict[2].update_text('“T REF/AUCT T AVG HIGH” 경보 발생')
-            self.sym_dict[3].update_text('"ROD BANKS LOW/LO-LO LIMIT” 경보 발생')
-            self.sym_dict[4].update_text('가압기 보조전열기 켜짐')
-            self.sym_dict[5].update_text('가압기 보조전열기 켜짐')
-
-
-            # print(local_mem['KBCDO7']['List'])
-            # print(local_mem['KBCDO7']['Val'])
-
             # 초당으로 비교하면 깜빡거림 발생=>9초 전이랑 비교
             if local_mem['KBCDO7']['List'][-1] < local_mem['KBCDO7']['List'][-9]:  #KBCDO7 : D bank (Mal_type : 4)
                self.sym_dict[0].update_condition(True)
@@ -465,16 +461,6 @@ class SymptomArea(QWidget):
                 self.sym_dict[5].update_condition(True)
 
         if self.abnormal_name == 'Ab19_02: 가압기 안전밸브 고장':
-            #json파일 이용 절차 입력
-            self.sym_dict[0].update_text(json_data[self.abnormal_name]["0"]["절차"])
-            self.sym_dict[1].update_text(json_data[self.abnormal_name]["1"]["절차"])
-            self.sym_dict[2].update_text(json_data[self.abnormal_name]["2"]["절차"])
-            self.sym_dict[3].update_text(json_data[self.abnormal_name]["3"]["절차"])
-            self.sym_dict[4].update_text(json_data[self.abnormal_name]["4"]["절차"])
-            self.sym_dict[5].update_text(json_data[self.abnormal_name]["5"]["절차"])
-            self.sym_dict[6].update_text(json_data[self.abnormal_name]["6"]["절차"])
-            self.sym_dict[7].update_text(json_data[self.abnormal_name]["7"]["절차"])
-            self.sym_dict[8].update_text(json_data[self.abnormal_name]["8"]["절차"])
             print(local_mem['WNETCH']['List'])
             print(local_mem['ZVCT']['List'])
             print(local_mem['ZINST63']['List'])
@@ -485,11 +471,11 @@ class SymptomArea(QWidget):
                 self.sym_dict[1].update_condition(True)
             if local_mem['KLAMPO317']['Val'] == 1:
                 self.sym_dict[2].update_condition(True)
-            if local_mem['ZINST63']['List'][-1] != local_mem['ZINST63']['List'][-5]:
+            if local_mem['ZINST63']['List'][-1] != local_mem['ZINST63']['List'][-2]:
                 self.sym_dict[3].update_condition(True)
-            if local_mem['WNETCH']['List'][-1] > local_mem['WCHGNO']['List'][-9]:
+            if local_mem['WNETCH']['List'][-1] > local_mem['WCHGNO']['List'][-2]:
                 self.sym_dict[4].update_condition(True)
-            if local_mem['ZVCT']['List'][-1] < local_mem['ZVCT']['List'][-9]:
+            if local_mem['ZVCT']['List'][-1] < local_mem['ZVCT']['List'][-2]:
                 self.sym_dict[5].update_condition(True)
             if local_mem['QPRZB']['Val'] > 0:
                 self.sym_dict[6].update_condition(True)
@@ -497,6 +483,9 @@ class SymptomArea(QWidget):
                 self.sym_dict[7].update_condition(True)
             if local_mem['KLAMPO9']['Val'] == 1:
                 self.sym_dict[8].update_condition(True)
+
+        # --------------------------------------------------------------------------------------------------------------
+
     def _clear_txt_cond(self):
         for key in self.sym_dict.keys():
             self.sym_dict[key].update_condition(False)

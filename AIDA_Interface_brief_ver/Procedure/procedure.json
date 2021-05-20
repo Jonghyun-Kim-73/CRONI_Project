@@ -1,4 +1,11 @@
 ﻿{
+	"Normal: 정상": {
+		"0": {
+			"단계": "0.0",
+			"절차": "-",
+			"CNS변수": "-"
+		}
+	},
 	"Ab15_08: 증기발생기 수위 채널 고장 '고'": {
 		"0": {
 			"단계": "2.1",
@@ -2807,19 +2814,19 @@
 			"CNS변수": "KSWO223"
 		}
 	},
-	"R1경보(01) 1E RAD HIGH ALARM": {},
+	"R1 경보(01) 1E RAD HIGH ALARM": {},
 	"R2 경보(03) CONTAINMENT PRESS HI 1 ALERT": {},
-	"R3경보(03)CONTAINMENT PRESS HI 2 ALERT": {},
-	"R4경보(03)CONTAINMENT PRESS HI 3 ALERT": {},
-	"R5경보(01) ACCUM TK A, B, C PRESS HIGH / LOW": {
+	"R3 경보(03)CONTAINMENT PRESS HI 2 ALERT": {},
+	"R4 경보(03)CONTAINMENT PRESS HI 3 ALERT": {},
+	"R5 경보(01) ACCUM TK A, B, C PRESS HIGH / LOW": {
 		"0": {
 			"단계": "1.1",
 			"절차": "TANK PR HIGH",
 			"CNS변수": "-"
 		}
 	},
-	"R6경보(01) ACCUM TK A, B, C PRESS HIGH / LOW": {},
-	"R7경보(09)PZR PRESS HIGH ALERT": {
+	"R6 경보(01) ACCUM TK A, B, C PRESS HIGH / LOW": {},
+	"R7 경보(09)PZR PRESS HIGH ALERT": {
 		"0": {
 			"단계": "1.1",
 			"절차": "가압기 살수밸브의 오동작 또는 고착(Stick)",
@@ -2851,7 +2858,7 @@
 			"CNS변수": "-"
 		}
 	},
-	"R8경보(09) PZR PRESS LOW ALERT": {
+	"R8 경보(09) PZR PRESS LOW ALERT": {
 		"0": {
 			"단계": "1.1",
 			"절차": "과도한 출력변화",
@@ -2933,7 +2940,7 @@
 			"CNS변수": "BPORV"
 		}
 	},
-	"R9경보(09) PZR PORV PV-444B OPENING": {
+	"R9 경보(09) PZR PORV PV-444B OPENING": {
 		"0": {
 			"단계": "1.1",
 			"절차": "가압기 압력이 설정치(164.15 ㎏/㎠) 이상이고 저 압력(153.7 kg/㎠)이 아닐 때",
@@ -3005,7 +3012,7 @@
 			"CNS변수": "UPRT"
 		}
 	},
-	"R10경보(10) PZR CONT LEVEL HIGH HEATERS ON": {
+	"R10 경보(10) PZR CONT LEVEL HIGH HEATERS ON": {
 		"0": {
 			"단계": "1.1",
 			"절차": "가압기 수위제어계통 오동작",
@@ -3610,7 +3617,7 @@
 			"CNS변수": "-"
 		}
 	},
-	"R24": {
+	"R24 경보(_)": {
 		"0": {
 			"단계": "-",
 			"절차": "R22와 동일",
@@ -3689,7 +3696,13 @@
 			"CNS변수": "KLAMPO9"
 		}
 	},
-	"R26 ": {},
+	"R26 ": {
+		"0": {
+			"단계": "-",
+			"절차": "R22와 동일",
+			"CNS변수": "-"
+		}
+	},
 	"R27 경보(12) LOOP 1 STEAM PRESS RATE HIGH": {
 		"0": {
 			"단계": "1.1",
