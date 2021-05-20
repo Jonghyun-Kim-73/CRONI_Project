@@ -615,16 +615,18 @@ class AlarmItemInfo(QLabel):
         with open('./Procedure/procedure.json', 'rb') as f:
             json_data = json.load(f)
 
-        if self.alarm_info_db[self.alarm_name]["D"] in json_data.keys():
-            # 경보 절차서가 있는 경우의 경보
-            if nonpro.cond_visible:
-                nonpro.open_area(cond=False)
+        for j_p in json_data.keys():
+            if self.alarm_info_db[self.alarm_name]["D"] in j_p:
+                # 경보 절차서가 있는 경우의 경보
+                if nonpro.cond_visible:
+                    nonpro.open_area(cond=False)
+                else:
+                    symxai.open_area(cond=True, abnomal_name=f'경보_{self.alarm_info_db[self.alarm_name]["D"]}')
+                    # 여기서는 절차서 명만 생성해서 symxai 에 넘겨줌. symxai에서 자동동작사항 생성.
+                break
             else:
-                symxai.open_area(cond=True, abnomal_name=f'경보_{self.alarm_info_db[self.alarm_name]["D"]}')
-                # 여기서는 절차서 명만 생성해서 symxai 에 넘겨줌. symxai에서 자동동작사항 생성.
-        else:
-            # 경보 절차서 없는 경보 알람.
-            pass
+                # 경보 절차서 없는 경보 알람.
+                pass
 
 
 class AlarmItemTimer(QLabel):

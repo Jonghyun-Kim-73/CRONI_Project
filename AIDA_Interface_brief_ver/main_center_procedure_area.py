@@ -450,7 +450,7 @@ class SymptomArea(QWidget):
                 # TODO 만약에 Json 파일에 절차서 명과 이미 등록된 절차서 명이 다르면 오류 발생함.
                 try:
                     for i in range(len(json_data[get_procedure_name_in_json])):
-                        if i <= len(self.sym_dict):
+                        if i < len(self.sym_dict):
                             self.sym_dict[i].update_text(json_data[get_procedure_name_in_json][f"{i}"]["절차"])
                 except Exception as e:
                     print('절차서 명 에러 부분 TODO 확인...', e)
@@ -521,9 +521,9 @@ class SymptomArea(QWidget):
                     self.sym_dict[5].update_condition(True)
 
             if get_procedure_name_in_json == 'Ab19_02: 가압기 안전밸브 고장':
-                print(local_mem['WNETCH']['List'])
-                print(local_mem['ZVCT']['List'])
-                print(local_mem['ZINST63']['List'])
+                # print(local_mem['WNETCH']['List'])
+                # print(local_mem['ZVCT']['List'])
+                # print(local_mem['ZINST63']['List'])
 
                 if local_mem['KLAMPO312']['Val'] == 1:
                     self.sym_dict[0].update_condition(True)
