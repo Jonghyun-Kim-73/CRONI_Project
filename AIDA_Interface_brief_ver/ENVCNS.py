@@ -106,10 +106,10 @@ class CMem:
 
 
 class ENVCNS(CNS):
-    def __init__(self, Name, IP, PORT, RIP, RPORT):
+    def __init__(self, Name, IP, PORT, RIP, RPORT, Max_len):
         super(ENVCNS, self).__init__(threrad_name=Name,
                                      CNS_IP=IP, CNS_Port=PORT,
-                                     Remote_IP=RIP, Remote_Port=RPORT, Max_len=10)
+                                     Remote_IP=RIP, Remote_Port=RPORT, Max_len=Max_len)
         self.Name = Name  # = id
         self.ENVStep = 0
         self.LoggerPath = 'DB'
