@@ -465,6 +465,7 @@ class SymptomArea(QWidget):
             self.sym_dict[8].update_text(json_data[self.abnormal_name]["8"]["절차"])
             print(local_mem['WNETCH']['List'])
             print(local_mem['ZVCT']['List'])
+            print(local_mem['ZINST63']['List'])
 
             if local_mem['KLAMPO312']['Val'] == 1:
                 self.sym_dict[0].update_condition(True)
