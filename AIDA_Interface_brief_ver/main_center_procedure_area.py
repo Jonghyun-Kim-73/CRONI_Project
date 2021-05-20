@@ -6,6 +6,8 @@ import time
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from collections import deque
+import json
 
 # from AIDA_Interface_brief_ver.main_center_precedure_area_symptom import *
 
@@ -407,6 +409,10 @@ class SymptomArea(QWidget):
         local_mem = self.mem.get_shmem_db()
         self._clear_txt_cond()
 
+        # json파일 로드
+        with open('./Procedure/procedure.json', 'rb') as f:
+            json_data = json.load(f)
+
         if self.abnormal_name == 'Normal: 정상':
             # 절차 입력
             self.sym_dict[0].update_text('압력 만족')
@@ -420,6 +426,64 @@ class SymptomArea(QWidget):
             if local_mem['PPRZ']['Val'] > 15311339.0:
                 self.sym_dict[0].update_condition(True)
 
+        if self.abnormal_name == 'Ab63_02: 제어봉의 계속적인 삽입':
+            self.sym_dict[0].update_text('제어봉 위치 지시계와 스텝계수기상의 계속적인 제어봉 삽입')
+            self.sym_dict[1].update_text('원자로 출력 감소')
+            self.sym_dict[2].update_text('“T REF/AUCT T AVG HIGH” 경보 발생')
+            self.sym_dict[3].update_text('"ROD BANKS LOW/LO-LO LIMIT” 경보 발생')
+            self.sym_dict[4].update_text('가압기 보조전열기 켜짐')
+            self.sym_dict[5].update_text('가압기 보조전열기 켜짐')
+
+
+            # print(local_mem['KBCDO7']['List'])
+            # print(local_mem['KBCDO7']['Val'])
+
+            # 초당으로 비교하면 깜빡거림 발생=>9초 전이랑 비교
+            if local_mem['KBCDO7']['List'][-1] < local_mem['KBCDO7']['List'][-9]:  #KBCDO7 : D bank (Mal_type : 4)
+               self.sym_dict[0].update_condition(True)
+            if local_mem['ZINST124']['List'][-1] < local_mem['ZINST124']['List'][-9]:
+                self.sym_dict[1].update_condition(True)
+            if local_mem['KLAMPO313']['Val'] == 1:
+                self.sym_dict[2].update_condition(True)
+            if local_mem['KLAMPO254']['Val'] == 1:
+                self.sym_dict[3].update_condition(True)
+            if local_mem['QPRZB']['Val'] > 0:
+                self.sym_dict[4].update_condition(True)
+            if local_mem['WCHGNO']['Val'] > 0:
+                self.sym_dict[5].update_condition(True)
+
+        if self.abnormal_name == 'Ab19_02: 가압기 안전밸브 고장':
+            #json파일 이용 절차 입력
+            self.sym_dict[0].update_text(json_data[self.abnormal_name]["0"]["절차"])
+            self.sym_dict[1].update_text(json_data[self.abnormal_name]["1"]["절차"])
+            self.sym_dict[2].update_text(json_data[self.abnormal_name]["2"]["절차"])
+            self.sym_dict[3].update_text(json_data[self.abnormal_name]["3"]["절차"])
+            self.sym_dict[4].update_text(json_data[self.abnormal_name]["4"]["절차"])
+            self.sym_dict[5].update_text(json_data[self.abnormal_name]["5"]["절차"])
+            self.sym_dict[6].update_text(json_data[self.abnormal_name]["6"]["절차"])
+            self.sym_dict[7].update_text(json_data[self.abnormal_name]["7"]["절차"])
+            self.sym_dict[8].update_text(json_data[self.abnormal_name]["8"]["절차"])
+            print(local_mem['WNETCH']['List'])
+            print(local_mem['ZVCT']['List'])
+
+            if local_mem['KLAMPO312']['Val'] == 1:
+                self.sym_dict[0].update_condition(True)
+            if local_mem['KLAMPO308']['Val'] == 1:
+                self.sym_dict[1].update_condition(True)
+            if local_mem['KLAMPO317']['Val'] == 1:
+                self.sym_dict[2].update_condition(True)
+            if local_mem['ZINST63']['List'][-1] != local_mem['ZINST63']['List'][-5]:
+                self.sym_dict[3].update_condition(True)
+            if local_mem['WNETCH']['List'][-1] > local_mem['WCHGNO']['List'][-9]:
+                self.sym_dict[4].update_condition(True)
+            if local_mem['ZVCT']['List'][-1] < local_mem['ZVCT']['List'][-9]:
+                self.sym_dict[5].update_condition(True)
+            if local_mem['QPRZB']['Val'] > 0:
+                self.sym_dict[6].update_condition(True)
+            if local_mem['BHV6']['Val'] == 0:
+                self.sym_dict[7].update_condition(True)
+            if local_mem['KLAMPO9']['Val'] == 1:
+                self.sym_dict[8].update_condition(True)
     def _clear_txt_cond(self):
         for key in self.sym_dict.keys():
             self.sym_dict[key].update_condition(False)
