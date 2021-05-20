@@ -352,7 +352,12 @@ class SymptomXAIArea(QWidget):
             self.Abnormal_procedure_name.setText(f'{abnomal_name}')
             self.abnomal_name = abnomal_name
             self.row = row
-            self.Symptom_area.abnormal_name = self.abnomal_name
+            if get_info[0] == '경보':
+                self.Symptom_area.abnormal_name = get_info[1]
+                # 경보_Intermediate range high flux rod stop 중 뒤에 부분을 넘겨줌.
+            else:
+                self.Symptom_area.abnormal_name = self.abnomal_name
+
             self.Symptom_area.selected_row = self.row
             self.XAI_area.xai_table.selected_procedure_nub = self.row
 
@@ -364,7 +369,12 @@ class SymptomXAIArea(QWidget):
             self._visible(False, get_info)
             self.abnomal_name = ''
             self.row = row
-            self.Symptom_area.abnormal_name = self.abnomal_name
+            if get_info[0] == '경보':
+                self.Symptom_area.abnormal_name = get_info[1]
+                # 경보_Intermediate range high flux rod stop 중 뒤에 부분을 넘겨줌.
+            else:
+                self.Symptom_area.abnormal_name = self.abnomal_name
+
             self.Symptom_area.selected_row = self.row
             self.XAI_area.xai_table.selected_procedure_nub = self.row
 
@@ -424,65 +434,115 @@ class SymptomArea(QWidget):
         # json파일 로드
         with open('./Procedure/procedure.json', 'rb') as f:
             json_data = json.load(f)
-
+        # self.abnormal_name는
+        # 경보 -> Intermediate range high flux rod stop
+        # 비정상 -> Ab15_08: 증기발생기 수위 채널 고장 '고' 를 가지고 있다.
         if self.abnormal_name == '':
             pass
         else:
-            if self.abnormal_name in json_data.keys():
-                get_steps_in_procedure = len(json_data[self.abnormal_name])
-
+            # 1. json 절차서 db 에서 self.abnormal_name 과 유사한 절차서 명이 있는지 탐색한다.
+            get_procedure_name_in_json = ''                                 # json 파일에서 절차서 명 가져오기
+            for json_in_procedure_name in json_data.keys():                 # 순회하면서 self.abnormal_name 과 비교
+                if self.abnormal_name in json_in_procedure_name:
+                    get_procedure_name_in_json = json_in_procedure_name     # 최종 선택
+            # 2. 만약 유사한 절차서 명이 있다면 json 절차서 db 에서 해당 절차서의 전체 길이를 확인한다.
+            if get_procedure_name_in_json != '':
                 # TODO 만약에 Json 파일에 절차서 명과 이미 등록된 절차서 명이 다르면 오류 발생함.
                 try:
-                    for i in range(get_steps_in_procedure):
+                    for i in range(len(json_data[get_procedure_name_in_json])):
                         if i <= len(self.sym_dict):
-                            self.sym_dict[i].update_text(json_data[self.abnormal_name][f"{i}"]["절차"])
+                            self.sym_dict[i].update_text(json_data[get_procedure_name_in_json][f"{i}"]["절차"])
                 except Exception as e:
                     print('절차서 명 에러 부분 TODO 확인...', e)
-        # --------------------------------------------------------------------------------------------------------------
-        # 경보
+            # ----------------------------------------------------------------------------------------------------------
+            # 경보
+            if get_procedure_name_in_json == 'L1 경보(11) Intermediate range high flux rod stop': pass
+            if get_procedure_name_in_json == 'L2 경보(11) Power range overpower rod stop': pass
+            if get_procedure_name_in_json == 'L4 경보(11) Control bank lo-lo limit': pass
+            if get_procedure_name_in_json == 'L5 경보(11) Two or more rod at bottom': pass
+            if get_procedure_name_in_json == 'L7 경보(03) CCWS outlet temp hi (49.0 deg C)': pass
+            if get_procedure_name_in_json == 'L8 경보(01) Instrument air press lo (6.3 kg/cm2)': pass
+            if get_procedure_name_in_json == 'L9 경보(06) RWST level lo-lo (5%)': pass
+            if get_procedure_name_in_json == 'L11 경보(06) L/D HX outlet temp hi(58 deg C)': pass
+            if get_procedure_name_in_json == 'L12 경보(06) RHX L/D outlet temp hi(202 deg C)': pass
+            if get_procedure_name_in_json == 'L13 경보(06) VCT level lo(20 %) or VCT level hi(80 %)': pass
+            if get_procedure_name_in_json == 'L14 경보(06) VCT press lo(0.7 kg/cm2) or VCT press hi (4.5 kg/cm2)': pass
+            if get_procedure_name_in_json == 'L15 경보(06) RCP seal inj wtr flow lo(1.4 m3/hr)': pass
+            if get_procedure_name_in_json == 'L19 경보(05) PRZ press lo SI': pass
+            if get_procedure_name_in_json == 'L23 경보(05) CTMT phase B iso actuated': pass
+            if get_procedure_name_in_json == 'L46 경보(02) CTMT sump level hi or CTMT sump level hi-hi': pass
+            if get_procedure_name_in_json == 'L48 경보(26) CTMT air temp hi(48.89 deg C)': pass
+            if get_procedure_name_in_json == 'L47 경보(26) CTMT moisture hi(70% of R.H.)': pass
+            if get_procedure_name_in_json == 'R1 경보(01) Rad hi alarm': pass
+            if get_procedure_name_in_json == 'R2 경보(03) CTMT press hi 1 alert': pass
+            if get_procedure_name_in_json == 'R3 경보(03) CTMT press hi 2 alert': pass
+            if get_procedure_name_in_json == 'R5 경보(01) Accum. Tk press lo (43.4 kg/cm2) or Accum. Tk press hi (43.4 kg/cm2)': pass
+            if get_procedure_name_in_json == 'R7 경보(09) PRZ press hi alert(162.4 kg/cm2)': pass
+            if get_procedure_name_in_json == 'R8 경보(09) PRZ press lo alert(153.6 kg/cm2)': pass
+            if get_procedure_name_in_json == 'R9 경보(09) PRZ PORV opening(164.2 kg/cm2)': pass
+            if get_procedure_name_in_json == 'R10 경보(10) PRZ cont level hi heater on(over 5%)': pass
+            if get_procedure_name_in_json == 'R11 경보(09) PRZ cont level lo heater off(17%)': pass
+            if get_procedure_name_in_json == 'R12 경보(09) PRZ press lo back-up heater on(153.6 kg/cm2)': pass
+            if get_procedure_name_in_json == 'R13 경보(08) Tref/Auct. Tavg Deviation(1.67 deg C)': pass
+            if get_procedure_name_in_json == 'R14 경보(08) RCS 1,2,3 Tavg hi(312.78 deg C)': pass
+            if get_procedure_name_in_json == 'R15 경보(08) RCS 1,2,3 Tavg/auct Tavg hi/lo(1.1 deg C)': pass
+            if get_procedure_name_in_json == 'R16 경보(08) RCS 1,2,3 lo flow alert(92%)': pass
+            if get_procedure_name_in_json == 'R18 경보(09) PRT press hi( 0.6kg/cm2)': pass
+            if get_procedure_name_in_json == 'R19 경보(12) SG 1,2,3 level lo(25% of span)': pass
+            if get_procedure_name_in_json == 'R20 경보(12) SG 1,2,3 stm/FW flow deviation(10% of loop flow)': pass
+            if get_procedure_name_in_json == 'R22 경보(14) Condensate stor Tk level lo or Condensate stor Tk level lo-lo or Condensate stor Tk level hi': pass
+            if get_procedure_name_in_json == 'R25 경보(03) MSIV tripped': pass
+            if get_procedure_name_in_json == 'R27 경보(12) MSL press rate hi steam iso': pass
+            if get_procedure_name_in_json == 'R28 경보(12) MSL 1,2,3 press low(41.1 kg/cm*2 = 0.403E7 pas)': pass
+            if get_procedure_name_in_json == 'R29 경보(03) AFW(MD) actuated': pass
+            if get_procedure_name_in_json == 'R33 경보(15) FW temp hi(231.1 deg C)': pass
+            if get_procedure_name_in_json == 'R34 경보(16) Condensate pump flow lo(1400 gpm=88.324 kg/s)': pass
+            if get_procedure_name_in_json == 'R35 경보(16) Condenser abs press hi(633. mmmHg)': pass
+            if get_procedure_name_in_json == 'R37 경보(15) TBN trip P-4': pass
+            if get_procedure_name_in_json == 'R38 경보(15) SG 1,2,3 wtr level hi-hi TBN trip': pass
+            if get_procedure_name_in_json == 'R39 경보(15) Condenser vacuum lo TBN trip': pass
+            if get_procedure_name_in_json == 'R40 경보(15) TBN overspeed hi TBN trip': pass
 
+            # ----------------------------------------------------------------------------------------------------------
+            # 비정상
+            if get_procedure_name_in_json == 'Ab63_02: 제어봉의 계속적인 삽입':
+                # 초당으로 비교하면 깜빡거림 발생=>9초 전이랑 비교
+                if local_mem['KBCDO7']['List'][-1] < local_mem['KBCDO7']['List'][-9]:  #KBCDO7 : D bank (Mal_type : 4)
+                   self.sym_dict[0].update_condition(True)
+                if local_mem['ZINST124']['List'][-1] < local_mem['ZINST124']['List'][-9]:
+                    self.sym_dict[1].update_condition(True)
+                if local_mem['KLAMPO313']['Val'] == 1:
+                    self.sym_dict[2].update_condition(True)
+                if local_mem['KLAMPO254']['Val'] == 1:
+                    self.sym_dict[3].update_condition(True)
+                if local_mem['QPRZB']['Val'] > 0:
+                    self.sym_dict[4].update_condition(True)
+                if local_mem['WCHGNO']['Val'] > 0:
+                    self.sym_dict[5].update_condition(True)
 
+            if get_procedure_name_in_json == 'Ab19_02: 가압기 안전밸브 고장':
+                print(local_mem['WNETCH']['List'])
+                print(local_mem['ZVCT']['List'])
+                print(local_mem['ZINST63']['List'])
 
-        # --------------------------------------------------------------------------------------------------------------
-        # 비정상
-        if self.abnormal_name == 'Ab63_02: 제어봉의 계속적인 삽입':
-            # 초당으로 비교하면 깜빡거림 발생=>9초 전이랑 비교
-            if local_mem['KBCDO7']['List'][-1] < local_mem['KBCDO7']['List'][-9]:  #KBCDO7 : D bank (Mal_type : 4)
-               self.sym_dict[0].update_condition(True)
-            if local_mem['ZINST124']['List'][-1] < local_mem['ZINST124']['List'][-9]:
-                self.sym_dict[1].update_condition(True)
-            if local_mem['KLAMPO313']['Val'] == 1:
-                self.sym_dict[2].update_condition(True)
-            if local_mem['KLAMPO254']['Val'] == 1:
-                self.sym_dict[3].update_condition(True)
-            if local_mem['QPRZB']['Val'] > 0:
-                self.sym_dict[4].update_condition(True)
-            if local_mem['WCHGNO']['Val'] > 0:
-                self.sym_dict[5].update_condition(True)
-
-        if self.abnormal_name == 'Ab19_02: 가압기 안전밸브 고장':
-            print(local_mem['WNETCH']['List'])
-            print(local_mem['ZVCT']['List'])
-            print(local_mem['ZINST63']['List'])
-
-            if local_mem['KLAMPO312']['Val'] == 1:
-                self.sym_dict[0].update_condition(True)
-            if local_mem['KLAMPO308']['Val'] == 1:
-                self.sym_dict[1].update_condition(True)
-            if local_mem['KLAMPO317']['Val'] == 1:
-                self.sym_dict[2].update_condition(True)
-            if local_mem['ZINST63']['List'][-1] != local_mem['ZINST63']['List'][-2]:
-                self.sym_dict[3].update_condition(True)
-            if local_mem['WNETCH']['List'][-1] > local_mem['WCHGNO']['List'][-2]:
-                self.sym_dict[4].update_condition(True)
-            if local_mem['ZVCT']['List'][-1] < local_mem['ZVCT']['List'][-2]:
-                self.sym_dict[5].update_condition(True)
-            if local_mem['QPRZB']['Val'] > 0:
-                self.sym_dict[6].update_condition(True)
-            if local_mem['BHV6']['Val'] == 0:
-                self.sym_dict[7].update_condition(True)
-            if local_mem['KLAMPO9']['Val'] == 1:
-                self.sym_dict[8].update_condition(True)
+                if local_mem['KLAMPO312']['Val'] == 1:
+                    self.sym_dict[0].update_condition(True)
+                if local_mem['KLAMPO308']['Val'] == 1:
+                    self.sym_dict[1].update_condition(True)
+                if local_mem['KLAMPO317']['Val'] == 1:
+                    self.sym_dict[2].update_condition(True)
+                if local_mem['ZINST63']['List'][-1] != local_mem['ZINST63']['List'][-2]:
+                    self.sym_dict[3].update_condition(True)
+                if local_mem['WNETCH']['List'][-1] > local_mem['WCHGNO']['List'][-2]:
+                    self.sym_dict[4].update_condition(True)
+                if local_mem['ZVCT']['List'][-1] < local_mem['ZVCT']['List'][-2]:
+                    self.sym_dict[5].update_condition(True)
+                if local_mem['QPRZB']['Val'] > 0:
+                    self.sym_dict[6].update_condition(True)
+                if local_mem['BHV6']['Val'] == 0:
+                    self.sym_dict[7].update_condition(True)
+                if local_mem['KLAMPO9']['Val'] == 1:
+                    self.sym_dict[8].update_condition(True)
 
         # --------------------------------------------------------------------------------------------------------------
 

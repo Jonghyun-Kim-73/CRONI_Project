@@ -1,6 +1,7 @@
 import os
 import sys
 import pandas as pd
+import json
 from datetime import datetime
 
 from PyQt5.QtWidgets import *
@@ -240,7 +241,7 @@ class AlarmTable(QTableWidget):
 
             'KLAMPO316': {'U': False, 'CurP': '',        'CriP': '',        'D': 'RCS 1,2,3 lo flow alert(92%)'},
             'KLAMPO317': {'U': False, 'CurP': 'UPRT',    'CriP': 'CUPRT',   'D': 'PRT temp hi(45deg C )'},
-            'KLAMPO318': {'U': False, 'CurP': '',        'CriP': 'CPPRT',   'D': 'PRT  press hi( 0.6kg/cm2)'},
+            'KLAMPO318': {'U': False, 'CurP': '',        'CriP': 'CPPRT',   'D': 'PRT press hi( 0.6kg/cm2)'},
             'KLAMPO319': {'U': False, 'CurP': '',        'CriP': 'CZSGW',   'D': 'SG 1,2,3 level lo(25% of span)'},
             'KLAMPO320': {'U': False, 'CurP': '',        'CriP': '',        'D': 'SG 1,2,3 stm/FW flow deviation(10% of loop flow)'},
 
@@ -469,10 +470,161 @@ class AlarmItemInfo(QLabel):
         """ 알람 row 클릭 시 해당 경보 절차서 Open """
         MainCenterProcedureArea = self.parent().parent().parent().parent().parent().procedure_area
         symxai, nonpro = MainCenterProcedureArea.Symptomxai_area, MainCenterProcedureArea.non_procedure_area
-        if nonpro.cond_visible:
-            nonpro.open_area(cond=False)
+        """
+                알람 섹션
+
+                현재 파라 메터가 알람관련 변수라면 입력된 값을 Overwrite
+                # -----------  Left panel : KLARML(3,II) -----------------------------------------------------------------------
+                #
+                #           ---------------------------------------------------
+                #           | II = 1 |   9    |   17   |   25   |   33   |  41 |
+                #           ---------------------------------------------------
+                #           |   2    |   10   |   18   |   26   |   34   |  42|
+                #           ---------------------------------------------------
+                #           |   3    |   11   |   19   |   27   |   35   |  43 |
+                #           ---------------------------------------------------
+                #           |   4    |   12   |   20   |   28   |   36   |  44 |
+                #           ---------------------------------------------------
+                #           |   5    |   13   |   21   |   29   |   37   |  45 |
+                #           ---------------------------------------------------
+                #           |   6    |   14   |   22   |   30   |   38   |  46 |
+                #           ---------------------------------------------------
+                #           |   7    |   15   |   23   |   31   |   39   |  47 |
+                #           ---------------------------------------------------
+                #           |   8    |   16   |   24   |   32   |   40   |  48 |
+                #           ---------------------------------------------------
+                #
+                # ==============================================================================================================
+                # -----------  Right panel : KLARMR(3,IJ)
+                #
+                #       -----------------------------------------------------------------
+                #       | IJ=1  |   7   |  13   |  18   |  21   |  26   |  32   |  38   |
+                #       -----------------------------------------------------------------
+                #       |   2   |   8   |  14   |  19   |  22   |  27   |  33   |  39   |
+                #       -----------------------------------------------------------------
+                #       |   3   |   9   |  15   |  20   |       |  28   |  34   |  40   |
+                #       -----------------------------------------------------------------
+                #       |   4   |   10  |  16   |       |  23   |  29   |  35   |  41   |
+                #       -----------------------------------------------------------------
+                #       |   5   |   11  |       |       |  24   |  30   |  36   |       |
+                #       -----------------------------------------------------------------
+                #       |   6   |   12  |  17   |       |  25   |  31   |  37   |  42   |
+                #       -----------------------------------------------------------------
+                #
+                # ==============================================================================================================
+
+                - CNS와 연결된 경우 동작함.
+                - check_alarm_cond 에 CNS 파라메터가 저장되고 저장되지 않은 경우 알람이 추가되는 구조
+                - urgent 의 경우 현재 원자로 Trip 부분
+                - 알람 1줄에는 CNS 변수의 정보가 저장되어 이 기준을 가지고 관련 절차서를 반환함.
+
+                - TODO suppression 버튼을 누르게되면 조건 재확인하여 알람 최신화가 되는 기능 추가해야함.
+                    - 1) 알람 최신화시 조건이 만족되면 emergec_alarm_dict 에서도 지워야함.
+                    - 2) 항시 조건이 만족한지 확인하는 모듈도 만들어야함.
+                    - 3) 최종적으로 해당하는 알람 라인을 지워야함.
+                """
+
+        self.alarm_info_db = {
+            # 'KLAMPO251': {'Urgent': False, 'CurPara': '', 'Criteria': '', 'Descrip': '...'}
+            'KLAMPO251': {'D': 'Intermediate range high flux rod stop'},
+            'KLAMPO252': {'D': 'Power range overpower rod stop'},
+            'KLAMPO253': {'D': 'Control bank D full rod withdrawl(220 steps)'},         # No
+            'KLAMPO254': {'D': 'Control bank lo-lo limit'},
+            'KLAMPO255': {'D': 'Two or more rod at bottom'},
+
+            'KLAMPO256': {'D': 'Axial power distribution limit'},                       # No
+            'KLAMPO257': {'D': 'CCWS outlet temp hi (49.0 deg C)'},
+            'KLAMPO258': {'D': 'Instrument air press lo (6.3 kg/cm2)'},
+            'KLAMPO259': {'D': 'RWST level lo-lo (5%)'},
+            'KLAMPO260': {'D': 'L/D HX outlet flow lo (15 m3/hr)'},                     # No
+
+            'KLAMPO261': {'D': 'L/D HX outlet temp hi(58 deg C)'},
+            'KLAMPO262': {'D': 'RHX L/D outlet temp hi(202 deg C)'},
+            'KLAMPO263': {'D': 'VCT level lo(20 %)'},
+            'KLAMPO264': {'D': 'VCT press lo(0.7 kg/cm2)'},
+            'KLAMPO265': {'D': 'RCP seal inj wtr flow lo(1.4 m3/hr)'},
+
+            'KLAMPO266': {'D': 'Charging flow cont flow lo(5 m3/hr)'},                  # No
+            'KLAMPO267': {'D': 'Not used'},                                             # No
+            'KLAMPO268': {'D': 'L/D HX outlet flow hi (30  m3/hr)'},                    # No
+            'KLAMPO269': {'D': 'PRZ press lo SI'},
+            'KLAMPO270': {'D': 'CTMT spray actuated'},                                  # No
+
+            'KLAMPO271': {'D': 'VCT level hi(80 %)'},
+            'KLAMPO272': {'D': 'VCT press hi (4.5 kg/cm2)'},
+            'KLAMPO273': {'D': 'CTMT phase B iso actuated'},
+            'KLAMPO274': {'D': 'Charging flow cont flow hi(27 m3/hr)'},                 # No
+            'KLAMPO295': {'D': 'CTMT sump level hi'},                                   # No
+
+            'KLAMPO296': {'D': 'CTMT sump level hi-hi'},
+            'KLAMPO297': {'D': 'CTMT air temp hi(48.89 deg C)'},
+            'KLAMPO298': {'D': 'CTMT moisture hi(70% of R.H.)'},
+
+            'KLAMPO301': {'D': 'Rad hi alarm'},
+            'KLAMPO302': {'D': 'CTMT press hi 1 alert'},
+            'KLAMPO303': {'D': 'CTMT press hi 2 alert'},
+            'KLAMPO304': {'D': 'CTMT press hi 3 alert'},
+            'KLAMPO305': {'D': 'Accum. Tk press lo (43.4 kg/cm2)'},
+
+            'KLAMPO306': {'D': 'Accum. Tk press hi (43.4 kg/cm2)'},
+            'KLAMPO307': {'D': 'PRZ press hi alert(162.4 kg/cm2)'},
+            'KLAMPO308': {'D': 'PRZ press lo alert(153.6 kg/cm2)'},
+            'KLAMPO309': {'D': 'PRZ PORV opening(164.2 kg/cm2)'},
+            'KLAMPO310': {'D': 'PRZ cont level hi heater on(over 5%)'},
+
+            'KLAMPO311': {'D': 'PRZ cont level lo heater off(17%)'},
+            'KLAMPO312': {'D': 'PRZ press lo back-up heater on(153.6 kg/cm2)'},
+            'KLAMPO313': {'D': 'Tref/Auct. Tavg Deviation(1.67 deg C)'},
+            'KLAMPO314': {'D': 'RCS 1,2,3 Tavg hi(312.78 deg C)'},
+            'KLAMPO315': {'D': 'RCS 1,2,3 Tavg/auct Tavg hi/lo(1.1 deg C)'},
+
+            'KLAMPO316': {'D': 'RCS 1,2,3 lo flow alert(92%)'},
+            'KLAMPO317': {'D': 'PRT temp hi(45deg C )'},                                    # No
+            'KLAMPO318': {'D': 'PRT press hi( 0.6kg/cm2)'},
+            'KLAMPO319': {'D': 'SG 1,2,3 level lo(25% of span)'},
+            'KLAMPO320': {'D': 'SG 1,2,3 stm/FW flow deviation(10% of loop flow)'},
+
+            'KLAMPO321': {'D': 'RCP 1,2,3 trip'},                                           # No
+            'KLAMPO322': {'D': 'Condensate stor Tk level lo'},
+            'KLAMPO323': {'D': 'Condensate stor Tk level lo-lo'},
+            'KLAMPO324': {'D': 'Condensate stor Tk level hi'},
+            'KLAMPO325': {'D': 'MSIV tripped'},
+
+            'KLAMPO326': {'D': 'MSL press rate hi steam iso'},
+            'KLAMPO327': {'D': 'MSL 1,2,3 press rate hi(-7.03 kg/cm*2/sec = 6.89E5 Pa/sec)'},   # No
+            'KLAMPO328': {'D': 'MSL 1,2,3 press low(41.1 kg/cm*2 = 0.403E7 pas)'},
+            'KLAMPO329': {'D': 'AFW(MD) actuated'},
+            'KLAMPO330': {'D': 'Condenser level lo(27")'},                                      # No
+
+            'KLAMPO331': {'D': 'FW pump discharge header press hi'},                            # No
+            'KLAMPO332': {'D': 'FW pump trip'},                                                 # No
+            'KLAMPO333': {'D': 'FW temp hi(231.1 deg C)'},
+            'KLAMPO334': {'D': 'Condensate pump flow lo(1400 gpm=88.324 kg/s)'},
+            'KLAMPO335': {'D': 'Condenser abs press hi(633. mmmHg)'},
+
+            'KLAMPO336': {'D': 'Condenser level hi (45" )'},                                    # No
+            'KLAMPO337': {'D': 'TBN trip P-4'},
+            'KLAMPO338': {'D': 'SG 1,2,3 wtr level hi-hi TBN trip'},
+            'KLAMPO339': {'D': 'Condenser vacuum lo TBN trip'},
+            'KLAMPO340': {'D': 'TBN overspeed hi TBN trip'},
+
+            'KLAMPO341': {'D': 'Gen. brk open'},                                                # No
+            # End
+        }
+        # json파일 로드
+        with open('./Procedure/procedure.json', 'rb') as f:
+            json_data = json.load(f)
+
+        if self.alarm_info_db[self.alarm_name]["D"] in json_data.keys():
+            # 경보 절차서가 있는 경우의 경보
+            if nonpro.cond_visible:
+                nonpro.open_area(cond=False)
+            else:
+                symxai.open_area(cond=True, abnomal_name=f'경보_{self.alarm_info_db[self.alarm_name]["D"]}')
+                # 여기서는 절차서 명만 생성해서 symxai 에 넘겨줌. symxai에서 자동동작사항 생성.
         else:
-            symxai.open_area(cond=True, abnomal_name=f'경보_{self.alarm_name}')
+            # 경보 절차서 없는 경보 알람.
+            pass
 
 
 class AlarmItemTimer(QLabel):
