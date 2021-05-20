@@ -10,7 +10,7 @@ import time
 
 
 class All_Function_module(multiprocessing.Process):
-    def __init__(self, shmem):
+    def __init__(self, shmem, Max_len):
         multiprocessing.Process.__init__(self)
         self.daemon = True
         self.shmem = shmem
@@ -20,7 +20,8 @@ class All_Function_module(multiprocessing.Process):
         self.cns_ip, self.cns_port = self.shmem.get_cns_info()
         self.remote_ip, self.remote_port = self.shmem.get_remote_info()
         self.cns_env = ENVCNS(Name='EnvCNS', IP=self.cns_ip, PORT=int(self.cns_port),
-                              RIP=self.remote_ip, RPORT=int(self.remote_port))
+                              RIP=self.remote_ip, RPORT=int(self.remote_port),
+                              Max_len=Max_len)
 
     def pr_(self, s):
         head_ = 'AllFuncM'

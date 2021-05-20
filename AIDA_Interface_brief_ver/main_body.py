@@ -37,10 +37,10 @@ class Body:
         BaseManager.register('SHMem', SHMem)
         manager = BaseManager()
         manager.start()
-
+        max_len_deque = 20
         shmem = manager.SHMem(cnsinfo=(self.args.cnsip, self.args.cnsport),
                               remoteinfo=(self.args.comip, self.args.comport),
-                              max_len_deque=20,
+                              max_len_deque=max_len_deque,
                               )
         # Build Process ------------------------------------------------------------------------------------------------
         p_list = []
@@ -49,7 +49,7 @@ class Body:
         p_list.append(p)
 
         # Build Interface
-        p = All_Function_module(shmem)
+        p = All_Function_module(shmem, max_len_deque)
         p_list.append(p)
 
         # --------------------------------------------------------------------------------------------------------------
