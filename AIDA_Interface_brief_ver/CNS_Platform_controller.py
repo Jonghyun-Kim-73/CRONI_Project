@@ -130,7 +130,7 @@ class MyForm(QWidget):
         self.procedure_editor_wid = PrcedureEditor(self, mem=self.shmem)
         self.procedure_editor_wid.show()
 
-
+# # 자동 데이터 수집하는 구간 # #
 class AutoDataList(QListWidget):
     def __init__(self, parent):
         super(AutoDataList, self).__init__(parent=parent)
