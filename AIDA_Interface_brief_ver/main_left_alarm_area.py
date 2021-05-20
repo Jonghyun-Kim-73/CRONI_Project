@@ -17,7 +17,7 @@ class MainLeftAlarmArea(QWidget):
         self.mem = mem
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubW')
-        self.setFixedWidth(int(self.parentWidget().width()/7) * 4)                          # 1/3 부분을 차지
+        self.setFixedWidth(800)                          # 1/3 부분을 차지
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layout = QVBoxLayout(self)

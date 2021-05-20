@@ -97,7 +97,7 @@ class ProcedureTable(QTableWidget):
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
 
         # 테이블 셋업
-        col_info = [('비정상 절차서 명', 300), ('AI확신도', 100), ('진입 조건 확인', 100), ('긴급', 0)]
+        col_info = [('비정상 절차서 명', 500), ('AI확신도', 100), ('진입 조건 확인', 100), ('긴급', 0)]
 
         self.setColumnCount(len(col_info))
 
@@ -125,14 +125,10 @@ class ProcedureTable(QTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         if self.mem != None:
-            print('yes')
             timer1 = QTimer(self)
             timer1.setInterval(1000)
             timer1.timeout.connect(self._update_procedure)
             timer1.start()
-            if timer1.isActive():
-                print('running...')
-            else: print('None')
 
     def add_empty_procedure(self, i):
         self.insertRow(i)
@@ -148,10 +144,10 @@ class ProcedureTable(QTableWidget):
         :param em:
         :return:
         """
-        item1 = ProcedureNameCell(self, name, self.symxai, self.nonpro)
-        item2 = ProcedureAIProbCell(self, name, ai_prob, self.symxai, self.nonpro)
-        item3 = ProcedureInfoCell(self, if_prob, self.symxai, self.nonpro)
-        item4 = ProcedureInfoCell(self, em, self.symxai, self.nonpro)
+        item1 = ProcedureNameCell(self, name, row, self.symxai, self.nonpro)
+        item2 = ProcedureAIProbCell(self, name, ai_prob, row, self.symxai, self.nonpro)
+        item3 = ProcedureInfoCell(self, if_prob, row, self.symxai, self.nonpro)
+        item4 = ProcedureInfoCell(self, em, row, self.symxai, self.nonpro)
         self.setCellWidget(row, 0, item1)
         self.setCellWidget(row, 1, item2)
         self.setCellWidget(row, 2, item3)
@@ -193,45 +189,48 @@ class ProcedureEmptyCell(QLabel):
 
 class ProcedureBaseCell(QLabel):
     """ 셀 Label 공통 """
-    def __init__(self, parent, symxai, nonpro):
+    def __init__(self, parent, row, symxai, nonpro):
         super(ProcedureBaseCell, self).__init__(parent=parent)
         # SymXai과 Nonpro 위젯 메모리 주소 받기
         self.symxai, self.nonpro = symxai, nonpro
 
         self.procedure_name = ''
+        self.row = row
 
     def mousePressEvent(self, e) -> None:
         if self.nonpro.cond_visible:
             self.nonpro.open_area(cond=False)
         else:
-            self.symxai.open_area(cond=True, abnomal_name=self.procedure_name)
+            self.symxai.open_area(cond=True, abnomal_name=self.procedure_name, row=self.row)
 
 
 class ProcedureBaseWidget(QWidget):
     """ 셀 Widget 공통 """
-    def __init__(self, parent, symxai, nonpro):
+    def __init__(self, parent, row, symxai, nonpro):
         super(ProcedureBaseWidget, self).__init__(parent=parent)
         # SymXai과 Nonpro 위젯 메모리 주소 받기
         self.symxai, self.nonpro = symxai, nonpro
 
         self.procedure_name = ''
+        self.row = row
 
     def mousePressEvent(self, e) -> None:
         if self.nonpro.cond_visible:
             self.nonpro.open_area(cond=False)
         else:
-            self.symxai.open_area(cond=True, abnomal_name=self.procedure_name)
+            self.symxai.open_area(cond=True, abnomal_name=self.procedure_name, row=self.row)
 
 
 class ProcedureNameCell(ProcedureBaseCell):
     """ 절차서 명 Cell """
-    def __init__(self, parent, name, symxai, nonpro):
-        super(ProcedureNameCell, self).__init__(parent, symxai, nonpro)
+    def __init__(self, parent, name, row, symxai, nonpro):
+        super(ProcedureNameCell, self).__init__(parent, row, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('ProcedureItemInfo')
         self.isempty = False
 
         self.procedure_name = name
+        self.row = row
 
         self.setText(name)
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
@@ -239,13 +238,14 @@ class ProcedureNameCell(ProcedureBaseCell):
 
 class ProcedureAIProbCell(ProcedureBaseWidget):
     """ AI 확신도 """
-    def __init__(self, parent, name, aiprob, symxai, nonpro):
-        super(ProcedureAIProbCell, self).__init__(parent, symxai, nonpro)
+    def __init__(self, parent, name, aiprob, row, symxai, nonpro):
+        super(ProcedureAIProbCell, self).__init__(parent, row, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
 
         self.isempty = False
 
         self.procedure_name = name
+        self.row = row
 
         layer = QHBoxLayout()
         layer.setContentsMargins(0, 0, 0, 0)
@@ -270,13 +270,14 @@ class ProcedureAIProbCell(ProcedureBaseWidget):
 
 class ProcedureInfoCell(ProcedureBaseCell):
     """ 절차서 Info Cell """
-    def __init__(self, parent, name, symxai, nonpro):
-        super(ProcedureInfoCell, self).__init__(parent, symxai, nonpro)
+    def __init__(self, parent, name, row, symxai, nonpro):
+        super(ProcedureInfoCell, self).__init__(parent, row, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('ProcedureItemInfo')
         self.isempty = False
 
         self.procedure_name = name
+        self.row = row
 
         self.setText(name)
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
@@ -322,6 +323,7 @@ class SymptomXAIArea(QWidget):
         self._visible(False)
         self.cond_visible = False
         self.abnomal_name = ''
+        self.row = 0
 
     def _visible(self, trig, get_info=['경보', '비정상']):
         self.Symptom_area.setVisible(trig)
@@ -337,7 +339,7 @@ class SymptomXAIArea(QWidget):
             self.Vlayout.setContentsMargins(0, 0, 0, 0)
         self.cond_visible = trig
 
-    def open_area(self, cond, abnomal_name=''):
+    def open_area(self, cond, abnomal_name='', row=0):
         get_info = abnomal_name.split('_')      # 경보 비정상 나누는 기준
 
         if cond == True and abnomal_name == self.abnomal_name:
@@ -347,7 +349,10 @@ class SymptomXAIArea(QWidget):
             self._visible(True, get_info)
             self.Abnormal_procedure_name.setText(f'{abnomal_name}')
             self.abnomal_name = abnomal_name
+            self.row = row
             self.Symptom_area.abnormal_name = self.abnomal_name
+            self.Symptom_area.selected_row = self.row
+            self.XAI_area.xai_table.selected_procedure_nub = self.row
 
             # self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setStartValue(self.height())
@@ -356,7 +361,11 @@ class SymptomXAIArea(QWidget):
         else:
             self._visible(False, get_info)
             self.abnomal_name = ''
+            self.row = row
             self.Symptom_area.abnormal_name = self.abnomal_name
+            self.Symptom_area.selected_row = self.row
+            self.XAI_area.xai_table.selected_procedure_nub = self.row
+
             self.ani_symptomxai_area.setStartValue(self.height())
             self.ani_symptomxai_area.setEndValue(0)
             self.ani_symptomxai_area.start()
@@ -389,11 +398,14 @@ class SymptomArea(QWidget):
             i: SymptomWidget(self, txt='', cond=False) for i in range(10)
         }
         [self.sym_layer.addWidget(self.sym_dict[i]) for i in self.sym_dict.keys()]
-        layer.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Ignored, QSizePolicy.Expanding))
+
         layer.addLayout(self.sym_layer)
+        layer.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Ignored, QSizePolicy.Expanding))
+
         self.setLayout(layer)
 
         self.abnormal_name = ''
+        self.selected_row = 0
 
         # TODO CNS 업데이트 모듈 만들어야함.
 
@@ -451,7 +463,7 @@ class SymptomWidget(QWidget):
     def update_condition(self, cond: bool):
         self.curent_cond = self.txt_dis.update_condition(cond)
 
-    def update_text(self,txt: str):
+    def update_text(self, txt: str):
         self.txt_label.setText(txt)
 
 
@@ -485,7 +497,7 @@ class XAIArea(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('SubArea')
 
-        self.setMaximumWidth(260)
+        self.setMaximumWidth(450)
 
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         layer = QVBoxLayout(self)
@@ -512,7 +524,7 @@ class XAITable(QTableWidget):
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
 
         # 테이블 셋업
-        col_info = [('변수 명', 150), ('가중치', 0)]
+        col_info = [('변수 명', 350), ('가중치', 0)]
 
         self.setColumnCount(len(col_info))
 
@@ -526,6 +538,9 @@ class XAITable(QTableWidget):
         for i in range(0, self.max_cell):
             self.add_empty_procedure(i)
 
+        # shap val 아이템 저장
+        self.shap_val_dict = {i: self.add_value(i, '', 0) for i in range(self.max_cell)}
+
         cell_height = self.rowHeight(0)
         total_height = self.horizontalHeader().height() + cell_height * self.max_cell + 4  # TODO 4 매번 계산.
 
@@ -536,22 +551,13 @@ class XAITable(QTableWidget):
         self.horizontalHeader().setStretchLastSection(True)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
+        self.selected_procedure_nub = 0
+
         if self.mem != None:
-            print('yes_XAI')
             timer1 = QTimer(self)
             timer1.setInterval(1000)
-            timer1.timeout.connect(self._update_result)
+            timer1.timeout.connect(self._update_XAI)
             timer1.start()
-            if timer1.isActive():
-                print('running...XAI')
-            else: print('None')
-
-    def _update_result(self):
-        # self.minmax_data = self.Data_module1.make_input_data(self.mem)
-        # self.Model_module1.AI_abnormal_procedure_classifier(self.minmax_data)
-        # self.Model_module1.XAI_explainer(self.minmax_data)
-        # self.add_value(0, self.Model_module1.shap_name_1()[0], self.Model_module1.shap_val_1()[0])
-        self._update_XAI()
 
     def add_empty_procedure(self, i):
         self.insertRow(i)
@@ -567,10 +573,11 @@ class XAITable(QTableWidget):
         :param em:
         :return:
         """
-        item1 = XAITableInfoCell(self, name)
-        item2 = XAITableProbCell(self, name, weight)
-        self.setCellWidget(row, 0, item1)
-        self.setCellWidget(row, 1, item2)
+        XaiInfo = XAITableInfoCell(self, name)
+        XaiProb = XAITableProbCell(self, name, weight)
+        self.setCellWidget(row, 0, XaiInfo)
+        self.setCellWidget(row, 1, XaiProb)
+        return {'info': XaiInfo, 'prob': XaiProb}
 
     def contextMenuEvent(self, event) -> None:
         """ XAITable 에 기능 올리기  """
@@ -582,13 +589,13 @@ class XAITable(QTableWidget):
     def _update_XAI(self):
         shap_result = self.mem.get_logic('Ab_Xai_Result')
         if not shap_result == {}:
-            pass
-            # print('[XAI] 변수명: ', self.Model_module1.shap_name_1()[0])
-            # print('[XAI] SHAP 값: ', self.Model_module1.shap_val_1()[0])
-            # self.add_value(1, self.Model_module1.shap_name_1()[1], self.Model_module1.shap_val_1()[1])
-            # self.add_value(2, self.Model_module1.shap_name_1()[2], self.Model_module1.shap_val_1()[2])
-            # self.add_value(3, self.Model_module1.shap_name_1()[3], self.Model_module1.shap_val_1()[3])
-            # self.add_value(4, self.Model_module1.shap_name_1()[4], self.Model_module1.shap_val_1()[4])
+            selected_procedure = self.selected_procedure_nub
+            for i in range(self.max_cell):
+                shap_val = shap_result[selected_procedure][f'SHAP_VAL{i}']
+                shap_val_name = shap_result[selected_procedure][f'SHAP_NAME{i}']
+                shap_val_desc = shap_result[selected_procedure][f'SHAP_DESC{i}']
+                self.shap_val_dict[i]['info'].update_(shap_val_desc)
+                self.shap_val_dict[i]['prob'].update_(shap_val_name, shap_val)
 
     def _test(self):
         self.add_value(0, 'PZR압력', 95)
@@ -620,21 +627,26 @@ class XAITableProbCell(QWidget):
         layer.setContentsMargins(0, 0, 0, 0)
         layer.setSpacing(0)
 
-        prg_bar = QProgressBar()
-        prg_bar.setObjectName('ProcedureItemProgress')
-        prg_bar.setValue(weight)
-        prg_bar.setTextVisible(False)
+        self.prg_bar = QProgressBar()
+        self.prg_bar.setMaximumWidth(30)
+        self.prg_bar.setObjectName('ProcedureItemProgress')
+        self.prg_bar.setValue(weight)
+        self.prg_bar.setTextVisible(False)
 
-        prg_label = QLabel()
-        prg_label.setObjectName('ProcedureItemProgressLabel')
-        prg_label.setFixedWidth(45)
-        prg_label.setAlignment(Qt.AlignRight | Qt.AlignCenter)  # 텍스트 가운데 정렬
-        prg_label.setText(f'{weight}%')
+        self.prg_label = QLabel()
+        self.prg_label.setObjectName('ProcedureItemProgressLabel')
+        self.prg_label.setAlignment(Qt.AlignRight | Qt.AlignCenter)  # 텍스트 가운데 정렬
+        self.prg_label.setText(f'{weight}%')
 
-        layer.addWidget(prg_bar)
-        layer.addWidget(prg_label)
+        layer.addWidget(self.prg_bar)
+        layer.addWidget(self.prg_label)
 
         self.setLayout(layer)
+
+    def update_(self, name, weight):
+        self.para_name = name
+        self.prg_bar.setValue(int(weight))
+        self.prg_label.setText(f'{weight}%')
 
 
 class XAITableInfoCell(QLabel):
@@ -649,6 +661,10 @@ class XAITableInfoCell(QLabel):
         self.setText(para_name)
 
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 가운데 정렬
+
+    def update_(self, name):
+        self.para_name = name
+        self.setText(name)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

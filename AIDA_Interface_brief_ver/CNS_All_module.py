@@ -93,7 +93,7 @@ class All_Function_module(multiprocessing.Process):
                     # end AI
                 # One Step CNS -------------------------------------------------------------------------------------
                 Action_dict = {}  # 향후 액션 추가
-                self.cns_env.step(1) # 1초 돌 때 (5tick)
+                self.cns_env.step(0) # 1초 돌 때 (5tick)
 
                 # Update All mem -----------------------------------------------------------------------------------
                 self._update_cnsenv_to_sharedmem()

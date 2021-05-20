@@ -22,7 +22,7 @@ class Mainwindow(QWidget):
         self.top_window = parnet
         self.mem = mem
         # --------------------------------------------------------------------------------------------------------------
-        self.setGeometry(300, 300, 1500, 800)    # initial window size
+        self.setGeometry(300, 300, 1700, 800)    # initial window size
         self.setStyleSheet(qss)
         self.setObjectName('MainWin')
 
