@@ -67,6 +67,7 @@ class IC_Diagnosis_Pack:
             9: {'N': 'ZINST65', 'D': 'PRZ PRESSURE(WIDE RANGE)'},
             10: {'N': 'ZVCT', 'D': 'VOLUME CONTROL TANK LEVEL.'},
             11: {'N': 'BHTV', 'D': 'HP TURBIN CONTROL VALVE POSITION.'},
+            11: {'N': 'BHTV', 'D': 'HP TURBIN CONTROL VALVE POSITION.'},
             12: {'N': 'CAXOFF', 'D': 'AXIAL OFFSET.'},
             13: {'N': 'UPRZ', 'D': 'PRZ TEMPERATURE.'},
             14: {'N': 'CRETIV', 'D': 'REACTIVITY.'},
@@ -226,7 +227,8 @@ class IC_Diagnosis_Pack:
         ab_predict, ab_sort_predict = self._AI_abnormal_procedure_classifier(mem)
         # 3. 가공
         p_nub, v_nub = 3, 5  # 절차서 3개 shap 값 5개 # TODO  XAITable 의 Max Cell이 v_nub 임. 동일하게 값 맞출 것
-        shap_ab = np.abs(np.array(shap_value)).reshape(len(self.procedure_des), len(self.parms_dict))[:3]
+        shap_ab = np.abs(np.array(shap_value)).reshape(len(self.procedure_des), len(self.parms_dict))
+        shap_ab = np.array([shap_ab[i, :] for i in ab_sort_predict[:3]])
         shap_ab_sort = shap_ab.argsort()[:, ::-1]  # (3, 137)
         # 4. shap value, name 계산
         shap_result = {_: {} for _ in range(p_nub)}
