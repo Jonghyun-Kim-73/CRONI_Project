@@ -182,15 +182,17 @@ class ProcedureTable(QTableWidget):
 
 class ProcedureEmptyCell(QLabel):
     """ 공백 Cell """
+
     def __init__(self, parent):
         super(ProcedureEmptyCell, self).__init__(parent=parent)
-        self.setAttribute(Qt.WA_StyledBackground, True) # 상위 스타일 상속
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('ProcedureItemEmpty')
         self.isempty = True
 
 
 class ProcedureBaseCell(QLabel):
     """ 셀 Label 공통 """
+
     def __init__(self, parent, row, symxai, nonpro):
         super(ProcedureBaseCell, self).__init__(parent=parent)
         # SymXai과 Nonpro 위젯 메모리 주소 받기
@@ -208,6 +210,7 @@ class ProcedureBaseCell(QLabel):
 
 class ProcedureBaseWidget(QWidget):
     """ 셀 Widget 공통 """
+
     def __init__(self, parent, row, symxai, nonpro):
         super(ProcedureBaseWidget, self).__init__(parent=parent)
         # SymXai과 Nonpro 위젯 메모리 주소 받기
@@ -225,6 +228,7 @@ class ProcedureBaseWidget(QWidget):
 
 class ProcedureNameCell(ProcedureBaseCell):
     """ 절차서 명 Cell """
+
     def __init__(self, parent, name, row, symxai, nonpro):
         super(ProcedureNameCell, self).__init__(parent, row, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -240,6 +244,7 @@ class ProcedureNameCell(ProcedureBaseCell):
 
 class ProcedureAIProbCell(ProcedureBaseWidget):
     """ AI 확신도 """
+
     def __init__(self, parent, name, aiprob, row, symxai, nonpro):
         super(ProcedureAIProbCell, self).__init__(parent, row, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -272,6 +277,7 @@ class ProcedureAIProbCell(ProcedureBaseWidget):
 
 class ProcedureInfoCell(ProcedureBaseCell):
     """ 절차서 Info Cell """
+
     def __init__(self, parent, name, row, symxai, nonpro):
         super(ProcedureInfoCell, self).__init__(parent, row, symxai, nonpro)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -342,7 +348,7 @@ class SymptomXAIArea(QWidget):
         self.cond_visible = trig
 
     def open_area(self, cond, abnomal_name='', row=0):
-        get_info = abnomal_name.split('_')      # 경보 비정상 나누는 기준
+        get_info = abnomal_name.split('_')  # 경보 비정상 나누는 기준
 
         if cond == True and abnomal_name == self.abnomal_name:
             cond = False
@@ -407,7 +413,7 @@ class SymptomArea(QWidget):
         layer.addWidget(label0)
         self.sym_layer = QVBoxLayout()
         self.sym_dict = {
-            i: SymptomWidget(self, txt='', cond=False) for i in range(20)
+            i: SymptomWidget(self, txt='', cond=False) for i in range(10)
         }
         [self.sym_layer.addWidget(self.sym_dict[i]) for i in self.sym_dict.keys()]
 
@@ -441,10 +447,10 @@ class SymptomArea(QWidget):
             pass
         else:
             # 1. json 절차서 db 에서 self.abnormal_name 과 유사한 절차서 명이 있는지 탐색한다.
-            get_procedure_name_in_json = ''                                 # json 파일에서 절차서 명 가져오기
-            for json_in_procedure_name in json_data.keys():                 # 순회하면서 self.abnormal_name 과 비교
+            get_procedure_name_in_json = ''  # json 파일에서 절차서 명 가져오기
+            for json_in_procedure_name in json_data.keys():  # 순회하면서 self.abnormal_name 과 비교
                 if self.abnormal_name in json_in_procedure_name:
-                    get_procedure_name_in_json = json_in_procedure_name     # 최종 선택
+                    get_procedure_name_in_json = json_in_procedure_name  # 최종 선택
             # 2. 만약 유사한 절차서 명이 있다면 json 절차서 db 에서 해당 절차서의 전체 길이를 확인한다.
             if get_procedure_name_in_json != '':
                 # TODO 만약에 Json 파일에 절차서 명과 이미 등록된 절차서 명이 다르면 오류 발생함.
@@ -491,9 +497,12 @@ class SymptomArea(QWidget):
                     self.sym_dict[0].update_condition(True)
                 if local_mem['KBCDO22']['List'][-1] <= local_mem['KBCDO22']['List'][-2]:
                     self.sym_dict[1].update_condition(True)
-                if local_mem['BPORV']['Val'] > 0 and local_mem['ZINST65']['List'][-1] < local_mem['ZINST65']['List'][-2]:
+                if local_mem['BPORV']['Val'] > 0 and local_mem['ZINST65']['List'][-1] < local_mem['ZINST65']['List'][
+                    -2]:
                     self.sym_dict[2].update_condition(True)
-                if local_mem['ZPRTL']['List'][-1] > local_mem['ZPRTL']['List'][-2] and local_mem['ZINST48']['List'][-1] > local_mem['ZINST48']['List'][-2] and local_mem['UPRT']['List'][-1] > local_mem['UPRT']['List'][-2]:
+                if local_mem['ZPRTL']['List'][-1] > local_mem['ZPRTL']['List'][-2] and local_mem['ZINST48']['List'][
+                    -1] > local_mem['ZINST48']['List'][-2] and local_mem['UPRT']['List'][-1] > \
+                        local_mem['UPRT']['List'][-2]:
                     self.sym_dict[3].update_condition(True)
 
             if get_procedure_name_in_json == 'R10 경보(10) PRZ cont level hi heater on(over 5%)': pass
@@ -545,9 +554,8 @@ class SymptomArea(QWidget):
                     self.sym_dict[6].update_condition(True)
 
             if get_procedure_name_in_json == 'Ab63_02: 제어봉의 계속적인 삽입':
-                # 초당으로 비교하면 깜빡거림 발생=>9초 전이랑 비교
-                if local_mem['KBCDO7']['List'][-1] < local_mem['KBCDO7']['List'][-2]:  #KBCDO7 : D bank (Mal_type : 4)
-                   self.sym_dict[0].update_condition(True)
+                if local_mem['KBCDO7']['List'][-1] < local_mem['KBCDO7']['List'][-2]:  # KBCDO7 : D bank (Mal_type : 4)
+                    self.sym_dict[0].update_condition(True)
                 if local_mem['ZINST124']['List'][-1] < local_mem['ZINST124']['List'][-2]:
                     self.sym_dict[1].update_condition(True)
                 if local_mem['KLAMPO313']['Val'] == 1:
@@ -598,7 +606,7 @@ class SymptomArea(QWidget):
                     self.sym_dict[5].update_condition(True)
                 if local_mem['ZINST63']['List'][-1] <= 17:
                     self.sym_dict[6].update_condition(True)
-                    #위의 절차 만족시 아래 절차 시작
+                    # 위의 절차 만족시 아래 절차 시작
                     if local_mem['QPRZH']['Val'] == 0 and local_mem['QPRZB']['Val'] == 0:
                         self.sym_dict[7].update_condition(True)
                     if local_mem['BHV1']['Val'] == 0 or local_mem['BHV2']['Val'] == 0 or local_mem['BHV3']['Val'] == 0:
@@ -611,28 +619,30 @@ class SymptomArea(QWidget):
                         self.sym_dict[11].update_condition(True)
 
             if get_procedure_name_in_json == 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설':
-                if local_mem['ZINST58']['List'][-1] < local_mem['ZINST58']['List'][-2] or local_mem['ZINST63']['List'][-1] < local_mem['ZINST63']['List'][-2]:
+                if local_mem['ZINST58']['List'][-1] < local_mem['ZINST58']['List'][-2] or local_mem['ZINST63']['List'][
+                    -1] < local_mem['ZINST63']['List'][-2]:
                     self.sym_dict[0].update_condition(True)
                 if local_mem['ZVCT']['List'][-1] < local_mem['ZVCT']['List'][-2]:
                     self.sym_dict[1].update_condition(True)
                 if local_mem['WCHGNO']['List'][-1] > local_mem['WCHGNO']['List'][-2]:
                     self.sym_dict[2].update_condition(True)
 
-
-            if get_procedure_name_in_json == 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설': pass
             if get_procedure_name_in_json == 'Ab23_06: 증기발생기 전열관 누설':
-                if local_mem['ZINST58']['List'][-1] < local_mem['ZINST58']['List'][-2] or local_mem['ZINST63']['List'][-1] < local_mem['ZINST63']['List'][-2]:
+                if local_mem['ZINST58']['List'][-1] < local_mem['ZINST58']['List'][-2] or local_mem['ZINST63']['List'][
+                    -1] < local_mem['ZINST63']['List'][-2]:
                     self.sym_dict[0].update_condition(True)
                 if local_mem['ZVCT']['List'][-1] < local_mem['ZVCT']['List'][-2]:
                     self.sym_dict[1].update_condition(True)
                 if local_mem['WCHGNO']['List'][-1] > local_mem['WCHGNO']['List'][-2]:
                     self.sym_dict[2].update_condition(True)
                 if local_mem['ZINST63']['Val'] <= 17:
-                    if local_mem['BHV1']['Val'] == 0 and local_mem['BHV2']['Val'] == 0 and local_mem['BHV3']['Val'] == 0 and local_mem['BLV459']['Val'] == 0:
+                    if local_mem['BHV1']['Val'] == 0 and local_mem['BHV2']['Val'] == 0 and local_mem['BHV3'][
+                        'Val'] == 0 and local_mem['BLV459']['Val'] == 0:
                         self.sym_dict[3].update_condition(True)
                 if local_mem['WCHGNO']['List'][-1] > local_mem['WCHGNO']['List'][-2]:
                     self.sym_dict[4].update_condition(True)
-                if local_mem['BHV108']['Val'] == 0 and local_mem['BHV208']['Val'] == 0 and local_mem['BHV308']['Val'] == 0 and local_mem['BLV459']['Val'] == 0:
+                if local_mem['BHV108']['Val'] == 0 and local_mem['BHV208']['Val'] == 0 and local_mem['BHV308'][
+                    'Val'] == 0 and local_mem['BLV459']['Val'] == 0:
                     self.sym_dict[5].update_condition(True)
                 if local_mem['ZINST58']['Val'] <= 136.78:
                     if local_mem['KLAMPO9']['Val'] == 1:
@@ -641,8 +651,6 @@ class SymptomArea(QWidget):
                     if local_mem['BHV22']['Val'] > 0:
                         self.sym_dict[7].update_condition(True)
 
-            if get_procedure_name_in_json == 'Ab21_01: 가압기 압력 채널 고장 (고)': pass
-            if get_procedure_name_in_json == 'Ab21_02: 가압기 압력 채널 고장 (저)': pass
             if get_procedure_name_in_json == 'Ab20_04: 가압기 수위 채널 고장 (저)':
                 if local_mem['KLAMPO260']['Val'] == 1:
                     self.sym_dict[0].update_condition(True)
@@ -670,13 +678,6 @@ class SymptomArea(QWidget):
                 if local_mem['ZINST63']['List'][-1] > local_mem['ZINST63']['List'][-2]:
                     if local_mem['KLAMPO9']['Val'] == 1:
                         self.sym_dict[11].update_condition(True)
-
-            if get_procedure_name_in_json == 'Ab15_07: 증기발생기 수위 채널 고장 (저)': pass
-            # 해상 SG LOOP 선택 미해결
-                # if local_mem['KLAMPO319']['Val'] == 1:
-                #     self.sym_dict[0].update_condition(True)
-                # if local_mem['KLAMPO290']['Val'] == 1:
-                #     self.sym_dict[0].update_condition(True)
 
             if get_procedure_name_in_json == 'Ab21_11: 가압기 살수밸브 고장 (열림)':
                 if local_mem['KBHON']['Val'] == 1 and local_mem['KLAMPO118']['Val'] == 1:
@@ -720,7 +721,8 @@ class SymptomArea(QWidget):
                     self.sym_dict[5].update_condition(True)
                 if local_mem['QPRZB']['Val'] == 0 and local_mem['QPRZH']['Val'] == 0:
                     self.sym_dict[6].update_condition(True)
-                if local_mem['BLV459']['Val'] == 0 and local_mem['BHV1']['Val'] == 0 and local_mem['BHV2']['Val'] == 0 and local_mem['BHV3']['Val'] == 0:
+                if local_mem['BLV459']['Val'] == 0 and local_mem['BHV1']['Val'] == 0 and local_mem['BHV2'][
+                    'Val'] == 0 and local_mem['BHV3']['Val'] == 0:
                     self.sym_dict[7].update_condition(True)
                 if local_mem['URHXUT']['List'][-1] < local_mem['URHXUT']['List'][-2]:
                     self.sym_dict[8].update_condition(True)
@@ -732,13 +734,141 @@ class SymptomArea(QWidget):
                     self.sym_dict[11].update_condition(True)
                 if local_mem['ZINST23']['List'][-1] > local_mem['ZINST23']['List'][-2]:
                     self.sym_dict[12].update_condition(True)
-                if local_mem['ZINST36']['List'][-1] < local_mem['ZINST36']['List'][-2] and local_mem['BPV145']['List'][-1] < local_mem['BPV145']['List'][-2]:
+                if local_mem['ZINST36']['List'][-1] < local_mem['ZINST36']['List'][-2] and local_mem['BPV145']['List'][
+                    -1] < local_mem['BPV145']['List'][-2]:
                     self.sym_dict[13].update_condition(True)
                 if local_mem['UNRHXUT']['List'][-1] < local_mem['UNRHXUT']['List'][-2]:
                     self.sym_dict[14].update_condition(True)
                 if local_mem['BFV122']['List'][-1] > local_mem['BFV122']['List'][-2]:
                     self.sym_dict[15].update_condition(True)
 
+            if get_procedure_name_in_json == "Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설":
+
+                if local_mem['ZINST63']['List'][-1] != local_mem['ZINST63']['List'][-2] \
+                        or local_mem['ZINST58']['List'][-1] != local_mem['ZINST58']['List'][-2]:
+                    self.sym_dict[0].update_condition(True)
+                if local_mem['ZVCT']['List'][-1] < local_mem['ZVCT']['List'][-2]:
+                    self.sym_dict[1].update_condition(True)
+                if local_mem['WNETCH']['List'][-1] > local_mem['WCHGNO']['List'][-2]:
+                    self.sym_dict[2].update_condition(True)
+                if local_mem['ZINST22']['List'][-1] > local_mem['ZINST22']['List'][-2]:
+                    self.sym_dict[3].update_condition(True)
+                if local_mem['UCTMT']['List'][-1] > local_mem['UCTMT']['List'][-2]:
+                    self.sym_dict[4].update_condition(True)
+                if local_mem['BHV1']['Val'] and local_mem['BHV2']['Val'] and local_mem['BHV3']['Val'] and \
+                        local_mem['BHV459']['Val'] == 0:
+                    self.sym_dict[5].update_condition(True)
+                if local_mem['KLAMPO9']['Val'] == 1:
+                    self.sym_dict[6].update_condition(True)
+                if local_mem['BHV22']['Val'] > 0:
+                    self.sym_dict[7].update_condition(True)
+
+            if get_procedure_name_in_json == 'Ab21_01: 가압기 압력 채널 고장 (고)':
+
+                if local_mem['ZINST58']['Val'] >= 157:
+                    self.sym_dict[0].update_condition(True)
+                if local_mem['BPRZSP']['Val'] > 0:
+                    self.sym_dict[1].update_condition(True)
+                if local_mem['QPRZB']['Val'] == 0:
+                    self.sym_dict[2].update_condition(True)
+                if local_mem['QPRZH']['Val'] < 0.5:
+                    self.sym_dict[3].update_condition(True)
+                if local_mem['ZINST58']['Val'] >= 157:
+                    if local_mem['KLAMPO308']['Val'] == 1:
+                        self.sym_dict[4].update_condition(True)
+                if local_mem['BHV6']['Val'] == 0:
+                    self.sym_dict[5].update_condition(True)
+                if local_mem['KLAMPO308']['Val'] == 1:
+                    if local_mem['KLAMPO9']['Val'] == 1:
+                        self.sym_dict[6].update_condition(True)
+                if local_mem['KLAMPO269']['Val'] == 1:
+                    self.sym_dict[7].update_condition(True)
+                if local_mem['QPRZH']['Val'] == 0:
+                    if local_mem['QPRZB']['Val'] == 0:
+                        self.sym_dict[8].update_condition(True)
+                if local_mem['BPRZSP']['Val'] > 0:
+                    self.sym_dict[9].update_condition(True)
+                if local_mem['KLAMPO9']['Val'] == 1:
+                    self.sym_dict[10].update_condition(True)
+
+            if get_procedure_name_in_json == 'Ab21_02: 가압기 압력 채널 고장 (저)':
+                # BPORV , KLAMPO309 KLAMPO307 문제있음
+                if local_mem['ZINST58']['Val'] >= 155:
+                    self.sym_dict[0].update_condition(True)
+                    if local_mem['QPRZH']['Val'] < 0.5 and local_mem['QPRZB']['Val'] == 0:
+                        self.sym_dict[1].update_condition(True)
+                if local_mem['KLAMPO307']['Val'] == 1:
+                    if local_mem['ZINST58'] >= 155:
+                        self.sym_dict[2].update_condition(True)
+                if local_mem['BPORV']['Val'] == 1 and local_mem['KLAMPO309']['Val'] == 1:
+                    self.sym_dict[3].update_condition(True)
+                if local_mem['BPORV']['Val'] == 0 and local_mem['ZINST58']['List'][-1] < local_mem['ZINST58']['List'][
+                    -2]:
+                    self.sym_dict[4].update_condition(True)
+                if local_mem['QPRZH']['Val'] == 0 and local_mem['QPRZB']['Val'] == 0:
+                    self.sym_dict[5].update_condition(True)
+                if local_mem['BPRZSP']['Val'] != 0:
+                    self.sym_dict[6].update_condition(True)
+
+            if get_procedure_name_in_json == 'Ab15_07: 증기발생기 수위 채널 고장 (저)':
+                if local_mem['KLAMPO319']['Val'] == 1:
+                    self.sym_dict[0].update_condition(True)
+                if (local_mem['BFV478']['Val'] > 1 and local_mem['WFWLN1']['Val'] > local_mem['WFWLN2']['Val']) \
+                        or (local_mem['BFV488']['Val'] > 1 and local_mem['WFWLN2']['Val'] > local_mem['WFWLN3']['Val']) \
+                        or (local_mem['BFV498']['Val'] > 1 and local_mem['WFWLN3']['Val'] > local_mem['WFWLN1']['Val']):
+                    self.sym_dict[1].update_condition(True)
+                if local_mem['KLAMPO320']['Val'] == 1:
+                    self.sym_dict[2].update_condition(True)
+                if (local_mem['ZSGN1']['List'][-1] > local_mem['ZSGN1']['List'][-9]) \
+                        or (local_mem['ZSGN2']['List'][-1] > local_mem['ZSGN2']['List'][-9]) or \
+                        (local_mem['ZSGN3']['List'][-1] > local_mem['ZSGN3']['List'][-9]):
+                    self.sym_dict[3].update_condition(True)
+                if local_mem['KLAMPO338']['Val'] == 1 and local_mem['KLAMPO214']['Val'] == 1:
+                    self.sym_dict[4].update_condition(True)
+                if (local_mem['ZINST87']['Val'] < local_mem['ZINST86']['Val'] and local_mem['WFWLN1']['Val'] >
+                    local_mem['WFWLN2']['Val']) \
+                        or (local_mem['ZINST86']['Val'] < local_mem['ZINST87']['Val'] and local_mem['WFWLN2']['Val'] >
+                            local_mem['WFWLN1']['Val']) \
+                        or (local_mem['ZINST85']['Val'] < local_mem['ZINST86']['Val'] and local_mem['WFWLN3']['Val'] >
+                            local_mem['WFWLN2']['Val']):
+                    self.sym_dict[5].update_condition(True)
+
+            if get_procedure_name_in_json == 'Ab15_08: 증기발생기 수위 채널 고장 (고)':
+                if (local_mem['BFV478']['Val'] < 0.5 and local_mem['WFWLN1']['Val'] > local_mem['WFWLN2']['Val']) \
+                        or (
+                        local_mem['BFV488']['Val'] < 0.5 and local_mem['WFWLN2']['Val'] > local_mem['WFWLN3']['Val']) \
+                        or (
+                        local_mem['BFV498']['Val'] < 0.5 and local_mem['WFWLN3']['Val'] > local_mem['WFWLN1']['Val']):
+                    self.sym_dict[0].update_condition(True)
+                if local_mem['KLAMPO320']['Val'] == 1:
+                    self.sym_dict[1].update_condition(True)
+                if (local_mem['ZSGN1']['Val'] == 0) \
+                        or (local_mem['ZSGN2']['Val'] == 0) or \
+                        (local_mem['ZSGN3']['Val'] == 0):
+                    self.sym_dict[2].update_condition(True)
+                if (local_mem['ZINST87']['Val'] < local_mem['ZINST86']['Val'] and local_mem['WFWLN1']['Val'] >
+                    local_mem['WFWLN2']['Val']) \
+                        or (local_mem['ZINST86']['Val'] < local_mem['ZINST87']['Val'] and local_mem['WFWLN2']['Val'] >
+                            local_mem['WFWLN1']['Val']) \
+                        or (local_mem['ZINST85']['Val'] < local_mem['ZINST86']['Val'] and local_mem['WFWLN3']['Val'] >
+                            local_mem['WFWLN2']['Val']):
+                    self.sym_dict[3].update_condition(True)
+
+            if get_procedure_name_in_json == 'Ab21_12: 가압기 PORV (열림)':
+                if local_mem['BPORV']['Val'] != 0:
+                    self.sym_dict[0].update_condition(True)
+                if local_mem['KLAMPO312']['Val'] != 0:
+                    self.sym_dict[1].update_condition(True)
+                if local_mem['BHV6']['Val'] == 0:
+                    self.sym_dict[2].update_condition(True)
+                if local_mem['CPPRZL']['Val'] > local_mem['PPRZN']['Val']:
+                    self.sym_dict[3].update_condition(True)
+                if local_mem['UPRT']['Val'] > 45:
+                    self.sym_dict[4].update_condition(True)
+                if local_mem['QPRZB']['Val'] != 0 and local_mem['QPRZH']['Val'] == 1:
+                    self.sym_dict[5].update_condition(True)
+                if local_mem['BHV6']['Val'] == 0:
+                    self.sym_dict[6].update_condition(True)
             # --------------------------------------------------------------------------------------------------------------
 
     def _clear_txt_cond(self):
@@ -825,7 +955,7 @@ class XAITable(QTableWidget):
         super(XAITable, self).__init__(parent=parent)
         self.mem = mem
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.setObjectName('ProcedureTable')             # ProcedureTable 와 동일
+        self.setObjectName('ProcedureTable')  # ProcedureTable 와 동일
 
         # self.setMaximumWidth(self.parent().width())
 
@@ -916,15 +1046,17 @@ class XAITable(QTableWidget):
 
 class XAITableEmptyCell(QLabel):
     """ 공백 Cell """
+
     def __init__(self, parent):
         super(XAITableEmptyCell, self).__init__(parent=parent)
-        self.setAttribute(Qt.WA_StyledBackground, True) # 상위 스타일 상속
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('ProcedureItemEmpty')
         self.isempty = True
 
 
 class XAITableProbCell(QWidget):
     """ 변수 가중치 """
+
     def __init__(self, parent, para_name, weight):
         super(XAITableProbCell, self).__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -960,6 +1092,7 @@ class XAITableProbCell(QWidget):
 
 class XAITableInfoCell(QLabel):
     """ 절차서 Info Cell """
+
     def __init__(self, parent, para_name):
         super(XAITableInfoCell, self).__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -1001,7 +1134,6 @@ class NonProcedureArea(QWidget):
 
         self._visible(False)
         self.cond_visible = False
-
 
     def _visible(self, trig):
         self.non_procedure_label.setVisible(trig)
