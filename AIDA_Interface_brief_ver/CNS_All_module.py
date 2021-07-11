@@ -1,6 +1,7 @@
 import multiprocessing
 import numpy as np
 import copy
+import sys
 #
 from AIDA_Interface_brief_ver.ENVCNS import ENVCNS
 # AI Module
@@ -76,6 +77,7 @@ class All_Function_module(multiprocessing.Process):
 
         while True:
             local_logic = self.shmem.get_logic_info()
+            if local_logic['Close']: sys.exit()
             if local_logic['Run']:
                 if local_logic['Run_ai']:
                     """

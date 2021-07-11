@@ -10,8 +10,10 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QTimer
 #
 from AIDA_Interface_brief_ver import CNS_Platform_controller_interface as CNS_controller
-from AIDA_Interface_brief_ver import main_window
+# from AIDA_Interface_brief_ver import main_window as main_window
+from AIDA_Interface_brief_ver import main_window_ver1 as main_window
 from AIDA_Interface_brief_ver.TOOL.TOOL_etc import p_
+
 
 class InterfaceFun(multiprocessing.Process):
     def __init__(self, shmem):
@@ -60,8 +62,8 @@ class MyForm(QWidget):
         self.show()
 
         # Call
-        # self.cns_main_win = main_window.Mainwindow(parnet=self, mem=self.shmem)
-        # self.cns_main_win.show()
+        self.cns_main_win = main_window.Mainwindow(parent=self, mem=self.shmem)
+        self.cns_main_win.show()
 
     def run_cns(self):
         if self.shmem.get_logic('Initial_condition'):
@@ -125,6 +127,11 @@ class MyForm(QWidget):
     def show_procedure_editor(self):
         self.procedure_editor_wid = PrcedureEditor(self, mem=self.shmem)
         self.procedure_editor_wid.show()
+
+    def closeEvent(self, QCloseEvent):
+        p_(__file__, 'Close')
+        self.shmem.send_close()
+        sys.exit()
 
 # # 자동 데이터 수집하는 구간 # #
 class AutoDataList(QListWidget):

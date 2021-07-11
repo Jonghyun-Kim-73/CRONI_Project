@@ -2,10 +2,11 @@ import datetime
 import os
 import sys
 
+
 def p_(c:str, s:str):
     """ 현재 실행 중인 파일의 Prtint 문 호출 """
     file_name = c.split('\\')[-1].split('.')[0]
-    print(f'[{file_name}:20][{s}]')
+    print(f'[{file_name:30}][{s}]')
 
 
 class ToolEtc:

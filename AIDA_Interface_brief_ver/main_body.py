@@ -51,18 +51,18 @@ class Body:
                               )
         # Build Process ------------------------------------------------------------------------------------------------
         p_list = []
+
         # Build AI-CNS
-
-        p = InterfaceFun(shmem)
-        p_list.append(p)
-
-        # Build Interface
         if not self.args.test:
-            p = All_Function_module(shmem, max_len_deque)
-            p_list.append(p)
+            p_ai = All_Function_module(shmem, max_len_deque)
+            p_list.append(p_ai)
         else:
             p_(__file__, 'Test Mode')
             pass
+
+        # Build Interface
+        p = InterfaceFun(shmem)
+        p_list.append(p)
 
         # --------------------------------------------------------------------------------------------------------------
         [p_.start() for p_ in p_list]
@@ -102,6 +102,8 @@ class SHMem:
 
                       'Ab_Dig_Result': {},
                       'Ab_Xai_Result': {},
+
+                      'Close': False,
                       }
         print('Trig 메모리 생성 완료')
         # 3] 변수 그래픽 표기용
@@ -129,6 +131,8 @@ class SHMem:
 
                       'Ab_Dig_Result': {},
                       'Ab_Xai_Result': {},
+
+                      'Close': False,
                       }
 
         for key in self.save_mem:
@@ -154,6 +158,9 @@ class SHMem:
             self.mem[key_val] = mem[key_val]
             if key_val in saved_mem_key:
                 self.save_mem[key_val].append(mem[key_val]['Val'])
+
+    def send_close(self):
+        self.logic['Close'] = True
 
     def get_speed(self, speed):
         self.logic['Speed_Call'] = True
