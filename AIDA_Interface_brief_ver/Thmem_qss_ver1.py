@@ -6,6 +6,15 @@ qss = """
     QWidget#Mainwindow {
         background: rgb(244, 245, 249);               /* 메인 위젯 Back color */
     }
+    QWidget#MainTitleBar {
+        background: rgb(0, 0, 0);                     /* 메인 위젯 TitleBar color */
+    }
+    QWidget#MainLeftArea {
+        background: rgb(100, 100, 0);                 /* 메인 위젯 Left color */
+    }
+    QWidget#MainRightArea {
+        background: rgb(0, 0, 100);                   /* 메인 위젯 Right color */
+    }
 """
 #
 #     QWidget {background: rgb(254, 254, 254);}       /* 메인 위젯 Back color 색 */
