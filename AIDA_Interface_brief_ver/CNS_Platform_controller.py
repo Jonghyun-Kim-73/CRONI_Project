@@ -11,7 +11,7 @@ from PyQt5.QtCore import QTimer
 #
 from AIDA_Interface_brief_ver import CNS_Platform_controller_interface as CNS_controller
 from AIDA_Interface_brief_ver import main_window
-
+from AIDA_Interface_brief_ver.TOOL.TOOL_etc import p_
 
 class InterfaceFun(multiprocessing.Process):
     def __init__(self, shmem):
@@ -30,7 +30,7 @@ class MyForm(QWidget):
         # shmem
         self.shmem = shmem
         # ---- UI 호출
-        self.pr_(f'[SHMem:{self.shmem}][Controller UI 호출]')
+        p_(__file__, f'[SHMem:{self.shmem}][Controller UI 호출]')
         self.ui = CNS_controller.Ui_Form()
         self.ui.setupUi(self)
 
@@ -60,26 +60,22 @@ class MyForm(QWidget):
         self.show()
 
         # Call
-        self.cns_main_win = main_window.Mainwindow(parnet=self, mem=self.shmem)
-        self.cns_main_win.show()
-
-    def pr_(self, s):
-        head_ = 'Main_UI'
-        return print(f'[{head_:10}][{s}]')
+        # self.cns_main_win = main_window.Mainwindow(parnet=self, mem=self.shmem)
+        # self.cns_main_win.show()
 
     def run_cns(self):
         if self.shmem.get_logic('Initial_condition'):
-            self.pr_('CNS 시작')
+            p_(__file__, 'CNS 시작')
             self.shmem.change_logic_val('Run', True)
         else:
-            self.pr_('먼저 초기 조건을 선언')
+            p_(__file__, '먼저 초기 조건을 선언')
 
     def freeze_cns(self):
         if self.shmem.get_logic('Initial_condition'):
-            self.pr_('CNS 일시정지')
+            p_(__file__, 'CNS 일시정지')
             self.shmem.change_logic_val('Run', False)
         else:
-            self.pr_('먼저 초기 조건을 선언')
+            p_(__file__, '먼저 초기 조건을 선언')
 
     def go_mal(self):
         if self.ui.Mal_nub.text() != '' and self.ui.Mal_type.text() != '' and self.ui.Mal_time.text() != '':
@@ -98,12 +94,12 @@ class MyForm(QWidget):
             self.ui.Mal_nub.clear()
             self.ui.Mal_type.clear()
             self.ui.Mal_time.clear()
-            self.pr_('Malfunction 입력 완료')
+            p_(__file__, 'Malfunction 입력 완료')
         else:
-            self.pr_('Malfunction 입력 실패')
+            p_(__file__, 'Malfunction 입력 실패')
 
     def go_init(self):
-        self.pr_('CNS 초기 조건 선언')
+        p_(__file__, 'CNS 초기 조건 선언')
         # 1. Mal list clear
         self.ui.Mal_list.clear()
         # 2. Mal trig_mem clear
@@ -116,10 +112,10 @@ class MyForm(QWidget):
     def go_save(self):
         # 실시간 레코딩 중 ...
         self.shmem.change_logic_val('Run_rc', True)
-        self.pr_('Ester_Egg_Run_ROD CONTROL TRICK')
+        p_(__file__, 'Ester_Egg_Run_ROD CONTROL TRICK')
 
     def go_speed(self):
-        self.pr_('CNS 속도 조절')
+        p_(__file__, 'CNS 속도 조절')
         self.ui.Cu_SP.setText(self.shmem.get_speed(int(self.ui.Se_SP.text())))
 
     def show_main_window(self):

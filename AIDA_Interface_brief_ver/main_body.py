@@ -1,9 +1,14 @@
 import argparse
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))    # 콘솔용 절대 경로
+
 from multiprocessing.managers import BaseManager
 from multiprocessing import Process
 from collections import deque
 
 from AIDA_Interface_brief_ver.db import db_make
+from AIDA_Interface_brief_ver.TOOL.TOOL_etc import p_
 
 from AIDA_Interface_brief_ver.CNS_Platform_controller import InterfaceFun
 from AIDA_Interface_brief_ver.CNS_All_module import All_Function_module
@@ -26,6 +31,7 @@ class Body:
         get_com_ip = socket.gethostbyname(socket.getfqdn())
         # 초기 입력 인자 전달 --------------------------------------------------------------------------------------------
         parser = argparse.ArgumentParser(description='CNS 플랫폼_Ver0')
+        parser.add_argument('--test', type=bool, default=False, required=False, help='인터페이스 테스트 모드 [default=False]')
         parser.add_argument('--comip', type=str, default=ip_reg[get_com_ip]['comip'], required=False, help="현재 컴퓨터의 ip [default='']")
         parser.add_argument('--comport', type=int, default=ip_reg[get_com_ip]['comport'], required=False, help="현재 컴퓨터의 port [default=7001]")
         parser.add_argument('--cnsip', type=str, default=ip_reg[get_com_ip]['cnsip'], required=False, help="CNS 컴퓨터의 ip [default='']")
@@ -46,12 +52,17 @@ class Body:
         # Build Process ------------------------------------------------------------------------------------------------
         p_list = []
         # Build AI-CNS
+
         p = InterfaceFun(shmem)
         p_list.append(p)
 
         # Build Interface
-        p = All_Function_module(shmem, max_len_deque)
-        p_list.append(p)
+        if not self.args.test:
+            p = All_Function_module(shmem, max_len_deque)
+            p_list.append(p)
+        else:
+            p_(__file__, 'Test Mode')
+            pass
 
         # --------------------------------------------------------------------------------------------------------------
         [p_.start() for p_ in p_list]
