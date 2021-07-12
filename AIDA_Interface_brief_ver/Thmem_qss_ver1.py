@@ -7,14 +7,52 @@ qss = """
         background: rgb(244, 245, 249);               /* 메인 위젯 Back color */
     }
     QWidget#MainTitleBar {
-        background: rgb(0, 0, 0);                     /* 메인 위젯 TitleBar color */
+        background: rgb(255, 255, 230);                     /* 메인 위젯 TitleBar color */
     }
     QWidget#MainLeftArea {
         background: rgb(100, 100, 0);                 /* 메인 위젯 Left color */
     }
     QWidget#MainRightArea {
-        background: rgb(0, 0, 100);                   /* 메인 위젯 Right color */
+        background: rgb(0, 0, 0);                   /* 메인 위젯 Right color */
     }
+    
+    /* 종료 버튼 */
+    QPushButton#Exit {
+        background: rgb(184, 25, 28);
+        border-radius: 6px;
+        border: none;
+    }
+    QPushButton#Exit:hover {
+        background: rgb(184, 25, 28);
+    }
+    QPushButton#Exit:pressed {
+        background: rgb(215, 25, 28);
+    }
+    
+    /* Title Label */
+    QLabel#TitleLabel {                             /* 기본 라벨 컨샙 */
+        background: rgb(254, 254, 254);
+        border-radius: 6px;
+        font: bold 14px;
+        color: rgb(0, 0, 0);
+        padding: 4px 4px;
+    }
+    /* ConditionBar */
+    QLabel#ConditionBar{
+        border-radius: 6px;
+        font: bold 14px;
+    }
+    QLabel#ConditionBar[Condition="Normal"] {
+        background: rgb(74, 182, 146);
+    }
+    QLabel#ConditionBar[Condition="Emergency"] {
+        background: rgb(184, 25, 28);
+    }
+    QLabel#ConditionBar[Condition="Abnormal"] {
+        background: rgb(255, 181, 71);
+    }
+
+    
 """
 #
 #     QWidget {background: rgb(254, 254, 254);}       /* 메인 위젯 Back color 색 */
@@ -50,29 +88,7 @@ qss = """
 #         color: rgb(0, 0, 0);
 #     }
 #
-#     /* Title Label */
-#     QLabel#TitleLabel {                             /* 기본 라벨 컨샙 */
-#         background: rgb(254, 254, 254);
-#         border-radius: 6px;
-#         font: bold 14px;
-#         color: rgb(0, 0, 0);
-#         padding: 4px 4px;
-#     }
-#
-#     /* ConditionBar */
-#     QLabel#ConditionBar{
-#         border-radius: 6px;
-#         font: bold 14px;
-#     }
-#     QLabel#ConditionBar[Condition="Normal"] {
-#         background: rgb(74, 182, 146);
-#     }
-#     QLabel#ConditionBar[Condition="Emergency"] {
-#         background: rgb(184, 25, 28);
-#     }
-#     QLabel#ConditionBar[Condition="Abnormal"] {
-#         background: rgb(255, 181, 71);
-#     }
+
 #
 #     /* AlarmTableItem Info and Timer */
 #     QLabel#AlarmItemInfo {
@@ -184,18 +200,7 @@ qss = """
 #     }
 #
 #
-#     /* 종료 버튼 */
-#     QPushButton#Exit {
-#         background: rgb(184, 25, 28);
-#         border-radius: 6px;
-#         border: none;
-#     }
-#     QPushButton#Exit:hover {
-#         background: rgb(184, 25, 28);
-#     }
-#     QPushButton#Exit:pressed {
-#         background: rgb(215, 25, 28);
-#     }
+
 #
 #     /* ----------------------------------------------------------------------------- */
 #     /* 진단 바 정보                                                                    */

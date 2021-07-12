@@ -35,25 +35,31 @@ class Mainwindow(QWidget):
         self.setMask(mask)
 
     def set_frame(self):
-        t_h, r_w = 30, 100
+        self.t_h, self.r_w = 35, 100  # title height, right width
 
         self.vbox = QVBoxLayout()
         self.vbox.setContentsMargins(0, 0, 0, 0)
         self.vbox.setSpacing(0)
 
-        self.title_bar = MainTitleBar(parent=self, h=t_h)
-
-        self.hbox = QHBoxLayout()
-        self.hbox.setContentsMargins(0, 0, 0, 0)
-        self.hbox.setSpacing(0)
-        self.r_area = MainRightArea(parent=self, h=self.height()-t_h, w=r_w)
-        self.l_area = MainLeftArea(parent=self, h=self.height()-t_h, w=self.width() - r_w)
+        self.title_bar = MainTitleBar(parent=self, h=self.t_h, w=self.width())
+        self.stack_widget = QStackedLayout()
 
         self.vbox.addWidget(self.title_bar)
-        self.hbox.addWidget(self.r_area)
-        self.hbox.addWidget(self.l_area)
-        self.vbox.addLayout(self.hbox)
+        self.vbox.addLayout(self.stack_widget)
         self.setLayout(self.vbox)
+
+    def set_stack1(self):
+        self.pp1 = QWidget()
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+
+        self.r_area = MainRightArea(parent=self, h=self.height() - self.t_h, w=self.r_w)
+        self.l_area = MainLeftArea(parent=self, h=self.height() - self.t_h, w=self.width() - self.r_w)
+        layout.addWidget(self.l_area)
+        layout.addWidget(self.r_area)
+
+        self.pp1.setLayout(layout)
+
 
     def closeEvent(self, QCloseEvent):
         p_(__file__, 'Close')

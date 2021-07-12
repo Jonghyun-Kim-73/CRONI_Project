@@ -11,90 +11,76 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 class MainTitleBar(QWidget):
     """제목 표시줄 위젯"""
-    def __init__(self, parent, h):
+    def __init__(self, parent, h, w):
         super(MainTitleBar, self).__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('MainTitleBar')
         # --------------------------------------------------------------------------------------------------------------
         self.setFixedHeight(h)
+        self.setFixedWidth(w)
 
-    #     self.parent = parent
-    #     self.has_clicked = False
-    #
-    #     self.setMaximumHeight(45)
-    #
-    #     # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
-    #     layout = QHBoxLayout(self)
-    #     layout.setContentsMargins(5, 5, 5, 5)
-    #
-    #     label = QLabel("AIDAA")
-    #     label.setObjectName('TitleLabel')
-    #     label.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
-    #     label.setFixedHeight(self.bar_height)
-    #     label.setFixedWidth(70)
-    #
-    #     widget1 = TimeBar(self, load_realtime=True)
-    #     widget1.setFixedHeight(self.bar_height)
-    #     widget1.setFixedWidth(200)
-    #
-    #     label2 = ConditionBar(self)
-    #     label2.setFixedHeight(self.bar_height)
-    #     label2.setFixedWidth(120)
-    #
-    #     label3 = QLabel("APR-1400")
-    #     label3.setObjectName('TitleLabel')
-    #     label3.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
-    #     label3.setFixedHeight(self.bar_height)
-    #     label3.setFixedWidth(150)
-    #
-    #     btn_close = self.create_btn_with_image('close.png')
-    #     btn_close.setObjectName('Exit')
-    #     btn_close.clicked.connect(self.close)
-    #
-    #     # 타이틀에 들어가는 순서 (왼쪽부터 오른쪽 순으로) --------------------------------------------------------------------
-    #     layout.addWidget(label)
-    #     layout.addWidget(widget1)
-    #     layout.addWidget(label2)
-    #     layout.addSpacerItem(QSpacerItem(0, self.bar_height, QSizePolicy.Expanding))
-    #     layout.addWidget(label3)
-    #     layout.addWidget(btn_close)
-    #
-    # def create_btn_with_image(self, icon_path):
-    #     icon = os.path.join(ROOT_PATH, 'interface_image', icon_path)
-    #     btn = QPushButton(self)
-    #     btn.setIcon(QIcon(icon))
-    #     btn.setIconSize(QSize(self.bar_height - 20, self.bar_height - 20))  # 아이콘 크기
-    #     btn.setFixedSize(self.bar_height, self.bar_height)
-    #     return btn
-    #
-    # def close(self):
-    #     """버튼 명령: 닫기"""
-    #     self.parent.close()
-    #
-    # def mousePressEvent(self, event):
-    #     """오버로딩: 마우스 클릭 이벤트
-    #     - 제목 표시줄 클릭시 이동 가능 플래그
-    #     """
-    #     if event.button() == Qt.LeftButton:
-    #         self.parent.is_moving = True
-    #         self.parent.offset = event.pos()
-    #     else:
-    #         self.parent.is_moving = False
-    #
-    # def mouseMoveEvent(self, event):
-    #     """오버로딩: 마우스 이동 이벤트
-    #     - 제목 표시줄 드래그시 창 이동
-    #     """
-    #     if self.parent.is_moving:
-    #         self.parent.move(event.globalPos() - self.parent.offset)
+        self.is_moved = False
+        # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
+        self.timebar = TimeBar(self, load_realtime=True, margin=5, w=200)
+        self.condbar = ConditionBar(self, margin=5, w=100)
+        btn_close = self.create_btn_with_image('close.png', margin=5)
+        btn_close.setObjectName('Exit')
+        # --------------------------------------------------------------------------------------------------------------
+        btn_close.clicked.connect(self.close)
+
+    def create_btn_with_image(self, icon_path, margin):
+        icon = os.path.join(ROOT_PATH, 'interface_image', icon_path)
+        btn = QPushButton(self)
+
+        h = self.height() - margin * 2
+        x = self.width() - h - margin
+        y = margin
+        w = h
+
+        btn.setGeometry(x, y, w, h)
+        btn.setIcon(QIcon(icon))
+        btn.setIconSize(QSize(h*0.5, h*0.5))  # 아이콘 크기
+        return btn
+
+    def close(self):
+        """버튼 명령: 닫기"""
+        self.parent().close()
+
+    def mousePressEvent(self, event):
+        """오버로딩: 마우스 클릭 이벤트
+        - 제목 표시줄 클릭시 이동 가능 플래그
+        """
+        if event.button() == Qt.LeftButton:
+            self.mouseMovePos = event.globalPos()
+            self.is_moved = True
+        else:
+            self.is_moved = False
+
+    def mouseMoveEvent(self, event):
+        """오버로딩: 마우스 이동 이벤트
+        - 제목 표시줄 드래그시 창 이동
+        """
+        if self.is_moved:
+            curPos = self.mapToGlobal(self.parent().pos())  # 전체 창에서의 현재 위젯 위치 Pos 얻기
+            globalPos = event.globalPos()  # 현재 클릭 지점의 전체 창에서의 위치 Pos 얻기
+            diff = globalPos - self.mouseMovePos  # 움직인 거리 = 현재 - 이전 클릭 지점
+            newPos = self.mapFromGlobal(curPos + diff)  # 전체 창에서의 위젯이 움직인 거리 계산 후 상위 위젯의 위치에 적합하게 값 변환
+            self.parent().move(newPos)
+            self.mouseMovePos = globalPos
 
 
 class TimeBar(QWidget):
-    def __init__(self, parent, load_realtime: bool = False):
-        super(TimeBar, self).__init__()
-        self.parent = parent
+    def __init__(self, parent, load_realtime: bool = False, margin=5, w=100):
+        super(TimeBar, self).__init__(parent)
         self.load_realtime = load_realtime
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+
+        h = parent.height() - margin * 2
+        x = margin
+        y = margin
+        w = w
+
+        self.setGeometry(x, y, w, h)
 
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -126,11 +112,17 @@ class TimeBar(QWidget):
 
 
 class ConditionBar(QLabel):
-    def __init__(self, parent, init_condition: str = 'Normal'):
-        super(ConditionBar, self).__init__()
-        self.parent = parent
+    def __init__(self, parent, init_condition: str = 'Normal', margin=5, w=100):
+        super(ConditionBar, self).__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
+
+        h = parent.height() - margin * 2
+        x = margin + parent.timebar.width()
+        y = margin
+        w = w
+
+        self.setGeometry(x, y, w, h)
 
         self.setObjectName('ConditionBar')
         self.update_condition(init_condition)
