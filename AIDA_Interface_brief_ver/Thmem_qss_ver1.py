@@ -7,13 +7,29 @@ qss = """
         background: rgb(244, 245, 249);               /* 메인 위젯 Back color */
     }
     QWidget#MainTitleBar {
-        background: rgb(255, 255, 230);                     /* 메인 위젯 TitleBar color */
+        background: rgb(255, 255, 230);               /* 메인 위젯 TitleBar color */
     }
     QWidget#MainLeftArea {
         background: rgb(100, 100, 0);                 /* 메인 위젯 Left color */
     }
     QWidget#MainRightArea {
-        background: rgb(0, 0, 0);                   /* 메인 위젯 Right color */
+        background: rgb(0, 0, 0);                     /* 메인 위젯 Right color */
+    }
+    QWidget#Stack1 {
+        background: rgb(50, 50, 50);                     /* 메인 위젯 Right color */
+    }
+    
+    QWidget#ChangePP {
+        background: rgb(74, 182, 146);                     
+    }
+    QWidget#ChangePP[Condition="Hover"] {
+        background: rgb(255, 181, 71);                     
+    }
+    QWidget#ChangePP[Condition="Click"] {
+        background: rgb(184, 25, 28);                     
+    }
+    QWidget#ChangePP[Condition="Non-Click"] {
+        background: rgb(74, 182, 146);                     
     }
     
     /* 종료 버튼 */
@@ -28,7 +44,13 @@ qss = """
     QPushButton#Exit:pressed {
         background: rgb(215, 25, 28);
     }
-    
+    /* Title 버튼 */
+    QPushButton#TittleBTN {
+        background: rgb(74, 182, 146);
+        border-radius: 6px;
+        border: none;
+    }
+        
     /* Title Label */
     QLabel#TitleLabel {                             /* 기본 라벨 컨샙 */
         background: rgb(254, 254, 254);

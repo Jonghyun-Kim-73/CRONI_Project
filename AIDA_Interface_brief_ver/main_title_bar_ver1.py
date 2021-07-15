@@ -23,24 +23,11 @@ class MainTitleBar(QWidget):
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         self.timebar = TimeBar(self, load_realtime=True, margin=5, w=200)
         self.condbar = ConditionBar(self, margin=5, w=100)
-        btn_close = self.create_btn_with_image('close.png', margin=5)
-        btn_close.setObjectName('Exit')
+
+        self.changePP = ChangePP(self, st=310, w=200, margin=5, name_list=['pp1', 'pp2'])
+
+        self.btn_close = CloseBTN(self, margin=5)
         # --------------------------------------------------------------------------------------------------------------
-        btn_close.clicked.connect(self.close)
-
-    def create_btn_with_image(self, icon_path, margin):
-        icon = os.path.join(ROOT_PATH, 'interface_image', icon_path)
-        btn = QPushButton(self)
-
-        h = self.height() - margin * 2
-        x = self.width() - h - margin
-        y = margin
-        w = h
-
-        btn.setGeometry(x, y, w, h)
-        btn.setIcon(QIcon(icon))
-        btn.setIconSize(QSize(h*0.5, h*0.5))  # 아이콘 크기
-        return btn
 
     def close(self):
         """버튼 명령: 닫기"""
@@ -67,6 +54,36 @@ class MainTitleBar(QWidget):
             newPos = self.mapFromGlobal(curPos + diff)  # 전체 창에서의 위젯이 움직인 거리 계산 후 상위 위젯의 위치에 적합하게 값 변환
             self.parent().move(newPos)
             self.mouseMovePos = globalPos
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class CloseBTN(QPushButton):
+    def __init__(self, parent, margin=5):
+        super(CloseBTN, self).__init__(parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setObjectName('Exit')
+
+        icon = os.path.join(ROOT_PATH, 'interface_image', 'close.png')
+
+        h = self.parent().height() - margin * 2
+        x = self.parent().width() - h - margin
+        y = margin
+        w = h
+
+        self.setGeometry(x, y, w, h)
+        self.setIcon(QIcon(icon))
+        self.setIconSize(QSize(h * 0.5, h * 0.5))  # 아이콘 크기
+        # --------------------------------------------------------------------------------------------------------------
+        self.clicked.connect(self.close)
+
+    def close(self):
+        """버튼 명령: 닫기"""
+        self.parent().close()
+
+    def mouseMoveEvent(self, *args, **kwargs):
+        """ 버튼 명령: Move """
+        pass
 
 
 class TimeBar(QWidget):
@@ -144,3 +161,85 @@ class ConditionBar(QLabel):
         test_action3.triggered.connect(lambda a, cond='Abnormal': self.update_condition(cond))
 
         menu.exec_(event.globalPos())
+
+
+class ChangePP(QWidget):
+    def __init__(self, parent, st, w, margin, name_list):
+        """
+        Stack widget page 세팅
+        :param parent: MainTitleBar
+        :param st: 시작 지점 x
+        :param w: 전체 길이
+        :param margin: 위, 아래 양 사이드 마진
+        :param name_list: 각 버튼에 들어갈 이름
+        """
+        super(ChangePP, self).__init__(parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        # self.setObjectName('ChangePP')
+        self.installEventFilter(self)
+        # --------------------------------------------------------------------------------------------------------------
+        h = self.parent().height()
+        x = st
+        y = 0
+        w = w
+        self.setGeometry(x, y, w, h)
+        self.name_list = name_list
+        # --------------------------------------------------------------------------------------------------------------
+        layout = QHBoxLayout()
+        layout.setContentsMargins(margin, margin, margin, margin)
+        layout.setSpacing(5)
+
+        self.btn_ = {}
+        for i, name in enumerate(self.name_list):
+            self.btn_[name] = ChangePP_BTN(self, name, cond='Non-Click')
+            layout.addWidget(self.btn_[name])
+
+        self.setLayout(layout)
+
+    def click_change_pp(self, name):
+        for i, n in enumerate(self.name_list):
+            if n == name:
+                print(f'{n} is clicked.')
+                self.btn_[n].update_info('Click')
+                self.parent().parent().stack_widget.setCurrentIndex(i)
+            else:
+                self.btn_[n].update_info('Non-Click')
+
+    def mouseMoveEvent(self, QMouseEvent):
+        """ 버튼 명령: Move """
+        pass
+
+
+class ChangePP_BTN(QPushButton):
+    def __init__(self, parent, name: str, cond: str):
+        super(ChangePP_BTN, self).__init__(parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.installEventFilter(self)
+        self.setObjectName('ChangePP')
+        self._name = name
+        self._cond = cond
+        self.setText(name)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+    def eventFilter(self, a0: 'QObject', a1: 'QEvent') -> bool:
+        if a1.type() == QEvent.MouseButtonPress:
+            # Clicked -> 다른 pp 비활성화
+            self.parent().click_change_pp(self._name)
+            return True
+        if a1.type() == QEvent.HoverEnter:
+            self.update_info('Hover')
+            return True
+        if a1.type() == QEvent.HoverLeave:
+            self.update_info(self._cond)
+            return True
+        return False
+
+    def update_info(self, condition):
+        self.setProperty("Condition", condition)
+        self.style().polish(self)
+        if not condition == 'Hover':
+            self._cond = condition
+
+    def mouseMoveEvent(self, *args, **kwargs):
+        """ 버튼 명령: Move """
+        pass
