@@ -9,6 +9,7 @@ from AIDA_Interface_brief_ver.TOOL.TOOL_etc import p_
 from AIDA_Interface_brief_ver.main_title_bar_ver1 import MainTitleBar
 from AIDA_Interface_brief_ver.main_r_area_ver1 import MainRightArea
 from AIDA_Interface_brief_ver.main_l_area_ver1 import MainLeftArea
+from AIDA_Interface_brief_ver.main_sys_area_ver1 import MainSysArea
 
 
 class Mainwindow(QWidget):
@@ -45,6 +46,7 @@ class Mainwindow(QWidget):
         self.title_bar = MainTitleBar(parent=self, h=self.t_h, w=self.width())
         self.stack_widget = QStackedLayout()
         self.stack_widget.setContentsMargins(0, 0, 0, 0)
+        self.stack_widget.setSpacing(0)
 
         self.set_stack1()
         self.set_stack2()
@@ -78,6 +80,10 @@ class Mainwindow(QWidget):
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
+
+        self.sys_area = MainSysArea(parent=self, h=self.height() - self.t_h, w=self.width())
+
+        layout.addWidget(self.sys_area)
 
         self.pp2.setLayout(layout)
 
