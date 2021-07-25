@@ -24,7 +24,7 @@ class MainTitleBar(QWidget):
         self.timebar = TimeBar(self, load_realtime=True, margin=5, w=200)
         self.condbar = ConditionBar(self, margin=5, w=100)
 
-        self.changePP = ChangePP(self, st=310, w=200, margin=5, name_list=['pp1', 'pp2'])
+        self.changePP = ChangePP(self, st=310, w=200, margin=5, name_list=['Main', '기능복구'])
 
         self.btn_close = CloseBTN(self, margin=5)
         # --------------------------------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ class ConditionBar(QLabel):
         self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
 
         h = parent.height() - margin * 2
-        x = margin + parent.timebar.width()
+        x = margin + parent.timebar.width() + margin
         y = margin
         w = w
 
@@ -190,10 +190,13 @@ class ChangePP(QWidget):
         layout.setSpacing(5)
 
         self.btn_ = {}
+        self.main_stack_widget: QStackedWidget = self.parent().parent().stack_widget
         for i, name in enumerate(self.name_list):
             self.btn_[name] = ChangePP_BTN(self, name, cond='Non-Click')
             layout.addWidget(self.btn_[name])
 
+        # MainWindow 에서 선택된 화면과 해당하는 버튼 Click 으로 전환
+        self.click_change_pp(self.name_list[self.main_stack_widget.currentIndex()])
         self.setLayout(layout)
 
     def click_change_pp(self, name):
@@ -201,7 +204,7 @@ class ChangePP(QWidget):
             if n == name:
                 print(f'{n} is clicked.')
                 self.btn_[n].update_info('Click')
-                self.parent().parent().stack_widget.setCurrentIndex(i)
+                self.main_stack_widget.setCurrentIndex(i)
             else:
                 self.btn_[n].update_info('Non-Click')
 

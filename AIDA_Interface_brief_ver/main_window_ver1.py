@@ -24,7 +24,7 @@ class Mainwindow(QWidget):
 
         self.setObjectName('Mainwindow')
 
-        # self.set_main_frame()
+        self.set_main_frame()
         # --------------------------------------------------------------------------------------------------------------
         # 프레임
         self.set_frame()
@@ -37,13 +37,13 @@ class Mainwindow(QWidget):
         self.setMask(mask)
 
     def set_frame(self):
-        self.t_h, self.r_w = 35, 100  # title height, right width
+        """ 메인프레임의 세팅 """
+        self.t_h, self.l_w = 35, 600  # title height, left width
 
         self.vbox = QVBoxLayout()
         self.vbox.setContentsMargins(0, 0, 0, 0)
         self.vbox.setSpacing(0)
 
-        self.title_bar = MainTitleBar(parent=self, h=self.t_h, w=self.width())
         self.stack_widget = QStackedLayout()
         self.stack_widget.setContentsMargins(0, 0, 0, 0)
         self.stack_widget.setSpacing(0)
@@ -54,6 +54,7 @@ class Mainwindow(QWidget):
         self.stack_widget.addWidget(self.pp1)
         self.stack_widget.addWidget(self.pp2)
 
+        self.title_bar = MainTitleBar(parent=self, h=self.t_h, w=self.width())
         self.vbox.addWidget(self.title_bar)
         self.vbox.addLayout(self.stack_widget)
 
@@ -66,11 +67,11 @@ class Mainwindow(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.r_area = MainRightArea(parent=self, h=self.height() - self.t_h, w=self.r_w)
-        self.l_area = MainLeftArea(parent=self, h=self.height() - self.t_h, w=self.width() - self.r_w)
+        self.l_area = MainLeftArea(parent=self, h=self.height() - self.t_h, w=self.l_w, mem=self.mem)
+        self.r_area = MainRightArea(parent=self, h=self.height() - self.t_h, w=self.width() - self.l_w, mem=self.mem)
 
-        layout.addWidget(self.r_area)
         layout.addWidget(self.l_area)
+        layout.addWidget(self.r_area)
 
         self.pp1.setLayout(layout)
 
