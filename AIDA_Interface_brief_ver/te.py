@@ -57,6 +57,9 @@ class SvgItem(QGraphicsSvgItem):
         self.fault_max_level = 3
 
         self.text = QGraphicsTextItem('test_comp', self)
+        self.text.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
+        self.text.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
+
         self.text.setX(self.boundingRect().width()/2 - self.text.boundingRect().width()/2)
         self.text.setY(self.boundingRect().height() + 7)
 
@@ -269,6 +272,7 @@ class LineItem(QGraphicsLineItem):
             return float(v)
         except:
             return float(0.0)
+
 
 class SvgScene(QtWidgets.QGraphicsScene):
     def __init__(self, parent):

@@ -122,3 +122,7 @@ class ToolEtc:
         cont += '=' * 50 + '\n'
 
         return cont
+
+    @staticmethod
+    def cm_to_px(cm):
+        return float(cm * 37.7952755906)

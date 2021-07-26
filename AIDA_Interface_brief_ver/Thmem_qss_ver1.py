@@ -14,12 +14,14 @@ qss = """
         background: rgb(254, 245, 249);                 /* 메인 위젯 Left color -> Back color */
     }
     QTableWidget#MainLeftAlarmTable {
-        background: rgb(254, 0, 100);                   /* 메인 위젯 LeftAlarmTable color -> Back color */
+        background: rgb(254, 245, 249);                 /* 메인 위젯 LeftAlarmTable color -> Back color */
         border: 0px;                                
     }
-    QTableWidget#MainLeftAlarmTable QHeaderView{
-        background: rgb(19, 27, 48);                   /* 메인 위젯 LeftAlarmTable color -> Back color */  
-        # TODO 여기서                      
+    QTableWidget#MainLeftAlarmTable QHeaderView::section{
+        background: rgb(41, 103, 159);                  /* 테이블 위젯 LeftAlarmTable HeadColor -> 차트바 color */
+        border: none;
+        font: bold 12px;                                /* 폰트 bold */
+        color: rgb(255, 255, 255);                      /* 폰트 color */                        
     }
     QPushButton#MainLeftSupPresBtn {
         background: rgb(38, 55, 96);                    /* 활성화 o */ 
