@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   height="25"
+   width="25"
+   sodipodi:docname="D_arrow.svg"
+   inkscape:export-filename="D:\Загрузки\close_icon_black2.svg.png"
+   inkscape:export-xdpi="72.959999"
+   inkscape:export-ydpi="72.959999"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     id="namedview3731"
+     showgrid="false"
+     inkscape:zoom="34.897252"
+     inkscape:cx="20.85891"
+     inkscape:cy="12.06395"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="imagebot_2"
+     inkscape:document-rotation="0">
+    <sodipodi:guide
+       position="0,25"
+       orientation="0,25"
+       id="guide836" />
+    <sodipodi:guide
+       position="25,0"
+       orientation="25,0"
+       id="guide838" />
+    <sodipodi:guide
+       position="25,0"
+       orientation="0,-25"
+       id="guide840" />
+    <sodipodi:guide
+       position="0,0"
+       orientation="-25,0"
+       id="guide842" />
+  </sodipodi:namedview>
+  <defs
+     id="defs13" />
+  <metadata
+     id="imagebot_6">image/svg+xml<rdf:RDF>
+  <cc:Work
+     rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+    <dc:title />
+  </cc:Work>
+</rdf:RDF>
+</metadata>
+  <g
+     transform="translate(3.9661017,3.5677966)"
+     id="imagebot_2"
+     label="Layer 1">
+    <title
+       id="title9">Layer 1</title>
+    <g
+       id="g847"
+       transform="translate(4.4591441,3.8741681)">
+      <path
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="4"
+         d="m 4.1327545,-0.98947764 -0.058,12.09502564"
+         id="imagebot_5"
+         style="opacity:1;fill:#5f6368;fill-opacity:1;stroke:#5f6368;stroke-width:2.86941;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1"
+         sodipodi:nodetypes="cc" />
+      <path
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="4"
+         d="m -1.6112455,5.4886045 5.686,5.6169435"
+         id="imagebot_4"
+         style="opacity:1;fill:#5f6368;fill-opacity:1;stroke:#5f6368;stroke-width:2.8694;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1"
+         sodipodi:nodetypes="cc" />
+      <path
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="4"
+         d="M 9.760754,5.4887035 4.0747545,11.105548"
+         id="imagebot_4-1"
+         style="opacity:1;fill:#5f6368;fill-opacity:1;stroke:#5f6368;stroke-width:2.8694;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1"
+         sodipodi:nodetypes="cc" />
+    </g>
+  </g>
+</svg>

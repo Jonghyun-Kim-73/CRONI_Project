@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   height="25"
+   width="25"
+   sodipodi:docname="U_arrow.svg"
+   inkscape:export-filename="H:\Code\CRONI_Project_Proffesor\AIDA_Interface_brief_ver\interface_image\D_arrow.png"
+   inkscape:export-xdpi="72.959999"
+   inkscape:export-ydpi="72.959999"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     id="namedview3731"
+     showgrid="false"
+     inkscape:zoom="34.897252"
+     inkscape:cx="20.85891"
+     inkscape:cy="12.06395"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="imagebot_2"
+     inkscape:document-rotation="0"
+     showguides="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1434" />
+    <sodipodi:guide
+       position="0,25"
+       orientation="0,25"
+       id="guide1436" />
+    <sodipodi:guide
+       position="25,25"
+       orientation="25,0"
+       id="guide1438" />
+    <sodipodi:guide
+       position="25,0"
+       orientation="0,-25"
+       id="guide1440" />
+    <sodipodi:guide
+       position="0,0"
+       orientation="-25,0"
+       id="guide1442" />
+  </sodipodi:namedview>
+  <defs
+     id="defs13" />
+  <metadata
+     id="imagebot_6">image/svg+xml<rdf:RDF>
+  <cc:Work
+     rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+    <dc:title />
+  </cc:Work>
+</rdf:RDF>
+</metadata>
+  <g
+     transform="translate(3.9661017,3.5677966)"
+     id="imagebot_2"
+     label="Layer 1">
+    <title
+       id="title9">Layer 1</title>
+    <g
+       id="g840"
+       transform="matrix(0.99996836,0,0,1.0000034,-0.36779079,-0.50544673)">
+      <path
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="4"
+         d="m 8.9599706,15.485118 -0.058,-12.095025"
+         id="imagebot_5-5"
+         style="opacity:1;fill:#7f7f7f;fill-opacity:1;stroke:#5f6368;stroke-width:2.86941;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1"
+         sodipodi:nodetypes="cc"
+         inkscape:export-xdpi="72.959999"
+         inkscape:export-ydpi="72.959999" />
+      <path
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="4"
+         d="m 3.2159706,9.0070365 5.686,-5.6169435"
+         id="imagebot_4-3"
+         style="opacity:1;fill:#7f7f7f;fill-opacity:1;stroke:#5f6368;stroke-width:2.8694;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1"
+         sodipodi:nodetypes="cc"
+         inkscape:export-xdpi="72.959999"
+         inkscape:export-ydpi="72.959999" />
+      <path
+         inkscape:connector-curvature="0"
+         stroke-miterlimit="4"
+         d="M 14.587971,9.0069365 8.9019706,3.390093"
+         id="imagebot_4-1-8"
+         style="opacity:1;fill:#7f7f7f;fill-opacity:1;stroke:#5f6368;stroke-width:2.8694;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1"
+         sodipodi:nodetypes="cc"
+         inkscape:export-xdpi="72.959999"
+         inkscape:export-ydpi="72.959999" />
+    </g>
+  </g>
+</svg>
