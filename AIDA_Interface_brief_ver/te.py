@@ -132,9 +132,9 @@ class SvgItem(QGraphicsSvgItem):
         update_state_close = menu_state.addAction("Close")
         update_state_half = menu_state.addAction("Half")
         update_state_open = menu_state.addAction("Open")
-        update_state_close.triggered.connect(lambda a, s='v_close': self._update_state(s))
-        update_state_half.triggered.connect(lambda a, s='v_half': self._update_state(s))
-        update_state_open.triggered.connect(lambda a, s='v_open': self._update_state(s))
+        update_state_close.triggered.connect(lambda a, s='V1_close': self._update_state(s))
+        update_state_half.triggered.connect(lambda a, s='V1_half': self._update_state(s))
+        update_state_open.triggered.connect(lambda a, s='V1_open': self._update_state(s))
         # -----------------------------------------------------
         menu_info = QMenu('Info')
         self.menu_info_list = [
@@ -294,7 +294,7 @@ class SvgScene(QtWidgets.QGraphicsScene):
             menu.exec_(event.screenPos())
 
     def _add_valve(self, pos):
-        item = SvgItem('v_close', self._renderer, pos)
+        item = SvgItem('V1_open', self._renderer, pos)
         self.addItem(item)
 
     def _add_line(self, pos):
