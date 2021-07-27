@@ -2,6 +2,9 @@ import datetime
 import os
 import sys
 
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 def p_(c:str, s:str):
     """ 현재 실행 중인 파일의 Prtint 문 호출 """
@@ -126,3 +129,11 @@ class ToolEtc:
     @staticmethod
     def cm_to_px(cm):
         return float(cm * 37.7952755906)
+
+    @staticmethod
+    def set_round_frame(target):
+        """ 라운드 테두리 """
+        path = QPainterPath()
+        path.addRoundedRect(QRectF(target.rect()), 10, 10)
+        mask = QRegion(path.toFillPolygon().toPolygon())
+        target.setMask(mask)
