@@ -25,7 +25,7 @@ class MainLeftArea(QWidget):
         sp_h, s, side_s = 30, 5, 5
         scroll_w = 20
         # 1. 알람 Table
-        self.AlarmTable = AlarmTable(self, x=side_s, y=side_s, w=w-side_s*2 - scroll_w, h=h-(side_s*2+s+sp_h), mem=self.mem)
+        self.AlarmTable = AlarmTable(self, x=side_s, y=side_s, w=w-side_s*2 - scroll_w, h=h-(side_s*2+s+sp_h))
         self.AlarmTableScrollBar = self.AlarmTable.verticalScrollBar()
         self.AlarmTableScrollBar.setParent(self)
         self.AlarmTableScrollBar.setGeometry(side_s + self.AlarmTable.width() + s,
@@ -34,7 +34,7 @@ class MainLeftArea(QWidget):
                                              h-(side_s*2+s+sp_h) - self.AlarmTable.horizontalHeader().height())
 
         # 2. Subpress Btn
-        self.SubPressBtm = SupPresBtn(self, x=side_s, y=h-sp_h-side_s, w=w-side_s*2 - scroll_w, h=sp_h, mem=self.mem)
+        self.SubPressBtm = SupPresBtn(self, x=side_s, y=h-sp_h-side_s, w=w-side_s*2 - scroll_w, h=sp_h)
 
     def paintEvent(self, e: QPaintEvent) -> None:
         qp = QPainter(self)
@@ -48,9 +48,9 @@ class MainLeftArea(QWidget):
 
 
 class AlarmTable(QTableWidget):
-    def __init__(self, parent, x=0, y=0, w=0, h=0, mem=None):
+    def __init__(self, parent, x=0, y=0, w=0, h=0):
         super(AlarmTable, self).__init__(parent=parent)
-        self.mem = mem
+        self.mem = parent.mem
         self.local_mem = self.mem.get_shmem_db()
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -60,7 +60,6 @@ class AlarmTable(QTableWidget):
         self.setObjectName('MainLeftAlarmTable')
         # Size ---------------------------------------------------------------------------------------------------------
         self.setGeometry(x, y, w, h)
-        print(self.geometry())
         T.set_round_frame(self)
         # 테이블 셋업 ---------------------------------------------------------------------------------------------------
         # 1. Column 셋업
@@ -423,9 +422,9 @@ class AlarmItemTimer(QLabel):
 
 
 class SupPresBtn(QPushButton):
-    def __init__(self, parent, x=0, y=0, w=0, h=0, mem=None):
+    def __init__(self, parent, x=0, y=0, w=0, h=0):
         super(SupPresBtn, self).__init__(parent=parent)
-        self.mem = mem
+        self.mem = parent.mem
         self._AlarmTable:QTableWidget = self.parent().AlarmTable
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('MainLeftSupPresBtn')

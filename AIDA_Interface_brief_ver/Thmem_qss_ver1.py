@@ -40,7 +40,6 @@ qss = """
         QWidget#ChangePPProg[Condition="Non-Click"] {
             background: rgb(127, 127, 127);                 /* 활성화 x */                     
         }
-        
         /* 종료 버튼 */
             QPushButton#Exit {
                 background: rgb(184, 25, 28);
@@ -101,6 +100,30 @@ qss = """
     /* ------------ Right                       -------- */
         QWidget#MainRightArea {
             background: rgb(254, 245, 249);                 /* 메인 위젯 Right color -> Back color */
+        }
+        QTableWidget#MainRightProcedureTable {
+            background: rgb(254, 245, 249);                 /* 메인 위젯 LeftAlarmTable color -> Back color */
+            border: none;                                
+        }
+        QTableWidget#MainRightProcedureTable QHeaderView::section{
+            background: rgb(41, 103, 159);                  /* 테이블 위젯 LeftAlarmTable HeadColor -> 차트바 color */
+            border: none;
+            font: bold 12px;                                /* 폰트 bold */
+            color: rgb(255, 255, 255);                      /* 폰트 color */                        
+        }
+        QWidget#ProcedureItemInfo {
+            border: none;
+        }
+        QProgressBar#Prob{
+            background: rgb(254, 245, 249);                 /* 메인 위젯 Right color -> Back color */
+            text-align: center;
+            border: none;
+            height: 27px;
+        }
+        QProgressBar#Prob::chunk{
+            background-color: rgb(41, 103, 159);            /* 테이블 위젯 LeftAlarmTable HeadColor -> 차트바 color */
+            width: 10px;
+            margin: 1px;
         }
     /* ------------ SystemM                     -------- */
         QWidget#Stack1 {
