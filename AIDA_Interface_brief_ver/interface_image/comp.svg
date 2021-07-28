@@ -25,11 +25,11 @@
      showgrid="false"
      inkscape:zoom="0.67081229"
      inkscape:cx="396.53418"
-     inkscape:cy="442.00144"
+     inkscape:cy="561.25984"
      inkscape:window-width="1332"
      inkscape:window-height="1003"
-     inkscape:window-x="2904"
-     inkscape:window-y="132"
+     inkscape:window-x="859"
+     inkscape:window-y="106"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1">
     <sodipodi:guide
@@ -487,7 +487,7 @@
      id="layer1">
     <g
        id="HP"
-       transform="matrix(22.023325,0,0,21.788732,-524.12453,-237.9586)"
+       transform="matrix(22.023325,0,0,21.788732,-509.90147,-155.91876)"
        style="fill:#a9a9a9;fill-opacity:1">
       <g
          id="g71233"
@@ -552,7 +552,7 @@
     </g>
     <g
        id="RVP"
-       transform="matrix(3.7,0,0,4.0391668,20.837981,-88.306495)">
+       transform="matrix(3.7,0,0,4.0391668,35.061045,-6.2666544)">
       <g
          id="g11558">
         <rect
@@ -594,7 +594,7 @@
     </g>
     <g
        id="PZR"
-       transform="matrix(2.3879198,0,0,5.4266668,103.8694,-115.16563)">
+       transform="matrix(2.3879198,0,0,5.4266668,69.578516,105.71086)">
       <path
          style="fill:#a9a9a9;fill-opacity:1;stroke:none;stroke-width:0.0166412;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 26.828954,10.772738 h 9.016797 v 9.398632 l -9.015112,0.004 c 0,-0.260265 -0.0016,-9.402672 -0.0016,-9.402672 z"
@@ -628,7 +628,7 @@
     </g>
     <g
        id="V1_close"
-       transform="matrix(3.1238115,0,0,4.046596,-157.95944,92.089565)">
+       transform="matrix(3.1238115,0,0,4.046596,-143.73638,174.12941)">
       <path
          style="fill:#4ca18d;fill-opacity:1;stroke:none;stroke-width:0.0647811;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 72.846805,4.0742556 c 0,0 -4.38676,0 -4.38676,0 0,0 2.193701,3.870743 2.193701,3.870743 0,0 2.193059,-3.870743 2.193059,-3.870743 z"
@@ -646,7 +646,7 @@
     </g>
     <g
        id="V2_1_oneopen"
-       transform="matrix(3.7,0,0,3.7,-299.02391,10.200325)">
+       transform="matrix(3.7,0,0,3.7,-284.80085,92.240166)">
       <g
          id="g16600"
          transform="translate(-10.948988,-10.358489)">
@@ -689,7 +689,7 @@
     </g>
     <g
        id="Pump_close"
-       transform="matrix(3.7,0,0,3.7,-120.80502,41.478586)">
+       transform="matrix(3.7,0,0,3.7,-11.131761,-11.374)">
       <circle
          style="fill:#4ca18d;fill-opacity:1;stroke:none;stroke-width:0.0649999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
          id="path16656"
@@ -710,7 +710,7 @@
     </g>
     <g
        id="Pump_open"
-       transform="matrix(3.7,0,0,3.7,-168.3358,-46.550841)"
+       transform="matrix(3.7,0,0,3.7,-58.662541,-99.40343)"
        style="fill:#c0152e;fill-opacity:1">
       <circle
          style="fill:#c0152e;fill-opacity:1;stroke:none;stroke-width:0.0649999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
@@ -732,7 +732,7 @@
     </g>
     <g
        id="V1_half"
-       transform="matrix(3.6994584,0,0,3.7,-213.5207,138.28903)">
+       transform="matrix(3.6994584,0,0,3.7,-199.29764,220.32887)">
       <path
          style="fill:#c0152e;fill-opacity:1;stroke:none;stroke-width:0.0622537;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 72.82567,-8.0304319 c 0,0 -3.704167,0 -3.704167,0 0,0 1.852354,4.2333333 1.852354,4.2333333 0,0 1.851813,-4.2333333 1.851813,-4.2333333 z"
@@ -750,7 +750,7 @@
     </g>
     <g
        id="V3_5_sideopen"
-       transform="matrix(3.7,0,0,3.7,-315.00864,-37.657587)">
+       transform="matrix(3.7,0,0,3.7,-294.86925,80.274684)">
       <g
          id="g16008-2"
          transform="translate(12.777279,-15.007626)"
@@ -795,7 +795,7 @@
     </g>
     <g
        id="V1_open"
-       transform="matrix(3.1238115,0,0,4.046596,-144.25602,92.089565)">
+       transform="matrix(3.1238115,0,0,4.046596,-130.03296,174.12941)">
       <path
          style="fill:#c0152e;fill-opacity:1;stroke:none;stroke-width:0.0647811;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 72.846805,4.0742556 c 0,0 -4.38676,0 -4.38676,0 0,0 2.193701,3.870743 2.193701,3.870743 0,0 2.193059,-3.870743 2.193059,-3.870743 z"
@@ -813,7 +813,7 @@
     </g>
     <g
        id="V2_2_allopen"
-       transform="matrix(3.7,0,0,3.7,-262.2608,4.5199706)">
+       transform="matrix(3.7,0,0,3.7,-248.03774,86.559811)">
       <g
          id="g16600-0"
          transform="translate(-10.948988,-10.358489)">
@@ -856,7 +856,7 @@
     </g>
     <g
        id="V2_3_allclose"
-       transform="matrix(3.7,0,0,3.7,-263.38415,10.872649)">
+       transform="matrix(3.7,0,0,3.7,-249.16109,92.91249)">
       <g
          id="g16600-8"
          transform="translate(-14.851592,-0.63505149)">
@@ -899,7 +899,7 @@
     </g>
     <g
        id="V3_4_twoopen"
-       transform="matrix(3.7,0,0,3.7,-314.28409,0.14413596)">
+       transform="matrix(3.7,0,0,3.7,-290.31694,134.67553)">
       <g
          id="g16008-2-1"
          transform="translate(12.777279,-15.007626)"
@@ -944,7 +944,7 @@
     </g>
     <g
        id="V3_3_downopen"
-       transform="matrix(3.7,0,0,3.7,-314.28409,35.631376)">
+       transform="matrix(3.7,0,0,3.7,-267.7184,222.58755)">
       <g
          id="g16008-2-7"
          transform="translate(12.777279,-15.007626)"
@@ -989,7 +989,7 @@
     </g>
     <g
        id="V3_1_allclose"
-       transform="matrix(3.7,0,0,3.7,-314.77357,73.076531)">
+       transform="matrix(3.7,0,0,3.7,-224.82143,217.4351)">
       <g
          id="g16008-2-8"
          transform="translate(12.777279,-15.007626)"
@@ -1034,7 +1034,7 @@
     </g>
     <g
        id="V3_2_allopen"
-       transform="matrix(3.7,0,0,3.7,-316.73149,108.97374)">
+       transform="matrix(3.7,0,0,3.7,-184.97058,211.12912)">
       <g
          id="g16008-2-0"
          transform="translate(12.777279,-15.007626)"
@@ -1079,7 +1079,7 @@
     </g>
     <g
        id="V3_6_onesideopen"
-       transform="matrix(3.7,0,0,3.7,-216.87774,-52.474874)">
+       transform="matrix(3.7,0,0,3.7,-193.18854,61.907596)">
       <g
          id="g73338">
         <g

@@ -24,7 +24,6 @@ class MenuActWidget(QWidgetAction):
         w.setLayout(w_lay)
         self.setDefaultWidget(w)
 
-
 class SvgItem(QGraphicsSvgItem):
     def __init__(self, id, renderer, pos, parent=None):
         super().__init__(parent)
@@ -136,6 +135,12 @@ class SvgItem(QGraphicsSvgItem):
         update_state_half.triggered.connect(lambda a, s='V1_half': self._update_state(s))
         update_state_open.triggered.connect(lambda a, s='V1_open': self._update_state(s))
         # -----------------------------------------------------
+        menu_state = QMenu('State')
+        update_state_close = menu_state.addAction("Close")
+        update_state_open = menu_state.addAction("Open")
+        update_state_close.triggered.connect(lambda b, k='Pump_close': self._update_state(k))
+        update_state_open.triggered.connect(lambda b, k='Pump_open': self._update_state(k))
+
         menu_info = QMenu('Info')
         self.menu_info_list = [
             MenuActWidget(label_txt='comp_txt', line_txt=self.text.toPlainText(), connected_f=self._update_info_comp_txt),
@@ -288,9 +293,11 @@ class SvgScene(QtWidgets.QGraphicsScene):
             menu = QMenu()
             add_valve = menu.addAction("Add valve")
             add_line = menu.addAction("Add line")
+            add_pump = menu.addAction("Add pump") ### -------------펌프
 
             add_valve.triggered.connect(lambda a, pos=event.scenePos(): self._add_valve(pos))
             add_line.triggered.connect(lambda a, pos=event.scenePos(): self._add_line(pos))
+            add_pump.triggered.connect(lambda a, pos=event.scenePos(): self._add_pump(pos)) ###---------펌프
             menu.exec_(event.screenPos())
 
     def _add_valve(self, pos):
@@ -301,10 +308,14 @@ class SvgScene(QtWidgets.QGraphicsScene):
         self._line = LineItem(pos)
         self.addItem(self._line)
 
+    def _add_pump(self, pos):
+        item = SvgItem('Pump_open', self._renderer, pos) ### --------------펌프
+        self.addItem(item)
+
     def mousePressEvent(self, event: 'QtWidgets.QGraphicsSceneMouseEvent') -> None:
         self._line = None
         super().mousePressEvent(event)
-        
+
     def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         super().mouseReleaseEvent(event)
 
@@ -332,31 +343,11 @@ class SvgViewer(QtWidgets.QGraphicsView):
 class Window(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
+        # super(Window, self).__init__()
         self.viewer = SvgViewer(self)
         vb_layout = QtWidgets.QVBoxLayout(self)
         vb_layout.setContentsMargins(0, 0, 0, 0)
         vb_layout.addWidget(self.viewer)
-
-        img = b'''
-                <svg width="640" height="480" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-                <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
-                <defs>
-                <linearGradient id="svg_4" spreadMethod="pad" x1="0" x2="1" y1="0" y2="0">
-                <stop id="jq_stop_8410" offset="0" stop-color="#a83939"/>
-                <stop id="jq_stop_8165" offset="0.27344" stop-color="#57c6c6"/>
-                <stop id="jq_stop_1599" offset="1" stop-color="#57c6c6"/>
-                </linearGradient>
-                </defs>
-                <g class="layer">
-                <title>Layer 1</title>
-                <rect fill="#0000ff" height="39" id="svg_1" stroke="#000000" stroke-width="0" width="77" x="73" y="113"/>
-                <path d="m71.38066,206.41325c-2.99484,1.1385 8.98451,70.58683 8.98451,70.58683c0,0 92.83992,-2.27699 
-                95.83475,-3.41549c2.99484,-1.1385 80.86057,-33.01642 80.86057,-33.01642c0,0 -14.97418,-37.57041 -17.96902,-37.57041" fill="#0000ff" id="svg_2" stroke="url(#svg_4)" stroke-width="5" transform="rotate(0.141483 163.98 239.999)"/>
-                </g>
-                </svg>
-                '''
-        # self.viewer.set_svg(img)
-
 
 if __name__ == '__main__':
     import sys
