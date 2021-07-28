@@ -116,7 +116,6 @@ class SvgItem(QGraphicsSvgItem):
         [_.setPen(pen) for _ in self._bound]
         super(SvgItem, self).paint(painter, option, widget)
 
-
     def mousePressEvent(self, event: 'QtWidgets.QGraphicsSceneMouseEvent'):
         print('svg item: ' + str(self) + self.id + ' - mousePressEvent()')
         super().mousePressEvent(event)

@@ -19,11 +19,9 @@ class Mainwindow(QWidget):
         self.mem = mem
         self.up_widget = parent
         # --------------------------------------------------------------------------------------------------------------
-        self.setGeometry(300, 50, 1000, 800)
+        self.setGeometry(300, 50, 1300, 800)
         self.setStyleSheet(qss)
-
         self.setObjectName('Mainwindow')
-
         self.set_main_frame()
         # --------------------------------------------------------------------------------------------------------------
         # 프레임
@@ -50,17 +48,20 @@ class Mainwindow(QWidget):
 
         self.set_stack1()
         self.set_stack2()
+        self.set_stack3()
 
         self.stack_widget.addWidget(self.pp1)
         self.stack_widget.addWidget(self.pp2)
+        self.stack_widget.addWidget(self.pp3)
 
-        self.title_bar = MainTitleBar(parent=self, h=self.t_h, w=self.width())
+        self.title_bar = MainTitleBar(parent=self, mem=self.mem, h=self.t_h, w=self.width())
         self.vbox.addWidget(self.title_bar)
         self.vbox.addLayout(self.stack_widget)
 
         self.setLayout(self.vbox)
 
     def set_stack1(self):
+        """ 알람 및 절차서 진단 파트 """
         self.pp1 = QWidget()
         self.setObjectName('Stack1')
         layout = QHBoxLayout()
@@ -76,6 +77,7 @@ class Mainwindow(QWidget):
         self.pp1.setLayout(layout)
 
     def set_stack2(self):
+        """ System 미믹 및 기능 복구 파트 """
         self.pp2 = QWidget()
         self.setObjectName('Stack2')
         layout = QHBoxLayout()
@@ -87,6 +89,20 @@ class Mainwindow(QWidget):
         layout.addWidget(self.sys_area)
 
         self.pp2.setLayout(layout)
+
+    def set_stack3(self):
+        """ 예지 그래프 파트 """
+        self.pp3 = QWidget()
+        self.setObjectName('Stack3')
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        self.progWidget = QWidget()
+
+        layout.addWidget(self.progWidget)
+
+        self.pp3.setLayout(layout)
 
     def closeEvent(self, QCloseEvent):
         p_(__file__, 'Close')
