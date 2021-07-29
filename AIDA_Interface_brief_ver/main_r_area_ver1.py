@@ -424,44 +424,59 @@ class ProcedureSymptom(QTreeWidget):
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setFocusPolicy(Qt.NoFocus)
         self.setObjectName('MainRightProcedureSymptom')
         # Size ---------------------------------------------------------------------------------------------------------
         self.setGeometry(x, y, w, h)
         T.set_round_frame(self)
         print(self.geometry())
         # 테이블 셋업 ---------------------------------------------------------------------------------------------------
-        self.setAnimated(True)
         self.setHeaderHidden(True)
         self.setColumnCount(4)  # '스텝' | 세부 절차내용 | 수행 여부 | 확 인
-        self.setColumnWidth(0, 100)
+        self.setColumnWidth(0, 130)
         self.setColumnWidth(1, 400)
-        self.setColumnWidth(2, 100)
-        self.setColumnWidth(3, 100)
+        self.setColumnWidth(2, 80)
+        self.setColumnWidth(3, 80)
 
         sym = QTreeWidgetItem()
         self.addTopLevelItem(sym)
-        l = QLabel(text='Symptom')
+        l = QLabel(text='Symptom Check')
         l.setFixedHeight(30)
         self.setItemWidget(sym, 0, l)
 
-        sym1 = QTreeWidgetItem()
-        sym.addChild(sym1)
-        l = QLabel(text='Test')
+        # sym1 = QTreeWidgetItem()
+        # sym.addChild(sym1)
+        #
+        # sym2 = QTreeWidgetItem()
+        # sym.addChild(sym2)
+        #
+        # l = QLabel(text='Test')
+        # l2 = QLabel(text='이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이')
+        # l2.setStyleSheet("""background: rgb(255, 255, 255);""")
+        # l2.setWordWrap(True)
+        # l2.adjustSize()
 
-        l2 = QTextBrowser()
-        txt = '이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일'
-        l2.setMarkdown(txt)
-        l2.document().setPlainText(txt)
+        # l2 = QTextBrowser()
+        # txt = '이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일'
+        # l2.setMarkdown(txt)
+        # l2.document().setPlainText(txt)
+        #
+        # font = l2.document().defaultFont()
+        # fontMetrics = QFontMetrics(font)
+        # textSize = fontMetrics.size(0, l2.toPlainText())
+        #
+        # l2.setFixedHeight(textSize.height() + 15)
+        # l.setFixedHeight(textSize.height() + 15)
 
-        font = l2.document().defaultFont()
-        fontMetrics = QFontMetrics(font)
-        textSize = fontMetrics.size(0, l2.toPlainText())
+        # self.setItemWidget(sym1, 0, l)
+        # self.setItemWidget(sym1, 1, l2)
+        #
+        # self.setItemWidget(sym2, 0, l)
+        # self.setItemWidget(sym2, 1, l2)
 
-        l2.setFixedHeight(textSize.height() + 15)
-        l.setFixedHeight(textSize.height() + 15)
-
-        self.setItemWidget(sym1, 0, l)
-        self.setItemWidget(sym1, 1, l2)
+        i, n, c = self._make_item(sym, '1', '이 속성은 사용자가 항목을 확장할 수 있는지 여부를 유지합니다. 이 속성은 사용자가 대화식으로 항목을 확장 및 축소할 수 있는지 여부를 유지합니다. 기본적으로 이 속성은 true입니다.')
+        # self.setItemWidget(i, 0, n)
+        # self.setItemWidget(i, 1, c)
 
         emg = QTreeWidgetItem()
         self.addTopLevelItem(emg)
@@ -475,19 +490,23 @@ class ProcedureSymptom(QTreeWidget):
         l.setFixedHeight(30)
         self.setItemWidget(aft, 0, l)
 
-        # sym = QTreeWidgetItem(['Symptom', '', '', ''])
-        # emg = QTreeWidgetItem(['긴급 조치', '', '', ''])
-        # aft = QTreeWidgetItem(['후속 조치', '', '', ''])
-        #
-        # self.addTopLevelItem(sym)
-        # self.addTopLevelItem(emg)
-        # self.addTopLevelItem(aft)
-        #
-        # a = QTreeWidgetItem()
-        # a.setText(0, 'Test')
-        # sym.addChild(a)
-        #
-        # t_ = QTextBrowser()
-        # t_.setFixedHeight(100)
-        #
-        # self.setItemWidget(a, 1, t_)
+        self.expandAll()
+
+    def _make_item(self, top_level_item: QTreeWidgetItem, nub: str, content: str):
+        _item = QTreeWidgetItem()
+        top_level_item.addChild(_item)
+        _nub = QLabel(text=nub)
+
+        # 일정 길이내에서 공백을 기준으로 텍스트 가공
+        temp_line, temp_i_line = '', ''
+        for s in content.split(' '):    # 공백으로 글자 분할
+            if len(temp_i_line) + len(s) > 50:
+                temp_line += temp_i_line + '\n'
+                temp_i_line = ''
+            else:
+                temp_i_line += s + ' '
+        # 가공된 텍스트를 라벨에 부여하고, 텍스트의 모양에 맞춰서 크기 조정
+        _content = QLabel(text=content)
+        _content.setStyleSheet("""background: rgb(100, 100, 255);""")
+        _content.adjustSize()
+        return _item, _nub, _content

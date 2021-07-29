@@ -134,8 +134,16 @@ qss = """
             color: rgb(255, 255, 255);                      /* 폰트 color */                        
         }
         QTreeWidget#MainRightProcedureSymptom {
-            background: rgb(254, 245, 0);                 /* 메인 위젯 LeftAlarmTable color -> Back color */
+            background:transparent;
             border: none;                                
+        }
+        QTreeWidget::item:hover, QTreeWidget::item:selected{
+            background:transparent;
+            border:none;
+        }
+        QLabel#StepNub{
+            background-color: rgb(127, 127, 127);                 /* 활성화 x */
+            border-radius: 5px;
         }
     /* ------------ SystemM                     -------- */
         QWidget#Stack1 {
