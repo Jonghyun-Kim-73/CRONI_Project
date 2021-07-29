@@ -116,14 +116,26 @@ qss = """
         }
         QProgressBar#Prob{
             background: rgb(254, 245, 249);                 /* 메인 위젯 Right color -> Back color */
-            text-align: center;
-            border: none;
-            height: 27px;
+            border: 2px solid rgb(19, 27, 48);              /*  -> TitleBar color */
+            border-radius: 5px;
+            margin-right:30px;
         }
         QProgressBar#Prob::chunk{
-            background-color: rgb(41, 103, 159);            /* 테이블 위젯 LeftAlarmTable HeadColor -> 차트바 color */
-            width: 10px;
-            margin: 1px;
+            background-color: rgb(19, 27, 48);              /* 청크 color -> TitleBar color */
+        }
+        QTableWidget#ProcedureExplainTable {
+            background: rgb(254, 245, 249);                 /* 메인 위젯 LeftAlarmTable color -> Back color */
+            border: none;                                
+        }
+        QTableWidget#ProcedureExplainTable QHeaderView::section{
+            background: rgb(41, 103, 159);                  /* 테이블 위젯 LeftAlarmTable HeadColor -> 차트바 color */
+            border: none;
+            font: bold 12px;                                /* 폰트 bold */
+            color: rgb(255, 255, 255);                      /* 폰트 color */                        
+        }
+        QTreeWidget#MainRightProcedureSymptom {
+            background: rgb(254, 245, 0);                 /* 메인 위젯 LeftAlarmTable color -> Back color */
+            border: none;                                
         }
     /* ------------ SystemM                     -------- */
         QWidget#Stack1 {

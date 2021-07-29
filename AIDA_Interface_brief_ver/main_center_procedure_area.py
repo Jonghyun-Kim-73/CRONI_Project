@@ -512,7 +512,6 @@ class SymptomArea(QWidget):
                 if local_mem['BPRZSP']['Val'] == 0 and local_mem['QPRZB']['Val'] > 0:
                     self.sym_dict[7].update_condition(True)
 
-
             if get_procedure_name_in_json == 'R9 경보(09) PRZ PORV opening(164.2 kg/cm2)':
                 if local_mem['ZINST65']['Val'] >= 164.15:
                     self.sym_dict[0].update_condition(True)

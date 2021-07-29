@@ -153,7 +153,7 @@ class AlarmTable(QTableWidget):
             'KLAMPO310': {'D': 'PRZ cont level hi heater on',                   'CurP': '',        'CriP': '',        'U': '%',     'C': '5'},
 
             'KLAMPO311': {'D': 'PRZ cont level lo heater off',                  'CurP': '',        'CriP': '',        'U': '%',     'C': '17'},
-            'KLAMPO312': {'D': 'PRZ press lo back-up heater on',                'CurP': '',        'CriP': '',        'U': 'kg/cm2','C': '153.6'},
+            'KLAMPO312': {'D': 'PRZ press lo back-up heater on',                'CurP': 'PPRZ',    'CriP': 'CPPRZL',  'U': 'kg/cm2','C': '153.6'},
             'KLAMPO313': {'D': 'Tref/Auct. Tavg Deviation',                     'CurP': '',        'CriP': '',        'U': 'Deg C', 'C': '1.67'},
             'KLAMPO314': {'D': 'RCS 1,2,3 Tavg hi',                             'CurP': 'UAVLEGM', 'CriP': 'CUTAVG',  'U': 'Deg C', 'C': '312.78'},
             'KLAMPO315': {'D': 'RCS 1,2,3 Tavg/auct Tavg hi/lo',                'CurP': '',        'CriP': '',        'U': 'Deg C', 'C': '1.1'},
@@ -234,7 +234,7 @@ class AlarmTable(QTableWidget):
 
         add_empty_alarm.triggered.connect(lambda a: self._add_empty_line(self.columnCount()))
         add_alarm.triggered.connect(lambda a, id='KLAMPO251', current=10: self._add_alarm(id, current))
-        add_alarms.triggered.connect(lambda a, ids=['KLAMPO251', 'KLAMPO252', 'KLAMPO253']: alarms_(ids))
+        add_alarms.triggered.connect(lambda a, ids=['KLAMPO263', 'KLAMPO308', 'KLAMPO312']: alarms_(ids))
         menu.exec_(e.globalPos())
 
     # ==================================================================================================================
