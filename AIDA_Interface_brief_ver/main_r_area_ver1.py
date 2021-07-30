@@ -302,6 +302,7 @@ class ProcedureExplain(QWidget):
         self.selected_procedure: str = self.parent().selected_procedure
         self.title_.setText(str('절차서 : ' + self.selected_procedure))
         self.table_ai_.update_procedure_display()
+        self.widget_sym_.update_procedure_display()
 
 
 class ProcedureExplainTable(QTableWidget):
@@ -432,81 +433,123 @@ class ProcedureSymptom(QTreeWidget):
         print(self.geometry())
         # 테이블 셋업 ---------------------------------------------------------------------------------------------------
         self.setHeaderHidden(True)
-        self.setColumnCount(4)  # '스텝' | 세부 절차내용 | 수행 여부 | 확 인
-        self.setColumnWidth(0, 130)
-        self.setColumnWidth(1, 400)
-        self.setColumnWidth(2, 80)
-        self.setColumnWidth(3, 80)
+        self.setColumnCount(1)  # '스텝' | 세부 절차내용 | 수행 여부 | 확 인
 
-        sym = QTreeWidgetItem()
-        self.addTopLevelItem(sym)
-        l = QLabel(text='Symptom Check')
-        l.setFixedHeight(30)
-        self.setItemWidget(sym, 0, l)
-
-        # sym1 = QTreeWidgetItem()
-        # sym.addChild(sym1)
-        #
-        # sym2 = QTreeWidgetItem()
-        # sym.addChild(sym2)
-        #
-        # l = QLabel(text='Test')
-        # l2 = QLabel(text='이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이이')
-        # l2.setStyleSheet("""background: rgb(255, 255, 255);""")
-        # l2.setWordWrap(True)
-        # l2.adjustSize()
-
-        # l2 = QTextBrowser()
-        # txt = '이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일 이대일'
-        # l2.setMarkdown(txt)
-        # l2.document().setPlainText(txt)
-        #
-        # font = l2.document().defaultFont()
-        # fontMetrics = QFontMetrics(font)
-        # textSize = fontMetrics.size(0, l2.toPlainText())
-        #
-        # l2.setFixedHeight(textSize.height() + 15)
-        # l.setFixedHeight(textSize.height() + 15)
-
-        # self.setItemWidget(sym1, 0, l)
-        # self.setItemWidget(sym1, 1, l2)
-        #
-        # self.setItemWidget(sym2, 0, l)
-        # self.setItemWidget(sym2, 1, l2)
-
-        i, n, c = self._make_item(sym, '1', '이 속성은 사용자가 항목을 확장할 수 있는지 여부를 유지합니다. 이 속성은 사용자가 대화식으로 항목을 확장 및 축소할 수 있는지 여부를 유지합니다. 기본적으로 이 속성은 true입니다.')
-        # self.setItemWidget(i, 0, n)
-        # self.setItemWidget(i, 1, c)
-
-        emg = QTreeWidgetItem()
-        self.addTopLevelItem(emg)
-        l = QLabel(text='긴급조치')
-        l.setFixedHeight(30)
-        self.setItemWidget(emg, 0, l)
-
-        aft = QTreeWidgetItem()
-        self.addTopLevelItem(aft)
-        l = QLabel(text='후속조치')
-        l.setFixedHeight(30)
-        self.setItemWidget(aft, 0, l)
+        self.top_level_items = {_: QTreeWidgetItem() for _ in ['Symptom Check', '긴급조치', '후속조치']}
+        [self._make_top_item(self.top_level_items[_], _) for _ in ['Symptom Check', '긴급조치', '후속조치']]
 
         self.expandAll()
 
-    def _make_item(self, top_level_item: QTreeWidgetItem, nub: str, content: str):
+    def _make_top_item(self, top_level_item: QTreeWidgetItem, name: str):
+        self.addTopLevelItem(top_level_item)
+        l = QLabel(text=name)
+        l.setFixedHeight(30)
+        self.setItemWidget(top_level_item, 0, l)
+
+    def _make_item(self, top_level_item: QTreeWidgetItem, key, step,
+                   nub: str, content: str, autoclick: bool, manclick: bool):
+        """ 하위 아이템 추가 """
         _item = QTreeWidgetItem()
         top_level_item.addChild(_item)
-        _nub = QLabel(text=nub)
 
         # 일정 길이내에서 공백을 기준으로 텍스트 가공
         temp_line, temp_i_line = '', ''
         for s in content.split(' '):    # 공백으로 글자 분할
             if len(temp_i_line) + len(s) > 50:
                 temp_line += temp_i_line + '\n'
-                temp_i_line = ''
+                temp_i_line = s + ' '
             else:
                 temp_i_line += s + ' '
+        temp_line += temp_i_line
+
+        _step_widget = QWidget()
+
         # 가공된 텍스트를 라벨에 부여하고, 텍스트의 모양에 맞춰서 크기 조정
-        _content = QLabel(text=content)
-        _content.setStyleSheet("""background: rgb(100, 100, 255);""")
+        _content = QLabel(text=temp_line)
+        _content.setParent(_step_widget)
+        _content.setContentsMargins(5, 5, 5, 5)
         _content.adjustSize()
-        return _item, _nub, _content
+        _content.setGeometry(55, 5, 500, _content.height() + 5)
+
+        # # 절차서 번호
+        _nub = QLabel(text=nub)
+        _nub.setParent(_step_widget)
+        _nub.setContentsMargins(5, 5, 5, 5)
+        _nub.setGeometry(0, 5, 50, _content.height())
+        _nub.setAlignment(Qt.AlignTop | Qt.AlignRight)
+
+        # 자동 수행 확인
+        _auto_check = QPushButton()
+        _auto_check.setCheckable(autoclick)
+        _auto_check.setParent(_step_widget)
+        _auto_check.setGeometry(560, 5, 20, 20)
+
+        # 수동 수행 확인
+        _man_check = QPushButton()
+
+        _man_check._procedure = str(self.selected_procedure)
+        _man_check._key = str()
+
+
+        _man_check.setCheckable(True)
+        _man_check.setChecked(manclick)
+        _man_check.clicked.connect(lambda a, btn=_man_check, cont=_content, nub=_nub: self._update_step(btn, cont, nub))
+        _man_check.setParent(_step_widget)
+        _man_check.setGeometry(585, 5, 20, 20)
+        _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
+
+        # 상태에 따른 창 색 변경
+        if autoclick:
+            _auto_check.setStyleSheet(""" background: rgb(255, 77, 79); border-radius:5px; border: 1px solid black; """)
+        else:
+            _auto_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
+
+        if manclick:
+            _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
+            _content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+            _nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+        else:
+            _man_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
+            _content.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
+            _nub.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
+
+        _step_widget.setFixedHeight(_content.height() + 5)
+
+        # 상위 수준인 _item 에 _step_widget 을 추가함
+        self.setItemWidget(_item, 0, _step_widget)
+
+    def _update_step(self, man_check: QPushButton, content: QLabel, nub: QLabel):
+        if man_check.isChecked():
+            man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
+            content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+            nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+        else:
+            man_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
+            content.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
+            nub.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
+
+    def _clear_items(self):
+        """ sym, emg, aft의 내용 모두 지우기 """
+        for top_level_item in self.top_level_items.values():
+            for child in top_level_item.takeChildren():
+                top_level_item.removeChild(child)
+
+    def update_procedure_display(self):
+        # 창 초기화
+        self._clear_items()
+        # 메모리에서 선택된 절차서에 대한 절차서 정보 가져오기
+        self.selected_procedure: str = self.parent().selected_procedure
+
+        _info = self.mem.get_procedure_info(self.selected_procedure)
+        for key in ['Symptom Check', '긴급조치', '후속조치']:
+            _top_level_item: QTreeWidgetItem = self.top_level_items[key]
+            _steps = _info[key] # key = 'Symptom Check'
+            """
+            _steps 는 해당 key 에 포함되어 있는 데이터임. step 은 0 부터 순회함.
+            'Symptom Check': {
+                0: {'ManClick': False, 'AutoClick': False, 'Nub': '1.1', 'Des': '정상'}
+            }
+            """
+            for step in range(len(_steps)):
+                self._make_item(_top_level_item, key, step, _steps[step]['Nub'], _steps[step]['Des'],
+                                _steps[step]['AutoClick'], _steps[step]['ManClick'])

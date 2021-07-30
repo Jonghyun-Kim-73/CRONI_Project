@@ -13,6 +13,8 @@ from AIDA_Interface_brief_ver.TOOL.TOOL_etc import p_
 from AIDA_Interface_brief_ver.CNS_Platform_controller import InterfaceFun
 from AIDA_Interface_brief_ver.CNS_All_module import All_Function_module
 
+from AIDA_Interface_brief_ver.Procedure.ab_procedure import ab_pro
+
 import socket
 ip_reg = {
     # 자기 본래 아이피 : {'내부망 아이피' ...}
@@ -104,6 +106,8 @@ class SHMem:
                       'Ab_Dig_Result': {},
                       'Ab_Xai_Result': {},
 
+                      'Ab_Procedure': ab_pro,
+
                       'Close': False,
                       }
         print('Trig 메모리 생성 완료')
@@ -133,6 +137,8 @@ class SHMem:
                       'Ab_Dig_Result': {},
                       'Ab_Xai_Result': {},
 
+                      'Ab_Procedure': ab_pro,
+
                       'Close': False,
                       }
 
@@ -159,6 +165,12 @@ class SHMem:
             self.mem[key_val] = mem[key_val]
             if key_val in saved_mem_key:
                 self.save_mem[key_val].append(mem[key_val]['Val'])
+
+    def change_pro_mam_click(self, procedure_name, step_nub, clicked):
+        self.logic['Ab_Procedure'][procedure_name][step_nub]['ManClick'] = clicked
+
+    def change_pro_auto_click(self, procedure_name, step_nub, clicked):
+        self.logic['Ab_Procedure'][procedure_name][step_nub]['AutoClick'] = clicked
 
     def send_close(self):
         self.logic['Close'] = True
@@ -195,6 +207,8 @@ class SHMem:
     def get_shmem_save_db(self):
         return self.save_mem
 
+    def get_procedure_info(self, procedure_name):
+        return self.logic[procedure_name]
 
 if __name__ == '__main__':
     main_process = Body()

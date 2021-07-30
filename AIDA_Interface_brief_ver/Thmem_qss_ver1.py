@@ -140,7 +140,7 @@ qss = """
         QTreeWidget::item:hover, QTreeWidget::item:selected{
             background:transparent;
             border:none;
-        }
+        }     
         QLabel#StepNub{
             background-color: rgb(127, 127, 127);                 /* 활성화 x */
             border-radius: 5px;
