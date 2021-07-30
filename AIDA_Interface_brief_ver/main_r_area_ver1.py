@@ -446,7 +446,7 @@ class ProcedureSymptom(QTreeWidget):
         l.setFixedHeight(30)
         self.setItemWidget(top_level_item, 0, l)
 
-    def _make_item(self, top_level_item: QTreeWidgetItem, key, step,
+    def _make_item(self, top_level_item: QTreeWidgetItem, key: str, step: int,
                    nub: str, content: str, autoclick: bool, manclick: bool):
         """ 하위 아이템 추가 """
         _item = QTreeWidgetItem()
@@ -488,12 +488,12 @@ class ProcedureSymptom(QTreeWidget):
         _man_check = QPushButton()
 
         _man_check._procedure = str(self.selected_procedure)
-        _man_check._key = str()
-
+        _man_check._key = str(key)
+        _man_check._step = int(step)
 
         _man_check.setCheckable(True)
         _man_check.setChecked(manclick)
-        _man_check.clicked.connect(lambda a, btn=_man_check, cont=_content, nub=_nub: self._update_step(btn, cont, nub))
+        _man_check.clicked.connect(lambda a, btn=_man_check, cont=_content, nub=_nub: self._click_update_step(btn, cont, nub))
         _man_check.setParent(_step_widget)
         _man_check.setGeometry(585, 5, 20, 20)
         _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
@@ -505,28 +505,36 @@ class ProcedureSymptom(QTreeWidget):
             _auto_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
 
         if manclick:
-            _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
-            _content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-            _nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-        else:
             _man_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
             _content.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
             _nub.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
+        else:
+            _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
+            _content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+            _nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
 
         _step_widget.setFixedHeight(_content.height() + 5)
 
         # 상위 수준인 _item 에 _step_widget 을 추가함
         self.setItemWidget(_item, 0, _step_widget)
 
-    def _update_step(self, man_check: QPushButton, content: QLabel, nub: QLabel):
+    def _click_update_step(self, man_check: QPushButton, content: QLabel, nub: QLabel):
+        """
+        수동 확인 클릭 시 업데이트
+            1. 수동 확인 버튼 클릭 시 번호, 절차서 부분의 색 변경
+            2. 클릭된 수동 확인 버튼에 저장된 절차서명, 타입, 번호를 불러와서 메모리에 해당 부분 업데이트
+        """
+        # 1.
         if man_check.isChecked():
-            man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
-            content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-            nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-        else:
             man_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
             content.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
             nub.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
+        else:
+            man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
+            content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+            nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+        # 2.
+        self.mem.change_pro_mam_click(man_check._procedure, man_check._key, man_check._step, man_check.isChecked())
 
     def _clear_items(self):
         """ sym, emg, aft의 내용 모두 지우기 """
@@ -543,7 +551,7 @@ class ProcedureSymptom(QTreeWidget):
         _info = self.mem.get_procedure_info(self.selected_procedure)
         for key in ['Symptom Check', '긴급조치', '후속조치']:
             _top_level_item: QTreeWidgetItem = self.top_level_items[key]
-            _steps = _info[key] # key = 'Symptom Check'
+            _steps = _info[key]     # key = 'Symptom Check'
             """
             _steps 는 해당 key 에 포함되어 있는 데이터임. step 은 0 부터 순회함.
             'Symptom Check': {

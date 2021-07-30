@@ -166,8 +166,8 @@ class SHMem:
             if key_val in saved_mem_key:
                 self.save_mem[key_val].append(mem[key_val]['Val'])
 
-    def change_pro_mam_click(self, procedure_name, step_nub, clicked):
-        self.logic['Ab_Procedure'][procedure_name][step_nub]['ManClick'] = clicked
+    def change_pro_mam_click(self, procedure_name, type_, step_nub, clicked):
+        self.logic['Ab_Procedure'][procedure_name][type_][step_nub]['ManClick'] = clicked
 
     def change_pro_auto_click(self, procedure_name, step_nub, clicked):
         self.logic['Ab_Procedure'][procedure_name][step_nub]['AutoClick'] = clicked
@@ -208,7 +208,7 @@ class SHMem:
         return self.save_mem
 
     def get_procedure_info(self, procedure_name):
-        return self.logic[procedure_name]
+        return self.logic['Ab_Procedure'][procedure_name]
 
 if __name__ == '__main__':
     main_process = Body()
