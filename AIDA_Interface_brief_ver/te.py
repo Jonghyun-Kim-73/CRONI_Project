@@ -24,10 +24,11 @@ class MenuActWidget(QWidgetAction):
         w.setLayout(w_lay)
         self.setDefaultWidget(w)
 
+
 class SvgItem(QGraphicsSvgItem):
     def __init__(self, id, renderer, pos, parent=None):
         super().__init__(parent)
-        self.id = id
+        # self.id = id
         self.setSharedRenderer(renderer)
         self.setElementId(id)
         bounds = renderer.boundsOnElement(id)
@@ -347,6 +348,7 @@ class Window(QtWidgets.QWidget):
         vb_layout = QtWidgets.QVBoxLayout(self)
         vb_layout.setContentsMargins(0, 0, 0, 0)
         vb_layout.addWidget(self.viewer)
+
 
 if __name__ == '__main__':
     import sys
