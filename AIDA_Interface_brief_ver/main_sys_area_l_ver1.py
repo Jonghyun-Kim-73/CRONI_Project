@@ -186,8 +186,8 @@ class SVGComp(QGraphicsSvgItem):
             self.text.setY(float(self.text_y))
 
         # 이미지 스케일 선정
-        self.setScale(1.75)
-        self.text.setScale(1 / 1.75)
+        # self.setScale(1.75)
+        # self.text.setScale(1 / 1.75)
 
         self._update_info_to_mem()
 
