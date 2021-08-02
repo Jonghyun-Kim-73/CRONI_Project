@@ -791,6 +791,28 @@
 			"textypos": "34.0",
 			"xpos": "441.0",
 			"ypos": "705.0"
+		},
+		"75": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": "330",
+			"direction": "V",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "779.0",
+			"ypos": "704.0"
+		},
+		"76": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": "15",
+			"direction": "L",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "794.0",
+			"ypos": "629.0"
 		}
 	},
 	"RCS": {}
