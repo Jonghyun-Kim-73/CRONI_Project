@@ -58,7 +58,7 @@ class MainTitleBar(QWidget):
         layout.addWidget(btn_close)
 
     def create_btn_with_image(self, icon_path):
-        icon = os.path.join(ROOT_PATH, 'interface_image', icon_path)
+        icon = os.path.join(ROOT_PATH, '../../AIDA_Interface_brief_ver/interface_image', icon_path)
         btn = QPushButton(self)
         btn.setIcon(QIcon(icon))
         btn.setIconSize(QSize(self.bar_height - 20, self.bar_height - 20))  # 아이콘 크기

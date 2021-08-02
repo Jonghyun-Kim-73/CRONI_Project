@@ -368,7 +368,7 @@ class AlarmTable(QTableWidget):
     def add_alarm(self, alarm_id: int, urgent: bool):
         """ Alarm 1개 추가 기능 """
         # db load
-        db = pd.read_csv('./DB/alarm_info.csv')
+        db = pd.read_csv('../../AIDA_Interface_brief_ver/DB/alarm_info.csv')
         alarm_info = db.loc[alarm_id, "alarm_name"]
         criteria = db.loc[alarm_id, "criteria"]
         criteria_id = db.loc[alarm_id, "criteria_id"]
@@ -612,7 +612,7 @@ class AlarmItemInfo(QLabel):
             # End
         }
         # json파일 로드
-        with open('./Procedure/procedure.json', 'rb') as f:
+        with open('../../AIDA_Interface_brief_ver/Procedure/procedure.json', 'rb') as f:
             json_data = json.load(f)
 
         for j_p in json_data.keys():

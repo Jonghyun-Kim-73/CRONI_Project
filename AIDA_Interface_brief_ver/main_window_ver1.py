@@ -10,6 +10,7 @@ from AIDA_Interface_brief_ver.main_title_bar_ver1 import MainTitleBar
 from AIDA_Interface_brief_ver.main_r_area_ver1 import MainRightArea
 from AIDA_Interface_brief_ver.main_l_area_ver1 import MainLeftArea
 from AIDA_Interface_brief_ver.main_sys_area_ver1 import MainSysArea
+from AIDA_Interface_brief_ver.main_proce_area_ver1 import MainProceArea
 
 
 class Mainwindow(QWidget):
@@ -18,6 +19,7 @@ class Mainwindow(QWidget):
         super(Mainwindow, self).__init__()
         self.mem = mem
         self.up_widget = parent
+        self.selected_procedure: str = ''
         # --------------------------------------------------------------------------------------------------------------
         self.setGeometry(300, 50, 1300, 800)
         self.setStyleSheet(qss)
@@ -49,10 +51,12 @@ class Mainwindow(QWidget):
         self.set_stack1()
         self.set_stack2()
         self.set_stack3()
+        self.set_stack4()
 
         self.stack_widget.addWidget(self.pp1)
         self.stack_widget.addWidget(self.pp2)
         self.stack_widget.addWidget(self.pp3)
+        self.stack_widget.addWidget(self.pp4)
 
         self.title_bar = MainTitleBar(parent=self, mem=self.mem, h=self.t_h, w=self.width())
         self.vbox.addWidget(self.title_bar)
@@ -77,9 +81,23 @@ class Mainwindow(QWidget):
         self.pp1.setLayout(layout)
 
     def set_stack2(self):
-        """ System 미믹 및 기능 복구 파트 """
+        """ 선택된 절차서 파트 """
         self.pp2 = QWidget()
         self.setObjectName('Stack2')
+        layout = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        self.MainProceArea = MainProceArea(self, 0, 0, 1300, 765)
+
+        layout.addWidget(self.MainProceArea)
+
+        self.pp2.setLayout(layout)
+
+    def set_stack3(self):
+        """ System 미믹 및 기능 복구 파트 """
+        self.pp3 = QWidget()
+        self.setObjectName('Stack3')
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
@@ -88,12 +106,12 @@ class Mainwindow(QWidget):
 
         layout.addWidget(self.sys_area)
 
-        self.pp2.setLayout(layout)
+        self.pp3.setLayout(layout)
 
-    def set_stack3(self):
+    def set_stack4(self):
         """ 예지 그래프 파트 """
-        self.pp3 = QWidget()
-        self.setObjectName('Stack3')
+        self.pp4 = QWidget()
+        self.setObjectName('Stack4')
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
@@ -102,8 +120,13 @@ class Mainwindow(QWidget):
 
         layout.addWidget(self.progWidget)
 
-        self.pp3.setLayout(layout)
+        self.pp4.setLayout(layout)
 
     def closeEvent(self, QCloseEvent):
         p_(__file__, 'Close')
         self.up_widget.closeEvent(QCloseEvent)
+
+    def update_selected_procedure(self, procedure: str, change_panel:bool):
+        self.selected_procedure = procedure
+        self.title_bar.changePP.update_selected_procedure(procedure, change_panel)    # 타이틀 이름 전환 및 화면 전환
+        self.MainProceArea.update_selected_procedure(procedure)

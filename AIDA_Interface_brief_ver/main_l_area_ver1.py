@@ -7,6 +7,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from AIDA_Interface_brief_ver.TOOL.TOOL_etc import ToolEtc as T
+from AIDA_Interface_brief_ver.Procedure.alarm_procedure import alarm_pd
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -16,6 +17,8 @@ class MainLeftArea(QWidget):
     def __init__(self, parent, h, w, mem=None):
         super(MainLeftArea, self).__init__(parent)
         self.mem = mem
+        self.Mainwindow = parent
+
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('MainLeftArea')
         # Size ---------------------------------------------------------------------------------------------------------
@@ -52,6 +55,7 @@ class AlarmTable(QTableWidget):
         super(AlarmTable, self).__init__(parent=parent)
         self.mem = parent.mem
         self.local_mem = self.mem.get_shmem_db()
+        self.Mainwindow = parent.Mainwindow
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -63,7 +67,7 @@ class AlarmTable(QTableWidget):
         T.set_round_frame(self)
         # 테이블 셋업 ---------------------------------------------------------------------------------------------------
         # 1. Column 셋업
-        self.col_info = [('경보명', 240), ('현재값', 50), ('설정치', 50), ('Unit', 10), ('발생시간', 120), ('경보절차서', 0)]
+        self.col_info = [('경보명', 240), ('현재값', 50), ('설정치', 50), ('Unit', 10), ('발생시간', 0)]
         self.setColumnCount(len(self.col_info))
         [self.setColumnWidth(i, w) for i, (l, w) in enumerate(self.col_info)]
         self.setHorizontalHeaderLabels([l for (l, w) in self.col_info])
@@ -374,6 +378,8 @@ class AlarmItemInfo(QLabel):
     """ AlarmTable 의 Item """
     def __init__(self, parent, alarm_id, alarm_info):
         super(AlarmItemInfo, self).__init__(parent=parent)
+        self.Mainwindow = parent.Mainwindow
+        # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setObjectName('AlarmItemInfo')
@@ -392,6 +398,15 @@ class AlarmItemInfo(QLabel):
 
     def mousePressEvent(self, ev: QMouseEvent) -> None:
         print(f'{self.alarm_id}_Cell Clicked')
+
+        get_alarm_procedure = alarm_pd[self.alarm_id]
+
+        if get_alarm_procedure is not None:
+            if ev.button() == Qt.RightButton:
+                self.Mainwindow.update_selected_procedure(get_alarm_procedure, change_panel=True)
+            elif ev.button() == Qt.LeftButton:
+                self.Mainwindow.update_selected_procedure(get_alarm_procedure, change_panel=False)
+
         super(AlarmItemInfo, self).mousePressEvent(ev)
 
 
@@ -399,6 +414,8 @@ class AlarmItemTimer(QLabel):
     """ 발생 시간 타이머 아이템 """
     def __init__(self, parent, alarm_id):
         super(AlarmItemTimer, self).__init__(parent=parent)
+        self.Mainwindow = parent.Mainwindow
+        # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('AlarmItemInfo')
 
@@ -418,6 +435,15 @@ class AlarmItemTimer(QLabel):
 
     def mousePressEvent(self, ev: QMouseEvent) -> None:
         print(f'{self.alarm_id}_Cell Clicked')
+
+        get_alarm_procedure = alarm_pd[self.alarm_id]
+
+        if get_alarm_procedure is not None:
+            if ev.button() == Qt.RightButton:
+                self.Mainwindow.update_selected_procedure(get_alarm_procedure, change_panel=True)
+            elif ev.button() == Qt.LeftButton:
+                self.Mainwindow.update_selected_procedure(get_alarm_procedure, change_panel=False)
+
         super(AlarmItemTimer, self).mousePressEvent(ev)
 
 

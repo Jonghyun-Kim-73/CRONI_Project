@@ -1,10 +1,7 @@
-import os
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 
-from AIDA_Interface_brief_ver.main_window import Mainwindow
+from Old.OLD_V0.main_window import Mainwindow
 
 
 class StartPoint(QWidget):

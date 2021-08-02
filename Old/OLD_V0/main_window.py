@@ -4,15 +4,15 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-from AIDA_Interface_brief_ver.main_title_bar import MainTitleBar
-from AIDA_Interface_brief_ver.main_left_alarm_area import MainLeftAlarmArea
-from AIDA_Interface_brief_ver.main_center_procedure_area import MainCenterProcedureArea
-from AIDA_Interface_brief_ver.main_right_digprog_area import MainRightDiagnosisProgArea
+from Old.OLD_V0.main_title_bar import MainTitleBar
+from Old.OLD_V0.main_left_alarm_area import MainLeftAlarmArea
+from Old.OLD_V0.main_center_procedure_area import MainCenterProcedureArea
+from Old.OLD_V0.main_right_digprog_area import MainRightDiagnosisProgArea
 
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
-from AIDA_Interface_brief_ver.Thmem_qss import qss
+from Old.OLD_V0.Thmem_qss import qss
 
 
 class Mainwindow(QWidget):

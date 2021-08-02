@@ -16,6 +16,7 @@ class MainRightArea(QWidget):
     def __init__(self, parent, h, w, mem=None):
         super(MainRightArea, self).__init__(parent)
         self.mem = mem
+        self.Mainwindow = parent
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('MainRightArea')
         self.selected_procedure = ''
@@ -24,7 +25,7 @@ class MainRightArea(QWidget):
         self.setFixedWidth(w)
         # 레이어 셋업 ---------------------------------------------------------------------------------------------------
         s, side_s = 5, 5
-        self.ProcedureTable = ProcedureTable(self, x=side_s, y=side_s, w=w - side_s * 2, h=120)
+        self.ProcedureTable = ProcedureTable(self, x=side_s, y=side_s, w=w - side_s * 2, h=180)
         self.ProcedureExplain = ProcedureExplain(self, x=side_s, y=side_s * 2 + self.ProcedureTable.height(),
                                                  w=w - side_s * 2,
                                                  h=h - side_s * 3 - self.ProcedureTable.height())
@@ -48,6 +49,7 @@ class ProcedureTable(QTableWidget):
     def __init__(self, parent, x, y, w, h):
         super(ProcedureTable, self).__init__(parent)
         self.mem = parent.mem
+        self.Mainwindow = parent.Mainwindow
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -59,14 +61,14 @@ class ProcedureTable(QTableWidget):
         T.set_round_frame(self)
         # 테이블 셋업 ---------------------------------------------------------------------------------------------------
         # 1. Colum 셋업
-        self.col_info = [('비정상 절차서 명', 400), ('AI확신도', 145), ('진입 조건 확인', 145)] # 690
+        self.col_info = [('비정상 절차서 명', 395), ('긴급 여부', 65), ('증상 확인', 65), ('AI 확신도', 145)] # 690
         self.setColumnCount(len(self.col_info))
         [self.setColumnWidth(i, w) for i, (l, w) in enumerate(self.col_info)]
         self.setHorizontalHeaderLabels([l for (l, w) in self.col_info])
         self.horizontalHeader().setStretchLastSection(True)
         self.horizontalHeader().setFixedHeight(30)
         # 2. Row 셋업
-        self.max_line = 3
+        self.max_line = 5
         [self._add_empty_line(i) for i in range(self.max_line)]
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -126,8 +128,9 @@ class ProcedureTable(QTableWidget):
     def _add_empty_line(self, i):
         self.insertRow(i)
         self.setCellWidget(i, 0, ProcedureItemInfo(self, type='Name'))
-        self.setCellWidget(i, 1, ProcedureItemInfo(self, type='Prob'))
+        self.setCellWidget(i, 1, ProcedureItemInfo(self, type='Match'))
         self.setCellWidget(i, 2, ProcedureItemInfo(self, type='Match'))
+        self.setCellWidget(i, 3, ProcedureItemInfo(self, type='Prob'))
 
     def _update_procedure_display(self):
         """ AI 모듈에서 계산된 정보 업데이트"""
@@ -137,23 +140,40 @@ class ProcedureTable(QTableWidget):
             0: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
             1: 'Ab21_01: 가압기 압력 채널 고장 (고)',
             2: 'Ab63_02: 제어봉의 계속적인 삽입',
+            3: 'Ab63_02: 제어봉의 계속적인 삽입',
+            4: 'Ab63_02: 제어봉의 계속적인 삽입',
         }
         test_procedure_prob = {
             0: self.test_i,
             1: 95 - self.test_i,
             2: 5,
+            3: 3,
+            4: 2,
         }
         self.test_i = self.test_i + 1 if self.test_i <= 95 else 0
 
-        test_procedure_match = {
-            0: {'Tot': 10, 'Match': 9},
-            1: {'Tot': 15, 'Match': 3},
-            2: {'Tot': 7, 'Match': 2},
-        }
+        test_procedure_match = {}
+
+        for i in range(5):
+            _info = self.mem.get_procedure_info(test_procedure_des[i])
+            _steps = _info['Symptom Check']
+            """
+            _steps 는 해당 key 에 포함되어 있는 데이터임. step 은 0 부터 순회함.
+            'Symptom Check': {
+                0: {'ManClick': False, 'AutoClick': False, 'Nub': '1.1', 'Des': '정상'}
+            }
+            """
+            tot, auto_tot = 0, 0
+            for step in range(len(_steps)):
+                tot += 1
+                auto_tot += 1 if _steps[step]['AutoClick'] else 0
+            test_procedure_match[i] = {'Tot': tot, 'Match': auto_tot}
+
         for i in range(self.rowCount()):
             self.cellWidget(i, 0).dis_update(test_procedure_des[i], test_procedure_des[i])
-            self.cellWidget(i, 1).dis_update(test_procedure_des[i], test_procedure_prob[i])
+            self.cellWidget(i, 1).dis_update(test_procedure_des[i], test_procedure_match[i])
             self.cellWidget(i, 2).dis_update(test_procedure_des[i], test_procedure_match[i])
+            self.cellWidget(i, 3).dis_update(test_procedure_des[i], test_procedure_prob[i])
 
 
 class ProcedureItemInfo(QWidget):
@@ -161,6 +181,7 @@ class ProcedureItemInfo(QWidget):
     def __init__(self, parent, type):
         super(ProcedureItemInfo, self).__init__(parent=parent)
         self.mem = parent.mem
+        self.Mainwindow = parent.Mainwindow
         self.MainRightArea: MainRightArea = self.parent().parent()
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -188,6 +209,12 @@ class ProcedureItemInfo(QWidget):
 
     def mousePressEvent(self, ev: QMouseEvent) -> None:
         super(ProcedureItemInfo, self).mousePressEvent(ev)
+
+        if ev.button() == Qt.RightButton:
+            self.Mainwindow.update_selected_procedure(str(self.procedure_name), change_panel=True)
+        elif ev.button() == Qt.LeftButton:
+            self.Mainwindow.update_selected_procedure(str(self.procedure_name), change_panel=False)
+
         self.MainRightArea.selected_procedure = str(self.procedure_name)
 
         # Click 시 -> ProcedureExplain.upate_info와 연결
@@ -202,7 +229,7 @@ class ProcedureItemInfo(QWidget):
         if self._type == 'Name':
             self.label.setText(' ' + str(_info))
         elif self._type == 'Match':
-            self.label.setText(f'{_info["Tot"]} / {_info["Match"]}')
+            self.label.setText(f'{_info["Match"]} / {_info["Tot"]}')
             self.label.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
         elif self._type == 'Prob':
             self.progress.setValue(_info)
@@ -212,6 +239,7 @@ class ProcedureItemInfo(QWidget):
 class ProbProgressBar(QProgressBar):
     def __init__(self, parent):
         super(ProbProgressBar, self).__init__(parent)
+        self.Mainwindow = parent.Mainwindow
         self.MainRightArea: MainRightArea = self.parent().parent()
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -245,6 +273,7 @@ class ProcedureExplain(QWidget):
     def __init__(self, parent, x, y, w, h):
         super(ProcedureExplain, self).__init__(parent)
         self.mem = parent.mem
+        self.Mainwindow = parent.Mainwindow
         self.ProcedureItemInfo: ProcedureItemInfo = self.parent().ProcedureTable
         self.selected_procedure: str = self.parent().selected_procedure
         # --------------------------------------------------------------------------------------------------------------
@@ -258,16 +287,8 @@ class ProcedureExplain(QWidget):
         self.title_ = QLabel(self, text='절차서 : ')
         self.title_.setGeometry(5, 5, w - 10, 25)
 
-        self.title_ai_ = QLabel(self, text='AI\n확신도\nTop5')
-        self.title_ai_.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.title_ai_.setGeometry(5, 35, 50, 120)
-        self.table_ai_ = ProcedureExplainTable(self,
-                                               x=self.title_ai_.x() + self.title_ai_.width() + 5, y=self.title_ai_.y(),
-                                               w=self.width() - 5*3 - self.title_ai_.width(),
-                                               h=self.title_ai_.height())
-
         self.widget_sym_ = ProcedureSymptom(self,
-                                            x=5, y=self.title_ai_.y() + self.title_ai_.height() + 5,
+                                            x=5, y=self.title_.y() + self.title_.height() + 5,
                                             w=w - 10, h=465)
 
     # ==================================================================================================================
@@ -284,137 +305,13 @@ class ProcedureExplain(QWidget):
         pen.setWidth(2)
         # 절차서:
         qp.drawLine(0, 30, self.width(), 30)
-
-        # AI 확신도 top5
-        pen.setWidth(1)
-        qp.drawRoundedRect(self.title_ai_.geometry().adjusted(0, 0, self.width() - 60, 0), 10, 10)
-        qp.drawLine(5 + self.title_ai_.width() + 2.5, self.title_ai_.y(),
-                    5 + self.title_ai_.width() + 2.5, self.title_ai_.y() + self.title_ai_.height(),)
-        qp.drawLine(5 + self.title_ai_.width() + 5, self.title_ai_.y(),
-                    5 + self.title_ai_.width() + 5, self.title_ai_.y() + self.title_ai_.height(), )
-        # Symptom
-        qp.drawRoundedRect(self.widget_sym_.geometry(), 10, 10)
-
         qp.restore()
 
     def update_info(self):
         """ ProcedureItemInfo의 cell이 클릭 될때 동작함. """
         self.selected_procedure: str = self.parent().selected_procedure
         self.title_.setText(str('절차서 : ' + self.selected_procedure))
-        self.table_ai_.update_procedure_display()
         self.widget_sym_.update_procedure_display()
-
-
-class ProcedureExplainTable(QTableWidget):
-    def __init__(self, parent, x, y, w, h):
-        super(ProcedureExplainTable, self).__init__(parent)
-        self.mem = parent.mem
-        self.selected_procedure: str = self.parent().selected_procedure
-        # --------------------------------------------------------------------------------------------------------------
-        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setFocusPolicy(Qt.NoFocus)
-        self.setSelectionMode(QAbstractItemView.NoSelection)
-        self.setObjectName('ProcedureExplainTable')
-        # Size ---------------------------------------------------------------------------------------------------------
-        self.setGeometry(x, y, w, h)
-        path = QPainterPath()
-        path.addRoundedRect(QRectF(self.rect().adjusted(-10, 0, 0, 0)), 10, 10)
-        mask = QRegion(path.toFillPolygon().toPolygon())
-        self.setMask(mask)
-        # 테이블 셋업 ---------------------------------------------------------------------------------------------------
-        # 1. Colum 셋업
-        self.col_info = [('변수명', 480), ('AI확신도', 145)] # 625
-        self.setColumnCount(len(self.col_info))
-        [self.setColumnWidth(i, w) for i, (l, w) in enumerate(self.col_info)]
-        self.setHorizontalHeaderLabels([l for (l, w) in self.col_info])
-        self.horizontalHeader().setStretchLastSection(True)
-        self.horizontalHeader().setFixedHeight(20)
-        # 2. Row 셋업
-        self.max_line = 5
-        [self._add_empty_line(i) for i in range(self.max_line)]
-        self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
-        self.setShowGrid(False)  # Grid 지우기
-        # display update -----------------------------------------------------------------------------------------------
-        timer = QTimer(self)
-        timer.setInterval(1000)
-        timer.timeout.connect(self.update_procedure_display)
-        timer.start()
-
-        self.test_para = {
-            '': ['', '', '', '', ''],
-            'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설': ['가압기 수위', '가압기 압력', 'VCT 수위', '유출 유량', 'Charging Valve'],
-            'Ab21_01: 가압기 압력 채널 고장 (고)': ['가압기 수위', '가압기 압력', 'VCT 수위', '유출 유량', 'Charging Valve'],
-            'Ab63_02: 제어봉의 계속적인 삽입': ['가압기 수위', '가압기 압력', 'VCT 수위', '유출 유량', 'Charging Valve'],
-        }
-        self.test_val = {
-            '': [0, 0, 0, 0, 0],
-            'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설': [80, 10, 5, 3, 2],
-            'Ab21_01: 가압기 압력 채널 고장 (고)': [80, 10, 5, 3, 2],
-            'Ab63_02: 제어봉의 계속적인 삽입': [50, 30, 10, 5, 5],
-        }
-
-    # ==================================================================================================================
-    # 함수 Overwrite
-
-    def paintEvent(self, e: QPaintEvent) -> None:
-        """ tabelview의 위에 라인 그리기 """
-        super(ProcedureExplainTable, self).paintEvent(e)
-        qp = QPainter(self.viewport())
-        qp.save()
-        pen = QPen()
-        for i in range(self.max_line):
-            pen.setColor(QColor(127, 127, 127))  # 가로선 -> 활성화 x color
-            pen.setWidth(1)
-            qp.setPen(pen)
-            qp.drawLine(0, i * 20, self.viewport().width(), i * 20)
-
-        l, w = self.col_info[0]
-        qp.drawLine(w, 0, w, self.height())
-        qp.restore()
-
-    # ==================================================================================================================
-    # Private functions
-
-    def _add_empty_line(self, i):
-        self.insertRow(i)
-        self.setRowHeight(i, 20)
-        self.setCellWidget(i, 0, QLabel(self, text=''))
-        self.setCellWidget(i, 1, ProcedureExplainProgressBar(self))
-
-    def update_procedure_display(self):
-        self.selected_procedure: str = self.parent().selected_procedure
-        for i in range(self.max_line):
-            self.cellWidget(i, 0).setText(self.test_para[self.selected_procedure][i])
-            self.cellWidget(i, 1).setValue(self.test_val[self.selected_procedure][i])
-
-
-class ProcedureExplainProgressBar(QProgressBar):
-    def __init__(self, parent):
-        super(ProcedureExplainProgressBar, self).__init__(parent)
-        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
-        self.setObjectName('Prob')
-        self.setValue(10)
-
-    def paintEvent(self, e: QPaintEvent) -> None:
-        super(ProcedureExplainProgressBar, self).paintEvent(e)
-
-        qp = QPainter(self)
-        qp.save()
-        pen = QPen()
-        if self.value() > 50:
-            pen.setColor(QColor(254, 245, 249))  # 세로선 -> Back color
-        else:
-            pen.setColor(QColor(19, 27, 48))     # 세로선 -> TitleBar color
-        pen.setWidth(2)
-        pen.setStyle(Qt.DotLine)
-        qp.setPen(pen)
-        qp.drawLine(114/2, 0, 114/2, 24)
-        qp.restore()
 
 
 class ProcedureSymptom(QTreeWidget):
@@ -430,24 +327,22 @@ class ProcedureSymptom(QTreeWidget):
         # Size ---------------------------------------------------------------------------------------------------------
         self.setGeometry(x, y, w, h)
         T.set_round_frame(self)
-        print(self.geometry())
         # 테이블 셋업 ---------------------------------------------------------------------------------------------------
         self.setHeaderHidden(True)
         self.setColumnCount(1)  # '스텝' | 세부 절차내용 | 수행 여부 | 확 인
 
-        self.top_level_items = {_: QTreeWidgetItem() for _ in ['Symptom Check', '긴급조치', '후속조치']}
-        [self._make_top_item(self.top_level_items[_], _) for _ in ['Symptom Check', '긴급조치', '후속조치']]
+        self.top_level_items = {_: QTreeWidgetItem() for _ in ['Symptom Check']}
+        [self._make_top_item(self.top_level_items[_], _) for _ in ['Symptom Check']]
 
         self.expandAll()
 
     def _make_top_item(self, top_level_item: QTreeWidgetItem, name: str):
         self.addTopLevelItem(top_level_item)
-        l = QLabel(text=name)
-        l.setFixedHeight(30)
-        self.setItemWidget(top_level_item, 0, l)
+        self.l = QLabel(text=name)
+        self.l.setFixedHeight(30)
+        self.setItemWidget(top_level_item, 0, self.l)
 
-    def _make_item(self, top_level_item: QTreeWidgetItem, key: str, step: int,
-                   nub: str, content: str, autoclick: bool, manclick: bool):
+    def _make_item(self, top_level_item: QTreeWidgetItem, nub: str, content: str, autoclick: bool, ):
         """ 하위 아이템 추가 """
         _item = QTreeWidgetItem()
         top_level_item.addChild(_item)
@@ -484,57 +379,19 @@ class ProcedureSymptom(QTreeWidget):
         _auto_check.setParent(_step_widget)
         _auto_check.setGeometry(560, 5, 20, 20)
 
-        # 수동 수행 확인
-        _man_check = QPushButton()
-
-        _man_check._procedure = str(self.selected_procedure)
-        _man_check._key = str(key)
-        _man_check._step = int(step)
-
-        _man_check.setCheckable(True)
-        _man_check.setChecked(manclick)
-        _man_check.clicked.connect(lambda a, btn=_man_check, cont=_content, nub=_nub: self._click_update_step(btn, cont, nub))
-        _man_check.setParent(_step_widget)
-        _man_check.setGeometry(585, 5, 20, 20)
-        _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
-
         # 상태에 따른 창 색 변경
         if autoclick:
             _auto_check.setStyleSheet(""" background: rgb(255, 77, 79); border-radius:5px; border: 1px solid black; """)
         else:
             _auto_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
 
-        if manclick:
-            _man_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
-            _content.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
-            _nub.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
-        else:
-            _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
-            _content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-            _nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+        _nub.setStyleSheet(""" border-radius:5px; border: 1px solid black; """)
+        _content.setStyleSheet(""" border-radius:5px; border: 1px solid black; """)
 
         _step_widget.setFixedHeight(_content.height() + 5)
 
         # 상위 수준인 _item 에 _step_widget 을 추가함
         self.setItemWidget(_item, 0, _step_widget)
-
-    def _click_update_step(self, man_check: QPushButton, content: QLabel, nub: QLabel):
-        """
-        수동 확인 클릭 시 업데이트
-            1. 수동 확인 버튼 클릭 시 번호, 절차서 부분의 색 변경
-            2. 클릭된 수동 확인 버튼에 저장된 절차서명, 타입, 번호를 불러와서 메모리에 해당 부분 업데이트
-        """
-        # 1.
-        if man_check.isChecked():
-            man_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
-            content.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
-            nub.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
-        else:
-            man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
-            content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-            nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-        # 2.
-        self.mem.change_pro_mam_click(man_check._procedure, man_check._key, man_check._step, man_check.isChecked())
 
     def _clear_items(self):
         """ sym, emg, aft의 내용 모두 지우기 """
@@ -549,7 +406,7 @@ class ProcedureSymptom(QTreeWidget):
         self.selected_procedure: str = self.parent().selected_procedure
 
         _info = self.mem.get_procedure_info(self.selected_procedure)
-        for key in ['Symptom Check', '긴급조치', '후속조치']:
+        for key in ['Symptom Check']:
             _top_level_item: QTreeWidgetItem = self.top_level_items[key]
             _steps = _info[key]     # key = 'Symptom Check'
             """
@@ -558,6 +415,10 @@ class ProcedureSymptom(QTreeWidget):
                 0: {'ManClick': False, 'AutoClick': False, 'Nub': '1.1', 'Des': '정상'}
             }
             """
+            tot, tot_auto = 0, 0
             for step in range(len(_steps)):
-                self._make_item(_top_level_item, key, step, _steps[step]['Nub'], _steps[step]['Des'],
-                                _steps[step]['AutoClick'], _steps[step]['ManClick'])
+                self._make_item(_top_level_item, _steps[step]['Nub'], _steps[step]['Des'], _steps[step]['AutoClick'])
+                tot += 1
+                tot_auto += 1 if _steps[step]['AutoClick'] else 0
+
+            self.l.setText(f'Symptom Check [{tot_auto:3}/{tot:3}]')

@@ -438,7 +438,7 @@ class SymptomArea(QWidget):
         self._clear_txt_cond()
 
         # json파일 로드
-        with open('./Procedure/procedure.json', 'rb') as f:
+        with open('../../AIDA_Interface_brief_ver/Procedure/procedure.json', 'rb') as f:
             json_data = json.load(f)
         # self.abnormal_name는
         # 경보 -> Intermediate range high flux rod stop

@@ -147,11 +147,11 @@ qss = """
                 border-radius: 5px;
             }
     /* ------------ SystemM                     -------- */
-        QWidget#Stack1 {
+        QWidget#Stack3 {
             background: rgb(254, 245, 249);                 /* 메인 위젯 SysArea color -> Back color */
         }
-        /* ------------ SystemM Right               -------- */
-            QWidget#MainSysRightArea {
+        /* ------------ SystemM Left               -------- */
+            QWidget#MainSysLeftArea {
                 background: rgb(41, 103, 159);                  /* 시스템 진단 위젯 -> 차트바 color */
             }
         /* ------------ SystemM Left                -------- */

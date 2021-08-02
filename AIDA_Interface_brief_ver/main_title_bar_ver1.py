@@ -23,9 +23,8 @@ class MainTitleBar(QWidget):
         self.is_moved = False
         # 타이틀 레이어 셋업 ---------------------------------------------------------------------------------------------
         self.timebar = TimeBar(self, load_realtime=True, margin=5, w=200)
-        self.condbar = ConditionBar(self, margin=5, w=90)
 
-        self.changePP = ChangePP(self, st=310, w=600, margin=5, name_list=['Main', '기능복구', '예지'])
+        self.changePP = ChangePP(self, st=315, w=950, margin=5, name_list=['경보/증상', '절차서', '기능복구', '예지'])
 
         self.btn_close = CloseBTN(self, margin=5)
         # --------------------------------------------------------------------------------------------------------------
@@ -68,11 +67,8 @@ class MainTitleBar(QWidget):
         qp.drawLine(self.timebar.x() + self.timebar.width() + 5, self.timebar.y() + 5,
                     self.timebar.x() + self.timebar.width() + 5, self.timebar.y() + self.timebar.height() - 5)
 
-        qp.drawLine(self.condbar.x() + self.condbar.width() + 5, self.condbar.y() + 5,
-                    self.condbar.x() + self.condbar.width() + 5, self.condbar.y() + self.condbar.height() - 5)
-
-        qp.drawLine(self.changePP.x() + self.changePP.width() + 0, self.changePP.y() + 10,
-                    self.changePP.x() + self.changePP.width() + 0, self.changePP.y() + self.changePP.height() - 10)
+        qp.drawLine(self.changePP.x() - 0, self.changePP.y() + 10,
+                    self.changePP.x() - 0, self.changePP.y() + self.changePP.height() - 10)
 
         qp.drawLine(self.btn_close.x() - 5, self.btn_close.y() + 5,
                     self.btn_close.x() - 5, self.btn_close.y() + self.btn_close.height() - 5)
@@ -124,40 +120,6 @@ class TimeBar(QWidget):
             self.timebarlabel.setText(real_time)
 
 
-class ConditionBar(QLabel):
-    def __init__(self, parent, init_condition: str = 'Normal', margin=5, w=100):
-        super(ConditionBar, self).__init__(parent)
-        self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        self.setAlignment(Qt.AlignVCenter | Qt.AlignCenter)  # 텍스트 정렬
-
-        h = parent.height() - margin * 2
-        x = margin + parent.timebar.width() + margin * 2
-        y = margin
-        w = w
-        self.setGeometry(x, y, w, h)
-
-        self.setObjectName('ConditionBar')
-        self.update_condition(init_condition)
-
-    def update_condition(self, condition: str):
-        self.setProperty("Condition", condition)
-        self.setText(condition)
-        self.style().polish(self)
-
-    def contextMenuEvent(self, event) -> None:
-        """ Condition Bar 기능 테스트 """
-        menu = QMenu(self)
-        test_action1 = menu.addAction("Emergency")
-        test_action2 = menu.addAction("Normal")
-        test_action3 = menu.addAction("Abnormal")
-
-        test_action1.triggered.connect(lambda a, cond='Emergency': self.update_condition(cond))
-        test_action2.triggered.connect(lambda a, cond='Normal': self.update_condition(cond))
-        test_action3.triggered.connect(lambda a, cond='Abnormal': self.update_condition(cond))
-
-        menu.exec_(event.globalPos())
-
-
 class ChangePP(QWidget):
     def __init__(self, parent, st, w, margin, name_list):
         """
@@ -170,7 +132,6 @@ class ChangePP(QWidget):
         """
         super(ChangePP, self).__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
-        # self.setObjectName('ChangePP')
         self.installEventFilter(self)
         # --------------------------------------------------------------------------------------------------------------
         h = self.parent().height()
@@ -190,6 +151,8 @@ class ChangePP(QWidget):
             self.btn_[name] = ChangePP_BTN(self, name, cond='Non-Click')
             if name == '예지':
                 self.btn_[name].setFixedWidth(350)
+            if name == '절차서':
+                self.btn_[name].setFixedWidth(420)
 
             layout.addWidget(self.btn_[name])
 
@@ -224,6 +187,13 @@ class ChangePP(QWidget):
         self.btn_['예지'].setText(f'가압기 압력 이상 | Trip 까지 [{h:02}:{m:02}:{s:02}]')
         self.test_val -= 1
 
+    def update_selected_procedure(self, procedure: str, change_panel: bool):
+        """ 절차서 클릭 시 해당 버튼의 텍스트 변경 + 패널 변경 """
+        self.btn_['절차서'].setText(f'{procedure}')
+        if change_panel:
+            self.click_change_pp('절차서')
+
+
 class ChangePP_BTN(QPushButton):
     def __init__(self, parent, name: str, cond: str):
         super(ChangePP_BTN, self).__init__(parent)
@@ -241,9 +211,10 @@ class ChangePP_BTN(QPushButton):
 
     def eventFilter(self, a0: 'QObject', a1: 'QEvent') -> bool:
         if a1.type() == QEvent.MouseButtonPress:
-            # Clicked -> 다른 pp 비활성화
-            self.parent().click_change_pp(self._name)
-            return True
+            if self.text() != '절차서':
+                # Clicked -> 다른 pp 비활성화
+                self.parent().click_change_pp(self._name)
+                return True
         if a1.type() == QEvent.HoverEnter:
             self.update_info('Hover')
             return True
@@ -257,10 +228,6 @@ class ChangePP_BTN(QPushButton):
         self.style().polish(self)
         if not condition == 'Hover':
             self._cond = condition
-
-    def mouseMoveEvent(self, *args, **kwargs):
-        """ 버튼 명령: Move """
-        pass
 
 
 class CloseBTN(QPushButton):
@@ -285,7 +252,3 @@ class CloseBTN(QPushButton):
     def close(self):
         """버튼 명령: 닫기"""
         self.parent().close()
-
-    def mouseMoveEvent(self, *args, **kwargs):
-        """ 버튼 명령: Move """
-        pass

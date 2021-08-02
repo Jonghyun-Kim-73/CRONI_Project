@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-from AIDA_Interface_brief_ver.main_sys_area_l_ver1 import MainSysLeftArea
 from AIDA_Interface_brief_ver.main_sys_area_r_ver1 import MainSysRightArea
+from AIDA_Interface_brief_ver.main_sys_area_l_ver1 import MainSysLeftArea
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -25,5 +25,6 @@ class MainSysArea(QWidget):
         self.setFixedHeight(h)
         self.setFixedWidth(w)
         # 테이블 셋업 ---------------------------------------------------------------------------------------------------
-        self.MainSysLeftArea = MainSysLeftArea(self, 0, 0, w - 400, h)
-        self.MainSysRightArea = MainSysRightArea(self, w - 400, 0, 400, h)
+        self.MainSysRightArea = MainSysRightArea(self, 400, 0, w - 400, h)
+        self.MainSysLeftArea = MainSysLeftArea(self, 0, 0, 400, h)
+
