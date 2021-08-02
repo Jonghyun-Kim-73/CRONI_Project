@@ -103,11 +103,13 @@ class ProcedureSteps(QTreeWidget):
     def __init__(self, parent, type):
         super(ProcedureSteps, self).__init__(parent)
         self.mem = parent.mem
-        self.selected_procedure: str = parent.selected_procedure
+        self.ProcedureStepsWarp = parent
+        self.selected_procedure: str = self.parent().selected_procedure
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setFocusPolicy(Qt.NoFocus)
+        self.setObjectName('MainRightProcedureSymptom')
         # 테이블 셋업 ---------------------------------------------------------------------------------------------------
         self.setHeaderHidden(True)
         self.setColumnCount(1)  # '스텝' | 세부 절차내용 | 수행 여부 | 확 인
@@ -117,13 +119,19 @@ class ProcedureSteps(QTreeWidget):
         self._type = type
         self.expandAll()
 
+        # TODO 개방되면 자동적으로 크기 조절하는 로직 만들기
+        # self.expanded.connect(self.exp_)
+
+    def mousePressEvent(self, e: QMouseEvent) -> None:
+        super(ProcedureSteps, self).mousePressEvent(e)
+
     def _make_top_item(self, top_level_item: QTreeWidgetItem, name: str):
         self.addTopLevelItem(top_level_item)
-        self.l = QLabel(text=name)
-        self.l.setFixedHeight(30)
-        self.setItemWidget(top_level_item, 0, self.l)
+        l = QLabel(text=name)
+        l.setFixedHeight(30)
+        self.setItemWidget(top_level_item, 0, l)
 
-    def _make_item(self, top_level_item: QTreeWidgetItem, key, step,
+    def _make_item(self, top_level_item: QTreeWidgetItem, key: str, step: int,
                    nub: str, content: str, autoclick: bool, manclick: bool):
         """ 하위 아이템 추가 """
         _item = QTreeWidgetItem()
@@ -131,7 +139,7 @@ class ProcedureSteps(QTreeWidget):
 
         # 일정 길이내에서 공백을 기준으로 텍스트 가공
         temp_line, temp_i_line = '', ''
-        for s in content.split(' '):  # 공백으로 글자 분할
+        for s in content.split(' '):    # 공백으로 글자 분할
             if len(temp_i_line) + len(s) > 50:
                 temp_line += temp_i_line + '\n'
                 temp_i_line = s + ' '
@@ -165,11 +173,12 @@ class ProcedureSteps(QTreeWidget):
         _man_check = QPushButton()
 
         _man_check._procedure = str(self.selected_procedure)
-        _man_check._key = str()
+        _man_check._key = str(key)
+        _man_check._step = int(step)
 
         _man_check.setCheckable(True)
         _man_check.setChecked(manclick)
-        _man_check.clicked.connect(lambda a, btn=_man_check, cont=_content, nub=_nub: self._update_step(btn, cont, nub))
+        _man_check.clicked.connect(lambda a, btn=_man_check, cont=_content, nub=_nub: self._click_update_step(btn, cont, nub))
         _man_check.setParent(_step_widget)
         _man_check.setGeometry(585, 5, 20, 20)
         _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
@@ -181,29 +190,37 @@ class ProcedureSteps(QTreeWidget):
             _auto_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
 
         if manclick:
-            _man_check.setStyleSheet(
-                """ background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
-            _content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-            _nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-        else:
             _man_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
             _content.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
             _nub.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
+        else:
+            _man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
+            _content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+            _nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
 
         _step_widget.setFixedHeight(_content.height() + 5)
 
         # 상위 수준인 _item 에 _step_widget 을 추가함
         self.setItemWidget(_item, 0, _step_widget)
+        return _content.height() + 5
 
-    def _update_step(self, man_check: QPushButton, content: QLabel, nub: QLabel):
+    def _click_update_step(self, man_check: QPushButton, content: QLabel, nub: QLabel):
+        """
+        수동 확인 클릭 시 업데이트
+            1. 수동 확인 버튼 클릭 시 번호, 절차서 부분의 색 변경
+            2. 클릭된 수동 확인 버튼에 저장된 절차서명, 타입, 번호를 불러와서 메모리에 해당 부분 업데이트
+        """
+        # 1.
         if man_check.isChecked():
-            man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
-            content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-            nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
-        else:
             man_check.setStyleSheet(""" background: rgb(38, 55, 96); border-radius:5px; border: 1px solid black; """)
             content.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
             nub.setStyleSheet(""" background: rgb(24, 144, 255); border-radius:5px; border: 1px solid black; """)
+        else:
+            man_check.setStyleSheet(""" background: rgb(127, 127, 127); border-radius:5px; border: 1px solid black; """)
+            content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+            nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
+        # 2.
+        self.mem.change_pro_mam_click(man_check._procedure, man_check._key, man_check._step, man_check.isChecked())
 
     def _clear_items(self):
         """ sym, emg, aft의 내용 모두 지우기 """
@@ -228,8 +245,12 @@ class ProcedureSteps(QTreeWidget):
             }
             """
             tot, tot_auto = 0, 0
+            accumulated_cell_h = 0
             for step in range(len(_steps)):
-                self._make_item(_top_level_item, key, step, _steps[step]['Nub'], _steps[step]['Des'],
-                                _steps[step]['AutoClick'], _steps[step]['ManClick'])
+                accumulated_cell_h += self._make_item(_top_level_item, key, step, _steps[step]['Nub'],
+                                                      _steps[step]['Des'],_steps[step]['AutoClick'],
+                                                      _steps[step]['ManClick'])
                 tot += 1
                 tot_auto += 1 if _steps[step]['AutoClick'] else 0
+
+        self.ProcedureStepsWarp.setFixedHeight(accumulated_cell_h + 35)
