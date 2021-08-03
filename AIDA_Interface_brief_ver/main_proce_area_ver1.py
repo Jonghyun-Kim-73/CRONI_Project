@@ -119,8 +119,9 @@ class ProcedureSteps(QTreeWidget):
         self._type = type
         self.expandAll()
 
-        # TODO 개방되면 자동적으로 크기 조절하는 로직 만들기
-        # self.expanded.connect(self.exp_)
+        # 접히거나 열리는 경우 모양 변경
+        self.expanded.connect(lambda a: self.update_procedure_display(expanded=True))
+        self.collapsed.connect(lambda a: self.update_procedure_display(expanded=False))
 
     def mousePressEvent(self, e: QMouseEvent) -> None:
         super(ProcedureSteps, self).mousePressEvent(e)
@@ -228,29 +229,33 @@ class ProcedureSteps(QTreeWidget):
             for child in top_level_item.takeChildren():
                 top_level_item.removeChild(child)
 
-    def update_procedure_display(self):
-        # 창 초기화
-        self._clear_items()
-        # 메모리에서 선택된 절차서에 대한 절차서 정보 가져오기
-        self.selected_procedure: str = self.parent().selected_procedure
+    def update_procedure_display(self, expanded=True):
+        accumulated_cell_h = 0
+        if expanded:
+            # 창 초기화
+            self._clear_items()
+            # 메모리에서 선택된 절차서에 대한 절차서 정보 가져오기
+            self.selected_procedure: str = self.parent().selected_procedure
 
-        _info = self.mem.get_procedure_info(self.selected_procedure)
-        for key in [self._type]:
-            _top_level_item: QTreeWidgetItem = self.top_level_items[key]
-            _steps = _info[key]     # key = 'Symptom Check'
-            """
-            _steps 는 해당 key 에 포함되어 있는 데이터임. step 은 0 부터 순회함.
-            'Symptom Check': {
-                0: {'ManClick': False, 'AutoClick': False, 'Nub': '1.1', 'Des': '정상'}
-            }
-            """
-            tot, tot_auto = 0, 0
-            accumulated_cell_h = 0
-            for step in range(len(_steps)):
-                accumulated_cell_h += self._make_item(_top_level_item, key, step, _steps[step]['Nub'],
-                                                      _steps[step]['Des'],_steps[step]['AutoClick'],
-                                                      _steps[step]['ManClick'])
-                tot += 1
-                tot_auto += 1 if _steps[step]['AutoClick'] else 0
+            _info = self.mem.get_procedure_info(self.selected_procedure)
+
+            for key in [self._type]:
+                _top_level_item: QTreeWidgetItem = self.top_level_items[key]
+                _steps = _info[key]     # key = 'Symptom Check'
+                """
+                _steps 는 해당 key 에 포함되어 있는 데이터임. step 은 0 부터 순회함.
+                'Symptom Check': {
+                    0: {'ManClick': False, 'AutoClick': False, 'Nub': '1.1', 'Des': '정상'}
+                }
+                """
+                tot, tot_auto = 0, 0
+                for step in range(len(_steps)):
+                    accumulated_cell_h += self._make_item(_top_level_item, key, step, _steps[step]['Nub'],
+                                                          _steps[step]['Des'],_steps[step]['AutoClick'],
+                                                          _steps[step]['ManClick'])
+                    tot += 1
+                    tot_auto += 1 if _steps[step]['AutoClick'] else 0
+        else:
+            pass
 
         self.ProcedureStepsWarp.setFixedHeight(accumulated_cell_h + 35)

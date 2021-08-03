@@ -19,6 +19,7 @@ class MainSysRightArea(QGraphicsView):
         self.mem = parent.mem
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
+        self.setAttribute(Qt.WA_TranslucentBackground)
         self.setMouseTracking(True)
         self.setObjectName('MainSysRightArea')
         # Size ---------------------------------------------------------------------------------------------------------
@@ -33,6 +34,8 @@ class MainSysRightArea(QGraphicsView):
         self._scene.setSceneRect(0, 0, w, h)
         self.setMinimumSize(w, h)
 
+        self.update_sys_mimic('')
+
     def update_sys_mimic(self, target_sys):
         self._scene.clear()
         self._scene.update_sys_mimic(target_sys)
@@ -45,6 +48,8 @@ class MainSysRightScene(QGraphicsScene):
     def __init__(self, parent):
         super(MainSysRightScene, self).__init__(parent)
         self.mem = parent.mem
+        self.setBackgroundBrush(QColor(254, 245, 249))   # Back gorund color
+        print(self.sceneRect())
         # SVG render ---------------------------------------------------------------------------------------------------
         self.svg_render = QSvgRenderer('./interface_image/comp.svg')
         # Sys page info ------------------------------------------------------------------------------------------------
@@ -69,6 +74,11 @@ class MainSysRightScene(QGraphicsScene):
         for item in self.items():
             self.removeItem(item)
 
+        # 시스템 외부 테두리와 제목 표기 Not Move
+        boundary_item = BoundaryComp(self)
+        self.addItem(boundary_item)
+
+        # 하위 파이프, 기기, 등등 이 들어감.
         self.target_sys = target_sys
         _sys = self.sys_mimic_info[target_sys]
         for key in _sys.keys():
@@ -298,3 +308,17 @@ class LineComp(QGraphicsLineItem):
         self.sys_mimic_info[self.target_sys][self.nub]['ypos'] = str(self.y() + self.start_y)
         self.sys_mimic_info[self.target_sys][self.nub]['textxpos'] = str(self.text.x())
         self.sys_mimic_info[self.target_sys][self.nub]['textypos'] = str(self.text.y())
+
+
+class BoundaryComp(QGraphicsRectItem):
+    def __init__(self, parent):
+        super(BoundaryComp, self).__init__(parent.sceneRect().adjusted(5, 5, -5, -5), None)
+        self.MainSysRightScene = parent
+        self.setFlag(QGraphicsItem.ItemIsSelectable, False)  # horrible selection-box
+        self.setFlag(QGraphicsItem.ItemIsMovable, False)
+
+    def paint(self, qp: QPainter, option, widget=None):
+        # super(BoundaryComp, self).paint(qp, option, widget)
+        qp.setRenderHint(qp.Antialiasing)
+        qp.setPen(QPen(QColor(127, 127, 127), 2))
+        qp.drawRoundedRect(self.rect(), 10, 10)
