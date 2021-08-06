@@ -129,6 +129,44 @@ ab_pro = {
             },
         },
     },
+    'Ab63_04: 제어봉 낙하': {
+        'Symptom Check': {
+            0: { # KLAMPO15
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '제어봉 위치 지시계의 바닥 지시등(RB)점등',
+            },
+            1: { # KBCDO22
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': '원자로 출력 감소',
+            },
+            2: { # UAVLEGM
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': 'Tavg의 급격한 감소',
+            },
+            3: {  # KLAMPO313
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.9',
+                'Des': '“T REF/AUCT T AVG HIGH" 경보 발생',
+            },
+            4: {  # KLAMPO255
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.8',
+                'Des': '“TWO OR MORE RODS AT BOTTOM” 경보 발생(2개 이상 제어봉 낙하시)',
+            },
+            5: {  # KBCDO23
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.2',
+                'Des': '“낙하된 제어봉에 의해 원자로 출력감소',
+            },
+            6: {  # KBCDO22
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.3',
+                'Des': '“Tavg가 감소된 만큼 터빈출력 감발',
+            },
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
     'Ab63_02: 제어봉의 계속적인 삽입': {
         'Symptom Check': {
             0: {
