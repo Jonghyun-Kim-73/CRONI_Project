@@ -7,12 +7,13 @@ import json
 
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import *
 #
 from AIDA_Interface_brief_ver import CNS_Platform_controller_interface as CNS_controller
 # from AIDA_Interface_brief_ver import main_window as main_window
 from AIDA_Interface_brief_ver import main_window_ver1 as main_window
 from AIDA_Interface_brief_ver.TOOL.TOOL_etc import p_
+from AIDA_Interface_brief_ver.TOOL.TOOL_GP import TrendView
 
 
 class InterfaceFun(multiprocessing.Process):
@@ -37,7 +38,7 @@ class MyForm(QWidget):
         self.ui.setupUi(self)
 
         # ----------- ADD !!! -------------- (20210419 for 효진)
-        self.setGeometry(0, 0, 269, 550)
+        self.setGeometry(0, 0, 269, 620)
         self.auto_data_info_list = AutoDataList(parent=self)
         self.auto_data_info_list.setGeometry(20, 380, 225, 100)
 
@@ -45,6 +46,16 @@ class MyForm(QWidget):
         self.call_procedure_editor = QPushButton('Show Procedure Editor', self)
         self.call_procedure_editor.setGeometry(20, 500, 225, 30)
         self.call_procedure_editor.clicked.connect(self.show_procedure_editor)
+
+        # ----------- Value 값 수정용 ----------------------------
+        self.call_val_change_editor = QPushButton('Change Val Editor', self)
+        self.call_val_change_editor.setGeometry(20, 540, 225, 30)
+        self.call_val_change_editor.clicked.connect(self.go_val_change)
+
+        # ----------- Trend 테스트 용 ----------------------------
+        self.call_trend_view = QPushButton('Call Trend View', self)
+        self.call_trend_view.setGeometry(20, 580, 225, 30)
+        self.call_trend_view.clicked.connect(self.go_trend_view)
 
         # ---- UI 초기 세팅
         self.ui.Cu_SP.setText(str(self.shmem.get_logic('Speed')))
@@ -120,6 +131,14 @@ class MyForm(QWidget):
         p_(__file__, 'CNS 속도 조절')
         self.ui.Cu_SP.setText(self.shmem.get_speed(int(self.ui.Se_SP.text())))
 
+    def go_val_change(self):
+        if not self.shmem.get_logic('Run'):
+            self.val_editor = ValEditor(self)
+            self.val_editor.show()
+
+    def go_trend_view(self):
+        self.TrendView = TrendView(self)
+
     def show_main_window(self):
         # Controller와 동시 실행
         pass
@@ -132,6 +151,7 @@ class MyForm(QWidget):
         p_(__file__, 'Close')
         self.shmem.send_close()
         sys.exit()
+
 
 # # 자동 데이터 수집하는 구간 # #
 class AutoDataList(QListWidget):
@@ -383,3 +403,53 @@ class PrcedureEditor(QWidget):
         if ok:
             self.procedure_db[text] = {}
             self.procedure_combo.addItem(str(text))
+
+
+class ValEditor(QWidget):
+    def __init__(self, parent):
+        super(ValEditor, self).__init__()
+        self.shmem = parent.shmem
+        self.setGeometry(0, 0, 300, 50)
+
+        h_layer = QHBoxLayout()
+        v_layer = QVBoxLayout()
+
+        name_h_layer = QHBoxLayout()
+        self.name_label = QLabel('Name')
+        self.name_label.setFixedWidth(50)
+        self.name_text = QLineEdit('')
+        name_h_layer.addWidget(self.name_label)
+        name_h_layer.addWidget(self.name_text)
+
+        val_h_layer = QHBoxLayout()
+        self.val_label = QLabel('Val')
+        self.val_label.setFixedWidth(50)
+        self.val_text = QLineEdit('')
+        val_h_layer.addWidget(self.val_label)
+        val_h_layer.addWidget(self.val_text)
+
+        v_layer.addLayout(name_h_layer)
+        v_layer.addLayout(val_h_layer)
+
+        self.change_btn = QPushButton('Change')
+        self.change_btn.clicked.connect(self.change_val)
+
+        h_layer.addLayout(v_layer)
+        h_layer.addWidget(self.change_btn)
+
+        self.setLayout(h_layer)
+
+    def change_val(self):
+        if self.shmem.check_para(str(self.name_text.text())):
+            orgin = self.shmem.get_shmem_val(self.name_text.text())
+            try:
+                get_val = int(float(self.val_text.text())) if type(orgin) is int else float(self.val_text.text())
+                self.shmem.change_shmem_val(self.name_text.text(), get_val)
+
+                self.close()
+            except:
+                print('잘못된 파라메터 값 입력')
+                self.val_text.clear()
+        else:
+            print('잘못된 파라메터 이름 입력')
+            self.name_text.clear()

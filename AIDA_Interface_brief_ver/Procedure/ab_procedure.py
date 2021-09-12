@@ -180,5 +180,559 @@ ab_pro = {
         '후속조치': {
 
         }
-    }
+    },
+
+
+    'Intermediate range high flux rod stop': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Power range overpower rod stop': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Control bank D full rod withdrawl': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Control bank lo-lo limit': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Two or more rod at bottom': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Axial power distribution limit': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CCWS outlet temp hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Instrument air press lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'RWST level lo-lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'L/D HX outlet flow lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'L/D HX outlet temp hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'RHX L/D outlet temp hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'VCT level lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'VCT press lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'RCP seal inj wtr flow lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Charging flow cont flow lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Not used': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'L/D HX outlet flow hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRZ press lo SI': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT spray actuated': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'VCT level hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'VCT press hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT phase B iso actuated': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Charging flow cont flow hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT sump level hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT sump level hi-hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT air temp hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT moisture hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Rad hi alarm': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT press hi 1 alert': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT press hi 2 alert': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'CTMT press hi 3 alert': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Accum. Tk press lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Accum. Tk press hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRZ press hi alert': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRZ press lo alert': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRZ PORV opening': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRZ cont level hi heater on': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRZ cont level lo heater off': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRZ press lo back-up heater on': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Tref/Auct. Tavg Deviation': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'RCS 1,2,3 Tavg hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'RCS 1,2,3 Tavg/auct Tavg hi/lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'RCS 1,2,3 lo flow alert': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRT temp hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'PRT press hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'SG 1,2,3 level lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'SG 1,2,3 stm/FW flow deviation': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'RCP 1,2,3 trip': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Condensate stor Tk level lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Condensate stor Tk level lo-lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Condensate stor Tk level hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'MSIV tripped': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'MSL press rate hi steam iso': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'MSL 1,2,3 press rate hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'MSL 1,2,3 press low': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'AFW(MD) actuated': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Condenser level lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'FW pump discharge header press hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'FW pump trip': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'FW temp hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Condensate pump flow lo': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Condenser abs press hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Condenser level hi': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'TBN trip P-4': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'SG 1,2,3 wtr level hi-hi TBN trip': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Condenser vacuum lo TBN trip': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'TBN overspeed hi TBN trip': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
+    'Gen. brk open': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        }, '긴급조치': {}, '후속조치': {}
+    },
 }

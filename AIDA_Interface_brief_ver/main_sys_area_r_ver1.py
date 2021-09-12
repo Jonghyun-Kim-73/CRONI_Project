@@ -49,7 +49,6 @@ class MainSysRightScene(QGraphicsScene):
         super(MainSysRightScene, self).__init__(parent)
         self.mem = parent.mem
         self.setBackgroundBrush(QColor(254, 245, 249))   # Back gorund color
-        print(self.sceneRect())
         # SVG render ---------------------------------------------------------------------------------------------------
         self.svg_render = QSvgRenderer('./interface_image/comp.svg')
         # Sys page info ------------------------------------------------------------------------------------------------

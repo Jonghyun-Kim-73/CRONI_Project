@@ -1,4 +1,4 @@
-alarm_pd ={
+alarm_pd = {
     'Empty': None,
     'KLAMPO251': 'Intermediate range high flux rod stop',
     'KLAMPO252': 'Power range overpower rod stop',

@@ -12,6 +12,7 @@ from AIDA_Interface_brief_ver.TOOL.TOOL_etc import p_
 
 from AIDA_Interface_brief_ver.CNS_Platform_controller import InterfaceFun
 from AIDA_Interface_brief_ver.CNS_All_module import All_Function_module
+from AIDA_Interface_brief_ver.TEST_ALL_module import TEST_All_Function_module
 
 from AIDA_Interface_brief_ver.Procedure.ab_procedure import ab_pro
 
@@ -60,6 +61,9 @@ class Body:
             p_ai = All_Function_module(shmem, max_len_deque)
             p_list.append(p_ai)
         else:
+            p_ai = TEST_All_Function_module(shmem, max_len_deque)
+            p_list.append(p_ai)
+
             p_(__file__, 'Test Mode')
             pass
 
@@ -166,6 +170,9 @@ class SHMem:
             if key_val in saved_mem_key:
                 self.save_mem[key_val].append(mem[key_val]['Val'])
 
+    def change_shmem_val(self, val_name, val):
+        self.mem[val_name]['Val'] = val
+
     def change_pro_mam_click(self, procedure_name, type_, step_nub, clicked):
         self.logic['Ab_Procedure'][procedure_name][type_][step_nub]['ManClick'] = clicked
 
@@ -208,7 +215,18 @@ class SHMem:
         return self.save_mem
 
     def get_procedure_info(self, procedure_name):
-        return self.logic['Ab_Procedure'][procedure_name]
+        """ 비정상 및 경보 관련 절차서 DB 에서 선택된 절차서 확인 """
+        if procedure_name in self.logic['Ab_Procedure'].keys():
+            return self.logic['Ab_Procedure'][procedure_name]
+        else:
+            return None
+
+    def check_para(self, para_name):
+        if para_name in self.mem.keys():
+            return True
+        else:
+            return False
+
 
 if __name__ == '__main__':
     main_process = Body()

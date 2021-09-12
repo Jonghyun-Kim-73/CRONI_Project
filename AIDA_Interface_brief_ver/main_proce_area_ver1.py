@@ -238,23 +238,25 @@ class ProcedureSteps(QTreeWidget):
             self.selected_procedure: str = self.parent().selected_procedure
 
             _info = self.mem.get_procedure_info(self.selected_procedure)
-
-            for key in [self._type]:
-                _top_level_item: QTreeWidgetItem = self.top_level_items[key]
-                _steps = _info[key]     # key = 'Symptom Check'
-                """
-                _steps 는 해당 key 에 포함되어 있는 데이터임. step 은 0 부터 순회함.
-                'Symptom Check': {
-                    0: {'ManClick': False, 'AutoClick': False, 'Nub': '1.1', 'Des': '정상'}
-                }
-                """
-                tot, tot_auto = 0, 0
-                for step in range(len(_steps)):
-                    accumulated_cell_h += self._make_item(_top_level_item, key, step, _steps[step]['Nub'],
-                                                          _steps[step]['Des'],_steps[step]['AutoClick'],
-                                                          _steps[step]['ManClick'])
-                    tot += 1
-                    tot_auto += 1 if _steps[step]['AutoClick'] else 0
+            if _info is None:
+                raise Exception(f'{self.selected_procedure} 가 ab_procedure.py 에 없음')
+            else:
+                for key in [self._type]:
+                    _top_level_item: QTreeWidgetItem = self.top_level_items[key]
+                    _steps = _info[key]     # key = 'Symptom Check'
+                    """
+                    _steps 는 해당 key 에 포함되어 있는 데이터임. step 은 0 부터 순회함.
+                    'Symptom Check': {
+                        0: {'ManClick': False, 'AutoClick': False, 'Nub': '1.1', 'Des': '정상'}
+                    }
+                    """
+                    tot, tot_auto = 0, 0
+                    for step in range(len(_steps)):
+                        accumulated_cell_h += self._make_item(_top_level_item, key, step, _steps[step]['Nub'],
+                                                              _steps[step]['Des'],_steps[step]['AutoClick'],
+                                                              _steps[step]['ManClick'])
+                        tot += 1
+                        tot_auto += 1 if _steps[step]['AutoClick'] else 0
         else:
             pass
 
