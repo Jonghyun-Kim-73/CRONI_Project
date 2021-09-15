@@ -13,19 +13,22 @@ class Trend(QWidget):
         self.parent = parent
         if parent is not None:
             self.shmem = parent.shmem
+        self.setGeometry(10, 10, w, h)
 
         self.max_time_leg = 30
-
-        self.fig = plt.Figure()
-        self.fig.set_tight_layout(True)
-
+        # figure
+        self.fig = plt.Figure(facecolor='green')
+        self.fig.subplots_adjust(left=0.1, right=0.98, top=0.95, bottom=0.05)
+        self.canvas = FigureCanvas(self.fig)
+        # ax
         self.ax = self.fig.add_subplot(111)
+        self.ax.set_title('Parameter name')
         self.ax.set_xlim(- self.max_time_leg, 0)
         self.ax.set_ylim(0, 5)
-
-        self.canvas = FigureCanvas(self.fig)
+        self.ax.grid()
 
         layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.canvas)
         self.setLayout(layout)
 
@@ -35,7 +38,7 @@ class Trend(QWidget):
         self.line1, = self.ax.plot([], [], color='black', linewidth=1)
         #Q Timer ------------------------------------------------------------------------------------------------------
         timer = QTimer(self)
-        timer.setInterval(250)  # 500 ms run = 0.5 sec
+        timer.setInterval(500)  # 500 ms run = 0.5 sec
         timer.timeout.connect(self.local_loop)
         timer.start()
 
@@ -63,6 +66,6 @@ class Trend(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = Trend(None, 200, 200)
+    window = Trend(None, 500, 500)
     window.show()
     sys.exit(app.exec_())
