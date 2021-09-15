@@ -13,7 +13,8 @@ from AIDA_Interface_brief_ver import CNS_Platform_controller_interface as CNS_co
 # from AIDA_Interface_brief_ver import main_window as main_window
 from AIDA_Interface_brief_ver import main_window_ver1 as main_window
 from AIDA_Interface_brief_ver.TOOL.TOOL_etc import p_
-from AIDA_Interface_brief_ver.TOOL.TOOL_GP import TrendView
+# from AIDA_Interface_brief_ver.TOOL.TOOL_GP import TrendView
+from AIDA_Interface_brief_ver.TOOL.TOOL_MatGP import Trend
 
 
 class InterfaceFun(multiprocessing.Process):
@@ -137,7 +138,8 @@ class MyForm(QWidget):
             self.val_editor.show()
 
     def go_trend_view(self):
-        self.TrendView = TrendView(self)
+        self.TrendView = Trend(self, 200, 200)
+        self.TrendView.show()
 
     def show_main_window(self):
         # Controller와 동시 실행
