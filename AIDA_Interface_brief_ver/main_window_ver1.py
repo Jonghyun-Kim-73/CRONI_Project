@@ -66,6 +66,7 @@ class Mainwindow(QWidget):
 
     def set_stack1(self):
         """ 알람 및 절차서 진단 파트 """
+
         self.pp1 = QWidget()
         self.setObjectName('Stack1')
         layout = QHBoxLayout()

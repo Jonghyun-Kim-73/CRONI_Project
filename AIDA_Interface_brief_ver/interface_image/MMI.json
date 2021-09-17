@@ -216,10 +216,10 @@
 			"name": "HV50",
 			"type": "valve",
 			"direction": "V",
-			"textxpos": "9.0",
+			"textxpos": "-37.0",
 			"textypos": "5.0",
 			"xpos": "345.0",
-			"ypos": "553.0"
+			"ypos": "566.0"
 		},
 		"22": {
 			"id": "",
@@ -745,7 +745,7 @@
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "489.0",
+			"xpos": "488.0",
 			"ypos": "468.0"
 		},
 		"71": {

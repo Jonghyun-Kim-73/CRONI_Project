@@ -16,7 +16,7 @@ from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 class MainSysRightArea(QGraphicsView):
     def __init__(self, parent, x, y, w, h):
         super(MainSysRightArea, self).__init__(parent)
-        self.mem = parent.mem
+        self.mem = parent.mem if parent is not None else None
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -34,7 +34,7 @@ class MainSysRightArea(QGraphicsView):
         self._scene.setSceneRect(0, 0, w, h)
         self.setMinimumSize(w, h)
 
-        self.update_sys_mimic('')
+        self.update_sys_mimic('CVCS')
 
     def update_sys_mimic(self, target_sys):
         self._scene.clear()
@@ -42,6 +42,9 @@ class MainSysRightArea(QGraphicsView):
 
     def keyPressEvent(self, QKeyEvent):
         super(MainSysRightArea, self).keyPressEvent(QKeyEvent)
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        super(MainSysRightArea, self).mousePressEvent(event)
 
 
 class MainSysRightScene(QGraphicsScene):
@@ -55,6 +58,8 @@ class MainSysRightScene(QGraphicsScene):
         self.target_sys = ''
         with open('./interface_image/MMI.json', 'r', encoding='UTF-8-sig') as f:
             self.sys_mimic_info = json.load(f)
+
+        self.current_opened_control_board = None
 
     def keyPressEvent(self, QKeyEvent):
         super(MainSysRightScene, self).keyPressEvent(QKeyEvent)
@@ -74,8 +79,9 @@ class MainSysRightScene(QGraphicsScene):
             self.removeItem(item)
 
         # 시스템 외부 테두리와 제목 표기 Not Move
-        boundary_item = BoundaryComp(self)
-        self.addItem(boundary_item)
+        self.boundary_item = BoundaryComp(self)
+        print(self.boundary_item)
+        self.addItem(self.boundary_item)
 
         # 하위 파이프, 기기, 등등 이 들어감.
         self.target_sys = target_sys
@@ -90,27 +96,38 @@ class MainSysRightScene(QGraphicsScene):
             self.addItem(item)
 
     def contextMenuEvent(self, event) -> None:
-        menu = QMenu()
-        # -----------------------------------------------------
-        save_all = menu.addAction("SaveMMI")
-        load_all = menu.addAction("LoadMMI")
-        add_pump = menu.addAction("AddPump")
-        add_valve = menu.addAction("AddValve")
-        add_line = menu.addAction("AddLine")
-        add_hp = menu.addAction("AddHP")
-        add_RVP = menu.addAction("AddRVP")
-        add_PZR = menu.addAction("AddPZR")
-        save_all.triggered.connect(self.save_all_mmi)
-        load_all.triggered.connect(self.load_all_mmi)
-        add_pump.triggered.connect(lambda a, type='pump', pos=event.scenePos(): self.add_comp(type, pos))
-        add_valve.triggered.connect(lambda a, type='valve', pos=event.scenePos(): self.add_comp(type, pos))
-        add_line.triggered.connect(lambda a, type='line', pos=event.scenePos(): self.add_comp(type, pos))
-        add_hp.triggered.connect(lambda a, type='HP', pos=event.scenePos(): self.add_comp(type, pos))
-        add_RVP.triggered.connect(lambda a, type='RVP', pos=event.scenePos(): self.add_comp(type, pos))
-        add_PZR.triggered.connect(lambda a, type='PZR', pos=event.scenePos(): self.add_comp(type, pos))
-        # -----------------------------------------------------
-        menu.exec_(event.screenPos())
-        event.setAccepted(True)
+        item = self.itemAt(event.scenePos().toPoint(), QTransform())
+        if item is not None and item != self.boundary_item:
+            item.contextMenuEvent(event)
+        else:
+            menu = QMenu()
+            # -----------------------------------------------------
+            save_all = menu.addAction("SaveMMI")
+            load_all = menu.addAction("LoadMMI")
+            add_pump = menu.addAction("AddPump")
+            add_valve = menu.addAction("AddValve")
+            add_line = menu.addAction("AddLine")
+            add_hp = menu.addAction("AddHP")
+            add_RVP = menu.addAction("AddRVP")
+            add_PZR = menu.addAction("AddPZR")
+            save_all.triggered.connect(self.save_all_mmi)
+            load_all.triggered.connect(self.load_all_mmi)
+            add_pump.triggered.connect(lambda a, type='pump', pos=event.scenePos(): self.add_comp(type, pos))
+            add_valve.triggered.connect(lambda a, type='valve', pos=event.scenePos(): self.add_comp(type, pos))
+            add_line.triggered.connect(lambda a, type='line', pos=event.scenePos(): self.add_comp(type, pos))
+            add_hp.triggered.connect(lambda a, type='HP', pos=event.scenePos(): self.add_comp(type, pos))
+            add_RVP.triggered.connect(lambda a, type='RVP', pos=event.scenePos(): self.add_comp(type, pos))
+            add_PZR.triggered.connect(lambda a, type='PZR', pos=event.scenePos(): self.add_comp(type, pos))
+            # -----------------------------------------------------
+            menu.exec_(event.screenPos())
+
+    def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
+        item = self.itemAt(event.scenePos().toPoint(), QTransform())
+
+        if item is not None and item != self.boundary_item:
+
+
+        super(MainSysRightScene, self).mousePressEvent(event)
 
     def save_all_mmi(self):
         print('SaveMMI')
@@ -205,15 +222,41 @@ class SVGComp(QGraphicsSvgItem):
         super(SVGComp, self).mousePressEvent(*args, **kwargs)
         print(f'{self.nub} - {self.comp_id} - {self.pos()} - {self.x()} - {self.y()}')
 
+        print('Call Control Board')
+        self.scene().addItem(ValveControlBoard(self, self.pos()))
+        self._update_info_to_mem()
+
     def mouseReleaseEvent(self, *args, **kwargs):
         super(SVGComp, self).mouseReleaseEvent(*args, **kwargs)
         self._update_info_to_mem()
+
+    def contextMenuEvent(self, event: 'QGraphicsSceneContextMenuEvent') -> None:
+        menu = QMenu()
+        # -----------------------------------------------------
+        menu_state = QMenu('State')
+        if self.comp_type in ['valve', 'pump', 'HP']:
+            update_rotation = menu_state.addAction("Rotation")
+            update_rotation.triggered.connect(self._update_rotation)
+        # -----------------------------------------------------
+        menu.addMenu(menu_state)
+        # -----------------------------------------------------
+        menu.exec_(event.screenPos())
+        event.setAccepted(True)
 
     def _update_info_to_mem(self):
         self.sys_mimic_info[self.target_sys][self.nub]['xpos'] = str(self.x())
         self.sys_mimic_info[self.target_sys][self.nub]['ypos'] = str(self.y())
         self.sys_mimic_info[self.target_sys][self.nub]['textxpos'] = str(self.text.x())
         self.sys_mimic_info[self.target_sys][self.nub]['textypos'] = str(self.text.y())
+
+    def _update_rotation(self):
+        if self.comp_type == 'valve':
+            self.pen_direction = 'H' if self.pen_direction == 'V' else 'V'
+        if self.comp_type == 'pump':
+            self.pen_direction = 'R' if self.pen_direction == 'L' else 'L'
+        if self.comp_type == 'HP':
+            self.pen_direction = 'H' if self.pen_direction == 'V' else 'V'
+        self.setElementId(self.svg_info[self.comp_type][self.pen_direction])
 
 
 class LineComp(QGraphicsLineItem):
@@ -297,9 +340,13 @@ class LineComp(QGraphicsLineItem):
 
         super(LineComp, self).paint(painter, QStyleOptionGraphicsItem, widget)
 
-    def mouseReleaseEvent(self, *args, **kwargs):
-        super(LineComp, self).mouseReleaseEvent(*args, **kwargs)
+    def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent'):
+        super(LineComp, self).mouseReleaseEvent(event)
         print(self.nub)
+        self._update_info_to_mem()
+
+    def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
+        super(LineComp, self).mousePressEvent(event)
         self._update_info_to_mem()
 
     def _update_info_to_mem(self):
@@ -321,3 +368,39 @@ class BoundaryComp(QGraphicsRectItem):
         qp.setRenderHint(qp.Antialiasing)
         qp.setPen(QPen(QColor(127, 127, 127), 2))
         qp.drawRoundedRect(self.rect(), 10, 10)
+
+
+class ValveControlBoard(QGraphicsRectItem):
+    def __init__(self, parent, pos):
+        super(ValveControlBoard, self).__init__(None)
+        self.p = parent
+        self.setBrush(QBrush(Qt.white, Qt.SolidPattern))
+        self.setPen(QPen(Qt.black, 2))
+        self.setZValue(200)
+
+        self.w, self.h = 150, 200
+        self.setRect(pos.x() + 25, pos.y(), self.w, self.h)
+
+        self.close_btn = QGraphicsRectItem(self)
+        self.close_btn.setRect(pos.x() + 25 + self.w - 20, pos.y() + 5, 15, 15)
+        self.close_btn.setBrush(QBrush(Qt.darkRed, Qt.SolidPattern))
+        self.close_btn.setPen(QPen(Qt.NoPen))
+        #
+        self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
+        self.setFlag(QGraphicsItem.ItemIsMovable, True)
+
+    def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
+        """ x 버튼 누르면 닫힘 """
+        item = self.scene().itemAt(event.scenePos().toPoint(), QTransform())
+        if item == self.close_btn:
+            self.scene().removeItem(self)
+        super(ValveControlBoard, self).mousePressEvent(event)
+
+
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainSysRightArea(None, 0, 0, 900, 765)
+    window.show()
+    sys.exit(app.exec_())
