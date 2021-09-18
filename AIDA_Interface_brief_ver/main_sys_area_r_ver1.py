@@ -123,9 +123,15 @@ class MainSysRightScene(QGraphicsScene):
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         item = self.itemAt(event.scenePos().toPoint(), QTransform())
-
         if item is not None and item != self.boundary_item:
-
+            print(item.type())
+            # # 이전에 열려 있던 보드 닫기
+            # if self.current_opened_control_board is not None:
+            #     self.current_opened_control_board.closeBoard()
+        elif item == self.boundary_item:
+            # boundary board 클릭 시
+            if self.current_opened_control_board is not None:   # 이전에 열려있는 control board 가 있는지 확인
+                self.current_opened_control_board.closeBoard()  # 있다면 닫기
 
         super(MainSysRightScene, self).mousePressEvent(event)
 
@@ -173,6 +179,7 @@ class SVGComp(QGraphicsSvgItem):
         super(SVGComp, self).__init__(None)
         self.sys_mimic_info = parent.sys_mimic_info
         self.target_sys = parent.target_sys
+        self.parent = parent
         self.setSharedRenderer(svg_render)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -219,12 +226,16 @@ class SVGComp(QGraphicsSvgItem):
         self._update_info_to_mem()
 
     def mousePressEvent(self, *args, **kwargs):
-        super(SVGComp, self).mousePressEvent(*args, **kwargs)
+
         print(f'{self.nub} - {self.comp_id} - {self.pos()} - {self.x()} - {self.y()}')
 
         print('Call Control Board')
-        self.scene().addItem(ValveControlBoard(self, self.pos()))
+        control_board = ValveControlBoard(self, self.pos())
+        self.scene().addItem(control_board)
+        self.parent.current_opened_control_board = control_board  # MainSysRightScene 에 현재 열린 보드의 정보 업데이트
         self._update_info_to_mem()
+
+        super(SVGComp, self).mousePressEvent(*args, **kwargs)
 
     def mouseReleaseEvent(self, *args, **kwargs):
         super(SVGComp, self).mouseReleaseEvent(*args, **kwargs)
@@ -396,7 +407,8 @@ class ValveControlBoard(QGraphicsRectItem):
             self.scene().removeItem(self)
         super(ValveControlBoard, self).mousePressEvent(event)
 
-
+    def closeBoard(self):
+        self.scene().removeItem(self)
 
 
 if __name__ == '__main__':
