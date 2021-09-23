@@ -59,7 +59,7 @@ class MainSysRightScene(QGraphicsScene):
         with open('./interface_image/MMI.json', 'r', encoding='UTF-8-sig') as f:
             self.sys_mimic_info = json.load(f)
 
-        self.current_opened_control_board = None
+        self.current_opened_control_board = []
 
     def keyPressEvent(self, QKeyEvent):
         super(MainSysRightScene, self).keyPressEvent(QKeyEvent)
@@ -80,7 +80,6 @@ class MainSysRightScene(QGraphicsScene):
 
         # 시스템 외부 테두리와 제목 표기 Not Move
         self.boundary_item = BoundaryComp(self)
-        print(self.boundary_item)
         self.addItem(self.boundary_item)
 
         # 하위 파이프, 기기, 등등 이 들어감.
@@ -123,15 +122,23 @@ class MainSysRightScene(QGraphicsScene):
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         item = self.itemAt(event.scenePos().toPoint(), QTransform())
-        if item is not None and item != self.boundary_item:
-            print(item.type())
-            # # 이전에 열려 있던 보드 닫기
-            # if self.current_opened_control_board is not None:
-            #     self.current_opened_control_board.closeBoard()
-        elif item == self.boundary_item:
-            # boundary board 클릭 시
-            if self.current_opened_control_board is not None:   # 이전에 열려있는 control board 가 있는지 확인
-                self.current_opened_control_board.closeBoard()  # 있다면 닫기
+        if item is not None:
+            # boundary_item 클릭
+            if item is self.boundary_item:
+                print('Bound Click')
+            elif isinstance(item, SVGComp):
+                # SVGComp 의 경우
+                # 사전에 열려있는 Control Board 모두 Close
+                if len(self.current_opened_control_board) != 0:
+                    [self.removeItem(opened_item) for opened_item in self.current_opened_control_board]
+                    self.current_opened_control_board = []
+                print(self.sceneRect())
+                # Comp type 별 동작
+                if item.comp_type == 'valve':
+                    control_board = ValveControlBoard(item)
+                    control_board.move_to_inside(self.boundary_item)
+                    self.addItem(control_board)
+                    self.current_opened_control_board.append(control_board)
 
         super(MainSysRightScene, self).mousePressEvent(event)
 
@@ -226,15 +233,8 @@ class SVGComp(QGraphicsSvgItem):
         self._update_info_to_mem()
 
     def mousePressEvent(self, *args, **kwargs):
-
         print(f'{self.nub} - {self.comp_id} - {self.pos()} - {self.x()} - {self.y()}')
-
-        print('Call Control Board')
-        control_board = ValveControlBoard(self, self.pos())
-        self.scene().addItem(control_board)
-        self.parent.current_opened_control_board = control_board  # MainSysRightScene 에 현재 열린 보드의 정보 업데이트
         self._update_info_to_mem()
-
         super(SVGComp, self).mousePressEvent(*args, **kwargs)
 
     def mouseReleaseEvent(self, *args, **kwargs):
@@ -382,7 +382,7 @@ class BoundaryComp(QGraphicsRectItem):
 
 
 class ValveControlBoard(QGraphicsRectItem):
-    def __init__(self, parent, pos):
+    def __init__(self, parent):
         super(ValveControlBoard, self).__init__(None)
         self.p = parent
         self.setBrush(QBrush(Qt.white, Qt.SolidPattern))
@@ -390,10 +390,10 @@ class ValveControlBoard(QGraphicsRectItem):
         self.setZValue(200)
 
         self.w, self.h = 150, 200
-        self.setRect(pos.x() + 25, pos.y(), self.w, self.h)
+        self.setRect(parent.x() + 25, parent.y(), self.w, self.h)
 
         self.close_btn = QGraphicsRectItem(self)
-        self.close_btn.setRect(pos.x() + 25 + self.w - 20, pos.y() + 5, 15, 15)
+        self.close_btn.setRect(parent.x() + 25 + self.w - 20, parent.y() + 5, 15, 15)
         self.close_btn.setBrush(QBrush(Qt.darkRed, Qt.SolidPattern))
         self.close_btn.setPen(QPen(Qt.NoPen))
         #
@@ -407,8 +407,45 @@ class ValveControlBoard(QGraphicsRectItem):
             self.scene().removeItem(self)
         super(ValveControlBoard, self).mousePressEvent(event)
 
-    def closeBoard(self):
-        self.scene().removeItem(self)
+    def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
+        """ 컨트롤 보드 움직이는 경우 scene 경계 내에서 움직임 """
+        self.move_to_inside(self.scene().boundary_item)
+        super(ValveControlBoard, self).mouseReleaseEvent(event)
+
+    def move_to_inside(self, boundary_itme):
+        new_pos: QRect = self.mapRectToScene(self.rect())
+        new_pos_x: QRect = self.mapRectToScene(self.close_btn.rect())
+
+        boundary: QRect = boundary_itme.rect()  # < ---  self.scene().boundary_item.rect()
+
+        if new_pos.y() + new_pos.height() > boundary.y() + boundary.height():
+            # Out Boundary (y)
+            delta_y = (new_pos.y() + new_pos.height()) - (boundary.y() + boundary.height())
+        elif new_pos.y() < boundary.y():
+            # Out boundary (y) left
+            delta_y = (new_pos.y() - boundary.y())
+        else:
+            delta_y = 0
+        new_pos.moveTop(new_pos.y() - delta_y)
+        new_pos_x.moveTop(new_pos_x.y() - delta_y)
+
+        if new_pos.x() + new_pos.width() > boundary.x() + boundary.width():
+            # Out boundary (x) right
+            delta_x = (new_pos.x() + new_pos.width()) - (boundary.x() + boundary.width())
+        elif new_pos.x() < boundary.x():
+            # Out boundary (x) left
+            delta_x = (new_pos.x() - boundary.x())
+        else:
+            delta_x = 0
+
+        new_pos.moveLeft(new_pos.x() - delta_x)
+        new_pos_x.moveLeft(new_pos_x.x() - delta_x)
+
+        self.setPos(0, 0)  # 이전 pos 리셋
+        self.close_btn.setPos(0, 0)
+
+        self.setRect(new_pos)
+        self.close_btn.setRect(new_pos_x)
 
 
 if __name__ == '__main__':
