@@ -14,7 +14,7 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 class MainSysLeftArea(QWidget):
     def __init__(self, parent, x, y, w, h):
         super(MainSysLeftArea, self).__init__(parent)
-        self.mem = parent.mem
+        self.shmem = parent.shmem
         self.MainSysRightArea = parent.MainSysRightArea
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속

@@ -17,7 +17,7 @@ class Mainwindow(QWidget):
     """메인 윈도우"""
     def __init__(self, parent, mem=None):
         super(Mainwindow, self).__init__()
-        self.mem = mem
+        self.shmem = mem
         self.up_widget = parent
         self.selected_procedure: str = ''
         # --------------------------------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ class Mainwindow(QWidget):
         self.stack_widget.addWidget(self.pp3)
         self.stack_widget.addWidget(self.pp4)
 
-        self.title_bar = MainTitleBar(parent=self, mem=self.mem, h=self.t_h, w=self.width())
+        self.title_bar = MainTitleBar(parent=self, mem=self.shmem, h=self.t_h, w=self.width())
         self.vbox.addWidget(self.title_bar)
         self.vbox.addLayout(self.stack_widget)
 
@@ -73,8 +73,8 @@ class Mainwindow(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.l_area = MainLeftArea(parent=self, h=self.height() - self.t_h, w=self.l_w, mem=self.mem)
-        self.r_area = MainRightArea(parent=self, h=self.height() - self.t_h, w=self.width() - self.l_w, mem=self.mem)
+        self.l_area = MainLeftArea(parent=self, h=self.height() - self.t_h, w=self.l_w, mem=self.shmem)
+        self.r_area = MainRightArea(parent=self, h=self.height() - self.t_h, w=self.width() - self.l_w, mem=self.shmem)
 
         layout.addWidget(self.l_area)
         layout.addWidget(self.r_area)

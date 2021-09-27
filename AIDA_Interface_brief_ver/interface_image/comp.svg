@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="210mm"
    height="297mm"
    viewBox="0 0 210 297"
    version="1.1"
    id="svg1687"
    sodipodi:docname="comp.svg"
-   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <metadata
+     id="metadata215">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
   <sodipodi:namedview
      id="namedview1689"
      pagecolor="#ffffff"
@@ -23,15 +35,16 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.67081229"
+     inkscape:zoom="0.49593126"
      inkscape:cx="397.27954"
      inkscape:cy="561.25984"
      inkscape:window-width="1332"
      inkscape:window-height="1003"
-     inkscape:window-x="1107"
-     inkscape:window-y="67"
+     inkscape:window-x="407"
+     inkscape:window-y="363"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0">
     <sodipodi:guide
        position="0,297"
        orientation="0,793.70079"
@@ -754,7 +767,7 @@
          r="0.98185217" />
     </g>
     <g
-       id="pump_r_start"
+       id="pump_r_stop"
        transform="matrix(3.7,0,0,3.7,-11.131761,-11.374)">
       <circle
          style="fill:#4ca18d;fill-opacity:1;stroke:none;stroke-width:0.0649999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
@@ -775,7 +788,7 @@
          id="path16797" />
     </g>
     <g
-       id="pump_r_stop"
+       id="pump_r_start"
        transform="matrix(3.7,0,0,3.7,-58.662541,-99.40343)"
        style="fill:#c0152e;fill-opacity:1">
       <circle

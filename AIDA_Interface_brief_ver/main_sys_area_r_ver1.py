@@ -16,7 +16,7 @@ from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 class MainSysRightArea(QGraphicsView):
     def __init__(self, parent, x, y, w, h):
         super(MainSysRightArea, self).__init__(parent)
-        self.mem = parent.mem if parent is not None else None
+        self.shmem = parent.shmem if parent is not None else None
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -33,8 +33,12 @@ class MainSysRightArea(QGraphicsView):
         self._scene.clear()
         self._scene.setSceneRect(0, 0, w, h)
         self.setMinimumSize(w, h)
+        # Shortcut -----------------------------------------------------------------------------------------------------
+        self.F2_key = QShortcut(QKeySequence('F2'), self)
+        self.F2_key.activated.connect(self._keyPressEvent_F2)
+        self.edit_mode = False
 
-        self.update_sys_mimic('CVCS')
+        self.update_sys_mimic('RCS')
 
     def update_sys_mimic(self, target_sys):
         self._scene.clear()
@@ -43,14 +47,20 @@ class MainSysRightArea(QGraphicsView):
     def keyPressEvent(self, QKeyEvent):
         super(MainSysRightArea, self).keyPressEvent(QKeyEvent)
 
+    def _keyPressEvent_F2(self):
+        self.edit_mode = False if self.edit_mode else True
+        self._scene.keyPressEvent_F2(self.edit_mode)
+        print(f'Edit Mode is {self.edit_mode}.')
+
     def mousePressEvent(self, event: QMouseEvent) -> None:
         super(MainSysRightArea, self).mousePressEvent(event)
 
 
 class MainSysRightScene(QGraphicsScene):
     def __init__(self, parent):
-        super(MainSysRightScene, self).__init__(parent)
-        self.mem = parent.mem
+        super(MainSysRightScene, self).__init__(None)
+        self.shmem = parent.shmem
+        self.parent = parent
         self.setBackgroundBrush(QColor(254, 245, 249))   # Back gorund color
         # SVG render ---------------------------------------------------------------------------------------------------
         self.svg_render = QSvgRenderer('./interface_image/comp.svg')
@@ -58,8 +68,21 @@ class MainSysRightScene(QGraphicsScene):
         self.target_sys = ''
         with open('./interface_image/MMI.json', 'r', encoding='UTF-8-sig') as f:
             self.sys_mimic_info = json.load(f)
-
+        # 요소 추가 및 제거 시 ... ----------------------------------------------------
+        # for sys in  self.sys_mimic_info.keys():
+        #     for i in self.sys_mimic_info[sys].keys():
+        #         if self.sys_mimic_info[sys][i]['type'] == 'line':
+        #             self.sys_mimic_info[sys][i]['flow_from'] = "0"
+        #             del self.sys_mimic_info[sys][i]['flow_from']
+        # ---------------------------------------------------------------------------
         self.current_opened_control_board = []
+
+        # Comp display update ------------------------------------------------------------------------------------------
+        if self.shmem is not None:
+            timer = QTimer(self)
+            timer.setInterval(1000)
+            timer.timeout.connect(self.update_mimic_info)
+            timer.start()
 
     def keyPressEvent(self, QKeyEvent):
         super(MainSysRightScene, self).keyPressEvent(QKeyEvent)
@@ -94,6 +117,21 @@ class MainSysRightScene(QGraphicsScene):
                 item.setZValue(0)
             self.addItem(item)
 
+    def update_mimic_info(self):
+        """ 메모리에서 각 기기 값 업데이트 """
+        if self.shmem is not None:
+            # print('Update mimic_info')
+            local_mem = self.shmem.get_shmem_db()
+            # print(local_mem['KCNTOMS']['Val'])
+            for item in self.items():
+                if isinstance(item, SVGComp) and item.comp_id in local_mem.keys():
+                    item.update_mimic_dis_info(local_mem[item.comp_id]['Val'])
+        else:
+            # Test 용
+            for item in self.items():
+                if isinstance(item, SVGComp):
+                    print(f'Test mimic_info: {item.comp_id}_{item.comp_type}')
+
     def contextMenuEvent(self, event) -> None:
         item = self.itemAt(event.scenePos().toPoint(), QTransform())
         if item is not None and item != self.boundary_item:
@@ -118,11 +156,16 @@ class MainSysRightScene(QGraphicsScene):
             add_RVP.triggered.connect(lambda a, type='RVP', pos=event.scenePos(): self.add_comp(type, pos))
             add_PZR.triggered.connect(lambda a, type='PZR', pos=event.scenePos(): self.add_comp(type, pos))
             # -----------------------------------------------------
+            menu_test_mem = QMenu()
+            test_mem_ = menu_test_mem.addAction("TestMem")
+            test_mem_.triggered.connect(self.testmem)
+            menu.addMenu(menu_test_mem)
+            # -----------------------------------------------------
             menu.exec_(event.screenPos())
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         item = self.itemAt(event.scenePos().toPoint(), QTransform())
-        if item is not None:
+        if item is not None and event.button() == Qt.LeftButton:
             # boundary_item 클릭
             if item is self.boundary_item:
                 print('Bound Click')
@@ -132,7 +175,7 @@ class MainSysRightScene(QGraphicsScene):
                 if len(self.current_opened_control_board) != 0:
                     [self.removeItem(opened_item) for opened_item in self.current_opened_control_board]
                     self.current_opened_control_board = []
-                print(self.sceneRect())
+                # print(f'Comp Click {self.sceneRect()}')
                 # Comp type 별 동작
                 if item.comp_type == 'valve':
                     control_board = ValveControlBoard(item)
@@ -160,7 +203,8 @@ class MainSysRightScene(QGraphicsScene):
             self.sys_mimic_info[self.target_sys][str(max_nub)] = {
                 'name': "", 'type': f'{type}', 'thickness': '3', 'length': '50', 'direction': 'R',
                 'textxpos': '', 'textypos': '',
-                'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}'
+                'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}',
+                'flow_from': "0",
             }
         elif type == 'valve' or type == 'HP':
             self.sys_mimic_info[self.target_sys][str(max_nub)] = {
@@ -180,6 +224,15 @@ class MainSysRightScene(QGraphicsScene):
         # update 현재 화면
         self.update_sys_mimic(self.target_sys)
 
+    def keyPressEvent_F2(self, tig):
+        """ 모든 아이템의 Flag 수정 """
+        for item in self.items():
+            item.setFlag(QGraphicsItem.ItemIsMovable, tig)
+
+    def testmem(self):
+        self.update_mimic_info()
+        print('Test mem update')
+
 
 class SVGComp(QGraphicsSvgItem):
     def __init__(self, svg_render, i: str, parent):
@@ -189,7 +242,7 @@ class SVGComp(QGraphicsSvgItem):
         self.parent = parent
         self.setSharedRenderer(svg_render)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
-        self.setFlag(QGraphicsItem.ItemIsMovable, True)
+        self.setFlag(QGraphicsItem.ItemIsMovable, False)
         # --------------------------------------------------------------------------------------------------------------
         self.nub = i
         self.comp_id = self.sys_mimic_info[self.target_sys][i]['id']
@@ -248,6 +301,8 @@ class SVGComp(QGraphicsSvgItem):
         if self.comp_type in ['valve', 'pump', 'HP']:
             update_rotation = menu_state.addAction("Rotation")
             update_rotation.triggered.connect(self._update_rotation)
+            update_id = menu_state.addAction("Edit Id")
+            update_id.triggered.connect(self._update_id)
         # -----------------------------------------------------
         menu.addMenu(menu_state)
         # -----------------------------------------------------
@@ -268,6 +323,27 @@ class SVGComp(QGraphicsSvgItem):
         if self.comp_type == 'HP':
             self.pen_direction = 'H' if self.pen_direction == 'V' else 'V'
         self.setElementId(self.svg_info[self.comp_type][self.pen_direction])
+
+    def _update_id(self):
+        text, ok = QInputDialog.getText(None, 'Change Id', f'Curent Id [{self.comp_id}]:')
+        if ok:
+            self.comp_id = text
+            self.sys_mimic_info[self.target_sys][self.nub]['id'] = text
+
+    def update_mimic_dis_info(self, value):
+        if self.comp_type == 'valve':
+            if value == 1.0:
+                self.setElementId(f'valve_{self.pen_direction.lower()}_o')
+            elif 0 < value < 1:
+                self.setElementId(f'valve_{self.pen_direction.lower()}_h')
+            else:
+                self.setElementId(f'valve_{self.pen_direction.lower()}_c')
+        elif self.comp_type == 'pump':
+            if value == 1.0:
+                self.setElementId(f'pump_{self.pen_direction.lower()}_start')
+            else:
+                self.setElementId(f'pump_{self.pen_direction.lower()}_stop')
+        # print(f'[{self.comp_id}][{value}]')
 
 
 class LineComp(QGraphicsLineItem):
@@ -290,6 +366,8 @@ class LineComp(QGraphicsLineItem):
 
         self.start_x = float(self.sys_mimic_info[self.target_sys][i]['xpos'])
         self.start_y = float(self.sys_mimic_info[self.target_sys][i]['ypos'])
+
+        self.flow_from = self.sys_mimic_info[self.target_sys][i]['flow_from']
 
         if self.pen_direction == "R" or self.pen_direction == "L":
             self.end_x = self.start_x + self.pen_length if self.pen_direction == "R" else self.start_x - self.pen_length
@@ -359,6 +437,16 @@ class LineComp(QGraphicsLineItem):
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
         super(LineComp, self).mousePressEvent(event)
         self._update_info_to_mem()
+
+    def contextMenuEvent(self, event: 'QGraphicsSceneContextMenuEvent') -> None:
+        menu = QMenu()
+        # -----------------------------------------------------
+        update_flow_from = menu.addAction("Edit Flow ID")
+        update_flow_from.triggered.connect(self._update_flow_from)
+
+    def _update_flow(self):
+        text, ok = QInputDialog.getText(None, 'Flow Id', f'Curent Id [{self.flow_from}]:')
+        # TODO HEAR!
 
     def _update_info_to_mem(self):
         self.sys_mimic_info[self.target_sys][self.nub]['xpos'] = str(self.x() + self.start_x)

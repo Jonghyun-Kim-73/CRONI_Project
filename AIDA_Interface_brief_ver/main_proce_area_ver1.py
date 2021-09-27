@@ -14,7 +14,7 @@ class MainProceArea(QWidget):
     """ 절차서 디스플레이 위젯 """
     def __init__(self, parent, x, y, w, h):
         super(MainProceArea, self).__init__(parent)
-        self.mem = parent.mem
+        self.shmem = parent.shmem
         self.Mainwindow = parent
         self.selected_procedure:str = parent.selected_procedure
         # --------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ class MainProceArea(QWidget):
 class ProcedureStepsWarp(QWidget):
     def __init__(self, parent, type):
         super(ProcedureStepsWarp, self).__init__(parent)
-        self.mem = parent.mem
+        self.shmem = parent.shmem
         self.selected_procedure: str = parent.selected_procedure
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
@@ -102,7 +102,7 @@ class ProcedureStepsWarp(QWidget):
 class ProcedureSteps(QTreeWidget):
     def __init__(self, parent, type):
         super(ProcedureSteps, self).__init__(parent)
-        self.mem = parent.mem
+        self.shmem = parent.shmem
         self.ProcedureStepsWarp = parent
         self.selected_procedure: str = self.parent().selected_procedure
         # --------------------------------------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ class ProcedureSteps(QTreeWidget):
             content.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
             nub.setStyleSheet(""" background: rgb(254, 245, 249); border-radius:5px; border: 1px solid black; """)
         # 2.
-        self.mem.change_pro_mam_click(man_check._procedure, man_check._key, man_check._step, man_check.isChecked())
+        self.shmem.change_pro_mam_click(man_check._procedure, man_check._key, man_check._step, man_check.isChecked())
 
     def _clear_items(self):
         """ sym, emg, aft의 내용 모두 지우기 """
@@ -237,7 +237,7 @@ class ProcedureSteps(QTreeWidget):
             # 메모리에서 선택된 절차서에 대한 절차서 정보 가져오기
             self.selected_procedure: str = self.parent().selected_procedure
 
-            _info = self.mem.get_procedure_info(self.selected_procedure)
+            _info = self.shmem.get_procedure_info(self.selected_procedure)
             if _info is None:
                 raise Exception(f'{self.selected_procedure} 가 ab_procedure.py 에 없음')
             else:

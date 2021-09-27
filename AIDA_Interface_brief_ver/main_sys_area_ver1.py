@@ -17,7 +17,7 @@ class MainSysArea(QWidget):
     """ 시스템 디스플레이 위젯 """
     def __init__(self, parent, h, w):
         super(MainSysArea, self).__init__(parent)
-        self.mem = parent.mem
+        self.shmem = parent.shmem
         # --------------------------------------------------------------------------------------------------------------
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('MainSysArea')

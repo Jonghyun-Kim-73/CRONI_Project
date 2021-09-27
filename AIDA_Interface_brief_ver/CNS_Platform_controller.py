@@ -138,7 +138,8 @@ class MyForm(QWidget):
             self.val_editor.show()
 
     def go_trend_view(self):
-        self.TrendView = Trend(self, 200, 200)
+        self.TrendView = Trend(self, 500, 500, para_name='Flow', para_id='KCNTOMS', para_range=[0, 300],
+                               xtitle='Time Since Reactor Shutdown (Hours)', ytitle='Minimum Injection Flowrate (gpm)')
         self.TrendView.show()
 
     def show_main_window(self):
