@@ -9,7 +9,8 @@
 			"textxpos": "19.597150454901524",
 			"textypos": "83.33351236236085",
 			"xpos": "810.0",
-			"ypos": "605.0"
+			"ypos": "605.0",
+			"comp_val": 0
 		},
 		"1": {
 			"id": "",
@@ -19,7 +20,8 @@
 			"textxpos": "10.768541638801807",
 			"textypos": "71.61124725969418",
 			"xpos": "807.0",
-			"ypos": "341.0"
+			"ypos": "341.0",
+			"comp_val": 0
 		},
 		"2": {
 			"id": "BHV41",
@@ -29,7 +31,8 @@
 			"textxpos": "14.424136982790035",
 			"textypos": "5.326667900294417",
 			"xpos": "645.0",
-			"ypos": "597.0"
+			"ypos": "597.0",
+			"comp_val": 0
 		},
 		"3": {
 			"id": "KHV43",
@@ -39,7 +42,8 @@
 			"textxpos": "9.138422697075747",
 			"textypos": "10.898096471722987",
 			"xpos": "646.0",
-			"ypos": "478.0"
+			"ypos": "478.0",
+			"comp_val": 0
 		},
 		"4": {
 			"id": "",
@@ -49,7 +53,8 @@
 			"textxpos": "20.29465433609054",
 			"textypos": "-0.49488982016570304",
 			"xpos": "644.0",
-			"ypos": "535.0"
+			"ypos": "535.0",
+			"comp_val": 0
 		},
 		"5": {
 			"id": "",
@@ -59,7 +64,8 @@
 			"textxpos": "-22.419631378195177",
 			"textypos": "20.36225303697715",
 			"xpos": "708.0",
-			"ypos": "362.0"
+			"ypos": "362.0",
+			"comp_val": 0
 		},
 		"6": {
 			"id": "BHV1",
@@ -69,7 +75,8 @@
 			"textxpos": "-29.0",
 			"textypos": "5.0",
 			"xpos": "651.0",
-			"ypos": "173.0"
+			"ypos": "173.0",
+			"comp_val": 0
 		},
 		"7": {
 			"id": "BHV2",
@@ -79,7 +86,8 @@
 			"textxpos": "-27.0",
 			"textypos": "5.0",
 			"xpos": "717.0",
-			"ypos": "173.0"
+			"ypos": "173.0",
+			"comp_val": 0
 		},
 		"8": {
 			"id": "BHV3",
@@ -89,7 +97,8 @@
 			"textxpos": "-27.0",
 			"textypos": "5.0",
 			"xpos": "784.0",
-			"ypos": "173.0"
+			"ypos": "173.0",
+			"comp_val": 0
 		},
 		"9": {
 			"id": "",
@@ -99,7 +108,8 @@
 			"textxpos": "-3.7053456639094584",
 			"textypos": "18.076538751262866",
 			"xpos": "495.0",
-			"ypos": "79.0"
+			"ypos": "79.0",
+			"comp_val": 0
 		},
 		"10": {
 			"id": "BPV145",
@@ -109,7 +119,8 @@
 			"textxpos": "-4.004434445781392",
 			"textypos": "13.183810757437271",
 			"xpos": "250.0",
-			"ypos": "81.0"
+			"ypos": "81.0",
+			"comp_val": 0
 		},
 		"11": {
 			"id": "BLV614",
@@ -119,7 +130,8 @@
 			"textxpos": "8.56699412564717",
 			"textypos": "7.0",
 			"xpos": "86.0",
-			"ypos": "197.0"
+			"ypos": "197.0",
+			"comp_val": 0
 		},
 		"12": {
 			"id": "",
@@ -129,7 +141,8 @@
 			"textxpos": "-30.991059949623747",
 			"textypos": "-22.92346124873714",
 			"xpos": "151.0",
-			"ypos": "508.0"
+			"ypos": "508.0",
+			"comp_val": 0
 		},
 		"13": {
 			"id": "",
@@ -139,7 +152,8 @@
 			"textxpos": "-5.2314583611981895",
 			"textypos": "-38.38875274030582",
 			"xpos": "14.0",
-			"ypos": "159.0"
+			"ypos": "159.0",
+			"comp_val": 0
 		},
 		"14": {
 			"id": "",
@@ -149,7 +163,8 @@
 			"textxpos": "-34.08860121834105",
 			"textypos": "21.754104402551334",
 			"xpos": "80.0",
-			"ypos": "316.0"
+			"ypos": "316.0",
+			"comp_val": 0
 		},
 		"15": {
 			"id": "",
@@ -159,7 +174,8 @@
 			"textxpos": "-29.945744075483912",
 			"textypos": "-21.960181311734388",
 			"xpos": "82.0",
-			"ypos": "69.00000000000006"
+			"ypos": "69.00000000000006",
+			"comp_val": 0
 		},
 		"16": {
 			"id": "BLV616",
@@ -169,7 +185,8 @@
 			"textxpos": "-38.57586301720997",
 			"textypos": "4.0",
 			"xpos": "83.0",
-			"ypos": "449.0"
+			"ypos": "449.0",
+			"comp_val": 0
 		},
 		"17": {
 			"id": "KLAMPO71",
@@ -179,7 +196,8 @@
 			"textxpos": "-31.0",
 			"textypos": "-23.0",
 			"xpos": "171.0",
-			"ypos": "579.0"
+			"ypos": "579.0",
+			"comp_val": 0
 		},
 		"18": {
 			"id": "KLAMPO70",
@@ -189,7 +207,8 @@
 			"textxpos": "-28.0",
 			"textypos": "-23.0",
 			"xpos": "167.0",
-			"ypos": "649.0"
+			"ypos": "649.0",
+			"comp_val": 0
 		},
 		"19": {
 			"id": "KLAMPO69",
@@ -199,7 +218,8 @@
 			"textxpos": "-32.0",
 			"textypos": "-22.0",
 			"xpos": "169.0",
-			"ypos": "712.0"
+			"ypos": "712.0",
+			"comp_val": 0
 		},
 		"20": {
 			"id": "BHV22",
@@ -209,7 +229,8 @@
 			"textxpos": "-3.0",
 			"textypos": "12.0",
 			"xpos": "498.0",
-			"ypos": "700.0"
+			"ypos": "700.0",
+			"comp_val": 0
 		},
 		"21": {
 			"id": "BHV50",
@@ -219,7 +240,8 @@
 			"textxpos": "-37.0",
 			"textypos": "5.0",
 			"xpos": "345.0",
-			"ypos": "566.0"
+			"ypos": "566.0",
+			"comp_val": 0.0
 		},
 		"22": {
 			"id": "BFV122",
@@ -229,7 +251,8 @@
 			"textxpos": "13.0",
 			"textypos": "6.0",
 			"xpos": "542.0",
-			"ypos": "517.0"
+			"ypos": "517.0",
+			"comp_val": 0
 		},
 		"23": {
 			"id": "KLAMPO198",
@@ -239,7 +262,8 @@
 			"textxpos": "-15.0",
 			"textypos": "-18.0",
 			"xpos": "313.0",
-			"ypos": "368.0"
+			"ypos": "368.0",
+			"comp_val": 0
 		},
 		"24": {
 			"id": "KLAMPO198",
@@ -249,7 +273,8 @@
 			"textxpos": "-15.0",
 			"textypos": "-19.0",
 			"xpos": "311.0",
-			"ypos": "430.0"
+			"ypos": "430.0",
+			"comp_val": 0
 		},
 		"25": {
 			"id": "KFV611",
@@ -259,7 +284,8 @@
 			"textxpos": "-5.0",
 			"textypos": "15.183810757437271",
 			"xpos": "136.0",
-			"ypos": "426.0"
+			"ypos": "426.0",
+			"comp_val": 0
 		},
 		"26": {
 			"id": "KFV612",
@@ -269,7 +295,8 @@
 			"textxpos": "-5.0",
 			"textypos": "12.0",
 			"xpos": "137.0",
-			"ypos": "275.0"
+			"ypos": "275.0",
+			"comp_val": 0
 		},
 		"27": {
 			"id": "",
@@ -279,7 +306,8 @@
 			"textxpos": "-78.9457440754839",
 			"textypos": "7.611247259694181",
 			"xpos": "379.0",
-			"ypos": "214.0"
+			"ypos": "214.0",
+			"comp_val": 0
 		},
 		"28": {
 			"id": "",
@@ -289,7 +317,8 @@
 			"textxpos": "22.19711306737323",
 			"textypos": "8.18267583112275",
 			"xpos": "452.9999999999998",
-			"ypos": "214.0"
+			"ypos": "214.0",
+			"comp_val": 0
 		},
 		"29": {
 			"id": "BPSV5",
@@ -299,7 +328,8 @@
 			"textxpos": "-4.0",
 			"textypos": "13.0",
 			"xpos": "824.0",
-			"ypos": "81.0"
+			"ypos": "81.0",
+			"comp_val": 0
 		},
 		"30": {
 			"id": "BHV142",
@@ -309,7 +339,8 @@
 			"textxpos": "9.0",
 			"textypos": "10.0",
 			"xpos": "763.0",
-			"ypos": "34.0"
+			"ypos": "34.0",
+			"comp_val": 0
 		},
 		"31": {
 			"name": "",
@@ -321,7 +352,8 @@
 			"textypos": "38.0",
 			"xpos": "652.0",
 			"ypos": "669.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"32": {
 			"name": "",
@@ -333,7 +365,8 @@
 			"textypos": "84.0",
 			"xpos": "652.0",
 			"ypos": "672.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"33": {
 			"name": "",
@@ -344,7 +377,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "733.0",
-			"ypos": "741.0"
+			"ypos": "741.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"34": {
 			"name": "",
@@ -355,7 +390,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "724.0",
-			"ypos": "699.0"
+			"ypos": "699.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"35": {
 			"id": "BLV459",
@@ -365,7 +402,8 @@
 			"textxpos": "9.709851268504316",
 			"textypos": "5.0",
 			"xpos": "717.0",
-			"ypos": "441.0"
+			"ypos": "441.0",
+			"comp_val": 0
 		},
 		"36": {
 			"name": "",
@@ -377,7 +415,8 @@
 			"textypos": "34.0",
 			"xpos": "724.0",
 			"ypos": "740.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"37": {
 			"name": "",
@@ -389,7 +428,8 @@
 			"textypos": "34.0",
 			"xpos": "659.0",
 			"ypos": "241.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"38": {
 			"name": "",
@@ -401,7 +441,8 @@
 			"textypos": "34.0",
 			"xpos": "659.0",
 			"ypos": "156.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"39": {
 			"name": "",
@@ -413,7 +454,8 @@
 			"textypos": "34.0",
 			"xpos": "658.0",
 			"ypos": "241.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"40": {
 			"name": "",
@@ -425,7 +467,8 @@
 			"textypos": "34.0",
 			"xpos": "791.0",
 			"ypos": "241.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"41": {
 			"name": "",
@@ -436,7 +479,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "114.0",
-			"ypos": "88.0"
+			"ypos": "88.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"42": {
 			"name": "",
@@ -447,7 +492,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "93.0",
-			"ypos": "149.0"
+			"ypos": "149.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"43": {
 			"name": "",
@@ -458,7 +505,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "60.0",
-			"ypos": "214.0"
+			"ypos": "214.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"44": {
 			"name": "",
@@ -469,7 +518,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "104.0",
-			"ypos": "282.0"
+			"ypos": "282.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"45": {
 			"name": "",
@@ -480,7 +531,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "90.0",
-			"ypos": "389.0"
+			"ypos": "389.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"46": {
 			"name": "",
@@ -492,7 +545,8 @@
 			"textypos": "34.0",
 			"xpos": "122.0",
 			"ypos": "605.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"47": {
 			"name": "",
@@ -504,7 +558,8 @@
 			"textypos": "34.0",
 			"xpos": "92.0",
 			"ypos": "677.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"48": {
 			"name": "",
@@ -516,7 +571,8 @@
 			"textypos": "34.0",
 			"xpos": "122.0",
 			"ypos": "737.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"49": {
 			"name": "",
@@ -527,7 +583,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "101.0",
-			"ypos": "433.0"
+			"ypos": "433.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"50": {
 			"name": "",
@@ -539,7 +597,8 @@
 			"textypos": "34.0",
 			"xpos": "204.0",
 			"ypos": "433.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"51": {
 			"name": "",
@@ -551,7 +610,8 @@
 			"textypos": "34.0",
 			"xpos": "260.0",
 			"ypos": "372.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"52": {
 			"name": "",
@@ -563,7 +623,8 @@
 			"textypos": "34.0",
 			"xpos": "258.0",
 			"ypos": "435.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"53": {
 			"name": "",
@@ -575,7 +636,8 @@
 			"textypos": "34.0",
 			"xpos": "205.0",
 			"ypos": "406.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"54": {
 			"name": "",
@@ -587,7 +649,8 @@
 			"textypos": "34.0",
 			"xpos": "258.0",
 			"ypos": "433.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"55": {
 			"name": "",
@@ -599,7 +662,8 @@
 			"textypos": "34.0",
 			"xpos": "336.0",
 			"ypos": "387.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"56": {
 			"name": "",
@@ -611,7 +675,8 @@
 			"textypos": "34.0",
 			"xpos": "340.0",
 			"ypos": "455.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"57": {
 			"id": "KFV610",
@@ -621,7 +686,8 @@
 			"textxpos": "6.852708411361462",
 			"textypos": "38.32666790029441",
 			"xpos": "384.0",
-			"ypos": "311.0"
+			"ypos": "311.0",
+			"comp_val": 0
 		},
 		"58": {
 			"id": "KFV613",
@@ -631,7 +697,8 @@
 			"textxpos": "6.852708411361462",
 			"textypos": "38.32666790029441",
 			"xpos": "459.0",
-			"ypos": "310.0"
+			"ypos": "310.0",
+			"comp_val": 0
 		},
 		"59": {
 			"name": "",
@@ -643,7 +710,8 @@
 			"textypos": "34.0",
 			"xpos": "391.0",
 			"ypos": "455.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"60": {
 			"name": "",
@@ -655,7 +723,8 @@
 			"textypos": "34.0",
 			"xpos": "466.0",
 			"ypos": "384.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"61": {
 			"name": "",
@@ -667,7 +736,8 @@
 			"textypos": "34.0",
 			"xpos": "121.0",
 			"ypos": "736.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"62": {
 			"name": "",
@@ -679,7 +749,8 @@
 			"textypos": "34.0",
 			"xpos": "197.0",
 			"ypos": "584.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"63": {
 			"name": "",
@@ -691,7 +762,8 @@
 			"textypos": "34.0",
 			"xpos": "198.0",
 			"ypos": "653.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"64": {
 			"name": "",
@@ -703,7 +775,8 @@
 			"textypos": "34.0",
 			"xpos": "194.0",
 			"ypos": "717.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"65": {
 			"name": "",
@@ -714,7 +787,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "772.0",
-			"ypos": "707.0"
+			"ypos": "707.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"66": {
 			"name": "",
@@ -726,7 +801,8 @@
 			"textypos": "34.0",
 			"xpos": "549.0",
 			"ypos": "652.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"67": {
 			"name": "",
@@ -737,7 +813,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "790.0",
-			"ypos": "372.0"
+			"ypos": "372.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"68": {
 			"name": "",
@@ -749,7 +827,8 @@
 			"textypos": "34.0",
 			"xpos": "96.0",
 			"ypos": "519.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"69": {
 			"name": "",
@@ -761,7 +840,8 @@
 			"textypos": "34.0",
 			"xpos": "558.0",
 			"ypos": "468.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"70": {
 			"name": "",
@@ -773,7 +853,8 @@
 			"textypos": "34.0",
 			"xpos": "488.0",
 			"ypos": "468.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"71": {
 			"name": "",
@@ -785,7 +866,8 @@
 			"textypos": "34.0",
 			"xpos": "487.0",
 			"ypos": "519.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"72": {
 			"name": "",
@@ -797,7 +879,8 @@
 			"textypos": "34.0",
 			"xpos": "247.0",
 			"ypos": "716.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"73": {
 			"name": "",
@@ -808,7 +891,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "352.0",
-			"ypos": "651.0"
+			"ypos": "651.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"74": {
 			"name": "",
@@ -820,7 +905,8 @@
 			"textypos": "34.0",
 			"xpos": "441.0",
 			"ypos": "705.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"75": {
 			"name": "",
@@ -832,7 +918,8 @@
 			"textypos": "34.0",
 			"xpos": "779.0",
 			"ypos": "704.0",
-			"flow_from": "0"
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"76": {
 			"name": "",
@@ -843,7 +930,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "794.0",
-			"ypos": "629.0"
+			"ypos": "629.0",
+			"flow_from": "31",
+			"comp_val": 0
 		},
 		"77": {
 			"name": "",
@@ -854,7 +943,9 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "770.0",
-			"ypos": "29.0"
+			"ypos": "29.0",
+			"flow_from": "31",
+			"comp_val": 0
 		}
 	},
 	"RCS": {
@@ -868,7 +959,8 @@
 			"textypos": "34.0",
 			"xpos": "409.0",
 			"ypos": "486.0",
-			"flow_from": "0"
+			"flow_from": "S",
+			"comp_val": 1
 		}
 	}
 }

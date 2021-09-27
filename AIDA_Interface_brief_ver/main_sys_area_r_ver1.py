@@ -38,7 +38,7 @@ class MainSysRightArea(QGraphicsView):
         self.F2_key.activated.connect(self._keyPressEvent_F2)
         self.edit_mode = False
 
-        self.update_sys_mimic('RCS')
+        self.update_sys_mimic('CVCS')
 
     def update_sys_mimic(self, target_sys):
         self._scene.clear()
@@ -71,9 +71,9 @@ class MainSysRightScene(QGraphicsScene):
         # 요소 추가 및 제거 시 ... ----------------------------------------------------
         # for sys in  self.sys_mimic_info.keys():
         #     for i in self.sys_mimic_info[sys].keys():
-        #         if self.sys_mimic_info[sys][i]['type'] == 'line':
-        #             self.sys_mimic_info[sys][i]['flow_from'] = "0"
-        #             del self.sys_mimic_info[sys][i]['flow_from']
+        #         if self.sys_mimic_info[sys][i]['type'] == 'arrow' or self.sys_mimic_info[sys][i]['type'] == 'line':
+        #             del self.sys_mimic_info[sys][i]['flow_val']
+                    # del self.sys_mimic_info[sys][i]['flow_from']
         # ---------------------------------------------------------------------------
         self.current_opened_control_board = []
 
@@ -126,11 +126,15 @@ class MainSysRightScene(QGraphicsScene):
             for item in self.items():
                 if isinstance(item, SVGComp) and item.comp_id in local_mem.keys():
                     item.update_mimic_dis_info(local_mem[item.comp_id]['Val'])
+                if isinstance(item, LineComp):
+                    item.update_flow_color()
         else:
             # Test 용
             for item in self.items():
                 if isinstance(item, SVGComp):
                     print(f'Test mimic_info: {item.comp_id}_{item.comp_type}')
+                if isinstance(item, LineComp):
+                    item.update_flow_color()
 
     def contextMenuEvent(self, event) -> None:
         item = self.itemAt(event.scenePos().toPoint(), QTransform())
@@ -204,22 +208,22 @@ class MainSysRightScene(QGraphicsScene):
                 'name': "", 'type': f'{type}', 'thickness': '3', 'length': '50', 'direction': 'R',
                 'textxpos': '', 'textypos': '',
                 'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}',
-                'flow_from': "0",
+                'flow_from': "0", 'comp_val': 0,
             }
         elif type == 'valve' or type == 'HP':
             self.sys_mimic_info[self.target_sys][str(max_nub)] = {
                 'id': "", 'name': "", 'type': f'{type}', 'direction': 'V', 'textxpos': '', 'textypos': '',
-                'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}'
+                'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}', 'comp_val': 0,
             }
         elif type == 'pump':
             self.sys_mimic_info[self.target_sys][str(max_nub)] = {
                 'id': "", 'name': "", 'type': f'{type}', 'direction': 'R', 'textxpos': '', 'textypos': '',
-                'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}'
+                'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}', 'comp_val': 0,
             }
         else:
             self.sys_mimic_info[self.target_sys][str(max_nub)] = {
                 'id': "", 'name': "", 'type': f'{type}', 'direction': 'R', 'textxpos': '', 'textypos': '',
-                'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}'
+                'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}', 'comp_val': 0,
             }
         # update 현재 화면
         self.update_sys_mimic(self.target_sys)
@@ -253,10 +257,12 @@ class SVGComp(QGraphicsSvgItem):
         self.text_y = self.sys_mimic_info[self.target_sys][i]['textypos']
         self.setX(float(self.sys_mimic_info[self.target_sys][i]['xpos']))
         self.setY(float(self.sys_mimic_info[self.target_sys][i]['ypos']))
+
+        self.comp_val = self.sys_mimic_info[self.target_sys][i]['comp_val']
         # 초기 이미지 선택
         self.svg_info = {
             'valve': {'V': 'valve_v_c', 'H': 'valve_h_c'},
-            'pump': {'R': 'pump_r_start', 'L': 'pump_l_stop'},
+            'pump': {'R': 'pump_r_stop', 'L': 'pump_l_stop'},
             'RVP': 'RVP', 'HP': {'V': 'HP_v', 'H': 'HP_h'}, 'PZR': 'PZR'
         }
         if self.comp_type == 'valve' or self.comp_type == 'HP':
@@ -286,7 +292,7 @@ class SVGComp(QGraphicsSvgItem):
         self._update_info_to_mem()
 
     def mousePressEvent(self, *args, **kwargs):
-        print(f'{self.nub} - {self.comp_id} - {self.pos()} - {self.x()} - {self.y()}')
+        print(f'{self.nub} - {self.comp_id} - {self.comp_val} - {self.pos()} - {self.x()} - {self.y()}')
         self._update_info_to_mem()
         super(SVGComp, self).mousePressEvent(*args, **kwargs)
 
@@ -303,6 +309,8 @@ class SVGComp(QGraphicsSvgItem):
             update_rotation.triggered.connect(self._update_rotation)
             update_id = menu_state.addAction("Edit Id")
             update_id.triggered.connect(self._update_id)
+            update_comp_val = menu_state.addAction("Edit Comp Val")
+            update_comp_val.triggered.connect(self._update_comp_val)
         # -----------------------------------------------------
         menu.addMenu(menu_state)
         # -----------------------------------------------------
@@ -330,7 +338,15 @@ class SVGComp(QGraphicsSvgItem):
             self.comp_id = text
             self.sys_mimic_info[self.target_sys][self.nub]['id'] = text
 
+    def _update_comp_val(self):
+        current_val = self.sys_mimic_info[self.target_sys][self.nub]['comp_val']
+        text, ok = QInputDialog.getText(None, f'Change Val', f'Curent Num [{self.nub}] Val [{current_val}]:')
+        if ok:
+            self.comp_val = float(text)
+            self.sys_mimic_info[self.target_sys][self.nub]['comp_val'] = float(text)
+
     def update_mimic_dis_info(self, value):
+        self.sys_mimic_info[self.target_sys][self.nub]['comp_val'] = value
         if self.comp_type == 'valve':
             if value == 1.0:
                 self.setElementId(f'valve_{self.pen_direction.lower()}_o')
@@ -352,7 +368,7 @@ class LineComp(QGraphicsLineItem):
         self.sys_mimic_info = parent.sys_mimic_info
         self.target_sys = parent.target_sys
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
-        self.setFlag(QGraphicsItem.ItemIsMovable, True)
+        self.setFlag(QGraphicsItem.ItemIsMovable, False)
         # --------------------------------------------------------------------------------------------------------------
         # print(self.sys_mimic_info[self.target_sys][i])
         self.nub = i
@@ -368,6 +384,7 @@ class LineComp(QGraphicsLineItem):
         self.start_y = float(self.sys_mimic_info[self.target_sys][i]['ypos'])
 
         self.flow_from = self.sys_mimic_info[self.target_sys][i]['flow_from']
+        self.flow_val = self.sys_mimic_info[self.target_sys][i]['comp_val']
 
         if self.pen_direction == "R" or self.pen_direction == "L":
             self.end_x = self.start_x + self.pen_length if self.pen_direction == "R" else self.start_x - self.pen_length
@@ -392,7 +409,8 @@ class LineComp(QGraphicsLineItem):
             self.text.setY(float(self.text_y))
         self._update_info_to_mem()
 
-        self.setPen(QPen(Qt.black, self.pen_thickness))
+        self.flow_color = Qt.blue if self.flow_val > 0 else Qt.black
+        self.setPen(QPen(self.flow_color, self.pen_thickness))
 
     def boundingRect(self):
         extra = (self.pen().width() + 26) / 2
@@ -402,8 +420,8 @@ class LineComp(QGraphicsLineItem):
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         painter.setRenderHint(painter.Antialiasing)
-        painter.setPen(QPen(Qt.black, 1))
-        painter.setBrush(Qt.SolidPattern)
+        painter.setPen(QPen(self.flow_color, 1))
+        painter.setBrush(QBrush(self.flow_color, Qt.SolidPattern))
         if self.comp_type == 'arrow':
             if self.pen_direction == 'R':
                 arrow = QPolygonF([QPointF(self.start_x - 8, self.start_y),
@@ -431,7 +449,7 @@ class LineComp(QGraphicsLineItem):
 
     def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent'):
         super(LineComp, self).mouseReleaseEvent(event)
-        print(self.nub)
+        print(f'{self.nub} - {self.comp_name} - {self.comp_type} - {self.flow_from} - {self.flow_val}')
         self._update_info_to_mem()
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
@@ -442,17 +460,30 @@ class LineComp(QGraphicsLineItem):
         menu = QMenu()
         # -----------------------------------------------------
         update_flow_from = menu.addAction("Edit Flow ID")
-        update_flow_from.triggered.connect(self._update_flow_from)
+        update_flow_from.triggered.connect(self._update_flow_id)
+        # -----------------------------------------------------
+        menu.exec_(event.screenPos())
 
-    def _update_flow(self):
-        text, ok = QInputDialog.getText(None, 'Flow Id', f'Curent Id [{self.flow_from}]:')
-        # TODO HEAR!
+    def _update_flow_id(self):
+        text, ok = QInputDialog.getText(None, 'Flow Id', f'Curent Id [{self.flow_from}]|Val [{self.flow_val}]:')
+        if ok:
+            self.flow_from = text
 
     def _update_info_to_mem(self):
         self.sys_mimic_info[self.target_sys][self.nub]['xpos'] = str(self.x() + self.start_x)
         self.sys_mimic_info[self.target_sys][self.nub]['ypos'] = str(self.y() + self.start_y)
         self.sys_mimic_info[self.target_sys][self.nub]['textxpos'] = str(self.text.x())
         self.sys_mimic_info[self.target_sys][self.nub]['textypos'] = str(self.text.y())
+
+    def update_flow_color(self):
+        if self.flow_from == "S": # Source
+            self.flow_val = 1
+        else:
+            _comp_type = self.sys_mimic_info[self.target_sys][self.flow_from]['type']
+            self.flow_val = self.sys_mimic_info[self.target_sys][self.flow_from]['comp_val']
+
+        self.flow_color = Qt.blue if self.flow_val > 0 else Qt.black
+        self.setPen(QPen(self.flow_color, self.pen_thickness))
 
 
 class BoundaryComp(QGraphicsRectItem):
