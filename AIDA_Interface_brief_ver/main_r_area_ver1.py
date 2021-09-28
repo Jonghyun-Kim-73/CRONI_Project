@@ -135,22 +135,33 @@ class ProcedureTable(QTableWidget):
     def _update_procedure_display(self):
         """ AI 모듈에서 계산된 정보 업데이트"""
         ab_dig_result = self.mem.get_logic('Ab_Dig_Result')
+        """
+        ad_dig_result = {0: {'index': ..., 'value': ...}} 
+        """
+        print(ab_dig_result)
+        if ab_dig_result != {}:
+            test_procedure_des = {i: ab_dig_result[i]['index'] for i in range(5)}
+            test_procedure_prob = {i: round(ab_dig_result[i]['value'], 2) * 100 for i in range(5)}
+        else:
+            test_procedure_des = {i: 'Normal: 정상' for i in range(5)}
+            test_procedure_prob = {i: 0 for i in range(5)}
+            # test_procedure_des = {
+            #     0: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
+            #     1: 'Ab21_01: 가압기 압력 채널 고장 (고)',
+            #     2: 'Ab63_02: 제어봉의 계속적인 삽입',
+            #     3: 'Ab63_02: 제어봉의 계속적인 삽입',
+            #     4: 'Ab63_02: 제어봉의 계속적인 삽입',
+            # }
+            #
+            # test_procedure_prob = {
+            #     0: self.test_i,
+            #     1: 95 - self.test_i,
+            #     2: 5,
+            #     3: 3,
+            #     4: 2,
+            # }
 
-        test_procedure_des = {
-            0: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
-            1: 'Ab21_01: 가압기 압력 채널 고장 (고)',
-            2: 'Ab63_02: 제어봉의 계속적인 삽입',
-            3: 'Ab63_02: 제어봉의 계속적인 삽입',
-            4: 'Ab63_02: 제어봉의 계속적인 삽입',
-        }
-        test_procedure_prob = {
-            0: self.test_i,
-            1: 95 - self.test_i,
-            2: 5,
-            3: 3,
-            4: 2,
-        }
-        self.test_i = self.test_i + 1 if self.test_i <= 95 else 0
+            self.test_i = self.test_i + 1 if self.test_i <= 95 else 0
 
         test_procedure_match = {}
 

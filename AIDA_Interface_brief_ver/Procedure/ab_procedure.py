@@ -129,6 +129,48 @@ ab_pro = {
             },
         },
     },
+    'Ab21_02: 가압기 압력 채널 고장 (저)': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
+    'Ab20_04: 가압기 수위 채널 고장 (저)': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
+    'Ab15_07: 증기발생기 수위 채널 고장 (저)': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
     'Ab63_04: 제어봉 낙하': {
         'Symptom Check': {
             0: { # KLAMPO15
@@ -181,7 +223,104 @@ ab_pro = {
 
         }
     },
+    'Ab21_12: 가압기 PORV (열림)': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
 
+        },
+        '후속조치': {
+
+        }
+    },
+    'Ab19_02: 가압기 안전밸브 고장': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
+    'Ab21_11: 가압기 살수밸브 고장 (열림)': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
+    'Ab60_02: 재생열교환기 전단부위 파열': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
+    'Ab59_02: 충전수 유량조절밸즈 후단누설': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
+    'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
+    'Ab23_06: 증기발생기 전열관 누설': {
+        'Symptom Check': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
+                'Des': '테스트 3',
+            }
+        },
+        '긴급조치': {
+
+        },
+        '후속조치': {
+
+        }
+    },
 
     'Intermediate range high flux rod stop': {
         'Symptom Check': {

@@ -2,12 +2,21 @@ import multiprocessing
 import sys
 import time
 
+#----------------------- 추가 부분
+import pickle
+import pandas as pd
+import numpy as np
+
+
 class TEST_All_Function_module(multiprocessing.Process):
     def __init__(self, shmem, Max_len):
         multiprocessing.Process.__init__(self)
         self.daemon = True
         self.shmem = shmem
         self.local_mem = self.shmem.get_shmem_db()
+        #------------------------------ 추가 부분
+        self.lgb_model = pickle.load(open('model/Lightgbm_max_depth_feature_137_200825.h5', 'rb'))
+        self.lgb_para = pd.read_csv('./DB/Final_parameter_200825.csv')['0'].tolist()
 
     def pr_(self, s):
         head_ = 'AllFuncM'
@@ -60,6 +69,36 @@ class TEST_All_Function_module(multiprocessing.Process):
                     """
                     TODO AI 방법론 추가
                     """
+                    # 진단 모듈 -----------------------------------------------------------------------------------------
+                    procedure_des = {
+                        0: 'Normal: 정상',
+                        1: 'Ab21_01: 가압기 압력 채널 고장 (고)',
+                        2: 'Ab21_02: 가압기 압력 채널 고장 (저)',
+                        3: 'Ab20_04: 가압기 수위 채널 고장 (저)',
+                        4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)',
+                        5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
+                        6: 'Ab63_04: 제어봉 낙하',
+                        7: 'Ab63_02: 제어봉의 계속적인 삽입',
+                        8: 'Ab21_12: 가압기 PORV (열림)',
+                        9: 'Ab19_02: 가압기 안전밸브 고장',
+                        10: 'Ab21_11: 가압기 살수밸브 고장 (열림)',
+                        11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
+                        12: 'Ab60_02: 재생열교환기 전단부위 파열',
+                        13: 'Ab59_02: 충전수 유량조절밸즈 후단누설',
+                        14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설',
+                        15: 'Ab23_06: 증기발생기 전열관 누설'
+                    }
+                    rank_result = {}
+                    lgb_data = [self.local_mem[i]['Val'] for i in self.lgb_para]
+                    lgb_result = list(self.lgb_model.predict([lgb_data])[0])
+                    for i in range(5):
+                        index_ = lgb_result.index(max(lgb_result))
+                        rank_result[i] = {'index': procedure_des[lgb_result.index(max(lgb_result))], 'value': max(lgb_result)}
+                        del lgb_result[index_]
+
+                    self.shmem.change_logic_val('Ab_Dig_Result', rank_result)
+                    # 진단 모듈 End -------------------------------------------------------------------------------------
+
                 # One Step CNS -------------------------------------------------------------------------------------
                 Action_dict = {}  # 향후 액션 추가
 
