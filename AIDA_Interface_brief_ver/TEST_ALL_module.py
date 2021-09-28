@@ -2,10 +2,14 @@ import multiprocessing
 import sys
 import time
 
-#----------------------- 추가 부분
+#----------------------- 모듈 추가 부분
 import pickle
 import pandas as pd
+from keras.layers import RepeatVector, Dense, Input, TimeDistributed, Dot, Concatenate, Activation, LSTM
+from keras.models import *
+from collections import deque
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class TEST_All_Function_module(multiprocessing.Process):
@@ -14,9 +18,35 @@ class TEST_All_Function_module(multiprocessing.Process):
         self.daemon = True
         self.shmem = shmem
         self.local_mem = self.shmem.get_shmem_db()
-        #------------------------------ 추가 부분
+        # 진단 추가 부분 ------------------------------------------------------------------------------
         self.lgb_model = pickle.load(open('model/Lightgbm_max_depth_feature_137_200825.h5', 'rb'))
         self.lgb_para = pd.read_csv('./DB/Final_parameter_200825.csv')['0'].tolist()
+        # 예지 추가 부분 ------------------------------------------------------------------------------
+        self.lstm_para = pd.read_excel('./DB/PRZ_all_para_6.xlsx')[0].tolist()
+        self.lstm_time_step = 30
+        with open('./model/PRZ_std_scaler_6_120.pkl', 'rb') as f:
+            self.scalerX = pickle.load(f)
+            self.scalerY = pickle.load(f)
+            self.pca = pickle.load(f)
+        cumsum = np.cumsum(self.pca.explained_variance_ratio_)
+        self.dim = np.argmax(cumsum >= 0.95) + 1
+        # self.lstm_model = self.pca_lstm()
+        # self.lstm_model.load_weights('./model/PRZ_LSTM.hdf5')
+        self.lstm_data = deque(maxlen=self.lstm_time_step)
+
+    def pca_lstm(self): # 예지 모델 가중치 업데이트를 위한 모델 구성
+        x = Input(shape=(self.lstm_time_step, self.dim))
+        enc_h, enc_ht, enc_ct = LSTM(64, activation='tanh', return_sequences=True, return_state=True)(x)
+        decoder_input = RepeatVector(120)(enc_ht)
+        decoder_stack_h = LSTM(64, return_sequences=True)(decoder_input, initial_state=[enc_ht, enc_ct])
+        attention = Dot(axes=[2, 2])([decoder_stack_h, enc_h])
+        attention = Activation('softmax')(attention)
+        context = Dot(axes=[2, 1])([attention, enc_h])
+        decoder_combined_context = Concatenate()([context, decoder_stack_h])
+        out = TimeDistributed(Dense(2))(decoder_combined_context)
+        model = Model(x, out)
+        model.compile(loss='mse', optimizer='adam')
+        return model
 
     def pr_(self, s):
         head_ = 'AllFuncM'
@@ -61,6 +91,9 @@ class TEST_All_Function_module(multiprocessing.Process):
         # - 공유 메모리에서 logic 부분을 취득 후 사용되는 AI 네트워크 정보 취득
         local_logic = self.shmem.get_logic_info()
 
+        self.lstm_model = self.pca_lstm()
+        self.lstm_model.load_weights('./model/PRZ_LSTM.hdf5')
+
         while True:
             local_logic = self.shmem.get_logic_info()
             if local_logic['Close']: sys.exit()
@@ -95,9 +128,22 @@ class TEST_All_Function_module(multiprocessing.Process):
                         index_ = lgb_result.index(max(lgb_result))
                         rank_result[i] = {'index': procedure_des[lgb_result.index(max(lgb_result))], 'value': max(lgb_result)}
                         del lgb_result[index_]
-
                     self.shmem.change_logic_val('Ab_Dig_Result', rank_result)
                     # 진단 모듈 End -------------------------------------------------------------------------------------
+
+                    # 예지 모듈 -----------------------------------------------------------------------------------------
+                    lstm_db = [self.local_mem[i]['Val'] for i in self.lstm_para]
+                    self.lstm_data.append(lstm_db)
+                    if np.shape(self.lstm_data)[0] == self.lstm_time_step: # self.lstm_data = 2차원: 추후 []로 3차원 데이터로 성형
+                        test_x = self.pca.transform(self.scalerX.transform(self.lstm_data))[:,:self.dim]
+                        lstm_result = self.lstm_model.predict(np.array([test_x])) # lstm_result[0][:,0] : 가압기 압력 / lstm_result[0][:,1] : 가압기 수위 / 최초의 [0]: 3차원 -> 2차원 축소
+                        lstm_result = self.scalerY.inverse_transform(lstm_result) # Inverse_transform
+                        lstm_result = np.where(lstm_result < 0, 0, lstm_result) # 가압기 수위가 마이너스일 경우, 0으로 복원하기 위함.
+                        lstm_pres_pred = lstm_result[0][:,0] # 가압기 압력
+                        lstm_level_pred = lstm_result[0][:,1] # 가압기 수위
+                        plt.plot(lstm_pres_pred)
+                        plt.show()
+                    # 예지 모듈 End -------------------------------------------------------------------------------------
 
                 # One Step CNS -------------------------------------------------------------------------------------
                 Action_dict = {}  # 향후 액션 추가

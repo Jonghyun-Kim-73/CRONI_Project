@@ -138,6 +138,7 @@ class ProcedureTable(QTableWidget):
         """
         ad_dig_result = {0: {'index': ..., 'value': ...}} 
         """
+        # print(ab_dig_result)
         if ab_dig_result != {}:
             test_procedure_des = {i: ab_dig_result[i]['index'] for i in range(5)}
             test_procedure_prob = {i: round(ab_dig_result[i]['value'], 2) * 100 for i in range(5)}
