@@ -12,6 +12,8 @@ from AIDA_Interface_brief_ver.main_l_area_ver1 import MainLeftArea
 from AIDA_Interface_brief_ver.main_sys_area_ver1 import MainSysArea
 from AIDA_Interface_brief_ver.main_proce_area_ver1 import MainProceArea
 
+from AIDA_Interface_brief_ver.TOOL import TOOL_MatGP2
+
 
 class Mainwindow(QWidget):
     """메인 윈도우"""
@@ -117,7 +119,8 @@ class Mainwindow(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.progWidget = QWidget()
+        self.progWidget = TOOL_MatGP2.Trend(self, w=500, h=500, para_name='Flow', para_id='KCNTOMS', para_range=[10000000, 16000000],
+                   xtitle='Time Since Reactor Shutdown (Hours)', ytitle='Minimum Injection Flowrate (gpm)')
 
         layout.addWidget(self.progWidget)
 

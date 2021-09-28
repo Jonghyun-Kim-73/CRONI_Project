@@ -22,7 +22,17 @@ class TEST_All_Function_module(multiprocessing.Process):
         self.lgb_model = pickle.load(open('model/Lightgbm_max_depth_feature_137_200825.h5', 'rb'))
         self.lgb_para = pd.read_csv('./DB/Final_parameter_200825.csv')['0'].tolist()
         # 예지 추가 부분 ------------------------------------------------------------------------------
-        self.lstm_para = pd.read_excel('./DB/PRZ_all_para_6.xlsx')[0].tolist()
+        # self.lstm_para = pd.read_excel('./DB/PRZ_all_para_6.xlsx')[0].tolist()
+        self.lstm_para = ['PLETIN', 'UFUELM', 'UUPPPL', 'UCNDS', 'QPROREL', 'PWRHFX', 'UHOLEG3', 'UHOLEG1',
+                          'DENEUO', 'UHOLEGM', 'UAVLEG3', 'UHOLEG2', 'PHPTIN', 'UAVLEGM', 'UAVLEG1', 'UAVLMO',
+                          'UDHOCO1', 'UAVLEG2', 'QPRONOR', 'QTHNOR', 'PHDTK', 'UDHOCO2', 'PCNDS', 'UCOND',
+                          'UDHOCO3', 'UCOLEG3', 'DECH1', 'UCOLEGM', 'UCOLEG2', 'UCOLEG1', 'UCOOL', 'WHDTP', 'WLPHCD',
+                          'ELPHA', 'ELPHB', 'ZLPHB', 'ZLPHA', 'WLPDRNA', 'WLPDRNB', 'HCVWL', 'PCVSG', 'ECVSG', 'UHPHOA', 'UHPHOB', 'FCDP1', 'FCDP2', 'FCDP3', 'UFDW', 'WCDPO',
+                          'ZHPHA', 'ZHPHB', 'WHPHDT', 'WHPDRNB', 'WHPDTB', 'WHPDTA', 'WHPDRNA', 'EHPHB', 'EHPHA', 'UPRZ',
+                          'DECH', 'WRHDRNA', 'WRHDRNB', 'WRHDRN', 'WCPLN3', 'WCPLN1', 'WCPLN2', 'PHPHOUT', 'ULPHOA', 'ULPHOB',
+                          'VRWST', 'CIODMPC', 'EAFWTK', 'ZAFWTK', 'PCDTB', 'UHDTP', 'UHDTK', 'UHDTCD', 'UCHGIN', 'CBINTR', 'ZVCT', 'PVCT', 'UPRT', 'UPRTL', 'CXENON', 'CXEMPCM',
+                          'WBOAC', 'UOVER', 'PHDTP', 'PCOND', 'PLPHOUT', 'ZHDTK', 'EHDTK', 'WSGRCP1', 'WSGRCP2',
+                          'WSGRCP3', 'PAFWPD', 'WAFWTK', 'USISC', 'WLV615', 'WHV22', 'WSISC1', 'WSISC2', 'WSISC3', 'WAUXSP']
         self.lstm_time_step = 30
         with open('./model/PRZ_std_scaler_6_120.pkl', 'rb') as f:
             self.scalerX = pickle.load(f)
@@ -33,6 +43,7 @@ class TEST_All_Function_module(multiprocessing.Process):
         # self.lstm_model = self.pca_lstm()
         # self.lstm_model.load_weights('./model/PRZ_LSTM.hdf5')
         self.lstm_data = deque(maxlen=self.lstm_time_step)
+        self.front_lstm_data = deque(maxlen=self.lstm_time_step)
 
     def pca_lstm(self): # 예지 모델 가중치 업데이트를 위한 모델 구성
         x = Input(shape=(self.lstm_time_step, self.dim))
@@ -133,7 +144,10 @@ class TEST_All_Function_module(multiprocessing.Process):
 
                     # 예지 모듈 -----------------------------------------------------------------------------------------
                     lstm_db = [self.local_mem[i]['Val'] for i in self.lstm_para]
+
                     self.lstm_data.append(lstm_db)
+                    self.front_lstm_data.append(self.local_mem['PPRZ']['Val'])
+
                     if np.shape(self.lstm_data)[0] == self.lstm_time_step: # self.lstm_data = 2차원: 추후 []로 3차원 데이터로 성형
                         test_x = self.pca.transform(self.scalerX.transform(self.lstm_data))[:,:self.dim]
                         lstm_result = self.lstm_model.predict(np.array([test_x])) # lstm_result[0][:,0] : 가압기 압력 / lstm_result[0][:,1] : 가압기 수위 / 최초의 [0]: 3차원 -> 2차원 축소
@@ -141,15 +155,25 @@ class TEST_All_Function_module(multiprocessing.Process):
                         lstm_result = np.where(lstm_result < 0, 0, lstm_result) # 가압기 수위가 마이너스일 경우, 0으로 복원하기 위함.
                         lstm_pres_pred = lstm_result[0][:,0] # 가압기 압력
                         lstm_level_pred = lstm_result[0][:,1] # 가압기 수위
-                        plt.plot(lstm_pres_pred)
-                        plt.show()
+
+                        get_last_val = self.front_lstm_data[-1]
+                        get_init_val = lstm_pres_pred[0]
+                        delta = get_last_val - get_init_val
+                        lstm_pres_pred = [i + delta for i in lstm_pres_pred]
+
+                        fin_out = list(self.front_lstm_data) + list(lstm_pres_pred)
+                        self.shmem.change_logic_val('AB_prog', fin_out)
+
+
+                        # plt.plot(lstm_pres_pred)
+                        # plt.show()
                     # 예지 모듈 End -------------------------------------------------------------------------------------
 
                 # One Step CNS -------------------------------------------------------------------------------------
                 Action_dict = {}  # 향후 액션 추가
 
                 self.local_mem['KCNTOMS']['Val'] += 5
-                time.sleep(1)
+                time.sleep(0.1)
 
                 print(self.local_mem['KCNTOMS']['Val'])
 
