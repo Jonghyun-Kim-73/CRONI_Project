@@ -231,7 +231,8 @@ class MainSysRightScene(QGraphicsScene):
     def keyPressEvent_F2(self, tig):
         """ 모든 아이템의 Flag 수정 """
         for item in self.items():
-            item.setFlag(QGraphicsItem.ItemIsMovable, tig)
+            if not isinstance(item, BoundaryComp):
+                item.setFlag(QGraphicsItem.ItemIsMovable, tig)
 
     def testmem(self):
         self.update_mimic_info()
@@ -311,11 +312,43 @@ class SVGComp(QGraphicsSvgItem):
             update_id.triggered.connect(self._update_id)
             update_comp_val = menu_state.addAction("Edit Comp Val")
             update_comp_val.triggered.connect(self._update_comp_val)
+            remove_item = menu.addAction("Remove Item")
+            remove_item.triggered.connect(self._remove_item)
         # -----------------------------------------------------
         menu.addMenu(menu_state)
         # -----------------------------------------------------
         menu.exec_(event.screenPos())
         event.setAccepted(True)
+
+    def _remove_item(self):
+        """ item 삭제 """
+        # 메커니즘: 1. self.sys_mimic_info 에서 해당 아이템 정보 제거 2. 관련된 파이프 정보 업데이트. 3. 메모리 저장 및 Re-load
+        del self.sys_mimic_info[self.target_sys][self.nub]
+
+        temp_mimic_info = {}
+
+        for new_nub, old_nub in enumerate(self.sys_mimic_info[self.target_sys].keys()):
+            temp_mimic_info[new_nub] = self.sys_mimic_info[self.target_sys][old_nub]
+            if temp_mimic_info[new_nub]['type'] == 'line' or temp_mimic_info[new_nub]['type'] == 'arrow':
+                if temp_mimic_info[new_nub]['flow_from'] == str(self.nub):
+                    # 삭제된 파이프에 연결된 flow_from 이므로 "N" 할당 및 자동적으로 -1 로 변환
+                    temp_mimic_info[new_nub]['flow_from'] = "N"
+                elif temp_mimic_info[new_nub]['flow_from'].isdigit():
+                    # 다른 기기와 연결된 경우, 이 경우 "1" 과 같이 숫자형인 str 값임.
+                    if int(temp_mimic_info[new_nub]['flow_from']) > int(self.nub):
+                        # 지워지는 값보다 flow_from 이 크면 숫자를 감산해 줘야함. (DB가 밀림)
+                        temp_mimic_info[new_nub]['flow_from'] = str(int(temp_mimic_info[new_nub]['flow_from']) - 1)
+                else:
+                    pass  # flow_from 이 소스("S") 이거나 타 기기 변수를 지칭하는 경우
+            else:
+                pass  # 펌프나 벨브와 같이 색이 안변하는 기기 경우
+
+        # 메모리 업데이트
+        self.sys_mimic_info[self.target_sys] = temp_mimic_info
+
+        # 저장 및 Re-load
+        self.parent.save_all_mmi()
+        self.parent.load_all_mmi()
 
     def _update_info_to_mem(self):
         self.sys_mimic_info[self.target_sys][self.nub]['xpos'] = str(self.x())
@@ -347,6 +380,7 @@ class SVGComp(QGraphicsSvgItem):
 
     def update_mimic_dis_info(self, value):
         self.sys_mimic_info[self.target_sys][self.nub]['comp_val'] = value
+        self.comp_val = value
         if self.comp_type == 'valve':
             if value == 1.0:
                 self.setElementId(f'valve_{self.pen_direction.lower()}_o')
@@ -367,6 +401,7 @@ class LineComp(QGraphicsLineItem):
         super(LineComp, self).__init__(None)
         self.sys_mimic_info = parent.sys_mimic_info
         self.target_sys = parent.target_sys
+        self.parent = parent
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
         self.setFlag(QGraphicsItem.ItemIsMovable, False)
         # --------------------------------------------------------------------------------------------------------------
@@ -461,6 +496,12 @@ class LineComp(QGraphicsLineItem):
         # -----------------------------------------------------
         update_flow_from = menu.addAction("Edit Flow ID")
         update_flow_from.triggered.connect(self._update_flow_id)
+        update_rotation = menu.addAction("Rotation")
+        update_rotation.triggered.connect(self._update_rotation)
+        # update_arrow = menu.addAction("Arrow")
+        # update_arrow.triggered.connect(self._update_rotation)
+        remove_item = menu.addAction("Remove Item")
+        remove_item.triggered.connect(self._remove_item)
         # -----------------------------------------------------
         menu.exec_(event.screenPos())
 
@@ -468,6 +509,11 @@ class LineComp(QGraphicsLineItem):
         text, ok = QInputDialog.getText(None, 'Flow Id', f'Curent Id [{self.flow_from}]|Val [{self.flow_val}]:')
         if ok:
             self.flow_from = text
+            self.sys_mimic_info[self.target_sys][self.nub]['flow_from'] = text
+
+    def _update_rotation(self):
+        # TODO
+        pass
 
     def _update_info_to_mem(self):
         self.sys_mimic_info[self.target_sys][self.nub]['xpos'] = str(self.x() + self.start_x)
@@ -475,14 +521,52 @@ class LineComp(QGraphicsLineItem):
         self.sys_mimic_info[self.target_sys][self.nub]['textxpos'] = str(self.text.x())
         self.sys_mimic_info[self.target_sys][self.nub]['textypos'] = str(self.text.y())
 
+    def _remove_item(self):
+        """ item 삭제 """
+        # 메커니즘: 1. self.sys_mimic_info 에서 해당 아이템 정보 제거 2. 관련된 파이프 정보 업데이트. 3. 메모리 저장 및 Re-load
+        del self.sys_mimic_info[self.target_sys][self.nub]
+
+        temp_mimic_info = {}
+
+        for new_nub, old_nub in enumerate(self.sys_mimic_info[self.target_sys].keys()):
+            temp_mimic_info[new_nub] = self.sys_mimic_info[self.target_sys][old_nub]
+            if temp_mimic_info[new_nub]['type'] == 'line' or temp_mimic_info[new_nub]['type'] == 'arrow':
+                if temp_mimic_info[new_nub]['flow_from'] == str(self.nub):
+                    # 삭제된 파이프에 연결된 flow_from 이므로 "N" 할당 및 자동적으로 -1 로 변환
+                    temp_mimic_info[new_nub]['flow_from'] = "N"
+                elif temp_mimic_info[new_nub]['flow_from'].isdigit():
+                    # 다른 기기와 연결된 경우, 이 경우 "1" 과 같이 숫자형인 str 값임.
+                    if int(temp_mimic_info[new_nub]['flow_from']) > int(self.nub):
+                        # 지워지는 값보다 flow_from 이 크면 숫자를 감산해 줘야함. (DB가 밀림)
+                        temp_mimic_info[new_nub]['flow_from'] = str(int(temp_mimic_info[new_nub]['flow_from']) - 1)
+                else:
+                    pass  # flow_from 이 소스("S") 이거나 타 기기 변수를 지칭하는 경우
+            else:
+                pass  # 펌프나 벨브와 같이 색이 안변하는 기기 경우
+
+        # 메모리 업데이트
+        self.sys_mimic_info[self.target_sys] = temp_mimic_info
+
+        # 저장 및 Re-load
+        self.parent.save_all_mmi()
+        self.parent.load_all_mmi()
+
     def update_flow_color(self):
-        if self.flow_from == "S": # Source
-            self.flow_val = 1
+        if self.flow_from == "S" or self.flow_from == "N":   # Source or None
+            self.flow_val = 1 if self.flow_from == "S" else -1      # -1 is None
         else:
             _comp_type = self.sys_mimic_info[self.target_sys][self.flow_from]['type']
             self.flow_val = self.sys_mimic_info[self.target_sys][self.flow_from]['comp_val']
 
-        self.flow_color = Qt.blue if self.flow_val > 0 else Qt.black
+        self.sys_mimic_info[self.target_sys][self.nub]['comp_val'] = self.flow_val
+
+        if self.flow_val == 0:
+            self.flow_color = Qt.black
+        elif self.flow_val > 0:
+            self.flow_color = Qt.blue
+        else:
+            self.flow_color = Qt.red
+
         self.setPen(QPen(self.flow_color, self.pen_thickness))
 
 
