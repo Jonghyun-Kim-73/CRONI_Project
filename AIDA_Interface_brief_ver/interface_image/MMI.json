@@ -42,7 +42,7 @@
 			"textxpos": "9.0",
 			"textypos": "6.0",
 			"xpos": "644.0",
-			"ypos": "480.0",
+			"ypos": "483.0",
 			"comp_val": 0
 		},
 		"4": {
@@ -76,7 +76,7 @@
 			"textypos": "5.0",
 			"xpos": "651.0",
 			"ypos": "185.0",
-			"comp_val": 0.0
+			"comp_val": 1.0
 		},
 		"7": {
 			"id": "BHV2",
@@ -87,7 +87,7 @@
 			"textypos": "5.0",
 			"xpos": "717.0",
 			"ypos": "186.0",
-			"comp_val": 0.0
+			"comp_val": 1.0
 		},
 		"8": {
 			"id": "BHV3",
@@ -120,18 +120,18 @@
 			"textypos": "13.183810757437271",
 			"xpos": "287.0",
 			"ypos": "101.0",
-			"comp_val": 0.6454104781150818
+			"comp_val": 0.6445918679237366
 		},
 		"11": {
 			"id": "BLV614",
 			"name": "LV614",
 			"type": "valve",
 			"direction": "V",
-			"textxpos": "8.56699412564717",
+			"textxpos": "13.56699412564717",
 			"textypos": "7.0",
 			"xpos": "86.0",
 			"ypos": "197.0",
-			"comp_val": 0.007204234600067139
+			"comp_val": 0.0
 		},
 		"12": {
 			"id": "",
@@ -163,7 +163,7 @@
 			"textxpos": "-34.08860121834105",
 			"textypos": "21.754104402551334",
 			"xpos": "80.0",
-			"ypos": "316.0",
+			"ypos": "314.0",
 			"comp_val": 0
 		},
 		"15": {
@@ -173,7 +173,7 @@
 			"direction": "R",
 			"textxpos": "-29.945744075483912",
 			"textypos": "-21.960181311734388",
-			"xpos": "82.0",
+			"xpos": "86.0",
 			"ypos": "69.00000000000006",
 			"comp_val": 0
 		},
@@ -185,7 +185,7 @@
 			"textxpos": "-38.57586301720997",
 			"textypos": "4.0",
 			"xpos": "83.0",
-			"ypos": "449.0",
+			"ypos": "458.0",
 			"comp_val": 1.0
 		},
 		"17": {
@@ -228,7 +228,7 @@
 			"direction": "H",
 			"textxpos": "-3.0",
 			"textypos": "12.0",
-			"xpos": "498.0",
+			"xpos": "500.0",
 			"ypos": "700.0",
 			"comp_val": 0.0
 		},
@@ -239,8 +239,8 @@
 			"direction": "V",
 			"textxpos": "-37.0",
 			"textypos": "5.0",
-			"xpos": "345.0",
-			"ypos": "566.0",
+			"xpos": "350.0",
+			"ypos": "589.0",
 			"comp_val": 1.0
 		},
 		"22": {
@@ -250,9 +250,9 @@
 			"direction": "V",
 			"textxpos": "13.0",
 			"textypos": "6.0",
-			"xpos": "542.0",
-			"ypos": "517.0",
-			"comp_val": 0.4962656497955322
+			"xpos": "541.0",
+			"ypos": "523.0",
+			"comp_val": 0.4914613962173462
 		},
 		"23": {
 			"id": "KLAMPO198",
@@ -283,7 +283,7 @@
 			"direction": "H",
 			"textxpos": "-5.0",
 			"textypos": "15.183810757437271",
-			"xpos": "136.0",
+			"xpos": "143.0",
 			"ypos": "426.0",
 			"comp_val": 0
 		},
@@ -294,8 +294,8 @@
 			"direction": "H",
 			"textxpos": "-5.0",
 			"textypos": "12.0",
-			"xpos": "137.0",
-			"ypos": "275.0",
+			"xpos": "148.0",
+			"ypos": "272.0",
 			"comp_val": 0
 		},
 		"27": {
@@ -316,7 +316,7 @@
 			"direction": "R",
 			"textxpos": "22.19711306737323",
 			"textypos": "8.18267583112275",
-			"xpos": "452.9999999999998",
+			"xpos": "447.9999999999998",
 			"ypos": "214.0",
 			"comp_val": 0
 		},
@@ -405,7 +405,7 @@
 			"textypos": "34.0",
 			"xpos": "659.0",
 			"ypos": "245.0",
-			"flow_from": "74",
+			"flow_from": "63",
 			"comp_val": 1.0,
 			"gate": "N"
 		},
@@ -413,31 +413,17 @@
 			"name": "",
 			"type": "line",
 			"thickness": "3",
-			"length": "130",
+			"length": 128.0,
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "659.0",
 			"ypos": "133.0",
-			"flow_from": "78,79,80",
-			"comp_val": 0,
-			"gate": "N"
+			"flow_from": "67,68,69",
+			"comp_val": 1,
+			"gate": "OR"
 		},
 		"37": {
-			"name": "",
-			"type": "arrow",
-			"thickness": "3",
-			"length": "150",
-			"direction": "D",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "93.0",
-			"ypos": "149.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"38": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -447,95 +433,81 @@
 			"textypos": "34.0",
 			"xpos": "60.0",
 			"ypos": "214.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"flow_from": "11",
+			"comp_val": 0.0,
 			"gate": "N"
+		},
+		"38": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": 40.0,
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "104.0",
+			"ypos": "279.0",
+			"flow_from": "26,87",
+			"comp_val": 0,
+			"gate": "AND"
 		},
 		"39": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
-			"length": "100",
-			"direction": "R",
+			"length": 70.0,
+			"direction": "L",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "104.0",
-			"ypos": "282.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"xpos": "163.0",
+			"ypos": "600.0",
+			"flow_from": "91",
+			"comp_val": 1,
 			"gate": "N"
 		},
 		"40": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
-			"length": "280",
-			"direction": "D",
+			"length": 70.0,
+			"direction": "L",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "90.0",
-			"ypos": "389.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"xpos": "162.0",
+			"ypos": "670.0",
+			"flow_from": "91",
+			"comp_val": 1,
 			"gate": "N"
 		},
 		"41": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
-			"length": "50",
+			"length": 70.0,
 			"direction": "L",
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "163.0",
-			"ypos": "600.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"ypos": "734.0",
+			"flow_from": "91",
+			"comp_val": 1,
 			"gate": "N"
 		},
 		"42": {
 			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "70",
-			"direction": "R",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "92.0",
-			"ypos": "677.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"43": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "50",
-			"direction": "R",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "122.0",
-			"ypos": "737.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"44": {
-			"name": "",
 			"type": "arrow",
 			"thickness": "3",
-			"length": "100",
+			"length": 40.0,
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "101.0",
+			"xpos": "100.0",
 			"ypos": "433.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
+			"flow_from": "88,25",
+			"comp_val": 0,
+			"gate": "AND"
 		},
-		"45": {
+		"43": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -544,12 +516,12 @@
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "204.0",
-			"ypos": "433.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"ypos": "430.0",
+			"flow_from": "46",
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"46": {
+		"44": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -557,13 +529,13 @@
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "260.0",
+			"xpos": "259.0",
 			"ypos": "372.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
+			"flow_from": "23,86",
+			"comp_val": 1,
+			"gate": "AND"
 		},
-		"47": {
+		"45": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -573,11 +545,11 @@
 			"textypos": "34.0",
 			"xpos": "258.0",
 			"ypos": "435.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
+			"flow_from": "24,48",
+			"comp_val": 1,
+			"gate": "AND"
 		},
-		"48": {
+		"46": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -587,11 +559,11 @@
 			"textypos": "34.0",
 			"xpos": "205.0",
 			"ypos": "406.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"flow_from": "47",
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"49": {
+		"47": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -601,39 +573,25 @@
 			"textypos": "34.0",
 			"xpos": "258.0",
 			"ypos": "433.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"flow_from": "44,45",
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"50": {
+		"48": {
 			"name": "",
-			"type": "line",
+			"type": "arrow",
 			"thickness": "3",
-			"length": "130",
+			"length": 60.0,
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "336.0",
-			"ypos": "387.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"xpos": "349.0",
+			"ypos": "453.0",
+			"flow_from": "85",
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"51": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "50",
-			"direction": "R",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "340.0",
-			"ypos": "455.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"52": {
+		"49": {
 			"id": "KFV610",
 			"name": "",
 			"type": "valve",
@@ -644,46 +602,18 @@
 			"ypos": "311.0",
 			"comp_val": 0
 		},
-		"53": {
+		"50": {
 			"id": "KFV613",
 			"name": "",
 			"type": "valve",
 			"direction": "V",
 			"textxpos": "6.852708411361462",
 			"textypos": "38.32666790029441",
-			"xpos": "459.0",
-			"ypos": "310.0",
+			"xpos": "454.0",
+			"ypos": "311.0",
 			"comp_val": 0
 		},
-		"54": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "170",
-			"direction": "V",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "391.0",
-			"ypos": "455.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"55": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "100",
-			"direction": "V",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "466.0",
-			"ypos": "384.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"56": {
+		"51": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -693,11 +623,11 @@
 			"textypos": "34.0",
 			"xpos": "197.0",
 			"ypos": "584.0",
-			"flow_from": "17",
+			"flow_from": "39,17",
 			"comp_val": 1,
-			"gate": "N"
+			"gate": "AND"
 		},
-		"57": {
+		"52": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -705,41 +635,13 @@
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "194.0",
+			"xpos": "196.0",
 			"ypos": "717.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
+			"flow_from": "19,41",
+			"comp_val": 0,
+			"gate": "AND"
 		},
-		"58": {
-			"name": "",
-			"type": "arrow",
-			"thickness": "3",
-			"length": "330",
-			"direction": "L",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "772.0",
-			"ypos": "707.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"59": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "280",
-			"direction": "V",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "549.0",
-			"ypos": "652.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"60": {
+		"53": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -747,97 +649,41 @@
 			"direction": "L",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "790.0",
-			"ypos": "372.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"xpos": "788.0",
+			"ypos": "371.0",
+			"flow_from": "98",
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"61": {
+		"54": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
-			"length": "390",
+			"length": 260.0,
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "96.0",
-			"ypos": "519.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"62": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "94",
-			"direction": "R",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "558.0",
-			"ypos": "474.0",
-			"flow_from": "3",
-			"comp_val": 0,
-			"gate": "N"
-		},
-		"63": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "50",
-			"direction": "R",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "488.0",
-			"ypos": "468.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"64": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": 43.0,
-			"direction": "V",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "487.0",
+			"xpos": "94.0",
 			"ypos": "518.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
+			"flow_from": "91,55",
+			"comp_val": 1,
+			"gate": "OR"
 		},
-		"65": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "130",
-			"direction": "V",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "247.0",
-			"ypos": "716.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
-		},
-		"66": {
+		"55": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
-			"length": "120",
+			"length": 60.0,
 			"direction": "U",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "352.0",
-			"ypos": "651.0",
-			"flow_from": "N",
-			"comp_val": -1,
-			"gate": "N"
+			"xpos": "357.0",
+			"ypos": "587.0",
+			"flow_from": "21,93",
+			"comp_val": 1,
+			"gate": "AND"
 		},
-		"67": {
+		"56": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -847,11 +693,11 @@
 			"textypos": "34.0",
 			"xpos": "441.0",
 			"ypos": "705.0",
-			"flow_from": "N",
-			"comp_val": -1,
+			"flow_from": "93",
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"68": {
+		"57": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -861,15 +707,15 @@
 			"textypos": "34.0",
 			"xpos": "794.0",
 			"ypos": "634.0",
-			"flow_from": "73",
-			"comp_val": -1,
+			"flow_from": "62",
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"69": {
+		"58": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
-			"length": 230.0,
+			"length": 223.0,
 			"direction": "D",
 			"textxpos": "38.5",
 			"textypos": "34.0",
@@ -879,7 +725,7 @@
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"70": {
+		"59": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -893,7 +739,7 @@
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"71": {
+		"60": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -903,11 +749,11 @@
 			"textypos": "34.0",
 			"xpos": "651.0",
 			"ypos": "517.0",
-			"flow_from": "2",
-			"comp_val": 0.0,
-			"gate": "N"
+			"flow_from": "2,59",
+			"comp_val": 0,
+			"gate": "AND"
 		},
-		"72": {
+		"61": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -921,7 +767,7 @@
 			"comp_val": 1.0,
 			"gate": "N"
 		},
-		"73": {
+		"62": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -931,11 +777,11 @@
 			"textypos": "34.0",
 			"xpos": "779.0",
 			"ypos": "374.0",
-			"flow_from": "60",
-			"comp_val": -1,
+			"flow_from": "53",
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"74": {
+		"63": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -945,11 +791,11 @@
 			"textypos": "34.0",
 			"xpos": "724.0",
 			"ypos": "249.0",
-			"flow_from": "72",
+			"flow_from": "61",
 			"comp_val": 1.0,
 			"gate": "N"
 		},
-		"75": {
+		"64": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -963,7 +809,7 @@
 			"comp_val": 1.0,
 			"gate": "N"
 		},
-		"76": {
+		"65": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -977,7 +823,7 @@
 			"comp_val": 1.0,
 			"gate": "N"
 		},
-		"77": {
+		"66": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -991,7 +837,7 @@
 			"comp_val": 1.0,
 			"gate": "N"
 		},
-		"78": {
+		"67": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1001,11 +847,11 @@
 			"textypos": "34.0",
 			"xpos": "658.0",
 			"ypos": "133.0",
-			"flow_from": "6",
-			"comp_val": 0.0,
-			"gate": "N"
+			"flow_from": "6,66",
+			"comp_val": 1,
+			"gate": "AND"
 		},
-		"79": {
+		"68": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1015,11 +861,11 @@
 			"textypos": "34.0",
 			"xpos": "724.0",
 			"ypos": "134.0",
-			"flow_from": "7",
-			"comp_val": 0.0,
-			"gate": "N"
+			"flow_from": "7,65",
+			"comp_val": 1,
+			"gate": "AND"
 		},
-		"80": {
+		"69": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1029,11 +875,11 @@
 			"textypos": "34.0",
 			"xpos": "788.0",
 			"ypos": "134.0",
-			"flow_from": "8",
-			"comp_val": 0.0,
-			"gate": "N"
+			"flow_from": "8,64",
+			"comp_val": 0,
+			"gate": "AND"
 		},
-		"81": {
+		"70": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1044,10 +890,10 @@
 			"xpos": "724.0",
 			"ypos": "111.0",
 			"flow_from": "36",
-			"comp_val": 0,
+			"comp_val": 1,
 			"gate": "N"
 		},
-		"82": {
+		"71": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1057,11 +903,11 @@
 			"textypos": "34.0",
 			"xpos": "725.0",
 			"ypos": "108.0",
-			"flow_from": "81,83",
-			"comp_val": 0,
-			"gate": "N"
+			"flow_from": "70,72",
+			"comp_val": 1,
+			"gate": "OR"
 		},
-		"83": {
+		"72": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -1075,7 +921,7 @@
 			"comp_val": 0.0,
 			"gate": "N"
 		},
-		"84": {
+		"73": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1089,7 +935,7 @@
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"85": {
+		"74": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1099,7 +945,427 @@
 			"textypos": "34.0",
 			"xpos": "322.0",
 			"ypos": "108.0",
+			"flow_from": "70,71",
+			"comp_val": 1,
+			"gate": "OR"
+		},
+		"75": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": 20.0,
+			"direction": "L",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "861.0",
+			"ypos": "108.0",
+			"flow_from": "29,71",
+			"comp_val": 0,
+			"gate": "AND"
+		},
+		"76": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": 140.0,
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "143.0",
+			"ypos": "108.0",
+			"flow_from": "10,74",
+			"comp_val": 1,
+			"gate": "AND"
+		},
+		"77": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": "50",
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "93.0",
+			"ypos": "138.0",
+			"flow_from": "76",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"78": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 45.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "93.0",
+			"ypos": "232.0",
+			"flow_from": "77",
+			"comp_val": 1,
+			"gate": "AND"
+		},
+		"79": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 30.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "93.0",
+			"ypos": "281.0",
+			"flow_from": "78,38",
+			"comp_val": 1,
+			"gate": "OR"
+		},
+		"80": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": 20.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "391.0",
+			"ypos": "283.0",
+			"flow_from": "S",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"81": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": 20.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "461.0",
+			"ypos": "282.0",
+			"flow_from": "S",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"82": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 70.0,
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "391.0",
+			"ypos": "364.0",
+			"flow_from": "84,83",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"83": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 20.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "461.0",
+			"ypos": "344.0",
+			"flow_from": "81,50",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"84": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 20.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "391.0",
+			"ypos": "344.0",
+			"flow_from": "49,80",
+			"comp_val": 0,
+			"gate": "AND"
+		},
+		"85": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 85.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "409.0",
+			"ypos": "365.0",
+			"flow_from": "83",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"86": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": "50",
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "356.0",
+			"ypos": "391.0",
+			"flow_from": "85",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"87": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 20.0,
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "183.0",
+			"ypos": "279.0",
+			"flow_from": "43",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"88": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 25.0,
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "178.0",
+			"ypos": "433.0",
+			"flow_from": "43",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"89": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": "50",
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "91.0",
+			"ypos": "381.0",
+			"flow_from": "S",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"90": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 20.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "91.0",
+			"ypos": "435.0",
+			"flow_from": "42,89",
+			"comp_val": 1,
+			"gate": "OR"
+		},
+		"91": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 240.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "90.0",
+			"ypos": "494.0",
+			"flow_from": "16,90",
+			"comp_val": 1,
+			"gate": "AND"
+		},
+		"92": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": "50",
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "196.0",
+			"ypos": "654.0",
+			"flow_from": "40,18",
+			"comp_val": 0,
+			"gate": "AND"
+		},
+		"93": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 300.0,
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "247.0",
+			"ypos": "654.0",
+			"flow_from": "103,92,104",
+			"comp_val": 1,
+			"gate": "OR"
+		},
+		"94": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 30.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "357.0",
+			"ypos": "623.0",
+			"flow_from": "93",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"95": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": "50",
+			"direction": "U",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "651.0",
+			"ypos": "479.0",
 			"flow_from": "0",
+			"comp_val": 0,
+			"gate": "N"
+		},
+		"96": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 25.0,
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "620.0",
+			"ypos": "499.0",
+			"flow_from": "0",
+			"comp_val": 0,
+			"gate": "N"
+		},
+		"97": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": "50",
+			"direction": "U",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "618.0",
+			"ypos": "499.0",
+			"flow_from": "0",
+			"comp_val": 0,
+			"gate": "N"
+		},
+		"98": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 147.0,
+			"direction": "U",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "548.0",
+			"ypos": "520.0",
+			"flow_from": "22,93",
+			"comp_val": 1,
+			"gate": "AND"
+		},
+		"99": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": "50",
+			"direction": "L",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "491.0",
+			"ypos": "707.0",
+			"flow_from": "56",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"100": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 240.0,
+			"direction": "L",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "776.0",
+			"ypos": "707.0",
+			"flow_from": "20,99",
+			"comp_val": 0,
+			"gate": "AND"
+		},
+		"101": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 70.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "779.0",
+			"ypos": "637.0",
+			"flow_from": "100",
+			"comp_val": 0,
+			"gate": "N"
+		},
+		"102": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": 90.0,
+			"direction": "U",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "547.0",
+			"ypos": "653.0",
+			"flow_from": "93",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"103": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 70.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "247.0",
+			"ypos": "584.0",
+			"flow_from": "51",
+			"comp_val": 1,
+			"gate": "N"
+		},
+		"104": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 60.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "247.0",
+			"ypos": "657.0",
+			"flow_from": "52",
 			"comp_val": 0,
 			"gate": "N"
 		}

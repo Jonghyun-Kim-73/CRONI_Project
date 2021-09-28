@@ -79,11 +79,11 @@ class MainSysRightScene(QGraphicsScene):
         # Shortcut -----------------------------------------------------------------------------------------------------
         self.edit_mode = False
         # Comp display update ------------------------------------------------------------------------------------------
-        if self.shmem is not None:
-            timer = QTimer(self)
-            timer.setInterval(1000)
-            timer.timeout.connect(self.update_mimic_info)
-            timer.start()
+        # if self.shmem is not None:
+        timer = QTimer(self)
+        timer.setInterval(1000)
+        timer.timeout.connect(self.update_mimic_info)
+        timer.start()
 
     def keyPressEvent(self, QKeyEvent):
         super(MainSysRightScene, self).keyPressEvent(QKeyEvent)
@@ -133,7 +133,8 @@ class MainSysRightScene(QGraphicsScene):
             # Test 용
             for item in self.items():
                 if isinstance(item, SVGComp):
-                    print(f'Test mimic_info: {item.comp_id}_{item.comp_type}')
+                    # print(f'Test mimic_info: {item.comp_id}_{item.comp_type}')
+                    pass
                 if isinstance(item, LineComp):
                     item.update_flow_color()
 
@@ -239,7 +240,7 @@ class MainSysRightScene(QGraphicsScene):
 
     def testmem(self):
         self.update_mimic_info()
-        print('Test mem update')
+        # print('Test mem update')
 
 
 class SVGComp(QGraphicsSvgItem):
@@ -653,6 +654,8 @@ class LineComp(QGraphicsLineItem):
                 for nub_ in connected_nubs:
                     if self.sys_mimic_info[self.target_sys][nub_]['comp_val'] > 0:
                         _logic_box.append(True)
+                    else:
+                        _logic_box.append(False)
                 # 로직
                 if self.gate == "OR" or self.gate == 'N':
                     self.flow_val = 1 if any(_logic_box) else 0
