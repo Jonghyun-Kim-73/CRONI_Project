@@ -951,10 +951,10 @@
 	"RCS": {
 		"0": {
 			"name": "",
-			"type": "line",
+			"type": "arrow",
 			"thickness": "3",
 			"length": "50",
-			"direction": "R",
+			"direction": "D",
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "409.0",

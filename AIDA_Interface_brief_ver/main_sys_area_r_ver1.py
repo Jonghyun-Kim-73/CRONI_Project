@@ -38,7 +38,7 @@ class MainSysRightArea(QGraphicsView):
         self.F2_key.activated.connect(self._keyPressEvent_F2)
         self.edit_mode = False
 
-        self.update_sys_mimic('CVCS')
+        self.update_sys_mimic('RCS')
 
     def update_sys_mimic(self, target_sys):
         self._scene.clear()
@@ -413,7 +413,7 @@ class LineComp(QGraphicsLineItem):
         self.text_y = self.sys_mimic_info[self.target_sys][i]['textypos']
         self.pen_thickness = int(self.sys_mimic_info[self.target_sys][i]['thickness'])
         self.pen_length = float(self.sys_mimic_info[self.target_sys][i]['length'])
-        self.pen_direction = self.sys_mimic_info[self.target_sys][i]['direction']       # Up, Down, Right, Right
+        self.pen_direction = self.sys_mimic_info[self.target_sys][i]['direction']       # Up, Down, Right, Left
 
         self.start_x = float(self.sys_mimic_info[self.target_sys][i]['xpos'])
         self.start_y = float(self.sys_mimic_info[self.target_sys][i]['ypos'])
@@ -421,6 +421,7 @@ class LineComp(QGraphicsLineItem):
         self.flow_from = self.sys_mimic_info[self.target_sys][i]['flow_from']
         self.flow_val = self.sys_mimic_info[self.target_sys][i]['comp_val']
 
+        # Line V = (R, L), H = (D, U)
         if self.pen_direction == "R" or self.pen_direction == "L":
             self.end_x = self.start_x + self.pen_length if self.pen_direction == "R" else self.start_x - self.pen_length
             self.end_y = self.start_y
@@ -498,8 +499,9 @@ class LineComp(QGraphicsLineItem):
         update_flow_from.triggered.connect(self._update_flow_id)
         update_rotation = menu.addAction("Rotation")
         update_rotation.triggered.connect(self._update_rotation)
-        # update_arrow = menu.addAction("Arrow")
-        # update_arrow.triggered.connect(self._update_rotation)
+        shape = 'Arrow' if self.comp_type == 'line' else 'Line'
+        update_arrow = menu.addAction(f"Change Shape to {shape}")
+        update_arrow.triggered.connect(self._update_shape)
         remove_item = menu.addAction("Remove Item")
         remove_item.triggered.connect(self._remove_item)
         # -----------------------------------------------------
@@ -512,8 +514,39 @@ class LineComp(QGraphicsLineItem):
             self.sys_mimic_info[self.target_sys][self.nub]['flow_from'] = text
 
     def _update_rotation(self):
-        # TODO
-        pass
+        # Shape 전환
+        if self.comp_type == 'line':
+            self.pen_direction = "D" if self.pen_direction == "R" or self.pen_direction == "L" else "R"
+        elif self.comp_type == 'arrow':
+            _rot_pos = {'R': 0, 'U': 1, 'L': 2, 'D': 3}
+            _rot_valpos = {0: 'R', 1: 'U', 2: 'L', 3: 'D'}
+            _pos_nub = 0 if _rot_pos[self.pen_direction] + 1 == 4 else _rot_pos[self.pen_direction] + 1
+            self.pen_direction = _rot_valpos[_pos_nub]
+
+        # 위치 재 계산
+        if self.pen_direction == "R" or self.pen_direction == "L":
+            self.end_x = self.start_x + self.pen_length if self.pen_direction == "R" else self.start_x - self.pen_length
+            self.end_y = self.start_y
+        else:
+            self.end_x = self.start_x
+            self.end_y = self.start_y + self.pen_length if self.pen_direction == "D" else self.start_y - self.pen_length
+
+        # 업데이트
+        self.setLine(self.start_x, self.start_y, self.end_x, self.end_y)
+
+        # 메모리 업데이트
+        self.sys_mimic_info[self.target_sys][self.nub]['direction'] = self.pen_direction
+        self.sys_mimic_info[self.target_sys][self.nub]['xpos'] = str(self.x() + self.start_x)
+        self.sys_mimic_info[self.target_sys][self.nub]['ypos'] = str(self.y() + self.start_y)
+
+    def _update_shape(self):
+        # Shape 전환
+        self.comp_type = 'arrow' if self.comp_type == 'line' else 'line'
+
+        self.update()
+
+        # 메모리 업데이트
+        self.sys_mimic_info[self.target_sys][self.nub]['type'] = self.comp_type
 
     def _update_info_to_mem(self):
         self.sys_mimic_info[self.target_sys][self.nub]['xpos'] = str(self.x() + self.start_x)
