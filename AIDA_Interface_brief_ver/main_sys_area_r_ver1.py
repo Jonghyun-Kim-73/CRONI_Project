@@ -38,7 +38,7 @@ class MainSysRightArea(QGraphicsView):
         self.F2_key.activated.connect(self._keyPressEvent_F2)
         self.edit_mode = False
 
-        self.update_sys_mimic('RCS')
+        self.update_sys_mimic('CVCS')
 
     def update_sys_mimic(self, target_sys):
         self._scene.clear()
@@ -72,11 +72,12 @@ class MainSysRightScene(QGraphicsScene):
         # for sys in  self.sys_mimic_info.keys():
         #     for i in self.sys_mimic_info[sys].keys():
         #         if self.sys_mimic_info[sys][i]['type'] == 'arrow' or self.sys_mimic_info[sys][i]['type'] == 'line':
-        #             del self.sys_mimic_info[sys][i]['flow_val']
+        #             self.sys_mimic_info[sys][i]['gate'] = 'N'
                     # del self.sys_mimic_info[sys][i]['flow_from']
         # ---------------------------------------------------------------------------
         self.current_opened_control_board = []
-
+        # Shortcut -----------------------------------------------------------------------------------------------------
+        self.edit_mode = False
         # Comp display update ------------------------------------------------------------------------------------------
         if self.shmem is not None:
             timer = QTimer(self)
@@ -93,7 +94,7 @@ class MainSysRightScene(QGraphicsScene):
                 self.selectedItems()[0].setY(int(self.selectedItems()[0].y() + 1))
             elif QKeyEvent.key() == Qt.Key_Right:
                 self.selectedItems()[0].setX(int(self.selectedItems()[0].x() + 1))
-            elif QKeyEvent.key() == Qt.Key_Right:
+            elif QKeyEvent.key() == Qt.Key_Left:
                 self.selectedItems()[0].setX(int(self.selectedItems()[0].x() - 1))
 
     def update_sys_mimic(self, target_sys):
@@ -182,10 +183,11 @@ class MainSysRightScene(QGraphicsScene):
                 # print(f'Comp Click {self.sceneRect()}')
                 # Comp type 별 동작
                 if item.comp_type == 'valve':
-                    control_board = ValveControlBoard(item)
-                    control_board.move_to_inside(self.boundary_item)
-                    self.addItem(control_board)
-                    self.current_opened_control_board.append(control_board)
+                    pass
+                    # control_board = ValveControlBoard(item)
+                    # control_board.move_to_inside(self.boundary_item)
+                    # self.addItem(control_board)
+                    # self.current_opened_control_board.append(control_board)
 
         super(MainSysRightScene, self).mousePressEvent(event)
 
@@ -208,7 +210,7 @@ class MainSysRightScene(QGraphicsScene):
                 'name': "", 'type': f'{type}', 'thickness': '3', 'length': '50', 'direction': 'R',
                 'textxpos': '', 'textypos': '',
                 'xpos': f'{pos.x()}', 'ypos': f'{pos.y()}',
-                'flow_from': "0", 'comp_val': 0,
+                'flow_from': "0", 'comp_val': 0, 'gate': 'N'
             }
         elif type == 'valve' or type == 'HP':
             self.sys_mimic_info[self.target_sys][str(max_nub)] = {
@@ -230,6 +232,7 @@ class MainSysRightScene(QGraphicsScene):
 
     def keyPressEvent_F2(self, tig):
         """ 모든 아이템의 Flag 수정 """
+        self.edit_mode = tig
         for item in self.items():
             if not isinstance(item, BoundaryComp):
                 item.setFlag(QGraphicsItem.ItemIsMovable, tig)
@@ -247,7 +250,7 @@ class SVGComp(QGraphicsSvgItem):
         self.parent = parent
         self.setSharedRenderer(svg_render)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
-        self.setFlag(QGraphicsItem.ItemIsMovable, False)
+        self.setFlag(QGraphicsItem.ItemIsMovable, parent.edit_mode)
         # --------------------------------------------------------------------------------------------------------------
         self.nub = i
         self.comp_id = self.sys_mimic_info[self.target_sys][i]['id']
@@ -403,7 +406,7 @@ class LineComp(QGraphicsLineItem):
         self.target_sys = parent.target_sys
         self.parent = parent
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
-        self.setFlag(QGraphicsItem.ItemIsMovable, False)
+        self.setFlag(QGraphicsItem.ItemIsMovable, parent.edit_mode)
         # --------------------------------------------------------------------------------------------------------------
         # print(self.sys_mimic_info[self.target_sys][i])
         self.nub = i
@@ -420,6 +423,8 @@ class LineComp(QGraphicsLineItem):
 
         self.flow_from = self.sys_mimic_info[self.target_sys][i]['flow_from']
         self.flow_val = self.sys_mimic_info[self.target_sys][i]['comp_val']
+
+        self.gate = self.sys_mimic_info[self.target_sys][i]['gate']
 
         # Line V = (R, L), H = (D, U)
         if self.pen_direction == "R" or self.pen_direction == "L":
@@ -504,11 +509,15 @@ class LineComp(QGraphicsLineItem):
         update_arrow.triggered.connect(self._update_shape)
         remove_item = menu.addAction("Remove Item")
         remove_item.triggered.connect(self._remove_item)
+        change_length = menu.addAction('Change Length')
+        change_length.triggered.connect(self._change_length)
+        change_gate = menu.addAction('Change Gate')
+        change_gate.triggered.connect(self._change_gate)
         # -----------------------------------------------------
         menu.exec_(event.screenPos())
 
     def _update_flow_id(self):
-        text, ok = QInputDialog.getText(None, 'Flow Id', f'Curent Id [{self.flow_from}]|Val [{self.flow_val}]:')
+        text, ok = QInputDialog.getText(None, 'Flow Id', f'Current Id [{self.flow_from}]|Val [{self.flow_val}]:')
         if ok:
             self.flow_from = text
             self.sys_mimic_info[self.target_sys][self.nub]['flow_from'] = text
@@ -548,6 +557,29 @@ class LineComp(QGraphicsLineItem):
         # 메모리 업데이트
         self.sys_mimic_info[self.target_sys][self.nub]['type'] = self.comp_type
 
+    def _change_length(self):
+        text, ok = QInputDialog.getText(None, 'Change length', f'Current Length [{self.pen_length}] =>')
+        if ok:
+            self.pen_length = float(text)
+            self.sys_mimic_info[self.target_sys][self.nub]['length'] = float(text)
+
+            # 위치 재 계산
+            if self.pen_direction == "R" or self.pen_direction == "L":
+                self.end_x = self.start_x + self.pen_length if self.pen_direction == "R" else self.start_x - self.pen_length
+                self.end_y = self.start_y
+            else:
+                self.end_x = self.start_x
+                self.end_y = self.start_y + self.pen_length if self.pen_direction == "D" else self.start_y - self.pen_length
+
+            # 업데이트
+            self.setLine(self.start_x, self.start_y, self.end_x, self.end_y)
+
+    def _change_gate(self):
+        text, ok = QInputDialog.getText(None, 'Change gate', f'Current gate [{self.gate}] =>')
+        if ok:
+            self.gate = text
+            self.sys_mimic_info[self.target_sys][self.nub]['gate'] = text
+
     def _update_info_to_mem(self):
         self.sys_mimic_info[self.target_sys][self.nub]['xpos'] = str(self.x() + self.start_x)
         self.sys_mimic_info[self.target_sys][self.nub]['ypos'] = str(self.y() + self.start_y)
@@ -573,7 +605,30 @@ class LineComp(QGraphicsLineItem):
                         # 지워지는 값보다 flow_from 이 크면 숫자를 감산해 줘야함. (DB가 밀림)
                         temp_mimic_info[new_nub]['flow_from'] = str(int(temp_mimic_info[new_nub]['flow_from']) - 1)
                 else:
-                    pass  # flow_from 이 소스("S") 이거나 타 기기 변수를 지칭하는 경우
+                    if "," in temp_mimic_info[new_nub]['flow_from']:
+                        # "1,2" 같이 2개의 입력을 소스를 받는 경우가 있음.
+                        connected_nubs = temp_mimic_info[new_nub]['flow_from'].split(',')
+                        out_str = ''
+
+                        for i, v in enumerate(connected_nubs):
+                            if int(v) > int(self.nub):              # 위와 동일한 로직
+                                out_str += f'{int(v) - 1},'
+                            elif int(v) < int(self.nub):
+                                out_str += f'{v},'
+                        out_str = out_str[:-1]      # , 제외
+
+                        if out_str == '':
+                            # out_str = ''
+                            out_str = 'N'
+                        else:
+                            # out_str = '1,2,3'
+                            pass
+
+                        temp_mimic_info[new_nub]['flow_from'] = out_str
+
+                    else:
+                        # flow_from 이 소스("S") 이거나 타 기기 변수를 지칭하는 경우
+                        pass
             else:
                 pass  # 펌프나 벨브와 같이 색이 안변하는 기기 경우
 
@@ -588,8 +643,23 @@ class LineComp(QGraphicsLineItem):
         if self.flow_from == "S" or self.flow_from == "N":   # Source or None
             self.flow_val = 1 if self.flow_from == "S" else -1      # -1 is None
         else:
-            _comp_type = self.sys_mimic_info[self.target_sys][self.flow_from]['type']
-            self.flow_val = self.sys_mimic_info[self.target_sys][self.flow_from]['comp_val']
+            if ',' in self.flow_from:
+                # 초기 파이프내 유량 0
+                self.flow_val = 0
+                
+                # "1,2" 같이 2개의 입력을 소스를 받는 경우가 있음.
+                _logic_box = []
+                connected_nubs = self.flow_from.split(',')
+                for nub_ in connected_nubs:
+                    if self.sys_mimic_info[self.target_sys][nub_]['comp_val'] > 0:
+                        _logic_box.append(True)
+                # 로직
+                if self.gate == "OR" or self.gate == 'N':
+                    self.flow_val = 1 if any(_logic_box) else 0
+                elif self.gate == "AND":
+                    self.flow_val = 1 if all(_logic_box) else 0
+            else:
+                self.flow_val = self.sys_mimic_info[self.target_sys][self.flow_from]['comp_val']
 
         self.sys_mimic_info[self.target_sys][self.nub]['comp_val'] = self.flow_val
 
