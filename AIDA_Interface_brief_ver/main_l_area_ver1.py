@@ -293,6 +293,16 @@ class AlarmTable(QTableWidget):
                 curp, crip = self._check_curp_crip(self.cellWidget(i, 1).alarm_id)
                 self.cellWidget(i, 1).dis_update(curp)
 
+        # 2. 새롭게 발생한 알람 찾기
+        alarm_list = list(self.alarm_info_db.keys())
+        del alarm_list[alarm_list.index('Empty')]
+
+        for alarm_name in alarm_list:                       # 사전에 선정된 알람 DB의 알람 id 를 순회함.
+            if self.local_mem[alarm_name]['Val'] == 1:      # 만약 해당 알람 id 값이 1 이면 알람 추가를 시도함.
+                if not alarm_name in self.alarm_his:        # 이전에 추가된 알람이 아닌 경우에만 추가함.
+                    self._add_alarm(alarm_name, 0)
+                    self.alarm_his.append(alarm_name)
+
     def _check_curp_crip(self, para):
         # 현재 값이나 기준치가 모호한 경우 공백으로 처리
         curp = '' if self.alarm_info_db[para]['CurP'] == '' else self.local_mem[self.alarm_info_db[para]['CurP']]['Val']
