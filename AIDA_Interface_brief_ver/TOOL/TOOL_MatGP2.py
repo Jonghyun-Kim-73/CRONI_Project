@@ -6,7 +6,6 @@ import sys
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backend_bases import MouseEvent
 import matplotlib.pyplot as plt
-from collections import deque
 
 
 class Trend(QWidget):
@@ -63,8 +62,8 @@ class Trend(QWidget):
         self.setLayout(layout)
 
         # Line
-        self.line1, = self.ax.plot([], [], color=[39/255, 39/255, 141/255], linewidth=1)    # 현재 값 Trend
-        self.prog_lines = deque(maxlen=10)    # 예지 값 Trends 저장
+        self.line1, = self.ax.plot([], [], color=[192/255, 0, 0], linewidth=1.5)    # 현재 값 Trend
+        self.prog_lines = []    # 예지 값 Trends 저장
 
         #Q Timer ------------------------------------------------------------------------------------------------------
         timer = QTimer(self)
@@ -98,14 +97,12 @@ class Trend(QWidget):
             
             * Required functions of graph
                 1. x의 범위는 0초 부터 15분의 정보를 보여준다. [0 ~ 900 sec = 0 ~ 4500 tick]  
-                2. 현재 데이터는 실선으로 1개, 예측 데이터는 점선으로 최대 10개까지 표기 할 수 있으며, 
+                2. 현재 데이터는 실선으로 1개, 예측 데이터는 점선으로 최대 20개까지 표기 할 수 있으며, 
                    10개의 예측데이터는 시간에 따라 alpha 값이 줄어 든다.
-                3. save_db와 time_db의 데이터의 길이가 맞지 않음으로 time_db의 끝에서 30 + 120 길이의 값을 가져와서 그려진다.
             """
             # 그래프 업데이트 코드 시작 -----------------------------------------------------------------------------------
             if len(time_db) > 2:    # 2개 이상 포이트가 저장되면 드로잉 시작
                 if saved_db != []:  # 예지된 값이 있는 경우 self.prog_lines 에 추가 해야함.
-
                     _temp_x = [time_db[-1] + 5 * i for i in range(len(saved_db))]
 
                     line, = self.ax.plot([], [], color=[39/255, 39/255, 141/255], linewidth=1, linestyle='--')
@@ -113,11 +110,15 @@ class Trend(QWidget):
 
                     self.prog_lines.append(line)
 
+                    if len(self.prog_lines) > 20:    # 20 개 이상 그려지면 지워짐.
+                        self.ax.lines.remove(self.prog_lines[0])
+                        self.prog_lines.remove(self.prog_lines[0])
+
                 # 예지 라인 alpha
                 if len(self.prog_lines) != 0:
                     for alpha, l in enumerate(self.prog_lines):
                         # alpha 0 -> 9
-                        alpha = 11 - len(self.prog_lines) + alpha
+                        alpha = 21 - len(self.prog_lines) + alpha
                         l.set_alpha(alpha * 0.1)
 
                 # 압력 그래프 드로잉
