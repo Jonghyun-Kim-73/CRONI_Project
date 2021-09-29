@@ -474,7 +474,7 @@ class LineComp(QGraphicsLineItem):
             self.text.setY(float(self.text_y))
         self._update_info_to_mem()
 
-        self.flow_color = Qt.blue if self.flow_val > 0 else Qt.black
+        self.flow_color = Qt.blue if self.flow_val > 0 else Qt.gray
         self.setPen(QPen(self.flow_color, self.pen_thickness))
 
     def boundingRect(self):
@@ -690,7 +690,7 @@ class LineComp(QGraphicsLineItem):
         self.sys_mimic_info[self.target_sys][self.nub]['comp_val'] = self.flow_val
 
         if self.flow_val == 0:
-            self.flow_color = Qt.black
+            self.flow_color = Qt.gray
         elif self.flow_val > 0:
             self.flow_color = Qt.blue
         else:
@@ -729,7 +729,10 @@ class ValveControlBoard(QGraphicsRectItem):
         self.close_btn.setBrush(QBrush(Qt.darkRed, Qt.SolidPattern))
         self.close_btn.setPen(QPen(Qt.NoPen))
 
-        self.up_btn = ValveControlBoardBtn(self, parent.x() + 20, parent.y() + 20)
+        # self.up_btn = ValveControlBoardBtn(self, -5, -50)
+        # self.up_btn.setRotation(90.0)
+        # self.down_btn = ValveControlBoardBtn(self, 25, 25)
+        # self.down_btn.setRotation(270.0)
         #
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -776,7 +779,6 @@ class ValveControlBoard(QGraphicsRectItem):
         # 바운더리 넘어간 경우 -------------------------------------------------------------------------------------------
         new_pos: QRect = self.mapRectToScene(self.rect())
         new_pos_x: QRect = self.mapRectToScene(self.close_btn.rect())
-        new_pos_up: QRect = self.mapRectToScene(self.up_btn.boundingRect())
 
         boundary: QRect = boundary_itme.rect()  # < ---  self.scene().boundary_item.rect()
 
@@ -784,15 +786,12 @@ class ValveControlBoard(QGraphicsRectItem):
 
         new_pos.moveTop(new_pos.y() - delta_y)
         new_pos_x.moveTop(new_pos_x.y() - delta_y)
-        new_pos_up.moveTop(new_pos_up.y() - delta_y)
 
         new_pos.moveLeft(new_pos.x() - delta_x)
         new_pos_x.moveLeft(new_pos_x.x() - delta_x)
-        new_pos_up.moveLeft(new_pos_up.x() - delta_x)
 
         self.setPos(0, 0)  # 이전 pos 리셋
         self.close_btn.setPos(0, 0)
-        self.up_btn.setPos(0, 0)
 
         self.setRect(new_pos)
         self.close_btn.setRect(new_pos_x)
@@ -835,27 +834,35 @@ class ValveControlBoard(QGraphicsRectItem):
         self.setRect(new_pos)
         self.close_btn.setRect(new_pos_x)
 
+        # self.up_btn.move_pos(new_pos.x(), new_pos.y())
+        # self.down_btn.move_pos(new_pos.x(), new_pos.y())
+
 
 class ValveControlBoardBtn(QGraphicsPolygonItem):
     def __init__(self, parent, x=0, y=0):
         super(ValveControlBoardBtn, self).__init__(parent)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, False)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setAcceptHoverEvents(True)
-        self.start_x, self.start_y = 100, 100
-        #print(x, y)
-        x, y = self.start_x, self.start_y
-        arrow = QPolygonF([QPointF(x - 8, y),
-                           QPointF(x, y - 6),
-                           QPointF(x, y + 6),
-                           QPointF(x - 8, y)])
+        self.start_x, self.start_y = x, y
+
+        arrow = QPolygonF([QPointF(self.start_x - 8, self.start_y),
+                           QPointF(self.start_x, self.start_y - 6),
+                           QPointF(self.start_x, self.start_y + 6),
+                           QPointF(self.start_x - 8, self.start_y)])
 
         self.setPolygon(arrow)
+
         self.setScale(2)
         self.setBrush(QBrush(Qt.darkRed, Qt.SolidPattern))
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None) -> None:
         painter.setRenderHint(painter.Antialiasing)
+        print(self.scenePos())
         super(ValveControlBoardBtn, self).paint(painter, QStyleOptionGraphicsItem, widget)
+
+    def move_pos(self, x, y):
+        self.setPos(x - self.start_x, y - self.start_y)
 
     def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
         self.setBrush(QBrush(Qt.darkGreen, Qt.SolidPattern))

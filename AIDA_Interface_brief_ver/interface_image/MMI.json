@@ -518,7 +518,7 @@
 			"xpos": "204.0",
 			"ypos": "430.0",
 			"flow_from": "46",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "N"
 		},
 		"44": {
@@ -532,7 +532,7 @@
 			"xpos": "259.0",
 			"ypos": "372.0",
 			"flow_from": "23,86",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "AND"
 		},
 		"45": {
@@ -546,7 +546,7 @@
 			"xpos": "258.0",
 			"ypos": "435.0",
 			"flow_from": "24,48",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "AND"
 		},
 		"46": {
@@ -560,7 +560,7 @@
 			"xpos": "205.0",
 			"ypos": "406.0",
 			"flow_from": "47",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "N"
 		},
 		"47": {
@@ -574,7 +574,7 @@
 			"xpos": "258.0",
 			"ypos": "433.0",
 			"flow_from": "44,45",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "N"
 		},
 		"48": {
@@ -588,7 +588,7 @@
 			"xpos": "349.0",
 			"ypos": "453.0",
 			"flow_from": "85",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "N"
 		},
 		"49": {
@@ -1058,7 +1058,7 @@
 			"xpos": "391.0",
 			"ypos": "364.0",
 			"flow_from": "84,83",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "N"
 		},
 		"83": {
@@ -1072,8 +1072,8 @@
 			"xpos": "461.0",
 			"ypos": "344.0",
 			"flow_from": "81,50",
-			"comp_val": 1,
-			"gate": "N"
+			"comp_val": 0,
+			"gate": "AND"
 		},
 		"84": {
 			"name": "",
@@ -1100,7 +1100,7 @@
 			"xpos": "409.0",
 			"ypos": "365.0",
 			"flow_from": "83",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "N"
 		},
 		"86": {
@@ -1114,7 +1114,7 @@
 			"xpos": "356.0",
 			"ypos": "391.0",
 			"flow_from": "85",
-			"comp_val": 1,
+			"comp_val": 0,
 			"gate": "N"
 		},
 		"87": {
