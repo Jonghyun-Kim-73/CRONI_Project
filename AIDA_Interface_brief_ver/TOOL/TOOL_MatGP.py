@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 
 class Trend(QWidget):
-    def __init__(self, parent, w, h, para_name: str, para_id: str, para_range: list, xtitle:str, ytitle:str):
+    def __init__(self, parent, w, h, para_name: str, para_id: str,
+                 para_range: list = [None, None], xtitle:str = 'None', ytitle:str = 'None'):
         """
         그래프 위젯
         :param parent: 시뮬레이터에서 공유 메모리에 업데이트된 값을 취득하기위해 부모 위젯 아이디 받기 위해서 사용

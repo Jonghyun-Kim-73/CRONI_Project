@@ -119,7 +119,7 @@ class SHMem:
         print('Trig 메모리 생성 완료')
         # 3] 변수 그래픽 표기용
         self.save_mem = {
-            'KCNTOMS': []
+            'KCNTOMS': [], 'PPRZ': [],
         }
 
     def call_init(self, init_nub):

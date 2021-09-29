@@ -206,8 +206,8 @@ class All_Function_module(multiprocessing.Process):
                         delta = get_last_val - get_init_val
                         lstm_pres_pred = [i + delta for i in lstm_pres_pred]
 
-                        fin_out = list(self.front_lstm_data) + list(lstm_pres_pred)
-                        self.shmem.change_logic_val('AB_prog', fin_out)
+                        # fin_out = list(self.front_lstm_data) + list(lstm_pres_pred)
+                        self.shmem.change_logic_val('AB_prog', list(lstm_pres_pred))
                     # 예지 모듈 End -------------------------------------------------------------------------------------
 
                     # end AI

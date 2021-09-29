@@ -119,8 +119,9 @@ class Mainwindow(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.progWidget = TOOL_MatGP2.Trend(self, w=500, h=500, para_name='Flow', para_id='KCNTOMS', para_range=[10000000, 16000000],
-                   xtitle='Time Since Reactor Shutdown (Hours)', ytitle='Minimum Injection Flowrate (gpm)')
+        self.progWidget = TOOL_MatGP2.Trend(self, w=500, h=500, para_name='Pressurizer Pressure', para_id='KCNTOMS',
+                                            para_range=[1.4e7, 1.6e7],
+                                            xtitle='Time (Sec)', ytitle='Pressure')
 
         layout.addWidget(self.progWidget)
 
