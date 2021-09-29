@@ -74,7 +74,7 @@ class MyForm(QWidget):
         self.show()
 
         # Call
-        self.cns_main_win = main_window.Mainwindow(parent=self, mem=self.shmem)
+        self.cns_main_win = main_window.Mainwindow(parent=self)
         self.cns_main_win.show()
 
     def run_cns(self):

@@ -119,7 +119,7 @@ class Trend(QWidget):
                     for alpha, l in enumerate(self.prog_lines):
                         # alpha 0 -> 9
                         alpha = 21 - len(self.prog_lines) + alpha
-                        l.set_alpha(alpha * 0.1)
+                        l.set_alpha(alpha * 0.05)
 
                 # 압력 그래프 드로잉
                 self.line1.set_data(time_db, pres_db)
@@ -139,7 +139,10 @@ class Trend(QWidget):
                     self.ax.set_ylim(min(self.para_range), max(self.para_range))
 
                 # 최종 캔버스 드로잉
-                self.canvas.draw()
+                try:
+                    self.canvas.draw()
+                except:
+                    pass
 
         else:
             self.vallist.append(self.vallist[-1] + 1)

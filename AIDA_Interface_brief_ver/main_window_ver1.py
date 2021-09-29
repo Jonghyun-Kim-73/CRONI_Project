@@ -17,10 +17,10 @@ from AIDA_Interface_brief_ver.TOOL import TOOL_MatGP2
 
 class Mainwindow(QWidget):
     """메인 윈도우"""
-    def __init__(self, parent, mem=None):
+    def __init__(self, parent):
         super(Mainwindow, self).__init__()
-        self.shmem = mem
-        self.up_widget = parent
+        self.shmem = parent.shmem   # <- myform.shmem
+        self.W_myform = parent
         self.selected_procedure: str = ''
         # --------------------------------------------------------------------------------------------------------------
         self.setGeometry(300, 50, 1300, 800)
@@ -60,7 +60,7 @@ class Mainwindow(QWidget):
         self.stack_widget.addWidget(self.pp3)
         self.stack_widget.addWidget(self.pp4)
 
-        self.title_bar = MainTitleBar(parent=self, mem=self.shmem, h=self.t_h, w=self.width())
+        self.title_bar = MainTitleBar(parent=self, h=self.t_h, w=self.width())
         self.vbox.addWidget(self.title_bar)
         self.vbox.addLayout(self.stack_widget)
 
@@ -129,7 +129,7 @@ class Mainwindow(QWidget):
 
     def closeEvent(self, QCloseEvent):
         p_(__file__, 'Close')
-        self.up_widget.closeEvent(QCloseEvent)
+        self.W_myform.closeEvent(QCloseEvent)
 
     def update_selected_procedure(self, procedure: str, change_panel:bool):
         self.selected_procedure = procedure

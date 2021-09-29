@@ -36,7 +36,7 @@ class Body:
         get_com_ip = socket.gethostbyname(socket.getfqdn())
         # 초기 입력 인자 전달 --------------------------------------------------------------------------------------------
         parser = argparse.ArgumentParser(description='CNS 플랫폼_Ver0')
-        parser.add_argument('--test', type=bool, default=False, required=False, help='인터페이스 테스트 모드 [default=False]')
+        parser.add_argument('--test', type=bool, default=True, required=False, help='인터페이스 테스트 모드 [default=False]')
         parser.add_argument('--comip', type=str, default=ip_reg[get_com_ip]['comip'], required=False, help="현재 컴퓨터의 ip [default='']")
         parser.add_argument('--comport', type=int, default=ip_reg[get_com_ip]['comport'], required=False, help="현재 컴퓨터의 port [default=7001]")
         parser.add_argument('--cnsip', type=str, default=ip_reg[get_com_ip]['cnsip'], required=False, help="CNS 컴퓨터의 ip [default='']")
@@ -85,7 +85,7 @@ class SHMem:
         # 0] 기능 동작 로직
         self.AI = True          # AI 모듈들 동작 허용
         self.XAI = True         # XAI 모듈 동작
-        self.ProDiag = True     # 절차서 진단용 AI 모듈 동작
+        self.ProDiag = False     # 절차서 진단용 AI 모듈 동작
 
         # 1] CNS 변수용 shmem
         self.mem = db_make().make_mem_structure(max_len_deque)

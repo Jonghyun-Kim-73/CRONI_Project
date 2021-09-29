@@ -5,12 +5,9 @@ import time
 #----------------------- 모듈 추가 부분
 import pickle
 import pandas as pd
-from keras.layers import RepeatVector, Dense, Input, TimeDistributed, Dot, Concatenate, Activation, LSTM
-from keras.models import *
 from collections import deque
 import numpy as np
 import matplotlib.pyplot as plt
-
 
 class TEST_All_Function_module(multiprocessing.Process):
     def __init__(self, shmem, Max_len):
@@ -46,6 +43,8 @@ class TEST_All_Function_module(multiprocessing.Process):
         self.front_lstm_data = deque(maxlen=self.lstm_time_step)
 
     def pca_lstm(self): # 예지 모델 가중치 업데이트를 위한 모델 구성
+        from keras.layers import RepeatVector, Dense, Input, TimeDistributed, Dot, Concatenate, Activation, LSTM
+        from keras.models import Model
         x = Input(shape=(self.lstm_time_step, self.dim))
         enc_h, enc_ht, enc_ct = LSTM(64, activation='tanh', return_sequences=True, return_state=True)(x)
         decoder_input = RepeatVector(120)(enc_ht)
@@ -102,8 +101,9 @@ class TEST_All_Function_module(multiprocessing.Process):
         # - 공유 메모리에서 logic 부분을 취득 후 사용되는 AI 네트워크 정보 취득
         local_logic = self.shmem.get_logic_info()
 
-        self.lstm_model = self.pca_lstm()
-        self.lstm_model.load_weights('./model/PRZ_LSTM.hdf5')
+        if local_logic['Run_ProDiag']:
+            self.lstm_model = self.pca_lstm()
+            self.lstm_model.load_weights('./model/PRZ_LSTM.hdf5')
 
         while True:
             local_logic = self.shmem.get_logic_info()
@@ -143,30 +143,30 @@ class TEST_All_Function_module(multiprocessing.Process):
                     # 진단 모듈 End -------------------------------------------------------------------------------------
 
                     # 예지 모듈 -----------------------------------------------------------------------------------------
-                    lstm_db = [self.local_mem[i]['Val'] for i in self.lstm_para]
+                    if local_logic['Run_ProDiag']:
+                        lstm_db = [self.local_mem[i]['Val'] for i in self.lstm_para]
 
-                    self.lstm_data.append(lstm_db)
-                    self.front_lstm_data.append(self.local_mem['PPRZ']['Val'])
+                        self.lstm_data.append(lstm_db)
+                        self.front_lstm_data.append(self.local_mem['PPRZ']['Val'])
 
-                    if np.shape(self.lstm_data)[0] == self.lstm_time_step: # self.lstm_data = 2차원: 추후 []로 3차원 데이터로 성형
-                        test_x = self.pca.transform(self.scalerX.transform(self.lstm_data))[:,:self.dim]
-                        lstm_result = self.lstm_model.predict(np.array([test_x])) # lstm_result[0][:,0] : 가압기 압력 / lstm_result[0][:,1] : 가압기 수위 / 최초의 [0]: 3차원 -> 2차원 축소
-                        lstm_result = self.scalerY.inverse_transform(lstm_result) # Inverse_transform
-                        lstm_result = np.where(lstm_result < 0, 0, lstm_result) # 가압기 수위가 마이너스일 경우, 0으로 복원하기 위함.
-                        lstm_pres_pred = lstm_result[0][:,0] # 가압기 압력
-                        lstm_level_pred = lstm_result[0][:,1] # 가압기 수위
+                        if np.shape(self.lstm_data)[0] == self.lstm_time_step: # self.lstm_data = 2차원: 추후 []로 3차원 데이터로 성형
+                            test_x = self.pca.transform(self.scalerX.transform(self.lstm_data))[:,:self.dim]
+                            lstm_result = self.lstm_model.predict(np.array([test_x])) # lstm_result[0][:,0] : 가압기 압력 / lstm_result[0][:,1] : 가압기 수위 / 최초의 [0]: 3차원 -> 2차원 축소
+                            lstm_result = self.scalerY.inverse_transform(lstm_result) # Inverse_transform
+                            lstm_result = np.where(lstm_result < 0, 0, lstm_result) # 가압기 수위가 마이너스일 경우, 0으로 복원하기 위함.
+                            lstm_pres_pred = lstm_result[0][:,0] # 가압기 압력
+                            lstm_level_pred = lstm_result[0][:,1] # 가압기 수위
 
-                        get_last_val = self.front_lstm_data[-1]
-                        get_init_val = lstm_pres_pred[0]
-                        delta = get_last_val - get_init_val
-                        lstm_pres_pred = [i + delta for i in lstm_pres_pred]
+                            get_last_val = self.front_lstm_data[-1]
+                            get_init_val = lstm_pres_pred[0]
+                            delta = get_last_val - get_init_val
+                            lstm_pres_pred = [i + delta for i in lstm_pres_pred]
 
-                        # fin_out = list(self.front_lstm_data) + list(lstm_pres_pred)
-                        self.shmem.change_logic_val('AB_prog', list(lstm_pres_pred))
+                            # fin_out = list(self.front_lstm_data) + list(lstm_pres_pred)
+                            self.shmem.change_logic_val('AB_prog', list(lstm_pres_pred))
 
-
-                        # plt.plot(lstm_pres_pred)
-                        # plt.show()
+                            # plt.plot(lstm_pres_pred)
+                            # plt.show()
                     # 예지 모듈 End -------------------------------------------------------------------------------------
 
                 # One Step CNS -------------------------------------------------------------------------------------
