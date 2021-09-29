@@ -38,7 +38,7 @@ class MainSysRightArea(QGraphicsView):
         self.F2_key.activated.connect(self._keyPressEvent_F2)
         self.edit_mode = False
 
-        self.update_sys_mimic('CVCS')
+        self.update_sys_mimic('RCS')
 
     def update_sys_mimic(self, target_sys):
         self._scene.clear()
@@ -184,11 +184,11 @@ class MainSysRightScene(QGraphicsScene):
                 # print(f'Comp Click {self.sceneRect()}')
                 # Comp type 별 동작
                 if item.comp_type == 'valve':
+                    control_board = ValveControlBoard(item)
+                    control_board.move_to_inside(self.boundary_item)
+                    self.addItem(control_board)
+                    self.current_opened_control_board.append(control_board)
                     pass
-                    # control_board = ValveControlBoard(item)
-                    # control_board.move_to_inside(self.boundary_item)
-                    # self.addItem(control_board)
-                    # self.current_opened_control_board.append(control_board)
 
         super(MainSysRightScene, self).mousePressEvent(event)
 
@@ -309,7 +309,7 @@ class SVGComp(QGraphicsSvgItem):
         menu = QMenu()
         # -----------------------------------------------------
         menu_state = QMenu('State')
-        if self.comp_type in ['valve', 'pump', 'HP']:
+        if self.comp_type in ['valve', 'pump', 'HP', ]:
             update_rotation = menu_state.addAction("Rotation")
             update_rotation.triggered.connect(self._update_rotation)
             update_id = menu_state.addAction("Edit Id")
@@ -343,7 +343,30 @@ class SVGComp(QGraphicsSvgItem):
                         # 지워지는 값보다 flow_from 이 크면 숫자를 감산해 줘야함. (DB가 밀림)
                         temp_mimic_info[new_nub]['flow_from'] = str(int(temp_mimic_info[new_nub]['flow_from']) - 1)
                 else:
-                    pass  # flow_from 이 소스("S") 이거나 타 기기 변수를 지칭하는 경우
+                    if "," in temp_mimic_info[new_nub]['flow_from']:
+                        # "1,2" 같이 2개의 입력을 소스를 받는 경우가 있음.
+                        connected_nubs = temp_mimic_info[new_nub]['flow_from'].split(',')
+                        out_str = ''
+
+                        for i, v in enumerate(connected_nubs):
+                            if int(v) > int(self.nub):  # 위와 동일한 로직
+                                out_str += f'{int(v) - 1},'
+                            elif int(v) < int(self.nub):
+                                out_str += f'{v},'
+                        out_str = out_str[:-1]  # , 제외
+
+                        if out_str == '':
+                            # out_str = ''
+                            out_str = 'N'
+                        else:
+                            # out_str = '1,2,3'
+                            pass
+
+                        temp_mimic_info[new_nub]['flow_from'] = out_str
+
+                    else:
+                        # flow_from 이 소스("S") 이거나 타 기기 변수를 지칭하는 경우
+                        pass
             else:
                 pass  # 펌프나 벨브와 같이 색이 안변하는 기기 경우
 
@@ -596,42 +619,42 @@ class LineComp(QGraphicsLineItem):
 
         for new_nub, old_nub in enumerate(self.sys_mimic_info[self.target_sys].keys()):
             temp_mimic_info[new_nub] = self.sys_mimic_info[self.target_sys][old_nub]
-            if temp_mimic_info[new_nub]['type'] == 'line' or temp_mimic_info[new_nub]['type'] == 'arrow':
-                if temp_mimic_info[new_nub]['flow_from'] == str(self.nub):
-                    # 삭제된 파이프에 연결된 flow_from 이므로 "N" 할당 및 자동적으로 -1 로 변환
-                    temp_mimic_info[new_nub]['flow_from'] = "N"
-                elif temp_mimic_info[new_nub]['flow_from'].isdigit():
-                    # 다른 기기와 연결된 경우, 이 경우 "1" 과 같이 숫자형인 str 값임.
-                    if int(temp_mimic_info[new_nub]['flow_from']) > int(self.nub):
-                        # 지워지는 값보다 flow_from 이 크면 숫자를 감산해 줘야함. (DB가 밀림)
-                        temp_mimic_info[new_nub]['flow_from'] = str(int(temp_mimic_info[new_nub]['flow_from']) - 1)
-                else:
-                    if "," in temp_mimic_info[new_nub]['flow_from']:
-                        # "1,2" 같이 2개의 입력을 소스를 받는 경우가 있음.
-                        connected_nubs = temp_mimic_info[new_nub]['flow_from'].split(',')
-                        out_str = ''
-
-                        for i, v in enumerate(connected_nubs):
-                            if int(v) > int(self.nub):              # 위와 동일한 로직
-                                out_str += f'{int(v) - 1},'
-                            elif int(v) < int(self.nub):
-                                out_str += f'{v},'
-                        out_str = out_str[:-1]      # , 제외
-
-                        if out_str == '':
-                            # out_str = ''
-                            out_str = 'N'
-                        else:
-                            # out_str = '1,2,3'
-                            pass
-
-                        temp_mimic_info[new_nub]['flow_from'] = out_str
-
-                    else:
-                        # flow_from 이 소스("S") 이거나 타 기기 변수를 지칭하는 경우
-                        pass
+            # if temp_mimic_info[new_nub]['type'] == 'line' or temp_mimic_info[new_nub]['type'] == 'arrow':
+            if temp_mimic_info[new_nub]['flow_from'] == str(self.nub):
+                # 삭제된 파이프에 연결된 flow_from 이므로 "N" 할당 및 자동적으로 -1 로 변환
+                temp_mimic_info[new_nub]['flow_from'] = "N"
+            elif temp_mimic_info[new_nub]['flow_from'].isdigit():
+                # 다른 기기와 연결된 경우, 이 경우 "1" 과 같이 숫자형인 str 값임.
+                if int(temp_mimic_info[new_nub]['flow_from']) > int(self.nub):
+                    # 지워지는 값보다 flow_from 이 크면 숫자를 감산해 줘야함. (DB가 밀림)
+                    temp_mimic_info[new_nub]['flow_from'] = str(int(temp_mimic_info[new_nub]['flow_from']) - 1)
             else:
-                pass  # 펌프나 벨브와 같이 색이 안변하는 기기 경우
+                if "," in temp_mimic_info[new_nub]['flow_from']:
+                    # "1,2" 같이 2개의 입력을 소스를 받는 경우가 있음.
+                    connected_nubs = temp_mimic_info[new_nub]['flow_from'].split(',')
+                    out_str = ''
+
+                    for i, v in enumerate(connected_nubs):
+                        if int(v) > int(self.nub):              # 위와 동일한 로직
+                            out_str += f'{int(v) - 1},'
+                        elif int(v) < int(self.nub):
+                            out_str += f'{v},'
+                    out_str = out_str[:-1]      # , 제외
+
+                    if out_str == '':
+                        # out_str = ''
+                        out_str = 'N'
+                    else:
+                        # out_str = '1,2,3'
+                        pass
+
+                    temp_mimic_info[new_nub]['flow_from'] = out_str
+
+                else:
+                    # flow_from 이 소스("S") 이거나 타 기기 변수를 지칭하는 경우
+                    pass
+            # else:
+            #     pass  # 펌프나 벨브와 같이 색이 안변하는 기기 경우
 
         # 메모리 업데이트
         self.sys_mimic_info[self.target_sys] = temp_mimic_info
@@ -705,6 +728,8 @@ class ValveControlBoard(QGraphicsRectItem):
         self.close_btn.setRect(parent.x() + 25 + self.w - 20, parent.y() + 5, 15, 15)
         self.close_btn.setBrush(QBrush(Qt.darkRed, Qt.SolidPattern))
         self.close_btn.setPen(QPen(Qt.NoPen))
+
+        self.up_btn = ValveControlBoardBtn(self, parent.x() + 20, parent.y() + 20)
         #
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)  # horrible selection-box
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -721,7 +746,7 @@ class ValveControlBoard(QGraphicsRectItem):
         self.move_to_inside(self.scene().boundary_item)
         super(ValveControlBoard, self).mouseReleaseEvent(event)
 
-    def move_to_inside(self, boundary_itme):
+    def _inside_delta(self, boundary_itme):
         new_pos: QRect = self.mapRectToScene(self.rect())
         new_pos_x: QRect = self.mapRectToScene(self.close_btn.rect())
 
@@ -735,8 +760,6 @@ class ValveControlBoard(QGraphicsRectItem):
             delta_y = (new_pos.y() - boundary.y())
         else:
             delta_y = 0
-        new_pos.moveTop(new_pos.y() - delta_y)
-        new_pos_x.moveTop(new_pos_x.y() - delta_y)
 
         if new_pos.x() + new_pos.width() > boundary.x() + boundary.width():
             # Out boundary (x) right
@@ -747,6 +770,62 @@ class ValveControlBoard(QGraphicsRectItem):
         else:
             delta_x = 0
 
+        return delta_x, delta_y
+
+    def move_to_inside(self, boundary_itme):
+        # 바운더리 넘어간 경우 -------------------------------------------------------------------------------------------
+        new_pos: QRect = self.mapRectToScene(self.rect())
+        new_pos_x: QRect = self.mapRectToScene(self.close_btn.rect())
+        new_pos_up: QRect = self.mapRectToScene(self.up_btn.boundingRect())
+
+        boundary: QRect = boundary_itme.rect()  # < ---  self.scene().boundary_item.rect()
+
+        delta_x, delta_y = self._inside_delta(boundary_itme)
+
+        new_pos.moveTop(new_pos.y() - delta_y)
+        new_pos_x.moveTop(new_pos_x.y() - delta_y)
+        new_pos_up.moveTop(new_pos_up.y() - delta_y)
+
+        new_pos.moveLeft(new_pos.x() - delta_x)
+        new_pos_x.moveLeft(new_pos_x.x() - delta_x)
+        new_pos_up.moveLeft(new_pos_up.x() - delta_x)
+
+        self.setPos(0, 0)  # 이전 pos 리셋
+        self.close_btn.setPos(0, 0)
+        self.up_btn.setPos(0, 0)
+
+        self.setRect(new_pos)
+        self.close_btn.setRect(new_pos_x)
+
+        # 기기를 가리는 경우 ---------------------------------------------------------------------------------------------
+        new_pos: QRect = self.mapRectToScene(self.rect())
+        new_pos_x: QRect = self.mapRectToScene(self.close_btn.rect())
+
+        if self.rect().x() + self.rect().width() + 5 > self.p.sceneBoundingRect().x() and self.rect().x() < self.p.sceneBoundingRect().x():
+            target_x = self.p.sceneBoundingRect().x() - 5
+
+            delta_x = self.rect().x() + self.rect().width() - target_x
+
+            new_pos.moveLeft(new_pos.x() - delta_x)
+            new_pos_x.moveLeft(new_pos_x.x() - delta_x)
+
+            self.setPos(0, 0)  # 이전 pos 리셋
+            self.close_btn.setPos(0, 0)
+
+            self.setRect(new_pos)
+            self.close_btn.setRect(new_pos_x)
+
+        # 바운더리 넘어간 경우 -------------------------------------------------------------------------------------------
+        new_pos: QRect = self.mapRectToScene(self.rect())
+        new_pos_x: QRect = self.mapRectToScene(self.close_btn.rect())
+
+        boundary: QRect = boundary_itme.rect()  # < ---  self.scene().boundary_item.rect()
+
+        delta_x, delta_y = self._inside_delta(boundary_itme)
+
+        new_pos.moveTop(new_pos.y() - delta_y)
+        new_pos_x.moveTop(new_pos_x.y() - delta_y)
+
         new_pos.moveLeft(new_pos.x() - delta_x)
         new_pos_x.moveLeft(new_pos_x.x() - delta_x)
 
@@ -755,6 +834,35 @@ class ValveControlBoard(QGraphicsRectItem):
 
         self.setRect(new_pos)
         self.close_btn.setRect(new_pos_x)
+
+
+class ValveControlBoardBtn(QGraphicsPolygonItem):
+    def __init__(self, parent, x=0, y=0):
+        super(ValveControlBoardBtn, self).__init__(parent)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, False)
+        self.setAcceptHoverEvents(True)
+        self.start_x, self.start_y = 100, 100
+        #print(x, y)
+        x, y = self.start_x, self.start_y
+        arrow = QPolygonF([QPointF(x - 8, y),
+                           QPointF(x, y - 6),
+                           QPointF(x, y + 6),
+                           QPointF(x - 8, y)])
+
+        self.setPolygon(arrow)
+        self.setScale(2)
+        self.setBrush(QBrush(Qt.darkRed, Qt.SolidPattern))
+
+    def paint(self, painter, QStyleOptionGraphicsItem, widget=None) -> None:
+        painter.setRenderHint(painter.Antialiasing)
+        super(ValveControlBoardBtn, self).paint(painter, QStyleOptionGraphicsItem, widget)
+
+    def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        self.setBrush(QBrush(Qt.darkGreen, Qt.SolidPattern))
+
+    def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        self.setBrush(QBrush(Qt.darkRed, Qt.SolidPattern))
+
 
 
 if __name__ == '__main__':

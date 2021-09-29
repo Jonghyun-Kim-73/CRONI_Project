@@ -1381,22 +1381,22 @@
 			"textypos": "34.0",
 			"xpos": "244.0",
 			"ypos": "393.0",
-			"flow_from": "2",
-			"comp_val": 1.0,
-			"gate": "N"
+			"flow_from": "S",
+			"comp_val": 1,
+			"gate": "AND"
 		},
 		"1": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
 			"length": "50",
-			"direction": "D",
+			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
 			"xpos": "297.0",
-			"ypos": "411.0",
+			"ypos": "463.0",
 			"flow_from": "0",
-			"comp_val": 1.0,
+			"comp_val": 1,
 			"gate": "N"
 		},
 		"2": {
@@ -1406,20 +1406,23 @@
 			"direction": "R",
 			"textxpos": "13.15582359999999",
 			"textypos": "34.836411896666675",
-			"xpos": "213.0",
-			"ypos": "388.0",
-			"comp_val": 1.0
+			"xpos": "380.0",
+			"ypos": "524.0",
+			"comp_val": 0
 		},
 		"3": {
-			"id": "",
 			"name": "",
-			"type": "pump",
+			"type": "line",
+			"thickness": "3",
+			"length": "50",
 			"direction": "R",
-			"textxpos": "13.15582359999999",
-			"textypos": "34.836411896666675",
-			"xpos": "211.0",
-			"ypos": "473.0",
-			"comp_val": 1.0
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "631.0",
+			"ypos": "575.0",
+			"flow_from": "2",
+			"comp_val": 0,
+			"gate": "N"
 		},
 		"4": {
 			"name": "",
@@ -1429,21 +1432,21 @@
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "309.0",
-			"ypos": "436.0",
-			"flow_from": "1",
-			"comp_val": 1.0,
+			"xpos": "654.0",
+			"ypos": "420.0",
+			"flow_from": "2,3",
+			"comp_val": 0,
 			"gate": "N"
 		},
 		"5": {
 			"id": "",
 			"name": "",
-			"type": "PZR",
-			"direction": "R",
-			"textxpos": "10.768541638801807",
-			"textypos": "71.61124725969418",
-			"xpos": "446.0",
-			"ypos": "439.0",
+			"type": "valve",
+			"direction": "V",
+			"textxpos": "6.852708411361462",
+			"textypos": "38.32666790029441",
+			"xpos": "845.0",
+			"ypos": "452.0",
 			"comp_val": 0
 		}
 	}
