@@ -219,8 +219,11 @@ class ChangePP(QWidget):
         m = int((self.test_val / 60) % 60)
         s = int(self.test_val % 60)
 
-        self.btn_['예지'].setText(f'가압기 압력 이상 | Trip 까지 [{h:02}:{m:02}:{s:02}]')
-        self.test_val -= 1
+        if self.shmem.get_shmem_val('KCNTOMS') > 30 * 5:
+            self.btn_['예지'].setText(f' 가압기 압력 이상 | Trip 까지 [{h:02}:{m:02}:{s:02}]')
+            self.test_val -= 1
+        else:
+            self.btn_['예지'].setText(f' 예지-주요 트립 변수 안정')
 
     def update_selected_procedure(self, procedure: str, change_panel: bool):
         """ 절차서 클릭 시 해당 버튼의 텍스트 변경 + 패널 변경 """

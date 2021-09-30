@@ -23,7 +23,7 @@ class Mainwindow(QWidget):
         self.W_myform = parent
         self.selected_procedure: str = ''
         # --------------------------------------------------------------------------------------------------------------
-        self.setGeometry(300, 50, 1300, 800)
+        self.setGeometry(300, 100, 1300, 800)
         self.setStyleSheet(qss)
         self.setObjectName('Mainwindow')
         self.set_main_frame()

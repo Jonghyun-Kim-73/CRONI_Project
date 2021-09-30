@@ -225,21 +225,22 @@ class AlarmTable(QTableWidget):
 
     def contextMenuEvent(self, e: QContextMenuEvent) -> None:
         """ AlarmTable 기능 테스트 """
-        self.local_mem = self.mem.get_shmem_db()
-
-        menu = QMenu()
-        add_empty_alarm = menu.addAction('Add Empty Alarm')
-        add_alarm = menu.addAction('Add Test Alarm 1')
-        add_alarms = menu.addAction('Add Test Alarms')
-
-        def alarms_(ids):
-            for i in range(len(ids)):
-                self._add_alarm(ids[i], 10)
-
-        add_empty_alarm.triggered.connect(lambda a: self._add_empty_line(self.columnCount()))
-        add_alarm.triggered.connect(lambda a, id='KLAMPO251', current=10: self._add_alarm(id, current))
-        add_alarms.triggered.connect(lambda a, ids=['KLAMPO263', 'KLAMPO308', 'KLAMPO312']: alarms_(ids))
-        menu.exec_(e.globalPos())
+        pass
+        # self.local_mem = self.mem.get_shmem_db()
+        #
+        # menu = QMenu()
+        # add_empty_alarm = menu.addAction('Add Empty Alarm')
+        # add_alarm = menu.addAction('Add Test Alarm 1')
+        # add_alarms = menu.addAction('Add Test Alarms')
+        #
+        # def alarms_(ids):
+        #     for i in range(len(ids)):
+        #         self._add_alarm(ids[i], 10)
+        #
+        # add_empty_alarm.triggered.connect(lambda a: self._add_empty_line(self.columnCount()))
+        # add_alarm.triggered.connect(lambda a, id='KLAMPO251', current=10: self._add_alarm(id, current))
+        # add_alarms.triggered.connect(lambda a, ids=['KLAMPO263', 'KLAMPO308', 'KLAMPO312']: alarms_(ids))
+        # menu.exec_(e.globalPos())
 
     # ==================================================================================================================
     # Private functions

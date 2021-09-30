@@ -38,7 +38,7 @@ class MainSysRightArea(QGraphicsView):
         self.F2_key.activated.connect(self._keyPressEvent_F2)
         self.edit_mode = False
 
-        self.update_sys_mimic('RCS')
+        self.update_sys_mimic('CVCS')
 
     def update_sys_mimic(self, target_sys):
         self._scene.clear()
@@ -61,7 +61,7 @@ class MainSysRightScene(QGraphicsScene):
         super(MainSysRightScene, self).__init__(None)
         self.shmem = parent.shmem
         self.parent = parent
-        self.setBackgroundBrush(QColor(254, 245, 249))   # Back gorund color
+        self.setBackgroundBrush(QColor(231, 231, 234))   # Back gorund color
         # SVG render ---------------------------------------------------------------------------------------------------
         self.svg_render = QSvgRenderer('./interface_image/comp.svg')
         # Sys page info ------------------------------------------------------------------------------------------------
@@ -474,7 +474,8 @@ class LineComp(QGraphicsLineItem):
             self.text.setY(float(self.text_y))
         self._update_info_to_mem()
 
-        self.flow_color = Qt.blue if self.flow_val > 0 else Qt.gray
+
+        self.flow_color = QColor(94, 156, 212) if self.flow_val > 0 else QColor(81, 81, 81)
         self.setPen(QPen(self.flow_color, self.pen_thickness))
 
     def boundingRect(self):
@@ -689,10 +690,12 @@ class LineComp(QGraphicsLineItem):
 
         self.sys_mimic_info[self.target_sys][self.nub]['comp_val'] = self.flow_val
 
+        # self.flow_color = QColor(94, 156, 212) if self.flow_val > 0 else QColor(81, 81, 81)
+
         if self.flow_val == 0:
-            self.flow_color = Qt.gray
+            self.flow_color = QColor(81, 81, 81)
         elif self.flow_val > 0:
-            self.flow_color = Qt.blue
+            self.flow_color = QColor(94, 156, 212)
         else:
             self.flow_color = Qt.red
 
