@@ -115,9 +115,9 @@ class All_Function_module(multiprocessing.Process):
                 # Update All mem -----------------------------------------------------------------------------------
                 self._update_cnsenv_to_sharedmem()
 
-                # 자동 멈춤 조건
-                # if self.cns_env.mem['KCNTOMS']['Val'] > 7500:
-                #     self.shmem.change_logic_val('Run', False)
+                #자동 멈춤 조건
+                if self.cns_env.mem['KCNTOMS']['Val'] > 5 * 60 * 25 or self.cns_env.mem['KLAMPO9']['Val'] == 1:
+                    self.shmem.change_logic_val('Run', False)
 
             else:
                 self.check_init()

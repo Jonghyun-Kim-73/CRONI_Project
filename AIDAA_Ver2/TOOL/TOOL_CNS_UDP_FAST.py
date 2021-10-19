@@ -1,5 +1,6 @@
 import socket
 import logging
+import os
 from struct import unpack, pack
 from time import sleep
 from numpy import shape
@@ -29,6 +30,7 @@ class CNS:
         # logger path
         self.LoggerPath = ''
         self.file_name = 0
+        self.save_file_path = ''
 
         # Control
         self.SaveControlPara = []
@@ -698,14 +700,28 @@ class CNS:
 
     # logger
     def init_line(self):
-        with open(f"./{self.LoggerPath}/{self.file_name}.txt", 'w') as f:
+        check_file_list = os.listdir(f'./{self.LoggerPath}')
+
+        iter_ = 0
+        orgin_file_name = ''
+
+        while True:
+            orgin_file_name = f'{self.file_name}_{iter_}.txt'
+            if orgin_file_name in check_file_list:
+                iter_ += 1
+            else:
+                break
+
+        with open(f"./{self.LoggerPath}/{orgin_file_name}.txt", 'w') as f:
             DIS = ''
             for para_name in self.mem.keys():
                 DIS += f'{para_name},'
             f.write(f'{DIS}\n')
 
+        self.save_file_name = orgin_file_name
+
     def save_line(self):
-        with open(f"./{self.LoggerPath}/{self.file_name}.txt", 'a') as f:
+        with open(f"./{self.LoggerPath}/{self.save_file_name}.txt", 'a') as f:
             DIS = ''
             for para_name in self.mem.keys():
                 DIS += f"{self.mem[para_name]['Val']},"

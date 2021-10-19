@@ -5,6 +5,8 @@ from copy import deepcopy
 import time
 import json
 
+import random
+
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
 from PyQt5.QtCore import *
@@ -170,9 +172,49 @@ class AutoDataList(QListWidget):
         """ ChartArea 에 기능 올리기  """
         menu = QMenu(self)
         add_input1 = menu.addAction("Add input")
+
+        add_input1_1 = menu.addAction("Gen 2101")
+        add_input1_2 = menu.addAction("Gen 2102")
+        add_input1_3 = menu.addAction("Gen 2001")
+        add_input1_4 = menu.addAction("Gen 2004")
+        add_input1_5 = menu.addAction("Gen 1507")
+        add_input1_6 = menu.addAction("Gen 1508")
+        add_input1_7 = menu.addAction("Gen 6304")
+        add_input1_8 = menu.addAction("Gen 2112")
+        add_input1_9 = menu.addAction("Gen 1902")
+        add_input1_10 = menu.addAction("Gen 2111")
+        add_input1_11 = menu.addAction("Gen 5901")
+        add_input1_12 = menu.addAction("Gen 8002")
+        add_input1_13 = menu.addAction("Gen 6403")
+        add_input1_14 = menu.addAction("Gen 6002")
+        add_input1_15 = menu.addAction("Gen 2303")
+        add_input1_16 = menu.addAction("Gen 5902")
+        add_input1_17 = menu.addAction("Gen 2301")
+        add_input1_18 = menu.addAction("Gen 2306")
+
         add_input2 = menu.addAction("Run")
 
         add_input1.triggered.connect(self._add_input)
+
+        add_input1_1.triggered.connect(self._gen_ab2101)
+        add_input1_2.triggered.connect(self._gen_ab2102)
+        add_input1_3.triggered.connect(self._gen_ab2001)
+        add_input1_4.triggered.connect(self._gen_ab2004)
+        add_input1_5.triggered.connect(self._gen_ab1507)
+        add_input1_6.triggered.connect(self._gen_ab1508)
+        add_input1_7.triggered.connect(self._gen_ab6304)
+        add_input1_8.triggered.connect(self._gen_ab2112)
+        add_input1_9.triggered.connect(self._gen_ab1902)
+        add_input1_10.triggered.connect(self._gen_ab2111)
+        add_input1_11.triggered.connect(self._gen_ab5901)
+        add_input1_12.triggered.connect(self._gen_ab8002)
+        add_input1_13.triggered.connect(self._gen_ab6403)
+        add_input1_14.triggered.connect(self._gen_ab6002)
+        add_input1_15.triggered.connect(self._gen_ab2303)
+        add_input1_16.triggered.connect(self._gen_ab5902)
+        add_input1_17.triggered.connect(self._gen_ab2301)
+        add_input1_18.triggered.connect(self._gen_ab2306)
+
         add_input2.triggered.connect(self._run_cns)
 
         menu.exec_(event.globalPos())
@@ -185,6 +227,118 @@ class AutoDataList(QListWidget):
         self.addItem(f'{mal}')
 
         # self.addItem(mal)
+
+    def _gen_ab2101(self):
+        # 100개 샘플링해서 만들기
+        for i in range(0, 100):
+            make_mal_itme = f'19_{random.randint(158, 170)}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab2102(self):
+        # 100개 샘플링해서 만들기
+        for i in range(0, 100):
+            make_mal_itme = f'19_{random.randint(140, 150)}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab2001(self):
+        # 100개 샘플링해서 만들기
+        for i in range(0, 100):
+            make_mal_itme = f'20_{random.randint(96, 100)}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab2004(self):
+        # 100개 샘플링해서 만들기
+        for i in range(0, 50):
+            make_mal_itme = f'20_{random.randint(0, 14)}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab1507(self):
+        # 100개 샘플링해서 만들기
+        for i in range(0, 30):
+            make_mal_itme = f'30_{random.randint(1, 25) * 2 + 1000}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+        for i in range(0, 30):
+            make_mal_itme = f'30_{random.randint(1, 25) * 2 + 2000}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+        for i in range(0, 30):
+            make_mal_itme = f'30_{random.randint(1, 25) * 2 + 3000}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab1508(self):
+        # 100개 샘플링해서 만들기
+        for i in range(0, 30):
+            make_mal_itme = f'30_{random.randint(26, 50) * 2 + 1000}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+        for i in range(0, 30):
+            make_mal_itme = f'30_{random.randint(26, 50) * 2 + 2000}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+        for i in range(0, 30):
+            make_mal_itme = f'30_{random.randint(26, 50) * 2 + 3000}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab6304(self):
+        for j in range(1, 5):
+            for i in range(0, 20):
+                make_mal_itme = f'2_{random.randint(11, 44) + 100 * j}_{random.randint(5, 10) * 60}'
+                self.addItem(make_mal_itme)
+
+    def _gen_ab2112(self):
+        for i in range(0, 100):
+            make_mal_itme = f'15_{random.randint(1, 100) * 5}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab1902(self):
+        for i in range(0, 100):
+            make_mal_itme = f'16_{random.randint(1, 100) * 5}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab2111(self):
+        for i in range(0, 100):
+            make_mal_itme = f'22_{random.randint(1, 50) * 2}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab5901(self):
+        for i in range(0, 100):
+            make_mal_itme = f'35_{1}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab8002(self):
+        for i in range(0, 50):
+            case = [11, 12, 13, 22, 23, 33]
+            make_mal_itme = f'35_{case[random.randint(1, 6)]}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab6403(self):
+        for i in range(30):
+            make_mal_itme = f'50_{random.randint(1, 3)}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab6002(self):
+        for i in range(100):
+            make_mal_itme = f'36_{random.randint(1, 20) * 30}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab2303(self):
+        for i in range(100):
+            make_mal_itme = f'37_{random.randint(1, 50) * 2}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab5902(self):
+        for i in range(100):
+            make_mal_itme = f'38_{random.randint(20, 40) * 5}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab2301(self):
+        for i in range(100):
+            case = [10000, 80000, 140000, 70000, 330000, 200000]
+            make_mal_itme = f'12_{case[random.randint(1, 6)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
+
+    def _gen_ab2306(self):
+        for i in range(50):
+            case = [10000, 20000, 30000]
+            make_mal_itme = f'13_{case[random.randint(1, 3)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}'
+            self.addItem(make_mal_itme)
 
     def _check_list(self):
         if self.__len__() > 0 and self.run_tirg:
