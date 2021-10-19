@@ -5,7 +5,9 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from AIDAA_Ver2.TOOL.TOOL_etc import p_
+from ..TOOL.TOOL_Shmem import SHMem
 
+import time
 
 class Mainwindow(QWidget):
     """메인 윈도우"""
@@ -15,7 +17,7 @@ class Mainwindow(QWidget):
         self.W_myform = parent
         self.selected_procedure: str = ''
         # --------------------------------------------------------------------------------------------------------------
-        self.setGeometry(300, 100, 1300, 800)
+        self.setGeometry(300, 50, 200, 200)
         # --------------------------------------------------------------------------------------------------------------
         # 프레임
 
