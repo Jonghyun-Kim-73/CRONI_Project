@@ -354,6 +354,9 @@ class ENVCNS(CNS):
         return np.array(state), state
 
     def _send_control_save(self, zipParaVal):
+        for para_, para_val in zip(zipParaVal[0], zipParaVal[1]):
+            self.overwrite_acts.append((para_, para_val))
+
         super(ENVCNS, self)._send_control_save(para=zipParaVal[0], val=zipParaVal[1])
 
     def _send_act_EM_Module(self, A):
@@ -599,13 +602,11 @@ class ENVCNS(CNS):
             if self.CMem.ab2111['S3']:
                 self.CMem.ab2111['S3Try'] += 1
                 Actprob(0.3, self._send_control_save(ActOrderBook['PZRSprayCloseBtn']))
-                self.overwrite_acts.append(('KSWO126', 1))
         if self.CMem.abnub['AB5901']:
             # 경보 인지 후 Ch 1 재기도 시도
             if self.CMem.ab5901['S2']:
                 self.CMem.ab5901['S2Try'] += 1
                 Actprob(0.3, self._send_control_save(ActOrderBook['RunCHP1']))
-                self.overwrite_acts.append(('KSWO71', 1))
             if self.CMem.ab5901['S3']:
                 Actprob(0.3, self._send_control_save(ActOrderBook['RunCHP2']))
         if self.CMem.abnub['AB6403']:
@@ -621,7 +622,6 @@ class ENVCNS(CNS):
                     self.overwrite_acts.append(('KSWO144', 1))
             if self.CMem.ab6403['S3']: # 수동 정지
                 Actprob(0.3, self._send_control_save(ActOrderBook['ManTrip']))
-                self.overwrite_acts.append(('KSWO9', 1))
         if self.CMem.abnub['AB6002']:
             # 경보 인지 후 유출수 계통 차단
             if self.CMem.ab6002['S2']:
