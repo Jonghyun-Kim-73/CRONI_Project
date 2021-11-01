@@ -305,7 +305,7 @@ class AutoDataList(QListWidget):
     def _gen_ab8002(self):
         for i in range(0, 50):
             case = [11, 12, 13, 22, 23, 33]
-            make_mal_itme = f'35_{case[random.randint(1, 6)]}_{random.randint(5, 10) * 60}'
+            make_mal_itme = f'67_{case[random.randint(0, 5)]}_{random.randint(5, 10) * 60}'
             self.addItem(make_mal_itme)
 
     def _gen_ab6403(self):
@@ -331,13 +331,13 @@ class AutoDataList(QListWidget):
     def _gen_ab2301(self):
         for i in range(100):
             case = [10000, 80000, 140000, 70000, 330000, 200000]
-            make_mal_itme = f'12_{case[random.randint(1, 6)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}'
+            make_mal_itme = f'12_{case[random.randint(0, 5)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}'
             self.addItem(make_mal_itme)
 
     def _gen_ab2306(self):
         for i in range(50):
             case = [10000, 20000, 30000]
-            make_mal_itme = f'13_{case[random.randint(1, 3)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}'
+            make_mal_itme = f'13_{case[random.randint(0, 2)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}'
             self.addItem(make_mal_itme)
 
     def _check_list(self):

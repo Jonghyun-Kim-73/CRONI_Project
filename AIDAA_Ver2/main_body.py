@@ -33,6 +33,10 @@ ip_reg = {
 class Body:
     def __init__(self):
         get_com_ip = socket.gethostbyname(socket.getfqdn())
+        if not get_com_ip in ip_reg.keys():
+            print('No registration in ip_reg')
+            ip_reg[get_com_ip] = {'comip': '192.168.0.29', 'comport': 7105, 'cnsip': '192.168.0.101', 'cnsport': 7105}
+
         # 초기 입력 인자 전달 --------------------------------------------------------------------------------------------
         parser = argparse.ArgumentParser(description='CNS 플랫폼_Ver0')
         parser.add_argument('--test', default=False, required=False, action="store_true",
@@ -47,7 +51,7 @@ class Body:
                             help="CNS 컴퓨터의 port [default=7001]")
         self.args = parser.parse_args()
         print('=' * 25 + '초기입력 파라메터' + '=' * 25)
-
+        print(self.args)
         if self.args.test:
             p_(__file__, 'Test Mode')
         # --------------------------------------------------------------------------------------------------------------

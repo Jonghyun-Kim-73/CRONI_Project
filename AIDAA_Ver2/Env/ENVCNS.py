@@ -84,7 +84,7 @@ class CMem:
         self.SIValve = self.m['BHV22']['Val']
 
         self.ChargingManAUto = self.m['KLAMPO95']['Val']
-        self.ChargingValvePos = self.m['BFV122']['Val']
+        self.ChargingValvePos = round(self.m['BFV122']['Val'], 2)
         self.ChargingPump2State = self.m['KLAMPO70']['Val']
 
         self.LetdownLV459Pos = self.m['BLV459']['Val']
@@ -268,7 +268,7 @@ class CMem:
                 if self.ab6403['S3'] and self.m['KLAMPO9']['Val'] == 1: # ManTrip 인지 후 종료
                     self.ab6403['S3'], self.ab6403['S4'] = CLogic(0.3)
             if self.abnub['AB6002']:
-                if self.ab6002['S1'] and self.m['KLAMPO60']['Val'] != 0: # 유출유로 저 유랸 알람 인지
+                if self.ab6002['S1'] and self.m['KLAMPO260']['Val'] != 0: # 유출유로 저 유랸 알람 인지
                     self.ab6002['S1'], self.ab6002['S2'] = CLogic(0.2)
                 if self.ab6002['S2'] and self.LetdownHV1Pos == 0 and self.LetdownHV2Pos == 0 and self.LetdownHV3Pos == 0:
                     self.ab6002['S2'], self.ab6002['S3'] = CLogic(0.3) # 유출 유로 차단 후 Letdown Valve 차단
@@ -473,8 +473,8 @@ class ENVCNS(CNS):
             'HV6Open': (['KSWO124', 'KSWO123'], [0, 1]),
             'HV6Close': (['KSWO124', 'KSWO123'], [1, 0]),
 
-            'HV41Close': (['KSWO110', 'KSWO109'], [1, 0]),
-            'HV41Open': (['KSWO110', 'KSWO109'], [0, 1]),
+            'HV41Open': (['KSWO110', 'KSWO109'], [1, 0]),
+            'HV41Close': (['KSWO110', 'KSWO109'], [0, 1]),
             'HV43Up': (['KSWO112', 'KSWO111'], [1, 0]),
             'HV43Right': (['KSWO112', 'KSWO111'], [0, 1]),
         }
@@ -641,7 +641,7 @@ class ENVCNS(CNS):
             # Charging Valve 차단
             if self.CMem.ab6002['S4']:
                 if self.CMem.ChargingManAUto == 1: # Manual Mode
-                    if self.CMem.ChargingValvePos != 0:
+                    if self.CMem.ChargingValvePos != 0.1:
                         Actprob(0.3, self._send_control_save(ActOrderBook['ChargingValveDown']))
                     else:
                         pass
@@ -650,7 +650,7 @@ class ENVCNS(CNS):
             # 유로 개방
             if self.CMem.ab6002['S5']:
                 if self.CMem.HV41 == 0:
-                    Actprob(0.3, self._send_control_save(ActOrderBook['HV6Open']))
+                    Actprob(0.3, self._send_control_save(ActOrderBook['HV41Open']))
             # 유로 전환
             if self.CMem.ab6002['S6']:
                 if self.CMem.HV43 == 0:

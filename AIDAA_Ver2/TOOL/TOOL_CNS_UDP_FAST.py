@@ -706,7 +706,7 @@ class CNS:
         orgin_file_name = ''
 
         while True:
-            orgin_file_name = f'{self.file_name}_{iter_}.txt'
+            orgin_file_name = f'{self.file_name}_{iter_}'
             if orgin_file_name in check_file_list:
                 iter_ += 1
             else:
