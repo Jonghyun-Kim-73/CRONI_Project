@@ -5,7 +5,7 @@ from collections import deque
 
 
 class SHMem:
-    def __init__(self, cnsinfo, remoteinfo, max_len_deque):
+    def __init__(self, cnsinfo, remoteinfo, max_len_deque, db_path='./DB/db.txt', db_add_path='./DB/db_add.txt'):
         self.cnsip, self.cnsport = cnsinfo
         self.remoteip, self.remoteport = remoteinfo
         # 0] 기능 동작 로직
@@ -14,7 +14,7 @@ class SHMem:
         self.ProDiag = True     # 절차서 진단용 AI 모듈 동작
 
         # 1] CNS 변수용 shmem
-        self.mem = db_make().make_mem_structure(max_len_deque)
+        self.mem = db_make().make_mem_structure(max_len_deque, db_path, db_add_path)
 
         print('Main 메모리 생성 완료')
         # 2] Trig 변수용 shmem

@@ -5,11 +5,11 @@ class db_make:
     def __init__(self):
         pass
 
-    def make_mem_structure(self, max_len):
+    def make_mem_structure(self, max_len, db_path='./DB/db.txt', db_add_path='./DB/db_add.txt'):
         # 초기 shared_mem의 구조를 선언한다.
         idx = 0
         shared_mem = {}
-        for file_name in ['./DB/db.txt', './DB/db_add.txt']:
+        for file_name in [db_path, db_add_path]:
             with open(file_name, 'r') as f:
                 while True:
                     temp_ = f.readline().split('\t')

@@ -10,6 +10,7 @@ import random
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 #
 from AIDAA_Ver2.Interface.CNS_Controller import CNS_Platform_controller_interface as CNS_controller
 from AIDAA_Ver2.Interface import main_window as main_window
@@ -24,7 +25,14 @@ class InterfaceFun(multiprocessing.Process):
 
     def run(self):
         app = QApplication(sys.argv)
+        app.setStyle("fusion")
+
         w = MyForm(self.shmem)
+
+        font = QFontDatabase()
+        font.addApplicationFont('./Arial.ttf')
+        app.setFont(QFont('Arial'))
+
         sys.exit(app.exec_())
 
 

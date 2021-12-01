@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-class MainLeft(QWidget):
+
+class Main1Left(QWidget):
     qss = """
         QWidget {
             background: rgb(231, 231, 234);
@@ -26,8 +27,8 @@ class MainLeft(QWidget):
         }
     """
 
-    def __init__(self, parent = None):
-        super(MainLeft, self).__init__()
+    def __init__(self, parent=None):
+        super(Main1Left, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.parent = parent
         self.setStyleSheet(self.qss)
@@ -45,6 +46,7 @@ class MainLeft(QWidget):
         layout.addWidget(label1)
         layout.addWidget(self.btn_suppress)
         self.setLayout(layout)
+
 
 class MainParaArea(QTableWidget):
     def __init__(self, parent=None):
@@ -99,6 +101,7 @@ class MainParaArea(QTableWidget):
             qp.setPen(pen)
             qp.drawLine(0, i*30, 960, i*30)
         qp.restore()
+
 
 class FreezeTableWidget(QTableView):
     def __init__(self, parent=None, *args):
@@ -245,13 +248,14 @@ class FreezeTableWidget(QTableView):
     #         qp.setPen(pen)
     #         qp.drawLine(0, i*30, 960, i*30)
     #     qp.restore()
+
+
 class MyTableModel(QAbstractTableModel):
     def __init__(self, parent=None, *args):
         QAbstractTableModel.__init__(self, parent, *args)
         self.colLabels = ['DESCRIPTION', 'VALUE', 'SETPOINT', 'UNIT', 'DATE', 'TIME']
         self.dataCached = [['cell%02d,%02d' % (i, j) for i in range(1, 7)]
                            for j in range(1, 51)]
-
 
     def rowCount(self, parent):
         return len(self.dataCached)
@@ -300,15 +304,15 @@ class MyTableModel(QAbstractTableModel):
         return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
 
-
 class AlignDelegate(QStyledItemDelegate):
     def initStyleOption(self, option, index):
         super(AlignDelegate, self).initStyleOption(option, index)
         option.displayAlignment = Qt.AlignCenter
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = MainLeft()
+    window = Main1Left()
     font = QFontDatabase()
     font.addApplicationFont('./Arial.ttf')
     app.setFont(QFont('Arial'))

@@ -8,7 +8,7 @@ from PyQt5.QtGui import *
 from AIDAA_Ver2.Interface import Flag
 
 
-class MainLeft(QWidget):
+class Main4Left(QWidget):
     qss = """
         QWidget {
             background: rgb(231, 231, 234);
@@ -32,7 +32,7 @@ class MainLeft(QWidget):
     """
 
     def __init__(self, parent = None):
-        super(MainLeft, self).__init__()
+        super(Main4Left, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.parent = parent
         self.setStyleSheet(self.qss)
@@ -60,9 +60,10 @@ class MainLeft(QWidget):
         Flag.main2_btn[btn_num] = True
         print("클릭함", btn_num)
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = MainLeft()
+    window = Main4Left()
     font = QFontDatabase()
     font.addApplicationFont('./Arial.ttf')
     app.setFont(QFont('Arial'))

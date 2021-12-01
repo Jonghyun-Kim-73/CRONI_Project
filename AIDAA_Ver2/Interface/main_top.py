@@ -8,14 +8,8 @@ from PyQt5.QtGui import *
 
 from AIDAA_Ver2.Interface import Flag
 
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
-def resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath(".."), relative_path)
-
-source1 = resource_path("../interface/img/return.png")
-source2 = resource_path("../interface/img/close.png")
 
 class MainTop(QWidget):
     qss = """
@@ -39,10 +33,10 @@ class MainTop(QWidget):
         }
         """
 
-    def __init__(self, parent=None):
+    def __init__(self):
         super(MainTop, self).__init__()
 
-        self.bar_height = 37
+        self.bar_height = 35
         self.setStyleSheet(self.qss)
 
         # 타이틀 레이어 셋업 ----------------------------------------------------------------------------------------------
@@ -58,8 +52,10 @@ class MainTop(QWidget):
         label0 = QLabel("")
         label0.setObjectName("black")
         label0.setFixedWidth(200)
+
         label1 = QPushButton("Main")
         label1.setObjectName('main1')
+        label1.clicked.connect(self.call_main)
 
         #AlignVCenter 수직가운데정렬 / AlignHCenter 수평가운데정렬 / AlignCenter 모두 적용
         # label1.setAlignment(Qt.AlignCenter)
@@ -68,24 +64,14 @@ class MainTop(QWidget):
 
         label2 = QPushButton("예지")
         label2.setObjectName('main2')
+        label2.clicked.connect(self.call_prog)
 
         # label2.setAlignment(Qt.AlignCenter)
         label2.setFixedHeight(self.bar_height)
         label2.setFixedWidth(620)
 
-        btn_return = QPushButton()
-        btn_return.setIcon(QIcon(source1))
-        btn_return.setStyleSheet("border:0px")
-        #btn_return.clicked.connect(self.close) #되돌아가기 기능 추가해야함
-        btn_return.setIconSize(QSize(60, 60))
-        btn_return.setFixedSize(30, 30)
-
-        btn_close = QPushButton()
-        btn_close.setIcon(QIcon(source2))
-        btn_close.setStyleSheet("border:0px;")
-        btn_close.clicked.connect(self.close)
-        btn_close.setIconSize(QSize(30, 30))
-        btn_close.setFixedSize(30, 30)
+        btn_return = ReturnBTN()
+        btn_close = CloseBTN()
 
         layout.addWidget(widget1)
         layout.addWidget(label0)
@@ -94,8 +80,12 @@ class MainTop(QWidget):
         layout.addWidget(btn_return)
         layout.addWidget(btn_close)
 
-    def close(self):
-        Flag.main_close = True
+    def call_main(self):
+        Flag.call_main = True
+
+    def call_prog(self):
+        Flag.call_prog = True
+
 
 class TimeBar(QWidget):
     qss = """
@@ -130,7 +120,7 @@ class TimeBar(QWidget):
 
         # timer section
         timer = QTimer(self)
-        timer.setInterval(1000)
+        timer.setInterval(500)
         timer.timeout.connect(self.dis_update)
         timer.start()
 
@@ -139,6 +129,66 @@ class TimeBar(QWidget):
         real_time = datetime.now().strftime('%Y.%m.%d')
         real_time2 = datetime.now().strftime('%H:%M:%S')
         self.timebarlabel.setText(real_time + " / " + real_time2)
+
+
+class ReturnBTN(QPushButton):
+    qss = """
+    QPushButton {
+        background: rgb(100, 25, 28);
+        border-radius: 6px;
+        border: none;
+    }
+    QPushButton:hover {
+        background: rgb(184, 25, 28);
+    }
+    QPushButton:pressed {
+        background: rgb(215, 25, 28);
+    }
+    """
+
+    def __init__(self):
+        super(ReturnBTN, self).__init__()
+        self.setStyleSheet(self.qss)
+        icon = os.path.join(ROOT_PATH, 'img', 'return.png')
+        self.setIcon(QIcon(icon))
+        self.setIconSize(QSize(60, 60))
+        self.setFixedSize(35, 35)
+        self.clicked.connect(self.call_return)
+
+    def call_return(self):
+        """버튼 명령: 이전 화면 전환"""
+        Flag.call_return = True
+        # TODO 이전 화면 전화되는 로직 구현 필요
+
+
+class CloseBTN(QPushButton):
+    qss = """
+    QPushButton {
+        background: rgb(100, 25, 28);
+        border-radius: 6px;
+        border: none;
+    }
+    QPushButton:hover {
+        background: rgb(184, 25, 28);
+    }
+    QPushButton:pressed {
+        background: rgb(215, 25, 28);
+    }
+    """
+
+    def __init__(self):
+        super(CloseBTN, self).__init__()
+        self.setStyleSheet(self.qss)
+        icon = os.path.join(ROOT_PATH, 'img', 'close.png')
+        self.setIcon(QIcon(icon))
+        self.setIconSize(QSize(20, 20))
+        self.setFixedSize(35, 35)
+        self.clicked.connect(self.close)
+
+    def close(self):
+        """버튼 명령: 닫기"""
+        Flag.main_close = True
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

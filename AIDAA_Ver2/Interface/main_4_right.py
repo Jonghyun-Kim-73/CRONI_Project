@@ -1,18 +1,10 @@
-import os
 import sys
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-def resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath(".."), relative_path)
-
-source1 = resource_path("../interface/img/back.png")
-
-class MainRight(QWidget):
+class Main4Right(QWidget):
     qss = """
         QWidget {
             background: rgb(231, 231, 234);
@@ -43,20 +35,40 @@ class MainRight(QWidget):
     """
 
     def __init__(self, parent=None):
-        super(MainRight, self).__init__()
+        super(Main4Right, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)
-        self.layout = QVBoxLayout()
+        self.parent = parent
+        self.setStyleSheet(self.qss)
+        # self.setFixedWidth(1500)
+        # 기본 속성
+        # self.setMinimumHeight(750)
 
-        pic = QPushButton()
-        pic.setIcon(QIcon(source1))
-        pic.setStyleSheet("border:0px")
-        pic.setIconSize(QSize(1900, 1000))
-        self.layout.addWidget(pic)
+        # 레이아웃
+        layout = QVBoxLayout()
+        layout_title = QHBoxLayout()
+        title_btn = []
+        title_item_list = ["2.0 경보 및 증상", "VALUE", "SETPOINT", "UNIT", ""]
+        for cnt in title_item_list:
+            title_btn.append(QPushButton(cnt))
+        for cnt in range(len(title_item_list)):
+            title_btn[cnt].setObjectName("title")
+            layout_title.addWidget(title_btn[cnt])
+        title_btn[0].setFixedWidth(840)
+        title_btn[1].setFixedWidth(180)
+        title_btn[2].setFixedWidth(170)
+        title_btn[3].setFixedWidth(160)
+        title_btn[4].setFixedWidth(40)
+        layout_title.addStretch(1)
+        layout_title.setContentsMargins(10,0,10,0)
+        layout.addLayout(layout_title)
+        layout.addStretch(1)
+        self.setLayout(layout)
 
-        self.setLayout(self.layout)
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = MainRight()
+    window = Main4Right()
     font = QFontDatabase()
     font.addApplicationFont('./Arial.ttf')
     app.setFont(QFont('Arial'))

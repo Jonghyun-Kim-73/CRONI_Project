@@ -12,7 +12,7 @@ from AIDAA_Ver2.Interface import Flag
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath(".."), relative_path)
+    return os.path.join(os.path.abspath(""), relative_path)
 
 class MainTop2(QComboBox):
     qss = """
@@ -33,7 +33,7 @@ class MainTop2(QComboBox):
             border: 0px; 
         }
         QComboBox::down-arrow {
-            image: url(../../interface/img/down.png);
+            image: url(../interface/img/down.png);
             top: 3px;
             width: 60px;
             height: 60px;

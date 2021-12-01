@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-class MainLeft(QWidget):
+
+class Main2Prog(QWidget):
     qss = """
         QWidget {
             background: rgb(231, 231, 234);
@@ -24,7 +25,7 @@ class MainLeft(QWidget):
     """
 
     def __init__(self, parent = None):
-        super(MainLeft, self).__init__()
+        super(Main2Prog, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.parent = parent
         self.setStyleSheet(self.qss)
@@ -34,6 +35,8 @@ class MainLeft(QWidget):
 
         # 레이아웃
         layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         g1 = Graph1(self)
         g2 = Graph2(self)
@@ -177,7 +180,7 @@ class Graph4(QGroupBox):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = MainLeft()
+    window = Main2Prog()
     font = QFontDatabase()
     font.addApplicationFont('./Arial.ttf')
     app.setFont(QFont('Arial'))

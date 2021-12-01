@@ -3,8 +3,10 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from AIDAA_Ver2.Interface import Flag
 
-class MainRight(QWidget):
+
+class Main1Right(QWidget):
     qss = """
         QWidget {
             background: rgb(231, 231, 234);
@@ -57,7 +59,7 @@ class MainRight(QWidget):
     """
 
     def __init__(self, parent=None):
-        super(MainRight, self).__init__()
+        super(Main1Right, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.parent = parent
         self.setStyleSheet(self.qss)
@@ -76,6 +78,7 @@ class MainRight(QWidget):
         label3 = MainParaArea3(self.parent)
         layout.addWidget(label3)
         self.setLayout(layout)
+
 
 class MainParaArea1(QTableWidget):
     def __init__(self, parent):
@@ -117,6 +120,11 @@ class MainParaArea1(QTableWidget):
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 28)
 
+    def mousePressEvent(self, *args, **kwargs):
+        print('Test 절차서 선택 시 화면 전환')
+        Flag.call_prss = True
+        super(MainParaArea1, self).mousePressEvent(*args, **kwargs)
+
     def paintEvent(self, e: QPaintEvent) -> None:
         """ tabelview의 위에 라인 그리기 """
         super(MainParaArea1, self).paintEvent(e)
@@ -129,6 +137,7 @@ class MainParaArea1(QTableWidget):
             qp.setPen(pen)
             qp.drawLine(0, i*28, 960, i*28)
         qp.restore()
+
 
 class MainParaArea2(QTableWidget):
     def __init__(self, parent):
@@ -171,6 +180,11 @@ class MainParaArea2(QTableWidget):
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 28)
         self.setRowHeight(self.rowCount()-1, 25)
+
+    def mousePressEvent(self, *args, **kwargs):
+        print('Test 시스템 선택 시 화면 전환')
+        Flag.call_recv = True
+        super(MainParaArea2, self).mousePressEvent(*args, **kwargs)
 
     def paintEvent(self, e: QPaintEvent) -> None:
         """ tabelview의 위에 라인 그리기 """
@@ -262,7 +276,7 @@ class AlignDelegate(QStyledItemDelegate):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = MainRight()
+    window = Main1Right()
     font = QFontDatabase()
     font.addApplicationFont('./Arial.ttf')
     app.setFont(QFont('Arial'))

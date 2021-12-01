@@ -8,7 +8,7 @@ from PyQt5.QtGui import *
 from AIDAA_Ver2.Interface import Flag
 
 
-class MainLeft(QWidget):
+class Main3Left(QWidget):
     qss = """
             QWidget {
                 background: rgb(231, 231, 234);
@@ -93,7 +93,7 @@ class MainLeft(QWidget):
             }
         """
     def __init__(self, parent = None):
-        super(MainLeft, self).__init__()
+        super(Main3Left, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.parent = parent
         self.setStyleSheet(self.qss)
@@ -165,6 +165,7 @@ class MainParaArea1(QTableWidget):
             qp.setPen(pen)
             qp.drawLine(0, i*28, 560, i*28)
         qp.restore()
+
 # 조치 제안
 class MainParaArea2(QGroupBox):
     def __init__(self, parent):
@@ -183,6 +184,7 @@ class MainParaArea2(QGroupBox):
         layout.addWidget(self.gb3)
 
         self.setLayout(layout)
+
 class Sub2_1(QGroupBox):
     def __init__(self, parent):
         super(Sub2_1, self).__init__(parent=parent)
@@ -269,7 +271,7 @@ class AlignDelegate(QStyledItemDelegate):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = MainLeft()
+    window = Main3Left()
     font = QFontDatabase()
     font.addApplicationFont('./Arial.ttf')
     app.setFont(QFont('Arial'))
