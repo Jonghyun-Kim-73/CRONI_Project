@@ -32,10 +32,25 @@ ab_pro = {
                 'Des': '해당 SG 증기/급수유량 편차 증가',
             }
         },
+        '자동동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.4',
+                'Des': '해당 SG 증기/급수유량 편차 증가',
+            }
+
+        },
         '긴급조치': {
 
         },
         '후속조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
+                'Des': '즉시 고장난 SG 수위 채널 정비 의뢰',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '5.2',
+                'Des': '고장난 SG 수위 채널 정비 후, 해당 SG 수위 선택스위치를 정비한 채널 위치로 전환하여 건전성 확인',
+            }
 
         },
     },
