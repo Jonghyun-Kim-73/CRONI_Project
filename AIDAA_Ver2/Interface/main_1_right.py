@@ -221,6 +221,7 @@ class MainParaArea3(QGroupBox):
         layout.addLayout(sublayout)
         self.setLayout(layout)
 
+
 class MainParaArea3_1(QTableWidget):
     def __init__(self, parent):
         super(MainParaArea3_1, self).__init__(parent=parent)
