@@ -50,7 +50,7 @@ ab_pro = {
             1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2',
                 'Des': '고장난 SG 수위 채널 정비 후, 해당 SG 수위 선택스위치를 정비한 채널 위치로 전환하여 건전성 확인',
-            }
+            },
             2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.3',
                 'Des': '고장난 SG 수위 채널 정비 후, 해당 SG 수위 선택스위치를 정비한 채널 위치로 전환하여 건전성 확인',
