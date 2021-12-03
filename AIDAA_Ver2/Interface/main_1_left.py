@@ -15,11 +15,12 @@ class Main1Left(QWidget):
         QTableWidget {
             background: rgb(231, 231, 234);
             border: 1px solid rgb(128, 128, 128);
+            border-radius: 6px;
         }
         QPushButton{
             background: White;
             color: Black;
-            border-radius:3px;
+            border-radius:6px;
         }
         QHeaderView::section {
             padding-left: 15px; 
@@ -60,7 +61,7 @@ class MainParaArea(QTableWidget):
         # self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         # 테이블 셋업
-        col_info = [('DESCRIPTION', 340), ('VALUE', 160), ('SETPOINT',160),('UNIT',100),('DATE',100),('TIME',88)]  # 475
+        col_info = [('DESCRIPTION', 340), ('VALUE', 160), ('SETPOINT',160),('UNIT',100),('DATE',100),('TIME',93)]  # 475
         self.setColumnCount(6)
         self.setRowCount(29)
         self.horizontalHeader().setFixedHeight(30)

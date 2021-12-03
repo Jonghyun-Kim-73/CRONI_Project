@@ -15,21 +15,23 @@ class MainTop(QWidget):
     qss = """
         QWidget {
             background: rgb(128, 128, 128);
-            border: 0px solid rgb(0, 0, 0); 
-            border-radius: 3px;
+            border: 0px solid rgb(0, 0, 0);
+            border-radius: 6px;
         }
         QPushButton#main1{
-            background: rgb(0, 176, 218);
+            background: rgb(231, 231, 234);
             font-size: 14pt;
             color: rgb(0, 0, 0);
+            border-radius: 6px;
         }
         QPushButton#main2{
             background: rgb(231, 231, 234);
             font-size: 14pt;
             color: rgb(0, 0, 0);
+            border-radius: 6px;
         }
         QPushButton{
-            border-radius: 3px;
+            border-radius: 6px;
         }
         """
 
@@ -53,38 +55,43 @@ class MainTop(QWidget):
         label0.setObjectName("black")
         label0.setFixedWidth(200)
 
-        label1 = QPushButton("Main")
-        label1.setObjectName('main1')
-        label1.clicked.connect(self.call_main)
+        self.label1 = QPushButton("Main")
+        self.label1.setObjectName('main1')
+        self.label1.setStyleSheet('background: rgb(24, 144, 255);')
+        self.label1.clicked.connect(self.call_main)
 
         #AlignVCenter 수직가운데정렬 / AlignHCenter 수평가운데정렬 / AlignCenter 모두 적용
         # label1.setAlignment(Qt.AlignCenter)
-        label1.setFixedHeight(self.bar_height)
-        label1.setFixedWidth(620)
+        self.label1.setFixedHeight(self.bar_height)
+        self.label1.setFixedWidth(620)
 
-        label2 = QPushButton("예지")
-        label2.setObjectName('main2')
-        label2.clicked.connect(self.call_prog)
+        self.label2 = QPushButton("예지")
+        self.label2.setObjectName('main2')
+        self.label2.clicked.connect(self.call_prog)
 
         # label2.setAlignment(Qt.AlignCenter)
-        label2.setFixedHeight(self.bar_height)
-        label2.setFixedWidth(620)
+        self.label2.setFixedHeight(self.bar_height)
+        self.label2.setFixedWidth(620)
 
         btn_return = ReturnBTN()
         btn_close = CloseBTN()
 
         layout.addWidget(widget1)
         layout.addWidget(label0)
-        layout.addWidget(label1)
-        layout.addWidget(label2)
+        layout.addWidget(self.label1)
+        layout.addWidget(self.label2)
         layout.addWidget(btn_return)
         layout.addWidget(btn_close)
 
     def call_main(self):
         Flag.call_main = True
+        self.label1.setStyleSheet('background: rgb(24, 144, 255);')
+        self.label2.setStyleSheet('background: rgb(231, 231, 234);')
 
     def call_prog(self):
         Flag.call_prog = True
+        self.label1.setStyleSheet('background: rgb(231, 231, 234);')
+        self.label2.setStyleSheet('background: rgb(24, 144, 255);')
 
 
 class TimeBar(QWidget):
@@ -93,6 +100,7 @@ class TimeBar(QWidget):
             background: rgb(255, 255, 255);
             color: rgb(0, 0, 0);
             padding: 4px 4px;
+            border-radius: 6px;
             font-size: 14pt;
         }
     """
@@ -134,15 +142,15 @@ class TimeBar(QWidget):
 class ReturnBTN(QPushButton):
     qss = """
     QPushButton {
-        background: rgb(100, 25, 28);
+        background: rgb(178, 178, 178);
         border-radius: 6px;
         border: none;
     }
     QPushButton:hover {
-        background: rgb(184, 25, 28);
+        background: rgb(24, 144, 255);
     }
     QPushButton:pressed {
-        background: rgb(215, 25, 28);
+        background: rgb(130, 130, 130);
     }
     """
 

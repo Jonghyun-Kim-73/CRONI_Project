@@ -14,18 +14,64 @@ ab_pro = {
         },
     },
     'Ab15_08: 증기발생기 수위 채널 고장 (고)': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '해당 ‘SG WTR LEVEL DEVIATION HIGH/LOW’ 경보 발생(NR 50±5 %)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': '해당 ‘SG  WTR LEVELHIGH-HIGH’ 경보 발생(NR 78 %)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': '해당 SG 상태등에서 ‘STM GEN CH LEVEL HI-HI’ 점등 (AE-LT476/486/496 : 해당 SG의 CH C 점등)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': '증기발생기 수위 DCS Monitor에 해당 증기발생기 ‘LVL CH FAIL’ 경보등 점등 및 Buzzer 울림, 경보 프린터 출력',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': '해당 SG의 ACS/DCS 제어 선택 스위치가 DCS 제어 Mode로 자동 전환 되지 않았거나 서서히 급수유량 감소가 진행되어 즉시 조치하지 않을 경우 아래 사항 진행됨',
+            },
+            5: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.5.1',
                 'Des': '해당 SG MFCV 닫힘 방향으로 진행 및 해당 SG 실제 급수유량 감소',
             },
-            1: {
+            6: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.5.2',
                 'Des': '해당 ‘SG STM/FW FLOW DEVIATION’ 경보 발생(±10 %)',
             },
-            2: {
+            7: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.5.3',
-                'Des': '해당 SG 실제 수위 감소',
+                'Des': '해당 SG 실제 수위 감소 [ZSGLEG1,2,3,으로 확인가능]',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5.4',
+                'Des': '해당 ‘SG WTR LEVEL DEVIATION HIGH/LOW’ 경보 (NR 50±5%)',
+            },
+            9: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5.5',
+                'Des': '해당 ‘해당 ‘SG WATER LEVEL LOW’ (NR 25%)',
+            },
+            10: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5.6',
+                'Des': '당 SG WTR LEVELLOW-LOW(NR 17%)에 의한 원자로정지 발생 가능',
+            }
+        },
+        '자동 동작 사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '고장 채널 수위 지시치(AE-LI476/486/496, AE-LI473/483/493) 증가',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': '해당 SG의 ACS/DCS 제어 선택 스위치(AE-HS478/488/498)가 DCS 제어 Mode로 자동 전환 및 해당 SG 수위 정상 복귀',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': '해당 SG의 ACS/DCS 제어 선택 스위치(AE-HS478/488/498)가 DCS 제어 Mode로 자동전환되지 않았을 경우 해당 SG 수위 편차 및 실제 수위 감소',
             },
             3: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.4',
@@ -33,7 +79,34 @@ ab_pro = {
             }
         },
         '긴급조치': {
-
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '증기발생기 제어반(JP007) 경보창에서 해당 경보 확인',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '고장난 SG 수위 지시계 확인, 선택된 채널 고장일 경우 아래 절차에 따라 확인 및 조치',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '해당 SG의 ACS/DCS 제어 선택 스위치(AE-HS478/488/498): ACS → DCS	자동 전환 확인, 전환되지 않았으면 아래 절차에 따라 수동으로 DCS 전환',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3.1',
+                'Des': '해당 MFCV 제어기(AE-FIK478/488/498)를 자동에서 수동으로 전환',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3.2',
+                'Des': '해당 MFCV 제어기(AE-FIK478/488/498) 요구신호 변화 없으면 비정상 발생 전 요구신호 값으로 복구하여 SG 수위를 안정시킨 후 수동으로 DCS 전환',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '모든 SG 수위가 정상 (50±5%)으로 유지되는지 확인',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': '해당 SG 수위 채널 선택스위치(AE-HS478Z/488Z/498Z)를 건전한 채널로 전환 ',
+            }
 
         },
         '후속조치': {
@@ -78,22 +151,89 @@ ab_pro = {
         },
     },
     'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '모든 원자로냉각재계통 누설 시 공통적 증상 ',
+            },
+            1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1.1',
                 'Des': 'PZR 수위 또는 압력 감소',
             },
-            1: {
+            2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1.2',
                 'Des': 'VCT 수위 감소 또는 보충횟수 증가',
             },
-            2: {
+            3: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1.3',
                 'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': 'CCW Hx 출구헤더에 설치된 방사선감시기(EG-RE364)의 지시치 증가 및 경보'
+                       '- "NON-1E RAD WARN(UA-901-C2)" 또는'
+                       '- "NON-1E RAD HIGH ALARM(UA-901-C2)"',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': 'CCW 완충탱크의 수위 증가',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': 'RCP 열방벽(Thermal Barrier) 열교환기 누설 시 RCP 열방벽 열교환기(RCP T/B Hx) 출구온도(전산값) 증가 및 CCW 유량 증가 경보 발생'
+                       '- “RCP A THER BARR CLG COIL FLOW HI/LO(UA-907-A1)" 또는'
+                       '- “RCP B THER BARR CLG COIL FLOW HI/LO(UA-907-A2)" 또는'
+                       '“RCP C THER BARR CLG COIL FLOW HI/LO(UA-907-A3)"',
             }
-
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': 'RCP 열방벽 열교환기 출구 ‘고’ 유량(EG-FI435, 433, 431 : 3.78 ℓ/s) 시 해당 RCP 열방벽 열교환기 출구밸브 자동 닫힘',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': 'RCP 열방벽 열교환기 출구 밸브(EG-FV435, 433, 431) 닫힘으로 인해 RCP 열방벽 열교환기 압력보호밸브(EG-PSV434, 432, 430) 동작으로 격납용기 배수조 수위 증가'
+                       '※ EG-PSV434, 432, 430 개방 설정치 : 2500 psig (175.76 kg/㎠)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': 'RCP 열방벽 열교환기 누설로 인하여 1차기기 냉각수(CCW) 공통회수관의 유량전송기(EG-FT337) ‘고‘ 유량(13.5 ℓ/s) 시 격납용기 내부 CCW 차단밸브(EG-HV337) 자동 닫힘',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.4',
+                'Des': '가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.5',
+                'Des': 'RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.6',
+                'Des': 'RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.',
+            }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '가압기 수위유지를 위해 필요할 경우 충전펌프를 추가 기동한다.',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '가압기 압력유지를 위해 필요할 경우 가압기 보조전열기를 수동 ‘ON‘ 한다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '충전펌프 추가기동 및 가압기 전열기 수동투입을 해도 가압기의 수위 및 압력을 유지할 수 없으면 원자로를 수동으로 정지시키고 비상-0(원자로 트립 또는 안전주입) 운전절차에 따른다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '정기-발-13(원자로냉각재계통 누설량 평형점검) 점검 절차서에 따라 원자로냉각재 누설율을 계산한다.',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': '누설개소를 확인하고 확인된 누설개소에 대하여 후속조치사항을 수행한다.',
+            }
 
         },
         '후속조치': {
@@ -274,7 +414,7 @@ ab_pro = {
         },
     },
     'Ab21_01: 가압기 압력 채널 고장 (고)': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
                 'Des': 'PZR ‘고’ 압력 지시(BB-PI444)',
@@ -297,38 +437,53 @@ ab_pro = {
             },
             5: {
                 'ManClick': False, 'AutoClick': True, 'Nub': '2.6',
-                'Des': 'PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘',
+                'Des': '"PZR LO PRESS INTERLOCK" 경보발생(153.6㎏/㎠) 및 PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘',
             },
             6: {
+                'ManClick': False, 'AutoClick': True, 'Nub': '2.7',
+                'Des': '"PZR PRESS NOT HI(P-11)" 경보 발생(138.5㎏/㎠)',
+            },
+            7: {
                 'ManClick': False, 'AutoClick': True, 'Nub': '2.8',
                 'Des': '"PZR PRESS LOW ALERT" 경보 발생(136.8㎏/㎠) 및 Rx 트립 작동',
             },
-            7: {
+            8: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.9',
                 'Des': '"PZR PRESS LOW SI ALERT" 경보 발생(126.7㎏/㎠) 및 SI 작동',
-            },
-            8: {
+            }
+        },
+        '자동 동작사항': {
+            0: {
                 'ManClick': False, 'AutoClick': True, 'Nub': '3.1',
                 'Des': 'PZR 전열기 모두 꺼짐(158.1㎏/㎠)',
             },
-            9: {
+            1: {
                 'ManClick': False, 'AutoClick': True, 'Nub': '3.2',
                 'Des': 'PZR 살수밸브(BB-PV444C, 444D) 열림(158.9㎏/㎠)',
             },
-            10: {
+            2: {
                 'ManClick': False, 'AutoClick': True, 'Nub': '3.4',
                 'Des': 'Rx 트립(136.8㎏/㎠)',
             },
+            3: {
+                'ManClick': False, 'AutoClick': True, 'Nub': '3.5',
+                'Des': 'SI 작동(126.7㎏/㎠)',
+            }
         },
         '긴급조치': {
             0: {
-                'ManClick': False, 'AutoClick': True, 'Nub': 'x.1',
-                'Des': 'Do ...',
+                'ManClick': False, 'AutoClick': True, 'Nub': '4.1',
+                'Des': 'PZR 압력 제어기 BB-PK444A를 수동으로 전환하여 압력을 조절한다. (동시확인)',
             },
             1: {
-                'ManClick': False, 'AutoClick': True, 'Nub': 'x.2',
-                'Des': 'Do ...',
+                'ManClick': False, 'AutoClick': True, 'Nub': '4.2',
+                'Des': '압력이 회복되어 정상으로 유지되는지 확인한다.',
             },
+            2: {
+                'ManClick': False, 'AutoClick': True, 'Nub': '4.3',
+                'Des': 'Rx 트립이나 SI가 발생되었으면 비상-0(원자로 트립 또는 SI)를 수행한다.',
+            }
+
         },
         '후속조치': {
             0: {
@@ -346,13 +501,59 @@ ab_pro = {
         },
     },
     'Ab21_02: 가압기 압력 채널 고장 (저)': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': 'PZR ‘저’ 압력 지시(BB-PI444)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': '"PZR PRESS LO/BACKUP HEATERS ON" 경보 발생(155.4㎏/㎠) 및 PZR 보조전열기 모두 켜짐 지시',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': '"PZR PRESS HIGH"(BB-PT444B, 445) 경보 발생(162.4㎏/㎠) 및 PZR ‘고’ 압력 지시(BB-PI445, 455, 456, 457)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': 'PZR PORV(BB-PV444B, 445A, 445B) 열림 지시 및 경보 발생(164.2㎏/㎠)'
+                       '◦ 경보명 : PZR PORV PV-444B OPENING'
+                       'PZR PORV PV-445A OPENING'
+                       'PZR PORV PV-445B OPENING'
+                       'PZR PORV ACTUATION PRESS',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': '실제 압력 감소로 PZR PORV(BB-PV444B, 445A, 445B) 닫힘',
+            }
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': 'PZR 전열기 모두 켜짐(155.8㎏/㎠)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': 'PZR PORV(BB-PV444B, 445A, 445B) 열림(164.2㎏/㎠) 및 닫힘(162.8㎏/㎠) 반복',
             }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': 'PZR 압력 제어기 BB-PK444A를 수동으로 전환하여 압력을 조절한다. (동시확인)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': 'PZR ‘고’ 압력에서 전열기가 켜져 있으면 전열기를 수동으로 꺼준다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': 'PZR 압력이 정상으로 유지되는지 확인한다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': 'PZR PORV(BB-PV444B, 445A, 445B)가 열리지 않도록 압력을 조절한다.',
+            }
 
         },
         '후속조치': {
@@ -373,13 +574,162 @@ ab_pro = {
         }
     },
     'Ab20_04: 가압기 수위 채널 고장 (저)': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '수위선택스위치(BB-LS459Z)에 BB-LT459가 선택된 경우',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.1',
+                'Des': 'BB-LI459 ‘저’ 수위 지시',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.2',
+                'Des': '“PZR CONT LVL LOW DEVIATION” 경보 발생(JP006, 기준 수위-5%)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.3',
+                'Des': '“PZR LVL LOW” 및 “PZR CONT LVL LOW HTRS OFF” 경보 발생(JP006, 17%)',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.4',
+                'Des': '“LETDN HX OUTLET FLOW LOW” 경보 발생(JP005, 15㎥/hr)',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.5',
+                'Des': '“CHARGING LINE FLOW HI/LO” 경보 발생 및 충전 유량 증가 (JP005, Hi. 경보 : 26.57㎥/hr, Lo. 경보 : 4.77㎥/hr)',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.6',
+                'Des': '건전한 수위지시계(BB-LI460, 461)의 수위 지시치 증가 [ZPRZNO로 실제 가압기 수위 파악 가능]',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.7',
+                'Des': '“PZR CONT LVL HIGH HTRS ON” 경보 발생(JP006, 기준 수위+5%)',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.8',
+                'Des': '“PZR LVL HIGH” 경보 발생(JP006, 70%)',
+            },
+            9: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.9',
+                'Des': '“PZR HI WTR LVL RX TRIP” 경보 발생 및 원자로 정지(JP006, 92%)',
+            },
+            10: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': '수위선택스위치(BB-LS459Z)에 BB-LT459가 선택되지 않은 경우',
+            },
+            11: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2.1',
+                'Des': 'BB-LI459 ‘저‘ 수위 지시',
+            },
+            12: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2.2',
+                'Des': '“PZR LVL LOW” 경보 발생(JP006, 17%)',
+            },
+            13: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2.3',
+                'Des': '“LETDN HX OUTLET FLOW LOW” 경보 발생(JP005, 15㎥/hr)',
+            },
+            14: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2.4',
+                'Des': '유출관 차단 및 충전 유량 감소로 인해 “CHARGING LINE FLOW HI/LO” 경보 발생(JP005, Hi. 경보 : 26.57㎥/hr, Lo. 경보 : 4.77㎥/hr)',
+            },
+            15: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2.5',
+                'Des': '건전한 수위지시계(BB-LI460, 461) 수위 지시치 증가',
+            }
+
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '수위선택스위치(BB-LS459Z)에 BB-LT459가 선택된 경우',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.1',
+                'Des': '가압기 전열기 꺼짐(17%)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.2',
+                'Des': '유출수 오리피스 차단밸브(BG-HV1, 2, 3) 닫힘(17%)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.3',
+                'Des': '유출수 차단밸브(BG-LV459) 닫힘(17%)',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.4',
+                'Des': '실제 가압기 수위 증가로 원자로 트립(92%)',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': '수위선택스위치(BB-LS459Z)에 BB-LT459가 선택되지 않은 경우',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2.1',
+                'Des': '유출수 오리피스 차단밸브(BG-HV1, 2, 3) 닫힘(17%)',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2.2',
+                'Des': '유출수 차단밸브(BG-LV459) 닫힘',
             }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '수위선택스위치(BB-LS459Z)에 BB-LT459가 선택된 경우',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1.1',
+                'Des': '고장 채널 확인'
+                       '◦ BB-LI459, 460, 461 상호 비교',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1.2',
+                'Des': '유출수 차단 확인',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1.3',
+                'Des': '충전유량 차단'
+                       '◦ 충전유량제어 밸브(BG-FV122) Close'
+                       '◦ 충전관 격리밸브(BG-HV036/037) Close',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1.4',
+                'Des': '정비 주관 부서에 긴급 정비 요청',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1.5',
+                'Des': '가압기 수위 증가시 예비유출계통을 사용하여 가압기 수위 유지',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '수위선택스위치(BB-LS459Z)에 BB-LT459가 선택되지 않은 경우',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2.1',
+                'Des': '고장 채널 확인'
+                       '◦ BB-LI459, 460, 461 상호 비교',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2.2',
+                'Des': '유출수 차단 확인',
+            },
+            9: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2.3',
+                'Des': '충전유량 차단'
+                       '◦ 충전유량제어 밸브(BG-FV122) Close'
+                       '◦ 충전관 격리밸브(BG-HV036/037) Close',
+            },
+            10: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2.4',
+                'Des': '정비 주관 부서에 긴급 정비 요청',
+            },
+            11: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2.5',
+                'Des': '가압기 수위 증가시 예비유출계통을 사용하여 가압기 수위 유지',
+            }
 
         },
         '후속조치': {
@@ -430,13 +780,95 @@ ab_pro = {
         }
     },
     'Ab15_07: 증기발생기 수위 채널 고장 (저)': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '해당 ‘SG WTR LEVEL DEVIATION HIGH/LOW’ 경보 발생(NR 50±5 %)',
             },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': '해당 ‘SG WATER LEVEL LOW’ 경보 발생(NR 25 %)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': '해당 ‘SG  LOOP WTR LEVEL LOW-LOW’ 경보 발생(NR 17 %)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': '해당 SG 상태등에서 ‘STM GEN CH LEVEL LO-LO’ 점등 (AE-LT476/486/496, AE-LT473/483/493 : 해당 SG의 CH C, CH D 점등)',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': '증기발생기 수위 DCS Monitor에 해당 증기발생기 ‘LVL CH FAIL’ 경보등 점등 및 Buzzer 울림, 경보 프린터 출력',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6',
+                'Des': '해당 SG의 ACS/DCS 제어 선택 스위치가 DCS 제어 Mode로 자동 전환 되지 않았거나 서서히 급수유량 증가가 진행되어 즉시 조치하지 않을 경우 아래 사항 진행됨',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6.1',
+                'Des': '해당 SG MFCV 열림 방향으로 진행 및 해당 SG 실제 급수유량 증가',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6.2',
+                'Des': '해당 ‘SG STM/FW FLOW DEVIATION’ 경보 발생(±10 %)',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6.3',
+                'Des': '해당 SG 실제 수위 증가 [ZSGLEG1,2,3,으로 확인가능]',
+            },
+            9: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6.4',
+                'Des': '해당 ‘SG WTR LEVELHIGH-HIGH’에 의한 터빈 정지 및 원자로 정지발생 가능(※ 원자로 출력 30% 이상에서 터빈 트립 시 P-8 신호 발생)',
+            }
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '고장 채널 수위 지시치(AE-LI476/486/496, AE-LI473/483/493) 감소',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': '해당 SG의 ACS/DCS 제어 선택 스위치(AE-HS478/488/498)가 DCS 제어 Mode로 자동 전환 및 해당 SG 수위 정상 복귀',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': '해당 SG의 ACS/DCS 제어 선택 스위치(AE-HS478/488/498)가 DCS 제어 Mode로 자동전환되지 않았을 경우 해당 SG 수위 편차 및 실제 수위 증가',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.4',
+                'Des': '해당 SG 증기/급수유량 편차 증가',
+            }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '증기발생기 제어반(JP007) 경보창에서 해당 경보 확인',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '고장난 SG 수위 지시계 확인, 선택된 채널 고장일 경우 아래 절차에 따라 확인 및 조치 ',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '해당 SG의 ACS/DCS 제어 선택 스위치(AE-HS478/488/498): ACS → DCS	자동 전환 확인, 전환되지 않았으면 아래 절차에 따라 수동으로 DCS 전환',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3.1',
+                'Des': '해당 MFCV 제어기(AE-FIK478/488/498)를 자동에서 수동으로 전환',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3.2',
+                'Des': '해당 MFCV 제어기(AE-FIK478/488/498) 요구신호 변화 없으면 비정상 발생 전 요구신호 값으로 복구하여 SG 수위를 안정시킨 후 수동으로 DCS 전환',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '모든 SG 수위가 정상 (50±5%)으로 유지되는지 확인',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': '해당 SG 수위 채널 선택스위치(AE-HS478Z/488Z/498Z)를 건전한 채널로 전환 ',
+            }
 
         },
         '후속조치': {
@@ -480,37 +912,100 @@ ab_pro = {
         }
     },
     'Ab63_04: 제어봉 낙하': {
-        'Symptom Check': {
-            0: { # KLAMPO15
+        '경보 및 증상': {
+            0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
                 'Des': '제어봉 위치 지시계의 바닥 지시등(RB)점등',
             },
-            1: { # KBCDO22
+            1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
                 'Des': '원자로 출력 감소',
             },
-            2: { # UAVLEGM
+            2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
                 'Des': 'Tavg의 급격한 감소',
             },
-            3: {  # KLAMPO313
-                'ManClick': False, 'AutoClick': False, 'Nub': '2.9',
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': '“RODS AT BOTTOM” 경보 발생',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': '“RPI RODDEVIATION 및 ROD DEVIATION” 경보 발생',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6',
                 'Des': '“T REF/AUCT T AVG HIGH" 경보 발생',
             },
-            4: {  # KLAMPO255
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.7',
+                'Des': '“ROD BANKS LOW/LO-LO LIMIT” 경보 발생',
+            },
+            7: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.8',
                 'Des': '“TWO OR MORE RODS AT BOTTOM” 경보 발생(2개 이상 제어봉 낙하시)',
             },
-            5: {  # KBCDO23
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.9',
+                'Des': '“ROD CONTROL URGENT FAILURE” 경보 발생',
+            },
+            9: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.10',
+                'Des': '“PR UPPER/LOWER HI FLUX DEV/AUTO DEFEAT” 경보 발생',
+            },
+            10: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.11',
+                'Des': '“COMPARATOR PWR RANGE DEVIATION” 경보 발생',
+            },
+            11: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.12',
+                'Des': '“DELTA FLUX” 경보 발생',
+            },
+            12: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.13',
+                'Des': '“RADIAL FLUX” 경보 발생',
+            },
+            13: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.14',
+                'Des': '“NIS HI FLUX RATE PWR RANGE" 경보 발생',
+            }
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '제어봉 제어계통 긴급 고장 경보가 발생',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.1',
+                'Des': '제어봉의 자동 및 수동운전 불가능',
+            },
+            2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1.2',
-                'Des': '“낙하된 제어봉에 의해 원자로 출력감소',
+                'Des': '낙하된 제어봉에 의해 원자로 출력감소',
             },
-            6: {  # KBCDO22
+            3: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1.3',
-                'Des': '“Tavg가 감소된 만큼 터빈출력 감발',
-            },
+                'Des': 'Tavg가 감소된 만큼 터빈출력 감발',
+            }
+
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '터빈출력을 조절하여 Tavg와 Tref를 일치',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '축방향 출력편차가 목표치 내에 있는지 확인',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '사분출력 경사비를 확인',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '원자로 정지가 발생하면 “비상운전절차서(비상-0 : 원자로 트립 또는 SI)”에 따라 조치',
+            }
 
         },
         '후속조치': {
@@ -631,13 +1126,73 @@ ab_pro = {
         }
     },
     'Ab63_02: 제어봉의 계속적인 삽입': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '제어봉 위치 지시계와 스텝계수기상의 계속적인 제어봉 삽입',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': '원자로 출력 감소',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': '“T REF/AUCT T AVG HIGH” 경보 발생',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': '“ROD BANKS LOW/LO-LO LIMIT” 경보 발생',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': '“COMPARATOR PWR RANGE DEVIATION” 경보 발생',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6',
+                'Des': '“PR UPPER/ LOWER HI FLUX DEV/AUTO DEFEAT” 경보 발생',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.7',
+                'Des': '“DELTA FLUX” 경보 발생',
+            }
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '가압기 보조전열기 켜짐'
+                       'Group ‘A‘ : BB-HS103			Group ‘B‘ : BB-HS203B'
+                       'Group ‘D‘ : BB-HS105			Group ‘E‘ : BB-HS205',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': '충전 유량 증가',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': '가압기 저압력(136.7kg/cm2)이 발생될 경우 원자로가 정지됨',
             }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '터빈런백(OTΔT, OPΔT, 복수펌프 2/4 정지, 주급수펌프 1/3 이상 정지, 가열기배수 펌프 2/2 정지, 고정자냉각수 저유량)에 의한 제어봉의 자동 삽입인지 확인',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '터빈 런백이 아니면 제어봉 제어 선택스위치를 수동으로 전환',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '제어봉이 계속 삽입되어 원자로 정지가 발생하면 “비상운전절차서(비상-0 : 원자로 트립 또는 SI)”에 따라 조치',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '제어봉의 삽입이 멈추면 원인을 규명',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': '수동으로 제어봉을 인출하여 Tavg와 Tref를 일치',
+            }
 
         },
         '후속조치': {
@@ -661,13 +1216,76 @@ ab_pro = {
         }
     },
     'Ab21_12: 가압기 PORV (열림)': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': 'PZR PORV(BB-PV444B, 445A, 445B) 열림 지시 및 경보 발생'
+                       '◦ BB-HS444B, 445A, 445B 열림 지시'
+                       '◦ 경보명 : PZR PORV PV-444B OPENING'
+                       'PZR PORV PV-445A OPENING'
+                       'PZR PORV PV-445B OPENING'
+                       'PZR PORV ACTUATION PRESS'
+                       '(BB-PT444B, 445A, 445 : 164.2kg/㎠)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': 'PZR PORV 출구 고온 지시(BB-TI463/464/466) 및 경보 발생'
+                       '◦ 경보명 : PZR PWR RELIEF LN TEMP HIGH',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': 'PZR 저압력/보조전열기 켜짐 지시 및 경보 발생(155.4㎏/㎠)'
+                       '◦ 경보명 : PZR PRESS LO/BACKUP HEATERS ON',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': 'PZR 압력 보호채널(BB-PI455, 456, 457) ‘저’ 압력 연동 경보발생(153.6㎏/㎠) 및 PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘'
+                       '◦ 경보명 : PZR LO PRESS INTERLOCK',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': 'PZR ‘저’ 압력 지시(BB-PI444, 445, 455, 456, 457) 및 경보발생(153.6㎏/㎠)'
+                       '◦ 경보명 : PZR PRESS LOW(BB-PT445)',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6',
+                'Des': 'PRT 고온(45℃), 고압(0.6㎏/㎠), 고수위(85%) 지시 및 경보 발생'
+                       '◦ 경보명 : PZR RELIEF TANK TEMP HIGH'
+                       'PZR RELIEF TANK PRESS HIGH'
+                       'PZR RELIEF TANK LEVEL HI/LO',
+            }
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': 'PZR 전열기 모두 켜짐(155.4㎏/㎠)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': 'PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘(153.6㎏/㎠)',
             }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': 'PZR PORV(BB-PV444B, 445A, 445B)중 열린 밸브를 수동으로 닫는다. (독립확인)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '수동닫힘이 불가능하면 PZR PORV가 열린 유로의 차단밸브(BB-HV005, 006, 007)를 수동으로 닫는다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': 'PZR 전열기가 모두 켜져 있는지 확인한다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': 'PZR의 압력 강하가 중지되어 압력이 정상으로 회복되는지 확인한다.',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': 'Rx 트립이나 SI가 발생되었으면 비상-0(원자로 트립 또는 SI)를 수행한다.',
+            }
 
         },
         '후속조치': {
@@ -691,13 +1309,92 @@ ab_pro = {
         }
     },
     'Ab19_02: 가압기 안전밸브 고장': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '가압기 안전밸브 출구 고온 경보(주위온도＋10℃ : JP006)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': '가압기 안전밸브 출구온도 기록계 지시치 증가(BB-TR465 : JP005)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': '음향감시계기 주의 및 경보(주의 0.062Vrms, 경보 0.125Vrms : JP015)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': '가압기 보조전열기 지시등 켜짐 및 경보(155.4㎏/㎠ : JP006)',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': '가압기 저압경보(153.7㎏/㎠ : JP006)',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6',
+                'Des': '가압기 압력방출밸브(PORV) 차단 경보(153.7㎏/㎠ : JP004)',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.7',
+                'Des': '가압기 압력방출탱크(PRT) 고압력 경보(0.6㎏/㎠ : JP006)',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.8',
+                'Des': '가압기 압력방출탱크(PRT) 고온 경보(45℃ : JP006)',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.9',
+                'Des': '가압기 압력방출탱크(PRT) 고수위 경보(85% : JP006)',
+            },
+            9: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.10',
+                'Des': '가압기 수위 변화',
+            },
+            10: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.11',
+                'Des': '충전유량 증가(BG-FI122A : JP001)',
+            },
+            11: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.12',
+                'Des': '체적제어탱크 수위감소 및 원자로보충수 보충횟수 증가',
+            }
+
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '가압기 보조전열기 켜짐(155.4㎏/㎠)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': '가압기 압력방출밸브의 차단밸브 닫힘(153.7㎏/㎠)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': '원자로 트립(136.7㎏/㎠)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.4',
+                'Des': '안전주입 작동(126.6㎏/㎠)',
             }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '원자로냉각재 압력을 운전 가능한 최소 압력까지 내려서 누설이 차단되는지 확인한다.',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '누설이 차단되면 원자로냉각재 압력을 정상으로 복귀한다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '누설이 차단되지 않으면 후속 조치사항에 따른다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '만일 원자로 트립이나 안전주입이 발생되었으면 비상운전 절차서 비상-0(원자로 트립 또는 안전주입)를 수행한다.',
+            }
 
         },
         '후속조치': {
@@ -713,13 +1410,110 @@ ab_pro = {
         }
     },
     'Ab21_11: 가압기 살수밸브 고장 (열림)': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': 'PZR 살수밸브 ‘열림’ 지시 및 상태 표시등 점등'
+                       '◦ 위치 지시등 : BB-ZL444C 또는 BB-ZL444D ‘열림’ 점등'
+                       '◦ 상태 표시등(RL-QL-3G)'
+                       'PRZR SPRAY V/V BB-PV-444C NOT CLOSED 점등 또는 PRZR SPRAY V/V BB-PV-444D NOT CLOSED 점등',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': 'PZR 보조전열기 켜짐 지시 및 경보 발생(155.4㎏/㎠)'
+                       '◦ 보조전열기 A/B/D/E：자동 ‘ON’'
+                       '◦ 경보명 : PZR PRESS LO/BACK UP HEATERS ON',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': 'PZR 살수관 온도(BB-TI451/452) 증가',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': 'PZR 저압력 지시(BB-PI444, 445, 455, 456, 457) 및 경보 발생(153.6㎏/㎠)'
+                       '◦ 경보명 : PZR PRESS LOW(BB-PT445)',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': 'PZR 압력 보호채널(BB-PI455, 456, 457) ‘저’ 압력 연동 경보발생(153.6㎏/㎠) 및 PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘'
+                       '◦ 경보명 : PZR LO PRESS INTERLOCK',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6',
+                'Des': 'PZR 압력 138.5㎏/㎠(P-11) 이하시 "PZR PRESS NOT HI(P-11)" 경보 발생',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.7',
+                'Des': 'PZR 수위 급격한 증가',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.8',
+                'Des': 'Rx 트립 작동 및 "PZR PRESS LOW ALERT" 경보 발생(136.8㎏/㎠)',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.9',
+                'Des': 'SI 작동 및 "PZR PRESS LOW SI ALERT" 경보 발생(126.7㎏/㎠)',
+            }
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': 'PZR 전열기 모두 켜짐(155.4㎏/㎠)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': 'PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘(153.6㎏/㎠)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': 'Rx 트립(136.8㎏/㎠)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.4',
+                'Des': 'SI 작동(126.7㎏/㎠)',
             }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': 'PZR 전열기 ‘ON’ 확인 및 불만족시 수동으로 켠다.'
+                       '◦ 보조전열기 A/B/D/E 및 비례전열기 C : ‘ON’',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': 'PZR 살수밸브가 고장으로 열려 있으면 수동으로 닫는다.(독립확인)'
+                       '◦ BB-PK444C/444D 수동 닫음',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': 'PZR 살수밸브가 닫히지 않으면, 비상제어용 솔레노이드밸브(BB-SV444C/ 444D)의 핸드스위치(BB-HS444C/444D)를 ‘NORMAL’에서 ‘CLOSE’로 전환(비상제어용 솔레노이드 밸브 상태표시등 ‘소등’)하여 살수밸브에 공급되는 제어용 공기를 배기시킨다.(동시확인)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': 'PZR 살수밸브 조작이 수동으로 불가능하면 고장 밸브의 유로를 확인한다.',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': 'PZR 살수밸브 한 개 이상 열린 상태로 고착되어 압력이 계속 감소될 경우,  Rx 출력을 P8(28%) 미만으로 감발[LO POWER PERMISSIVE(P8) 상태 표시등 점등]한 후 첫 번째 RCP를 정지한다.(동시확인)',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.6',
+                'Des': 'Rx 및 TBN 출력을 P7(Rx 출력 8％ 및 TBN 출력 8.72%) 미만으로 감발[LO POWER PERMISSIVE(P7) 상태 표시등 점등]한 후 열린 상태로 고착된 살수밸브와 관련된 두 번째 RCP를 정지한다.(동시확인)',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.7',
+                'Des': 'PZR 수위의 급격한 상승이 중지되고 안정상태로 유지되는지 확인한다.',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.8',
+                'Des': 'PZR 압력 증가에 따라 PZR 밀림관 온도 및 살수관 온도가 PZR 살수밸브 고장 열림 전의 온도로 복귀되는지 확인한다.'
+                       '◦ BB-TI450(PZR 밀림관 온도) : 증가되어 복귀'
+                       '◦ BB-TI451/452(PZR 살수관 온도) : 감소되어 복귀',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.9',
+                'Des': 'PZR의 압력 강하가 중지되고 정상으로 회복되는지 확인한다.',
+            }
 
         },
         '후속조치': {
@@ -751,13 +1545,114 @@ ab_pro = {
         }
     },
     'Ab60_02: 재생열교환기 전단부위 파열': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '유출수 유량지시계(BG-FI150) 지시치 감소 및 유출수 열교환기 출구유량 ‘저’ 경보(15㎥/hr) 발생',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': 'VCT 수위지시계(BG-LI112A/LI115) 지시치 감소 및 다음 증상 발생',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2.1',
+                'Des': 'VCT 수위 30% 이하시 원자로보충수계통 ‘자동’ 위치에서 자동 보충',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2.2',
+                'Des': 'VCT 수위 20% 이하시 VCT 수위 ‘저’ 경보',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2.3',
+                'Des': 'VCT 수위 5% 이하시 충전펌프 흡입원이 VCT에서 RWST로 전환 BG-LV115B/LV115D Open, BG-LV115C/LV115E Close',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': '가압기 수위 ‘저’ 편차 경보(기준수위 - 5%) 발생',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': '가압기 압력 ‘저’ 전열기 작동 경보(155.35kg/㎠) 발생',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': '가압기 수위 ‘저’ 경보(17%) 및 다음 증상 발생',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5.1',
+                'Des': '가압기 모든 전열기 꺼짐',
+            },
+            9: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5.2',
+                'Des': '유출수 차단발생(BG-LV459/LV460, BG-HV1/HV2/HV3 닫힘)',
+            },
+            10: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6',
+                'Des': '재생 열교환기 후단 유출수 온도(BG-TI140) 감소',
+            },
+            11: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.7',
+                'Des': '재생 열교환기 후단 충전수 온도(BG-TI123) 감소',
+            },
+            12: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.8',
+                'Des': '격납용기 배수조 수위 증가',
+            },
+            13: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.9',
+                'Des': '격납용기내 방사능준위 증가',
+            },
+            14: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.10',
+                'Des': '격납용기내 습도 증가',
             }
+
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '유출수 열교환기 출구 압력지시계(BG-PI145) 지시치 감소 및 압력조절밸브(BG-PV145) 서서히 닫힘',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': '유출수 열교환기 출구 온도지시계(BG-TI144) 지시치 감소 및 유출수 열교환기 출구 온도 조절밸브(EG-TV144) 서서히 닫힘',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': '가압기 수위 감소에 따라 충전수 유량제어기(BG-FK122) ‘자동’ 상태에서 충전수 유량 조절밸브(BG-FV122) 서서히 열림',
+            }
+
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '원자로보충수계통의 ‘자동’ 위치를 확인하고 VCT 수위가 30%에서 충수가 시작되는지를 확인한 다음 충수가 안되면 즉시 수동으로 충수한다.'
+                       '주) VCT 수위가 30% 이상이라도 필요한 경우 수동 보충운전을 수행한다.',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '가압기 수위를 유지하기 위해 다음과 같이 유출수계통을 차단한다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2.1',
+                'Des': '유출수 오리피스차단밸브(BG-HV1/HV2/HV3)를 닫고 녹색지시등을 확인한다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2.2',
+                'Des': '유출수 차단밸브(BG-LV459/LV460)를 닫고 녹색지시등을 확인한다.',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '가압기 수위가 계속 감소하면 ‘비정상-23(원자로냉각재계통 누설)’ 절차를 수행하고, 감소하지 않으면 다음 절차로 진행한다.',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '가압기 수위가 정상수위(기준수위 ± 5%)로 회복되면 충전수 유량 조절밸브(BG-FV122)를 닫아 충전수를 차단한다',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': 'RCP 밀봉주입수 유량 조절밸브(BG-HV186)를 조절하여 각 펌프당 밀봉주입수 유량을 0.5～0.63ℓ/s(8～10gpm)로 맞춘다.',
+            }
 
         },
         '후속조치': {
@@ -781,13 +1676,142 @@ ab_pro = {
         }
     },
     'Ab59_02: 충전수 유량조절밸즈 후단누설': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': 'CHG FLOW CONT FLOW HI/LO(JP005)',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': 'PRZR CONT LEVEL LOW DEVIATION(JP006)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': 'VOL CONT TK LEVEL HIGH/LOW(JP005)',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': 'REGEN HX LETDN LINE TEMP HIGH(JP005)',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': 'RCP SEAL INJ WTR FLOW LOW(JP005)',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.6',
+                'Des': '1E RAD WARN ＆ HIGH ALARM(JP004)'
+                       'NON-1E RAD WARN ＆ HIGH ALARM(JP004)'
+                       '(격납건물:GT-RE001/002/119/211/132/133/220  JP014)'
+                       '(보조건물:GL-RE015/069/087  JP014)',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.7',
+                'Des': '충전유량 지시계 지시치 증가(BG-FI122A  JP001)',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.8',
+                'Des': '가압기 수위 지시계 지시치 감소(BB-LI459A/460/461/460B  JP001/005)',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.9',
+                'Des': '체적제어탱크 수위 지시계 지시치 감소(BG-LI115/112A  JP001/005)',
+            },
+            9: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.10',
+                'Des': '재생 열교환기 후단 유출수 온도 지시계 지시치 증가(BG-TI140  JP001)'
+                       '(재생 열교환기 전단 충전수 관로 누설시)',
+            },
+            10: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.11',
+                'Des': '재생 열교환기 후단 충전수 온도 지시계 지시치 감소(BG-TI123  JP001)'
+                       '(재생 열교환기 후단 충전수 관로 누설시)  ',
+            },
+            11: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.12',
+                'Des': 'RCP 밀봉수 주입유량 지시계 지시치 감소(BG-FR154A/155A/156A  JP005)',
+            },
+            12: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.13',
+                'Des': '격납건물 외부에서 누설 시 보조건물 배수조 수위 증가',
+            },
+            13: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.14',
+                'Des': '격납건물 내부에서 누설 시 격납건물 배수조 수위 및 온도/습도 증가',
             }
+
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '가압기 수위지시계 및 기록계(BB-LI459A/460, BB-LR459) 지시치 17%이하로 감소되면 다음과 같은 자동 동작이 발생한다.',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.1',
+                'Des': '모든 가압기 전열기 꺼짐(OFF)',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.2',
+                'Des': '유출수 오리피스차단밸브(BG-HV1/2/3) 자동 닫힘',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.3',
+                'Des': '유출수 차단밸브(BG-LV459/460) 자동 닫힘',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.4',
+                'Des': '충전수 유량 조절밸브(BG-FV122) 완전 열림',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.5',
+                'Des': '유출수 열교환기 출구온도 증가에 따라 기기냉각수 조절밸브(EG-TV144) 서서히 열림',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.6',
+                'Des': '저압 유출수 압력조절밸브(BG-PV145) 자동 닫힘',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1.7',
+                'Des': '원자로보충수계통의 빈번한 자동 동작',
+            }
+
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '원자로 보충수 제어선택스위치(BG-HS71)를 "자동"(AUTO)위치에 놓고 보충수 제어스위치(BG-HS70)를 "시작"(START) 위치에 놓아 체적제어탱크 수위를 정상상태로 회복시킨다.',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '유출수 오리피스차단밸브(BG-HV1/BG-HV2/BG-HV3)를 닫고 유출수 차단밸브(BG-LV459/BG-LV460)를 닫음으로써 유출수를 차단한다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '충전수 차단밸브(BG-HV36/BG-HV37)를 닫는다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '충전수 유량조절 밸브(BG-FV122)를 서서히 닫는다.',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': '초과 유출수 전환밸브(BG-HV43)를 "VCT"위치로 놓는다.',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.6',
+                'Des': '초과 유출수 차단밸브(BG-HV41/BG-HV42)를 열고 초과 유출수 조절밸브(BG-HV137)를 서서히 열어 가압기 수위를 유지한다.',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.7',
+                'Des': '가압기 수위와 원자로 냉각재 펌프의 밀봉수 유량을 유지하기 위하여 초과 유출수 조절밸브(BG-HV137)를 수시로 조절한다.',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.8',
+                'Des': '원자로냉각재펌프 밀봉수 주입유량(BG-FR156A/155A/154A)이 각각 0.5～0.82ℓ/s가 되도록 밀봉수 주입유량 제어밸브(BG-HV186)를 조절한다.',
+            },
+            8: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.9',
+                'Des': '방사선비상계획서의 비상 발령기준을 확인 후 필요한 조치를 한다.',
+            }
 
         },
         '후속조치': {
@@ -839,13 +1863,83 @@ ab_pro = {
         }
     },
     'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '모든 원자로냉각재계통 누설 시 공통적 증상 ',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.1',
+                'Des': 'PZR 수위 또는 압력 감소',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.2',
+                'Des': 'VCT 수위 감소 또는 보충횟수 증가',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.3',
+                'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': 'CV 대기 방사선감시기(GT-RE211) 또는 격납용기 배기계통 방사선감시기(GT-RE119)의 지시치 증가 및 경보',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': 'CV 지역 방사선감시기(GT-RE001, 002, 132, 133, 220)의 지시치증가 및 경보'
+                       '- "1E RAD WARN(UA-901-C1)" 또는'
+                       '- "1E RAD HIGH ALARM(UA-901-B1)"',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': 'CV 온도, 습도, 압력이 정상보다 높게 지시',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': 'CV Sump 수위 증가 및 배수조 펌프의 기동횟수 증가',
             }
+
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': '격납용기 환기차단 계측설비 관련 방사선감시기(GT-RE001/ 002/119/220)의 고방사선경보가 발생되면 격납용기 환기차단신호(CPIS) 및 주제어실 비상환기신호(CREVS)가 발생된다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': 'RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.4',
+                'Des': 'RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.',
+            }
+
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '가압기 수위유지를 위해 필요할 경우 충전펌프를 추가 기동한다.',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.2',
+                'Des': '가압기 압력유지를 위해 필요할 경우 가압기 보조전열기를 수동 ‘ON‘ 한다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.3',
+                'Des': '충전펌프 추가기동 및 가압기 전열기 수동투입을 해도 가압기의 수위 및 압력을 유지할 수 없으면 원자로를 수동으로 정지시키고 비상-0(원자로 트립 또는 안전주입) 운전절차에 따른다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.4',
+                'Des': '정기-발-13(원자로냉각재계통 누설량 평형점검) 점검 절차서에 따라 원자로냉각재 누설율을 계산한다.',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
+                'Des': '누설개소를 확인하고 확인된 누설개소에 대하여 후속조치사항을 수행한다.',
+            }
 
         },
         '후속조치': {
@@ -914,13 +2008,63 @@ ab_pro = {
         }
     },
     'Ab23_06: 증기발생기 전열관 누설': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
-                'Des': '테스트 3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '모든 원자로냉각재계통 누설 시 공통적 증상 ',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.1',
+                'Des': 'PZR 수위 또는 압력 감소',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.2',
+                'Des': 'VCT 수위 감소 또는 보충횟수 증가',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.3',
+                'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가',
+            },
+            4: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'Des': '복수기 공기추출계통 방사선감시기(CG-RE004/RE013)의 고방사선경보',
+            },
+            5: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'Des': '증기발생기 취출수계통 및 시료채취계통 방사선감지기(BM-RE410,RC-RE019/029 /039)의 고방사선경보',
+            },
+            6: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
+                'Des': '증기발생기의 급수 및 증기유량 편차 및 경보 발생',
+            },
+            7: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'Des': '주증기관 방사선감지기(AB-RE801A/801B/801C)의 고방사선경보',
+            }
+        },
+        '자동 동작사항': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.',
+            },
+            1: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.2',
+                'Des': '증기발생기 전열관 누설 시 증기발생기 취출수계통 고방사선경보가 발생하면 증기발생기 취출수 차단밸브(BM-HV103/203/303)와 시료채취 차단밸브(BM-HV107/207/307)가 닫히고 동시에 취출수 방사선감시기 시료채취 차단밸브(BM-RV410)가 자동으로 닫힌다.',
+            },
+            2: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.3',
+                'Des': 'RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.',
+            },
+            3: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '3.4',
+                'Des': 'RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.',
             }
         },
         '긴급조치': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '원자로 냉각재가 증기발생기 전열관을 통하여 2차계통으로 누설되고 있으면 정상-76(증기발생기 전열관 누설) 절차서를 수행한다.',
+            }
 
         },
         '후속조치': {
