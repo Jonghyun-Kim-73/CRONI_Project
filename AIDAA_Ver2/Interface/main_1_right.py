@@ -234,7 +234,7 @@ class MainParaArea3_1(QTableWidget):
         self.setShowGrid(False)  # Grid 지우기
 
         # 테이블 셋업
-        col_info = [('변수명', 180), ('기여도', 142)]
+        col_info = [('변수명', 180), ('기여도', 147)]
         self.setColumnCount(2)
         self.setRowCount(16)
         self.horizontalHeader().setFixedHeight(29)
