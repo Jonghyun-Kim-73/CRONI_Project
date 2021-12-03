@@ -11,7 +11,7 @@ call_main = False       # Main 화면
 call_prog = False       # 예지 화면
 call_prss = False       # 절차서 화면
 call_recv = False       # 시스템 복구 화면
-
+call_click = False
 # main2 left button click
 main2_btn = [0] * 20
 

@@ -115,6 +115,7 @@ class Mainwindow(QWidget):
         Flag.call_prog = self.change_pp(1) if Flag.call_prog else False
         Flag.call_recv = self.change_pp(2) if Flag.call_recv else False
         Flag.call_prss = self.change_pp(3) if Flag.call_prss else False
+        Flag.call_click = self.change_pp(4) if Flag.call_click else False
 
         """ SHmem <<-->> Flag """
         # TODO 향후 공유 메모리와 Flag의 값 사이의 교환 구현 필요함. ex. AI 계산 결과 -> interface 표현

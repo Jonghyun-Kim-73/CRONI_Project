@@ -15,23 +15,45 @@ class MainTop(QWidget):
     qss = """
         QWidget {
             background: rgb(128, 128, 128);
-            border: 0px solid rgb(0, 0, 0); 
-            border-radius: 3px;
+            border: 0px solid rgb(0, 0, 0);
+            border-radius: 6px;
         }
         QPushButton#main1{
             background: rgb(0, 176, 218);
             font-size: 14pt;
             color: rgb(0, 0, 0);
+            border-radius: 6px;
         }
         QPushButton#main2{
             background: rgb(231, 231, 234);
             font-size: 14pt;
             color: rgb(0, 0, 0);
+            border-radius: 6px;
         }
         QPushButton{
-            border-radius: 3px;
+            border-radius: 6px;
         }
         """
+    # qss = """
+    #     QWidget {
+    #         background: rgb(128, 128, 128);
+    #         border: 0px solid rgb(0, 0, 0);
+    #         border-radius: 6px;
+    #     }
+    #     QWidget#ChangePP[Condition="Hover"] {
+    #         background: rgb(24, 144, 255);                  /* 호버 임시 낮은 % 색상 */
+    #     }
+    #     QWidget#ChangePP[Condition="Click"] {
+    #         background: rgb(24, 144, 255);                    /* 활성화 o */
+    #     }
+    #     QWidget#ChangePP[Condition="Non-Click"] {
+    #         background: rgb(231, 231, 234);                 /* 활성화 x */
+    #     }
+    #     QPushButton{
+    #         border-radius: 6px;
+    #     }
+    #     """
+
 
     def __init__(self):
         super(MainTop, self).__init__()
@@ -93,6 +115,7 @@ class TimeBar(QWidget):
             background: rgb(255, 255, 255);
             color: rgb(0, 0, 0);
             padding: 4px 4px;
+            border-radius: 6px;
             font-size: 14pt;
         }
     """
@@ -130,19 +153,43 @@ class TimeBar(QWidget):
         real_time2 = datetime.now().strftime('%H:%M:%S')
         self.timebarlabel.setText(real_time + " / " + real_time2)
 
+# dis_updata의 1초간격으로 하위 항목들이 업데이트 됨
+    # 라벨들을 얹어놓고 라벨들의 상태에 따라 업데이트가 되도록 해야함
+    # 라벨1: Main / 라벨2: 예지
+    # Click 상태_ / Non_Click 상태_/ Hover 상태
+    # Default_ 라벨1 Click / 라벨2 Non_Click
+
+
+    # def click_status(self, name):
+    #     for i, n in enumerate(self.name_list):
+    #         if n == name:
+    #             # print(f'{n} is clicked.')
+    #             self.btn_[n].update_info('Click')
+    #             self.main_stack_widget.setCurrentIndex(i)
+    #         else:
+    #             self.btn_[n].update_info('Non-Click')
+    #
+    # def update_info(self, condition):
+    #     self.setProperty("Condition", condition)
+    #     self.style().polish(self)
+    #     if not condition == 'Hover':
+    #         self._cond = condition
+    #
+    # def paintEvent(self, a0: QPaintEvent) -> None:
+    #     print('test')
 
 class ReturnBTN(QPushButton):
     qss = """
     QPushButton {
-        background: rgb(100, 25, 28);
+        background: rgb(178, 178, 178);
         border-radius: 6px;
         border: none;
     }
     QPushButton:hover {
-        background: rgb(184, 25, 28);
+        background: rgb(24, 144, 255);
     }
     QPushButton:pressed {
-        background: rgb(215, 25, 28);
+        background: rgb(130, 130, 130);
     }
     """
 

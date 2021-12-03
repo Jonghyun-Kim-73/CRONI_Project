@@ -12,10 +12,12 @@ class Main1Right(QWidget):
             background: rgb(231, 231, 234);
             border: 0px solid rgb(0, 0, 0); 
             font-size: 14pt;
+            border-radius: 6px;
         }
         QTableWidget {
             background: rgb(231, 231, 234);
             border: 1px solid rgb(128,128,128);
+            border-radius: 6px;
         }
         QHeaderView::section {
             padding-left: 15px; 
@@ -39,7 +41,7 @@ class Main1Right(QWidget):
             padding: 4px 900px 4px 10px;
             background-color: rgb(128, 128, 128);
             color: black;
-            font-size: 14pt;
+            font-size: 14pt;       
         }
         QGroupBox#sub1  {
             border : 1px solid rgb(128, 128, 128);
