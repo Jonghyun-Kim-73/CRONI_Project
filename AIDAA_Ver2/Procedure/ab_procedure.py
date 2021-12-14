@@ -1,15 +1,18 @@
 ab_pro = {
     'Normal: 정상': {
-        'Symptom Check': {
+        '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.1',
                 'Des': '정상',
             }
         },
-        '긴급조치': {
+        '자동 동작 사항': {
 
         },
-        '후속조치': {
+        '긴급 조치 사항': {
+
+        },
+        '후속 조치 사항': {
 
         },
     },
@@ -78,7 +81,7 @@ ab_pro = {
                 'Des': '해당 SG 증기/급수유량 편차 증가',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '증기발생기 제어반(JP007) 경보창에서 해당 경보 확인',
@@ -109,7 +112,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '즉시 고장난 SG 수위 채널 정비 의뢰',
@@ -186,7 +189,7 @@ ab_pro = {
                        '“RCP C THER BARR CLG COIL FLOW HI/LO(UA-907-A3)"',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': 'RCP 열방벽 열교환기 출구 ‘고’ 유량(EG-FI435, 433, 431 : 3.78 ℓ/s) 시 해당 RCP 열방벽 열교환기 출구밸브 자동 닫힘',
@@ -213,7 +216,7 @@ ab_pro = {
                 'Des': 'RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '가압기 수위유지를 위해 필요할 경우 충전펌프를 추가 기동한다.',
@@ -232,11 +235,11 @@ ab_pro = {
             },
             4: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
-                'Des': '누설개소를 확인하고 확인된 누설개소에 대하여 후속조치사항을 수행한다.',
+                'Des': '누설개소를 확인하고 확인된 누설개소에 대하여 후속 조치 사항사항을 수행한다.',
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '1차기기 냉각수 계통으로 누설에 따른 해당 조치사항을 수행한다.',
@@ -452,7 +455,7 @@ ab_pro = {
                 'Des': '"PZR PRESS LOW SI ALERT" 경보 발생(126.7㎏/㎠) 및 SI 작동',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': True, 'Nub': '3.1',
                 'Des': 'PZR 전열기 모두 꺼짐(158.1㎏/㎠)',
@@ -470,7 +473,7 @@ ab_pro = {
                 'Des': 'SI 작동(126.7㎏/㎠)',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': True, 'Nub': '4.1',
                 'Des': 'PZR 압력 제어기 BB-PK444A를 수동으로 전환하여 압력을 조절한다. (동시확인)',
@@ -485,7 +488,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': 'PZR 압력이 정상으로 조절되는지 확인한다.',
@@ -527,7 +530,7 @@ ab_pro = {
                 'Des': '실제 압력 감소로 PZR PORV(BB-PV444B, 445A, 445B) 닫힘',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': 'PZR 전열기 모두 켜짐(155.8㎏/㎠)',
@@ -537,7 +540,7 @@ ab_pro = {
                 'Des': 'PZR PORV(BB-PV444B, 445A, 445B) 열림(164.2㎏/㎠) 및 닫힘(162.8㎏/㎠) 반복',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': 'PZR 압력 제어기 BB-PK444A를 수동으로 전환하여 압력을 조절한다. (동시확인)',
@@ -556,7 +559,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': 'PZR 압력이 정상으로 조절되는지 확인한다.',
@@ -641,7 +644,7 @@ ab_pro = {
             }
 
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '수위선택스위치(BB-LS459Z)에 BB-LT459가 선택된 경우',
@@ -675,7 +678,7 @@ ab_pro = {
                 'Des': '유출수 차단밸브(BG-LV459) 닫힘',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '수위선택스위치(BB-LS459Z)에 BB-LT459가 선택된 경우',
@@ -732,7 +735,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': True, 'Nub': '5.1',
                 'Des': '수위기록계(BB-LR459)를 건전한 채널로 선택(BB-LS459Y)',
@@ -822,7 +825,7 @@ ab_pro = {
                 'Des': '해당 ‘SG WTR LEVELHIGH-HIGH’에 의한 터빈 정지 및 원자로 정지발생 가능(※ 원자로 출력 30% 이상에서 터빈 트립 시 P-8 신호 발생)',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '고장 채널 수위 지시치(AE-LI476/486/496, AE-LI473/483/493) 감소',
@@ -840,7 +843,7 @@ ab_pro = {
                 'Des': '해당 SG 증기/급수유량 편차 증가',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '증기발생기 제어반(JP007) 경보창에서 해당 경보 확인',
@@ -871,7 +874,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '즉시 고장난 SG 수위 채널 정비 의뢰',
@@ -970,7 +973,7 @@ ab_pro = {
                 'Des': '“NIS HI FLUX RATE PWR RANGE" 경보 발생',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '제어봉 제어계통 긴급 고장 경보가 발생',
@@ -989,7 +992,7 @@ ab_pro = {
             }
 
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '터빈출력을 조절하여 Tavg와 Tref를 일치',
@@ -1008,7 +1011,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '1시간 내에 “노심-2-2(정지여유도 계산) 절차서”에 따라 정지여유도 계산',
@@ -1075,7 +1078,7 @@ ab_pro = {
                        '2) 낙하된 제어봉 그룹의 스텝계수기를 초기 기록된 위치로 원상복귀'
                        '3) 낙하된 제어봉이 출력 제어군이면 해당 뱅크의 펄스-아날로그 변환기를 초기 기록된 위치로 원상복귀'
                        '4) 제어봉 선택스위치를 수동 또는 자동으로 위치'
-                       '5) “제어봉 구동장치 작동불능시의 후속조치사항 5.0항”을 수행',
+                       '5) “제어봉 구동장치 작동불능시의 후속 조치 사항사항 5.0항”을 수행',
             },
             16: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.9',
@@ -1156,7 +1159,7 @@ ab_pro = {
                 'Des': '“DELTA FLUX” 경보 발생',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '가압기 보조전열기 켜짐'
@@ -1172,7 +1175,7 @@ ab_pro = {
                 'Des': '가압기 저압력(136.7kg/cm2)이 발생될 경우 원자로가 정지됨',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '터빈런백(OTΔT, OPΔT, 복수펌프 2/4 정지, 주급수펌프 1/3 이상 정지, 가열기배수 펌프 2/2 정지, 고정자냉각수 저유량)에 의한 제어봉의 자동 삽입인지 확인',
@@ -1195,14 +1198,14 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '제어봉이 수동 조작에 의해 작동될 때',
             },
             1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1.1',
-                'Des': '“제어봉 구동장치 작동불능시의 후속조치사항 5.1항”을 수행',
+                'Des': '“제어봉 구동장치 작동불능시의 후속 조치 사항사항 5.1항”을 수행',
             },
             2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2',
@@ -1210,7 +1213,7 @@ ab_pro = {
             },
             3: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.1',
-                'Des': '“제어봉 구동장치 작동불능시의 후속조치사항 5.2항”을 수행',
+                'Des': '“제어봉 구동장치 작동불능시의 후속 조치 사항사항 5.2항”을 수행',
             }
 
         }
@@ -1255,7 +1258,7 @@ ab_pro = {
                        'PZR RELIEF TANK LEVEL HI/LO',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': 'PZR 전열기 모두 켜짐(155.4㎏/㎠)',
@@ -1265,7 +1268,7 @@ ab_pro = {
                 'Des': 'PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘(153.6㎏/㎠)',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': 'PZR PORV(BB-PV444B, 445A, 445B)중 열린 밸브를 수동으로 닫는다. (독립확인)',
@@ -1288,7 +1291,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': 'PRT가 고온(45℃), 고압(0.6㎏/㎠), 고수위(85%)에 도달하면 계통-017(가압기 압력방출탱크 운전)에 따라 조치한다.',
@@ -1360,7 +1363,7 @@ ab_pro = {
             }
 
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '가압기 보조전열기 켜짐(155.4㎏/㎠)',
@@ -1378,7 +1381,7 @@ ab_pro = {
                 'Des': '안전주입 작동(126.6㎏/㎠)',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '원자로냉각재 압력을 운전 가능한 최소 압력까지 내려서 누설이 차단되는지 확인한다.',
@@ -1397,7 +1400,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '고리 3,4호기 운영기술지침서 3.4.10항(가압기 안전밸브)의 불만족시 조치사항에 따른다.',
@@ -1455,7 +1458,7 @@ ab_pro = {
                 'Des': 'SI 작동 및 "PZR PRESS LOW SI ALERT" 경보 발생(126.7㎏/㎠)',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': 'PZR 전열기 모두 켜짐(155.4㎏/㎠)',
@@ -1473,7 +1476,7 @@ ab_pro = {
                 'Des': 'SI 작동(126.7㎏/㎠)',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': 'PZR 전열기 ‘ON’ 확인 및 불만족시 수동으로 켠다.'
@@ -1516,7 +1519,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': 'PZR 압력이 정상으로 조절되는지 확인한다.',
@@ -1608,7 +1611,7 @@ ab_pro = {
             }
 
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '유출수 열교환기 출구 압력지시계(BG-PI145) 지시치 감소 및 압력조절밸브(BG-PV145) 서서히 닫힘',
@@ -1623,7 +1626,7 @@ ab_pro = {
             }
 
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '원자로보충수계통의 ‘자동’ 위치를 확인하고 VCT 수위가 30%에서 충수가 시작되는지를 확인한 다음 충수가 안되면 즉시 수동으로 충수한다.'
@@ -1655,7 +1658,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '가압기 수위 증가를 방지하기 위해 계통-20(화학 및 체적제어계통 운전) 절차서에 따라 잉여유출수계통을 운전한다.',
@@ -1740,7 +1743,7 @@ ab_pro = {
             }
 
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '가압기 수위지시계 및 기록계(BB-LI459A/460, BB-LR459) 지시치 17%이하로 감소되면 다음과 같은 자동 동작이 발생한다.',
@@ -1775,7 +1778,7 @@ ab_pro = {
             }
 
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '원자로 보충수 제어선택스위치(BG-HS71)를 "자동"(AUTO)위치에 놓고 보충수 제어스위치(BG-HS70)를 "시작"(START) 위치에 놓아 체적제어탱크 수위를 정상상태로 회복시킨다.',
@@ -1814,7 +1817,7 @@ ab_pro = {
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '만약 충전관로의 고장 시 고장난 관로를 차단하여 격리시키고 계통을 정비할 수 있는 조치를 취한다.',
@@ -1900,7 +1903,7 @@ ab_pro = {
             }
 
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.',
@@ -1919,7 +1922,7 @@ ab_pro = {
             }
 
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '가압기 수위유지를 위해 필요할 경우 충전펌프를 추가 기동한다.',
@@ -1938,11 +1941,11 @@ ab_pro = {
             },
             4: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.5',
-                'Des': '누설개소를 확인하고 확인된 누설개소에 대하여 후속조치사항을 수행한다.',
+                'Des': '누설개소를 확인하고 확인된 누설개소에 대하여 후속 조치 사항사항을 수행한다.',
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '격납용기 내로 누설에 따른 해당 조치사항을 수행한다.',
@@ -2042,7 +2045,7 @@ ab_pro = {
                 'Des': '주증기관 방사선감지기(AB-RE801A/801B/801C)의 고방사선경보',
             }
         },
-        '자동 동작사항': {
+        '자동 동작 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
                 'Des': '가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.',
@@ -2060,14 +2063,14 @@ ab_pro = {
                 'Des': 'RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.',
             }
         },
-        '긴급조치': {
+        '긴급 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '원자로 냉각재가 증기발생기 전열관을 통하여 2차계통으로 누설되고 있으면 정상-76(증기발생기 전열관 누설) 절차서를 수행한다.',
             }
 
         },
-        '후속조치': {
+        '후속 조치 사항': {
 
         }
     },
@@ -2078,7 +2081,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Power range overpower rod stop': {
         'Symptom Check': {
@@ -2086,7 +2089,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Control bank D full rod withdrawl': {
         'Symptom Check': {
@@ -2094,7 +2097,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Control bank lo-lo limit': {
         'Symptom Check': {
@@ -2102,7 +2105,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Two or more rod at bottom': {
         'Symptom Check': {
@@ -2110,7 +2113,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Axial power distribution limit': {
         'Symptom Check': {
@@ -2118,7 +2121,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CCWS outlet temp hi': {
         'Symptom Check': {
@@ -2126,7 +2129,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Instrument air press lo': {
         'Symptom Check': {
@@ -2134,7 +2137,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'RWST level lo-lo': {
         'Symptom Check': {
@@ -2142,7 +2145,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'L/D HX outlet flow lo': {
         'Symptom Check': {
@@ -2150,7 +2153,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'L/D HX outlet temp hi': {
         'Symptom Check': {
@@ -2158,7 +2161,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'RHX L/D outlet temp hi': {
         'Symptom Check': {
@@ -2166,7 +2169,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'VCT level lo': {
         'Symptom Check': {
@@ -2174,7 +2177,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'VCT press lo': {
         'Symptom Check': {
@@ -2182,7 +2185,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'RCP seal inj wtr flow lo': {
         'Symptom Check': {
@@ -2190,7 +2193,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Charging flow cont flow lo': {
         'Symptom Check': {
@@ -2198,7 +2201,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Not used': {
         'Symptom Check': {
@@ -2206,7 +2209,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'L/D HX outlet flow hi': {
         'Symptom Check': {
@@ -2214,7 +2217,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRZ press lo SI': {
         'Symptom Check': {
@@ -2222,7 +2225,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT spray actuated': {
         'Symptom Check': {
@@ -2230,7 +2233,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'VCT level hi': {
         'Symptom Check': {
@@ -2238,7 +2241,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'VCT press hi': {
         'Symptom Check': {
@@ -2246,7 +2249,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT phase B iso actuated': {
         'Symptom Check': {
@@ -2254,7 +2257,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Charging flow cont flow hi': {
         'Symptom Check': {
@@ -2262,7 +2265,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT sump level hi': {
         'Symptom Check': {
@@ -2270,7 +2273,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT sump level hi-hi': {
         'Symptom Check': {
@@ -2278,7 +2281,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT air temp hi': {
         'Symptom Check': {
@@ -2286,7 +2289,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT moisture hi': {
         'Symptom Check': {
@@ -2294,7 +2297,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Rad hi alarm': {
         'Symptom Check': {
@@ -2302,7 +2305,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT press hi 1 alert': {
         'Symptom Check': {
@@ -2310,7 +2313,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT press hi 2 alert': {
         'Symptom Check': {
@@ -2318,7 +2321,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'CTMT press hi 3 alert': {
         'Symptom Check': {
@@ -2326,7 +2329,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Accum. Tk press lo': {
         'Symptom Check': {
@@ -2334,7 +2337,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Accum. Tk press hi': {
         'Symptom Check': {
@@ -2342,7 +2345,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRZ press hi alert': {
         'Symptom Check': {
@@ -2350,7 +2353,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRZ press lo alert': {
         'Symptom Check': {
@@ -2358,7 +2361,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRZ PORV opening': {
         'Symptom Check': {
@@ -2366,7 +2369,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRZ cont level hi heater on': {
         'Symptom Check': {
@@ -2374,7 +2377,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRZ cont level lo heater off': {
         'Symptom Check': {
@@ -2382,7 +2385,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRZ press lo back-up heater on': {
         'Symptom Check': {
@@ -2390,7 +2393,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Tref/Auct. Tavg Deviation': {
         'Symptom Check': {
@@ -2398,7 +2401,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'RCS 1,2,3 Tavg hi': {
         'Symptom Check': {
@@ -2406,7 +2409,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'RCS 1,2,3 Tavg/auct Tavg hi/lo': {
         'Symptom Check': {
@@ -2414,7 +2417,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'RCS 1,2,3 lo flow alert': {
         'Symptom Check': {
@@ -2422,7 +2425,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRT temp hi': {
         'Symptom Check': {
@@ -2430,7 +2433,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'PRT press hi': {
         'Symptom Check': {
@@ -2438,7 +2441,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'SG 1,2,3 level lo': {
         'Symptom Check': {
@@ -2446,7 +2449,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'SG 1,2,3 stm/FW flow deviation': {
         'Symptom Check': {
@@ -2454,7 +2457,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'RCP 1,2,3 trip': {
         'Symptom Check': {
@@ -2462,7 +2465,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Condensate stor Tk level lo': {
         'Symptom Check': {
@@ -2470,7 +2473,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Condensate stor Tk level lo-lo': {
         'Symptom Check': {
@@ -2478,7 +2481,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Condensate stor Tk level hi': {
         'Symptom Check': {
@@ -2486,7 +2489,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'MSIV tripped': {
         'Symptom Check': {
@@ -2494,7 +2497,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'MSL press rate hi steam iso': {
         'Symptom Check': {
@@ -2502,7 +2505,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'MSL 1,2,3 press rate hi': {
         'Symptom Check': {
@@ -2510,7 +2513,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'MSL 1,2,3 press low': {
         'Symptom Check': {
@@ -2518,7 +2521,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'AFW(MD) actuated': {
         'Symptom Check': {
@@ -2526,7 +2529,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Condenser level lo': {
         'Symptom Check': {
@@ -2534,7 +2537,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'FW pump discharge header press hi': {
         'Symptom Check': {
@@ -2542,7 +2545,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'FW pump trip': {
         'Symptom Check': {
@@ -2550,7 +2553,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'FW temp hi': {
         'Symptom Check': {
@@ -2558,7 +2561,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Condensate pump flow lo': {
         'Symptom Check': {
@@ -2566,7 +2569,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Condenser abs press hi': {
         'Symptom Check': {
@@ -2574,7 +2577,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Condenser level hi': {
         'Symptom Check': {
@@ -2582,7 +2585,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'TBN trip P-4': {
         'Symptom Check': {
@@ -2590,7 +2593,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'SG 1,2,3 wtr level hi-hi TBN trip': {
         'Symptom Check': {
@@ -2598,7 +2601,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Condenser vacuum lo TBN trip': {
         'Symptom Check': {
@@ -2606,7 +2609,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'TBN overspeed hi TBN trip': {
         'Symptom Check': {
@@ -2614,7 +2617,7 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
     'Gen. brk open': {
         'Symptom Check': {
@@ -2622,6 +2625,6 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.3',
                 'Des': '테스트 3',
             }
-        }, '긴급조치': {}, '후속조치': {}
+        }, '긴급 조치 사항': {}, '후속 조치 사항': {}
     },
 }
