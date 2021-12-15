@@ -45,7 +45,16 @@ class MainTop2(QComboBox):
         self.setStyleSheet(self.qss)
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setFixedHeight(45)
-        list = ["비정상절차서: 가압기 압력 채널 고장 (고)", "추가 1", "추가 2", "추가 3"]
+
+
+        timer1 = QTimer(self)
+        timer1.setInterval(100)
+        timer1.timeout.connect(self.list_update)
+        timer1.start()
+
+    def list_update(self):
+        self.clear()
+        list = Flag.return_list
         self.addItems(list)
 
 if __name__ == '__main__':

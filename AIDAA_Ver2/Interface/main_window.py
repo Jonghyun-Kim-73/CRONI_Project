@@ -19,7 +19,6 @@ from AIDAA_Ver2.Interface.main_3_right import Main3Right
 from AIDAA_Ver2.Interface.main_4_left import Main4Left
 from AIDAA_Ver2.Interface.main_4_right import Main4Right
 
-import time
 
 
 class Mainwindow(QWidget):
@@ -103,19 +102,26 @@ class Mainwindow(QWidget):
         self.setLayout(window_vbox)
         # self.showMaximized() <- 초기 Geometry 의 크기에 따라감. 삭제.
 
+        # 테스트
+        timer1 = QTimer(self)
+        timer1.setInterval(100)
+        timer1.timeout.connect(self.call)
+        timer1.start()
+
     def set_frame(self):
         """ 메인프레임의 세팅 """
         pass
 
-    def paintEvent(self, e):
+    def call(self):
         """ Flag update """
         Flag.main_close = self.close() if Flag.main_close else False
-        Flag.call_return = self.return_page() if Flag.call_return else False
-        Flag.call_main = self.change_pp(0) if Flag.call_main else False
-        Flag.call_prog = self.change_pp(1) if Flag.call_prog else False
-        Flag.call_recv = self.change_pp(2) if Flag.call_recv else False
-        Flag.call_prss = self.change_pp(3) if Flag.call_prss else False
 
+        Flag.call_return = self.return_page() if Flag.call_return else False
+        Flag.call_main = self.change_pp(0) if Flag.call_main else False  # main
+        Flag.call_prog = self.change_pp(1) if Flag.call_prog else False  # 예지
+        Flag.call_recv = self.change_pp(2) if Flag.call_recv else False  # 복구
+        Flag.call_prss = self.change_pp(3) if Flag.call_prss else False  # 절차서
+        print(Flag.return_list)
         """ SHmem <<-->> Flag """
         # TODO 향후 공유 메모리와 Flag의 값 사이의 교환 구현 필요함. ex. AI 계산 결과 -> interface 표현
 
@@ -125,7 +131,24 @@ class Mainwindow(QWidget):
 
     def return_page(self):
         print('Return Page ...')
+
+        if len(Flag.return_list) > 1:
+            Flag.return_list.pop()
+
+            if Flag.return_list[-1] == "Main":
+                Flag.return_page = 0
+                self.stack_widget.setCurrentIndex(0)
+                # self.maintop.call_main()
+            elif Flag.return_list[-1] == "예지":
+                Flag.return_page = 1
+                self.stack_widget.setCurrentIndex(1)
+                # self.maintop.call_prog()
+        # 뒤로 가면 return list도 하나씩 없애기
+
         # TODO Return page 기능 구현 필요 ...
+
+    def before_page(self):
+        print('바로 전 페이지')
 
     def closeEvent(self, QCloseEvent):
         p_(__file__, 'Close')
@@ -152,7 +175,6 @@ if __name__ == '__main__':
     # 1. 더미 Shared Mem
     shmem = SHMem(cnsinfo=('192.0.0.1', 7000), remoteinfo=('192.0.0.1', 7000), max_len_deque=2,
                   db_path='../DB/db.txt', db_add_path='../DB/db_add.txt')
-
     # 2. Call Interface
     app = QApplication(sys.argv)
     app.setStyle("fusion")

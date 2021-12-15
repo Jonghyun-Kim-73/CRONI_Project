@@ -11,6 +11,7 @@ class Main1Left(QWidget):
             background: rgb(231, 231, 234);
             border: 0px solid rgb(0, 0, 0); 
             font-size: 14pt;
+            border-radius: 6px;
         }
         QTableWidget {
             background: rgb(231, 231, 234);
@@ -28,6 +29,13 @@ class Main1Left(QWidget):
             background: rgb(128, 128, 128);
             font-size:14pt;
             border:0px solid;
+        }
+        QHeaderView {
+            border:1px solid rgb(128, 128, 128);
+            border-top-left-radius :6px;
+            border-top-right-radius : 6px;
+            border-bottom-left-radius : 0px;
+            border-bottom-right-radius : 0px;
         }
         QTableView::item {
             color:black;

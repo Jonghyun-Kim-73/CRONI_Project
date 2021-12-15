@@ -151,6 +151,18 @@ class SHMem:
         else:
             return None
 
+    # Symptom count
+    def get_pro_symptom_count(self, procedure_name):
+        return len(self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'].keys())
+
+    # Symptom des name
+    def get_pro_symptom_des(self, procedure_name, idx):
+        return self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'][idx]['Des']
+
+    # Symptom color
+    def get_pro_symptom_color(self, procedure_name, idx):
+        return self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'][idx]['ManClick']
+
     def check_para(self, para_name):
         if para_name in self.mem.keys():
             return True

@@ -83,13 +83,30 @@ class MainTop(QWidget):
         layout.addWidget(btn_return)
         layout.addWidget(btn_close)
 
+        timer = QTimer(self)
+        timer.setInterval(100)
+        timer.timeout.connect(self.call_page)
+        timer.start()
+
+    def call_page(self):
+        if Flag.return_page == 0:
+            self.label1.setStyleSheet('background: rgb(24, 144, 255);')
+            self.label2.setStyleSheet('background: rgb(231, 231, 234);')
+            Flag.return_page = -1
+        elif Flag.return_page == 1:
+            self.label1.setStyleSheet('background: rgb(231, 231, 234);')
+            self.label2.setStyleSheet('background: rgb(24, 144, 255);')
+            Flag.return_page = -1
+
     def call_main(self):
         Flag.call_main = True
+        Flag.return_list.append("Main")
         self.label1.setStyleSheet('background: rgb(24, 144, 255);')
         self.label2.setStyleSheet('background: rgb(231, 231, 234);')
 
     def call_prog(self):
         Flag.call_prog = True
+        Flag.return_list.append("예지")
         self.label1.setStyleSheet('background: rgb(231, 231, 234);')
         self.label2.setStyleSheet('background: rgb(24, 144, 255);')
 
