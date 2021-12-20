@@ -168,3 +168,20 @@ class SHMem:
             return True
         else:
             return False
+
+    def add_dumy_val(self):
+        """ 절차서 If-then 부분 테스트를 위한 List 채우기 """
+        # 1. Basic version
+        # [self.mem[key]['List'].append(self.mem[key]['Val']) for key in self.mem.keys()]
+
+        # 2. Time 변수만 제어
+        for key in self.mem.keys():
+            # 2.1 특정 변수 수정
+            self.mem[key]['Val'] = self.mem[key]['Val'] + 1 if key == 'KCNTOMS' else self.mem[key]['Val']
+            self.mem[key]['Val'] = self.mem[key]['Val'] + 0.01 if key == 'UAVLEG2' else self.mem[key]['Val']
+
+            # 2.2 Close
+            self.mem[key]['List'].append(self.mem[key]['Val'])
+
+        print(f"[TOOL_Shmem.py]_{self.mem['KCNTOMS']['Val']}")
+

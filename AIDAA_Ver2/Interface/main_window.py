@@ -128,6 +128,8 @@ class Mainwindow(QWidget):
         # TODO 향후 공유 메모리와 Flag의 값 사이의 교환 구현 필요함. ex. AI 계산 결과 -> interface 표현
 
         '''IF-THEN Rule'''
+        self.shmem.add_dumy_val()       # if-then 테스트 용 더미 데이터 채우기
+
         # print(self.shmem.get_shmem_val('cZINST80'))
         # print(self.shmem.get_shmem_vallist('cZINST80'))
         # print(self.shmem.save_mem)
