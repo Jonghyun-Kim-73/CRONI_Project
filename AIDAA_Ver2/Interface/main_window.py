@@ -19,6 +19,8 @@ from AIDAA_Ver2.Interface.main_3_right import Main3Right
 from AIDAA_Ver2.Interface.main_4_left import Main4Left
 from AIDAA_Ver2.Interface.main_4_right import Main4Right
 
+from AIDAA_Ver2.Procedure.ab_procedure import ab_pro
+
 
 
 class Mainwindow(QWidget):
@@ -125,6 +127,14 @@ class Mainwindow(QWidget):
         """ SHmem <<-->> Flag """
         # TODO 향후 공유 메모리와 Flag의 값 사이의 교환 구현 필요함. ex. AI 계산 결과 -> interface 표현
 
+        '''IF-THEN Rule'''
+        # print(self.shmem.get_shmem_val('cZINST80'))
+        # print(self.shmem.get_shmem_vallist('cZINST80'))
+        # print(self.shmem.save_mem)
+        if self.shmem.get_shmem_val('KLAMPO338')==1 and self.shmem.get_shmem_val('KLAMPO214')==1:
+            print('만족')
+        else: print('불만족')
+
     def change_pp(self, page):
         """ page 번호 받아서 stack_widget 페이지로 변경 """
         self.stack_widget.setCurrentIndex(page)
@@ -173,7 +183,7 @@ class DumyWindow(QWidget):
 if __name__ == '__main__':
     """ Interface 개발자 TEST 용 """
     # 1. 더미 Shared Mem
-    shmem = SHMem(cnsinfo=('192.0.0.1', 7000), remoteinfo=('192.0.0.1', 7000), max_len_deque=2,
+    shmem = SHMem(cnsinfo=('192.0.0.1', 7000), remoteinfo=('192.0.0.1', 7000), max_len_deque=5,
                   db_path='../DB/db.txt', db_add_path='../DB/db_add.txt')
     # 2. Call Interface
     app = QApplication(sys.argv)
