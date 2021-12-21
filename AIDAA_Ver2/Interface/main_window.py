@@ -20,6 +20,7 @@ from AIDAA_Ver2.Interface.main_4_left import Main4Left
 from AIDAA_Ver2.Interface.main_4_right import Main4Right
 
 from AIDAA_Ver2.Procedure.ab_procedure import ab_pro
+from AIDAA_Ver2.Procedure.symptom_check import symp_check
 
 
 
@@ -127,15 +128,20 @@ class Mainwindow(QWidget):
         """ SHmem <<-->> Flag """
         # TODO 향후 공유 메모리와 Flag의 값 사이의 교환 구현 필요함. ex. AI 계산 결과 -> interface 표현
 
-        '''IF-THEN Rule'''
-        self.shmem.add_dumy_val()       # if-then 테스트 용 더미 데이터 채우기
-
+        '''
+        IF-THEN Rule -> ab_pro
+        절차서 선택과 상관없이 background에서 모든 절차서의 증상 요건을 확인
+        제한사항: deque에 데이터가 5초 이상 쌓여 있어야 증감 비교 가능
+        '''
+        self.shmem.add_dumy_val()       # IF-THEN 테스트 용 더미 데이터 채우기
+        symp_check(self.shmem) # IF-THEN 구동
         # print(self.shmem.get_shmem_val('cZINST80'))
-        # print(self.shmem.get_shmem_vallist('cZINST80'))
-        # print(self.shmem.save_mem)
-        if self.shmem.get_shmem_val('KLAMPO338')==1 and self.shmem.get_shmem_val('KLAMPO214')==1:
-            print('만족')
-        else: print('불만족')
+        # print(np.array(self.shmem.get_shmem_vallist('cZINST80')))
+
+        # if self.shmem.get_shmem_val('KLAMPO338')==1 and self.shmem.get_shmem_val('KLAMPO214')==1:
+        #     print('만족')
+        # else: ab_pro['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설']['경보 및 증상'][0]['AutoClick'] = True
+        print(ab_pro['Ab23_06: 증기발생기 전열관 누설']['경보 및 증상'][0]['AutoClick'])
 
     def change_pp(self, page):
         """ page 번호 받아서 stack_widget 페이지로 변경 """
