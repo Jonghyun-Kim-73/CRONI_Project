@@ -217,3 +217,111 @@ class symp_check:
 
         # 자동 동작 사항 8: 원자로보충수계통의 빈번한 자동 동작
         ab_pro[procedure_name]['자동 동작 사항'][7]['AutoClick'] = False # (추후조치)
+
+    def abnormal_procedure_60_02(self):
+        procedure_name = 'Ab60_02: 재생열교환기 전단부위 파열'
+        '''
+        경보 및 증상 0~14
+        '''
+        # 경보 및 증상 0: 유출수 유량지시계(BG-FI150) 지시치 감소 및 유출수 열교환기 출구유량 ‘저’ 경보(15㎥/hr) 발생
+        if self.db_val('WNETLD') < self.db_val('CWLHXL'):
+            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
+        else: ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 1: VCT 수위지시계(BG-LI112A/LI115) 지시치 감소 및 다음 증상 발생 -> 경보 및 증상 2~4 전체 만족 시
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5: #deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('ZVCT') and ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] == True and ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] == True and ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] == True:
+                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True
+            else: ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 2: VCT 수위 30% 이하시 원자로보충수계통 ‘자동’ 위치에서 자동 보충
+        if self.db_val('ZVCT') < self.db_val('CZVCT3') and self.db_val('KLAMPO86') == 1:
+            ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = True
+        else: ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 3: VCT 수위 20% 이하시 VCT 수위 ‘저’ 경보
+        if self.db_val('ZVCT') < self.db_val('CZVCT2') and self.db_val('KLAMPO263') == 1:
+            ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = True
+        else: ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 4: VCT 수위 5% 이하시 충전펌프 흡입원이 VCT에서 RWST로 전환 BG-LV115B/LV115D Open, BG-LV115C/LV115E Close
+        if self.db_val('ZVCT') < self.db_val('CZVCT1') and self.db_val('BLV616') != 1 and self.db_val('BLV615') != 0:
+            ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = True
+        else: ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 5: 가압기 수위 ‘저’ 편차 경보(기준수위 - 5%) 발생 => 추후조치
+        ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False
+
+        # 경보 및 증상 6: 가압기 압력 ‘저’ 전열기 작동 경보(155.35kg/㎠) 발생
+        if self.db_val('ZINST58') < 155.35 and self.db_val('KBHON') == 1:
+            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = True
+        else: ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 7: 가압기 수위 ‘저’ 경보(17%) 및 다음 증상 발생 -> 경보 및 증상 8~9 전체 만족 시
+        if self.db_val('ZINST63') < self.db_val('CPZLOW')*100 and ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] == True:
+            ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = True
+        else: ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 8: 가압기 모든 전열기 꺼짐 -> 추후조치
+        # 후반에 보조전열기가 켜지나 초반에 꺼져있는 상태를 보고 만족사항으로 나타남.
+        if self.db_val('QPRZB') < 0.001 and self.db_val('QPRZH') < 0.001: # 0으로 도달 안함, 때문에 < 0.001로 표현
+            ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = True
+        else: ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 9: 유출수 차단발생(BG-LV459/LV460, BG-HV1/HV2/HV3 닫힘)
+        if self.db_val('BLV459') == 0 and self.db_val('BHV1') == 0 and self.db_val('BHV2') == 0 and self.db_val('BHV3') == 0:
+            ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = True
+        else: ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 10: 재생 열교환기 후단 유출수 온도(BG-TI140) 감소
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('URHXUT'):
+                ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = True
+            else: ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 11: 재생 열교환기 후단 충전수 온도(BG-TI123) 감소
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('UCHGUT'):
+                ab_pro[procedure_name]['경보 및 증상'][11]['AutoClick'] = True
+            else: ab_pro[procedure_name]['경보 및 증상'][11]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 12: 격납용기 배수조 수위 증가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('ZSUMP'):
+                ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = True
+            else: ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 13: 격납용기내 방사능준위 증가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('ZINST22'):
+                ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = True
+            else: ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 14: 격납용기내 습도 증가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('ZINST23'):
+                ab_pro[procedure_name]['경보 및 증상'][14]['AutoClick'] = True
+            else: ab_pro[procedure_name]['경보 및 증상'][14]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        '''
+        자동 동작 사항 0~2
+        '''
+        # 자동 동작 사항 0: 유출수 열교환기 출구 압력지시계(BG-PI145) 지시치 감소 및 압력조절밸브(BG-PV145) 서서히 닫힘.
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('BPV145') and self.sym_decrease('ZINST36'):
+                ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = True
+            else: ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 1: 유출수 열교환기 출구 온도지시계(BG-TI144) 지시치 감소 및 유출수 열교환기 출구 온도 조절밸브(EG-TV144) 서서히 닫힘
+        # 추후조치 -> 유출수 열교환기 출구 온도지시계 지시치 변수 확인 불가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('UNRHXUT'):
+                ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = True
+            else: ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 2: 가압기 수위 감소에 따라 충전수 유량제어기(BG-FK122) ‘자동’ 상태에서 충전수 유량 조절밸브(BG-FV122) 서서히 열림
+        # 추후조치 -> 충전수 유량제어기 상태변수 확인 필요
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('BFV122'):
+                ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = True
+            else: ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용

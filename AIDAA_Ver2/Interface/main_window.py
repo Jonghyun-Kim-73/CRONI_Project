@@ -135,13 +135,7 @@ class Mainwindow(QWidget):
         '''
         self.shmem.add_dumy_val()       # IF-THEN 테스트 용 더미 데이터 채우기
         symp_check(self.shmem) # IF-THEN 구동
-        # print(self.shmem.get_shmem_val('cZINST80'))
-        # print(np.array(self.shmem.get_shmem_vallist('cZINST80')))
-
-        # if self.shmem.get_shmem_val('KLAMPO338')==1 and self.shmem.get_shmem_val('KLAMPO214')==1:
-        #     print('만족')
-        # else: ab_pro['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설']['경보 및 증상'][0]['AutoClick'] = True
-        print(ab_pro['Ab23_06: 증기발생기 전열관 누설']['경보 및 증상'][0]['AutoClick'])
+        # print(ab_pro['Ab23_06: 증기발생기 전열관 누설']['경보 및 증상'][1]['AutoClick'])
 
     def change_pp(self, page):
         """ page 번호 받아서 stack_widget 페이지로 변경 """
