@@ -6,6 +6,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from AIDAA_Ver2.Interface import Flag
+from AIDAA_Ver2.Procedure.ab_procedure import ab_pro
 
 
 class Main4Left(QWidget):
@@ -45,6 +46,9 @@ class Main4Left(QWidget):
 
         # 변수 받아와야함
         item_list = ["2.0 경보 및 증상 [3/4]", "3.0 자동 동작 사항 [3/5]", "4.0 긴급 조치 사항 [3/5]", "5.0 후속 조치 사항 [3/5]"]
+        if Flag.call_bottom:
+            item_list = ["2.0 경보 및 증상 [0/0]", "3.0 자동 동작 사항 [0/0]", "4.0 긴급 조치 사항 [0/0]", "5.0 후속 조치 사항 [0/0]"]
+            # print(ab_pro[Flag.call_bottom_name])
 
         btn = []
         for item in item_list:

@@ -13,11 +13,178 @@ class symp_check:
     def db_list(self, val, num):
         return self.shmem.get_shmem_vallist(val)[num]
 
-    def sym_increase(self, val):
+    def sym_increase(self, val): # deque의 maxlen이 5일 경우
         return self.db_list(val, 0) < self.db_list(val, 1) < self.db_list(val, 2) < self.db_list(val, 3) < self.db_list(val, 4)
 
-    def sym_decrease(self, val):
+    def sym_decrease(self, val): # deque의 maxlen이 5일 경우
         return self.db_list(val, 0) > self.db_list(val, 1) > self.db_list(val, 2) > self.db_list(val, 3) > self.db_list(val, 4)
+
+    def abnormal_procedure_23_01(self):
+        procedure_name = 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설'
+        '''
+        경보 및 증상 0~7
+        '''
+        # 경보 및 증상 0: 모든 원자로냉각재계통 누설 시 공통적 증상 -> 경보 및 증상 1~3 전체 만족 시
+        if ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] == True:
+            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 1: PZR 수위 또는 압력 감소
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('ZINST63') or self.sym_decrease('ZINST63'):
+                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 2: VCT 수위 감소 또는 보충횟수 증가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('ZVCT'):
+                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 3: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('WCHGNO'):
+                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 4: CV 대기 방사선감시기(GT-RE211) 또는 격납용기 배기계통 방사선감시기(GT-RE119)의 지시치 증가 및 경보
+        # 추후조치 -> 경보 및 증상 4,5번 통합 고려
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('DCTMT') and (self.db_val('DCTMT') > self.db_val('CRADHI')):
+                ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 5: CV 지역 방사선감시기(GT-RE001, 002, 132, 133, 220)의 지시치증가 및 경보
+        # 추후조치 -> 경보 및 증상 4,5번 통합 고려
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('DCTMT') and (self.db_val('DCTMT') > self.db_val('CRADHI')):
+                ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 6: CV 온도, 습도, 압력이 정상보다 높게 지시
+        if (self.db_val('PCTMT') > 24666.171875) and (self.db_val('UCTMT') > 34.67035675048828):
+            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 7: CV Sump 수위 증가 및 배수조 펌프의 기동횟수 증가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('ZINST17'):
+                ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        '''
+        자동 동작 사항 0~3
+        '''
+        # 자동 동작 사항 0: 가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.
+        if self.db_val('ZINST63') < 17 and self.db_val('BHV1') == 0 and self.db_val('BHV2') == 0 and self.db_val(
+                'BHV3') == 0 and self.db_val('BLV459') == 0:
+            ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 1: 격납용기 환기차단 계측설비 관련 방사선감시기(GT-RE001/ 002/119/220)의 고방사선경보가 발생되면 격납용기 환기차단신호(CPIS) 및 주제어실 비상환기신호(CREVS)가 발생된다.
+        # 추후조치 -> 격납용기 환기차단 신호 및 주제어실 비상환기신호 미구현
+        if self.db_val('DCTMT') > self.db_val('CRADHI'):
+            ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 2: RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.
+        if self.db_val('KLAMPO9') == 1:
+            ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 3: RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.
+        if self.db_val('KLAMPO6') == 1:
+            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+    def abnormal_procedure_23_03(self):
+        procedure_name = 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설'
+        '''
+        경보 및 증상 0~6
+        '''
+        # 경보 및 증상 0: 모든 원자로냉각재계통 누설 시 공통적 증상 -> 경보 및 증상 1~3 전체 만족 시
+        if ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] == True:
+            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 1: PZR 수위 또는 압력 감소
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('ZINST63') or self.sym_decrease('ZINST63'):
+                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 2: VCT 수위 감소 또는 보충횟수 증가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('ZVCT'):
+                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 3: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('WCHGNO'):
+                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 4: CCW Hx 출구헤더에 설치된 방사선감시기(EG-RE364)의 지시치 증가 및 경보, "NON-1E RAD WARN(UA-901-C2)" 또는 "NON-1E RAD HIGH ALARM(UA-901-C2)"
+        # 추후조치 -> 미구현 증상
+        ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 5: CCW 완충탱크의 수위 증가
+        # 추후조치 -> 미구현 증상
+        ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 경보 및 증상 6: RCP 열방벽(Thermal Barrier) 열교환기 누설 시 RCP 열방벽 열교환기(RCP T/B Hx) 출구온도(전산값) 증가 및 CCW 유량 증가 경보 발생, “RCP A THER BARR CLG COIL FLOW HI/LO(UA-907-A1)" 또는 “RCP B THER BARR CLG COIL FLOW HI/LO(UA-907-A2)" 또는 “RCP C THER BARR CLG COIL FLOW HI/LO(UA-907-A3)"
+        # 추후조치 -> 미구현 증상
+        ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        '''
+        자동 동작 사항 0~5
+        '''
+        # 자동 동작 사항 0: RCP 열방벽 열교환기 출구 ‘고’ 유량(EG-FI435, 433, 431 : 3.78 ℓ/s) 시 해당 RCP 열방벽 열교환기 출구밸브 자동 닫힘
+        # 추후조치 -> 미구현 증상
+        ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 1: RCP 열방벽 열교환기 출구 밸브(EG-FV435, 433, 431) 닫힘으로 인해 RCP 열방벽 열교환기 압력보호밸브(EG-PSV434, 432, 430) 동작으로 격납용기 배수조 수위 증가
+        # 추후조치 -> 미구현 증상
+        ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 2: RCP 열방벽 열교환기 누설로 인하여 1차기기 냉각수(CCW) 공통회수관의 유량전송기(EG-FT337) ‘고‘ 유량(13.5 ℓ/s) 시 격납용기 내부 CCW 차단밸브(EG-HV337) 자동 닫힘
+        # 추후조치 -> 미구현 증상
+        ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 3: 가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.
+        if self.db_val('ZINST63') < 17 and self.db_val('BHV1') == 0 and self.db_val('BHV2') == 0 and self.db_val('BHV3') == 0 and self.db_val('BLV459') == 0:
+            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 4: RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.
+        if self.db_val('KLAMPO9') == 1:
+            ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+        # 자동 동작 사항 5: RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.
+        if self.db_val('KLAMPO6') == 1:
+            ab_pro[procedure_name]['자동 동작 사항'][5]['AutoClick'] = True
+        else:
+            ab_pro[procedure_name]['자동 동작 사항'][5]['AutoClick'] = False  # IF-THEN dummy 확인용
 
     def abnormal_procedure_23_06(self):
         procedure_name = 'Ab23_06: 증기발생기 전열관 누설'
@@ -198,3 +365,5 @@ class symp_check:
             if self.sym_increase('BFV122'):
                 ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = True
             else: ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
+
+
