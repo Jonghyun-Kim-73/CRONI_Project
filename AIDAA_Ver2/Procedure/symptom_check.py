@@ -77,10 +77,19 @@ class symp_check:
         else: ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
 
         # 자동 동작 사항 1: 증기발생기 전열관 누설 시 증기발생기 취출수계통 고방사선경보가 발생하면 증기발생기 취출수 차단밸브(BM-HV103/203/303)와 시료채취 차단밸브(BM-HV107/207/307)가 닫히고 동시에 취출수 방사선감시기 시료채취 차단밸브(BM-RV410)가 자동으로 닫힌다.
+        if (self.db_val('DSECON') > 3.9E-3) and (self.db_val('ZINST116') == 0):
+            ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = True
+        else: ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
 
         # 자동 동작 사항 2: RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.
+        if self.db_val('KLAMPO9') == 1:
+            ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = True
+        else: ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
 
         # 자동 동작 사항 3: RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.
+        if self.db_val('KLAMPO6') == 1:
+            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = True
+        else: ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
 
 
 
