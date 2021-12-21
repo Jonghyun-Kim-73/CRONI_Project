@@ -1,5 +1,4 @@
 from AIDAA_Ver2.Procedure.ab_procedure import ab_pro
-import numpy as np
 
 class symp_check:
     def __init__(self, shmem):
@@ -298,36 +297,41 @@ class symp_check:
         ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False # 관련 경보 확인 불가(추후조치)
 
         # 경보 및 증상 6: 충전유량 지시계 지시치 증가(BG-FI122A JP001)
-        if self.sym_increase('WCHGNO'): # CNS상 추전유량 지시치가 증가하는것으로 확인, 그러나 데이터에서는 감소하는 경향을 확인(추후조치)
-            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('WCHGNO'): # CNS상 추전유량 지시치가 증가하는것으로 확인, 그러나 데이터에서는 감소하는 경향을 확인(추후조치)
+                ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False
 
         # 경보 및 증상 7: 가압기 수위 지시계 지시치 감소(BB-LI459A/460/461/460B  JP001/005)
-        if self.sym_decrease('ZINST63'):
-            ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = False
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('ZINST63'):
+                ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = False
 
         # 경보 및 증상 8: 체적제어탱크 수위 지시계 지시치 감소(BG-LI115/112A  JP001/005)
-        if self.sym_decrease('ZVCT'):
-            ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = False
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('ZVCT'):
+                ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = False
 
         # 경보 및 증상 9: 재생 열교환기 후단 유출수 온도 지시계 지시치 증가(BG-TI140  JP001)
         # (재생 열교환기 전단 충전수 관로 누설시)
-        if self.sym_increase('URHXUT'): # jupyter에서는 UCHGUT(충전수 출구 온도)로 되어있는데 URHXUT(RHX 출구 온도)가 맞는듯 함(추후조치)
-            ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = False
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('URHXUT'): # jupyter에서는 UCHGUT(충전수 출구 온도)로 되어있는데 URHXUT(RHX 출구 온도)가 맞는듯 함(추후조치)
+                ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = False
 
         # 경보 및 증상 10: 재생 열교환기 후단 충전수 온도 지시계 지시치 감소(BG-TI123  JP001)
         # (재생 열교환기 후단 충전수 관로 누설시)
-        if self.sym_decrease('UCHGUT'):
-            ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = False
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_decrease('UCHGUT'):
+                ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = False
 
         # 경보 및 증상 11: RCP 밀봉수 주입유량 지시계 지시치 감소(BG-FR154A/155A/156A  JP005)
         if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5: #deque 사용시 필요 (5개가 할당되어 있는지 확인)
@@ -336,15 +340,17 @@ class symp_check:
             else: ab_pro[procedure_name]['경보 및 증상'][11]['AutoClick'] = False  # IF-THEN dummy 확인용
 
         # 경보 및 증상 12: 격납건물 외부에서 누설 시 보조건물 배수조 수위 증가
-        if self.sym_increase('ZSUMP'):
-            ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = False
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('ZSUMP'):
+                ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = True
+            else: ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = False
 
         # 경보 및 증상 13: 격납건물 내부에서 누설 시 격납건물 배수조 수위 및 온도/습도 증가
-        if self.sym_increase('ZSUMP') and self.sym_increase('UCTMT') and self.sym_increase('HUCTMT'):
-            ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = False
+        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
+            if self.sym_increase('ZSUMP') and self.sym_increase('UCTMT') and self.sym_increase('HUCTMT'):
+                ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = True
+            else:
+                ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = False
 
         '''
         자동 동작 사항 0~7

@@ -209,7 +209,6 @@ class MainParaArea1(QTableWidget):
                                   6: 'Ab63_04: 제어봉 낙하', 7: 'Ab63_02: 제어봉의 계속적인 삽입', 8: 'Ab21_12: 가압기 PORV (열림)', 9: 'Ab19_02: 가압기 안전밸브 고장', 10: 'Ab21_11: 가압기 살수밸브 고장 (열림)', 11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
                                   12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸즈 후단누설', 14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설'}
         ai_ref = {i:{'name':diagnosis_convert_text[int(ai_proc.iloc[i][0])], 'em':len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['긴급 조치 사항']), 'if_prob':f'2/{self.shmem.get_pro_symptom_count(diagnosis_convert_text[int(ai_proc.iloc[i][0])])}', 'ai_prob':round(ai_proc.iloc[i][1]*100,2)} for i in range(len(ai_result))}
-        print()
         for i in range(5):
             self.add_procedure(i, ai_ref[i]['name'], ai_ref[i]['em'], ai_ref[i]['if_prob'], ai_ref[i]['ai_prob'])
 
