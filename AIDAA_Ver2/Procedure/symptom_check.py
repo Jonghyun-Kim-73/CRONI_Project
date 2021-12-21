@@ -4,8 +4,12 @@ import numpy as np
 class symp_check:
     def __init__(self, shmem):
         self.shmem = shmem
-        print('IF-THEN Rule Test')
+        # print('IF-THEN Rule Test')
+        self.abnormal_procedure_23_01()
+        self.abnormal_procedure_23_03()
         self.abnormal_procedure_23_06()
+        self.abnormal_procedure_59_02()
+        self.abnormal_procedure_60_02()
 
     def db_val(self, val):
         return self.shmem.get_shmem_val(val)
