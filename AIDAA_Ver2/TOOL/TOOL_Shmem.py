@@ -161,7 +161,7 @@ class SHMem:
 
     # Symptom color
     def get_pro_symptom_color(self, procedure_name, idx):
-        return self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'][idx]['ManClick']
+        return self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'][idx]['AutoClick']
 
     def check_para(self, para_name):
         if para_name in self.mem.keys():
