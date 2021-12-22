@@ -137,6 +137,9 @@ class Mainwindow(QWidget):
         symp_check(self.shmem) # IF-THEN 구동
         # print(ab_pro['Ab23_06: 증기발생기 전열관 누설']['경보 및 증상'][1]['AutoClick'])
 
+        # update
+        self.update()
+
     def change_pp(self, page):
         """ page 번호 받아서 stack_widget 페이지로 변경 """
         self.stack_widget.setCurrentIndex(page)

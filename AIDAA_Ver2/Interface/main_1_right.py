@@ -361,6 +361,7 @@ class ProcedureEmCell(ProcedureBaseCell):
 
         self.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)  # 텍스트 가운데 정렬
 
+
 class ProcedureInfoCell(ProcedureBaseCell):
     """ 절차서 Info Cell """
 
@@ -440,6 +441,7 @@ class MainParaArea2(QTableWidget):
             qp.drawLine(0, i*28, 960, i*28)
         qp.restore()
 
+
 # 비정상절차서
 class MainParaArea3(QGroupBox):
     def __init__(self, parent, shmem):
@@ -481,6 +483,8 @@ class MainParaArea3(QGroupBox):
         layout.addLayout(sublayout)
         self.setLayout(layout)
 
+        self.selected_ab = ''
+
     def check_btn_press(self):
         self.symp_satis = []
         if Flag.call_bottom_name != "":
@@ -489,16 +493,15 @@ class MainParaArea3(QGroupBox):
 
         if len(Flag.selected_procedure) > 0:
             for i in range(len(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'])):
-                print(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'][i]['AutoClick'])
+                # print(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'][i]['AutoClick'])
                 self.symp_satis.append(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'][i]['AutoClick'])
-            self.gb.setTitle(f"Symptom Check [{sum(self.symp_satis)}/{len(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'])}]")  # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
 
         if Flag.call_bottom:
             self.symptom = []
             self.clearLayout(self.gb_layout)
             self.add_symptom(Flag.call_bottom_name)
-            self.setTitle(f"비정상절차서: {Flag.call_bottom_name}") # 테이블 클릭 시 비정상 절차서 이름을 Title로 반영
-            # self.gb.setTitle(f"Symptom Check [2/{len(ab_pro[Flag.call_bottom_name]['경보 및 증상'])}]") # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
+            self.setTitle(f"비정상절차서 : {Flag.call_bottom_name}") # 테이블 클릭 시 비정상 절차서 이름을 Title로 반영
+            self.selected_ab = Flag.call_bottom_name
 
             if len(self.symptom) != 0:
                 for i in range(len(self.symptom)):
@@ -537,6 +540,12 @@ class MainParaArea3(QGroupBox):
                 self.symptom[item].setStyleSheet("background-color : rgb(255,204,0)")
             else:
                 self.symptom[item].setStyleSheet("background-color : rgb(178,178,178)")
+
+    def paintEvent(self, e: QPaintEvent) -> None:
+        super(MainParaArea3, self).paintEvent(e)
+        # Symptom Check 숫자 바꾸기.
+        if self.selected_ab != '':
+            self.gb.setTitle(f"Symptom Check [{sum(self.symp_satis)}/{len(ab_pro[self.selected_ab]['경보 및 증상'])}]")  # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
 
 
 class MainParaArea3_1(QTableWidget):
@@ -587,10 +596,12 @@ class MainParaArea3_1(QTableWidget):
             qp.drawLine(0, i*29, 960, i*29)
         qp.restore()
 
+
 class AlignDelegate(QStyledItemDelegate):
     def initStyleOption(self, option, index):
         super(AlignDelegate, self).initStyleOption(option, index)
         option.displayAlignment = Qt.AlignCenter
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
