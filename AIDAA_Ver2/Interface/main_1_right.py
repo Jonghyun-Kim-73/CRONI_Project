@@ -482,13 +482,23 @@ class MainParaArea3(QGroupBox):
         self.setLayout(layout)
 
     def check_btn_press(self):
+        self.symp_satis = []
+        if Flag.call_bottom_name != "":
+            if Flag.selected_procedure != Flag.call_bottom_name:
+                Flag.selected_procedure.append(Flag.call_bottom_name)
+
+        if len(Flag.selected_procedure) > 0:
+            for i in range(len(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'])):
+                print(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'][i]['AutoClick'])
+                self.symp_satis.append(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'][i]['AutoClick'])
+            self.gb.setTitle(f"Symptom Check [{sum(self.symp_satis)}/{len(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'])}]")  # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
+
         if Flag.call_bottom:
             self.symptom = []
             self.clearLayout(self.gb_layout)
-
             self.add_symptom(Flag.call_bottom_name)
             self.setTitle(f"비정상절차서: {Flag.call_bottom_name}") # 테이블 클릭 시 비정상 절차서 이름을 Title로 반영
-            self.gb.setTitle(f"Symptom Check [2/{len(ab_pro[Flag.call_bottom_name]['경보 및 증상'])}]") # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
+            # self.gb.setTitle(f"Symptom Check [2/{len(ab_pro[Flag.call_bottom_name]['경보 및 증상'])}]") # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
 
             if len(self.symptom) != 0:
                 for i in range(len(self.symptom)):
