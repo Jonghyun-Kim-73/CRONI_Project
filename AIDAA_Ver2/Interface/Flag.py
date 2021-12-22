@@ -19,7 +19,6 @@ call_bottom_None = False
 # 절차서 name call
 call_bottom_name = ""   # 비정상 절차서 명
 call_prss_name = ""     # 비정상 절차서 명
-selected_procedure = deque(maxlen=1)
 
 # main2 left button click
 main2_btn = [0] * 20

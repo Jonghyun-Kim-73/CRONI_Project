@@ -174,6 +174,11 @@ class MainParaArea1(QTableWidget):
         # 더블 클릭 시 절차서 화면 이동
         self.cellDoubleClicked.connect(self.mouseDoubleClick)
 
+        # timer1 = QTimer(self)
+        # timer1.setInterval(100)
+        # timer1.timeout.connect(self.update_procedure)
+        # timer1.start()
+
 
     def add_procedure(self, row, name, em, if_prob, ai_prob):
         """
@@ -208,6 +213,11 @@ class MainParaArea1(QTableWidget):
         diagnosis_convert_text = {0: 'Normal: 정상', 1: 'Ab21_01: 가압기 압력 채널 고장 (고)', 2: 'Ab21_02: 가압기 압력 채널 고장 (저)', 3: 'Ab20_04: 가압기 수위 채널 고장 (저)', 4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)', 5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
                                   6: 'Ab63_04: 제어봉 낙하', 7: 'Ab63_02: 제어봉의 계속적인 삽입', 8: 'Ab21_12: 가압기 PORV (열림)', 9: 'Ab19_02: 가압기 안전밸브 고장', 10: 'Ab21_11: 가압기 살수밸브 고장 (열림)', 11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
                                   12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸즈 후단누설', 14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설'}
+        # symp_sum = {k: [] for k in range(len(ai_result))}
+        # for i in range(len(ai_result)):
+        #     for j in range(len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['경보 및 증상'])):
+        #         symp_sum[i].append(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['경보 및 증상'][j]['AutoClick'])
+        # symp_check = {t:sum(symp_sum[t]) for t in range(len(ai_result))}
         ai_ref = {i:{'name':diagnosis_convert_text[int(ai_proc.iloc[i][0])], 'em':len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['긴급 조치 사항']), 'if_prob':f'2/{self.shmem.get_pro_symptom_count(diagnosis_convert_text[int(ai_proc.iloc[i][0])])}', 'ai_prob':round(ai_proc.iloc[i][1]*100,2)} for i in range(len(ai_result))}
         for i in range(5):
             self.add_procedure(i, ai_ref[i]['name'], ai_ref[i]['em'], ai_ref[i]['if_prob'], ai_ref[i]['ai_prob'])
@@ -250,6 +260,8 @@ class MainParaArea1(QTableWidget):
             qp.setPen(pen)
             qp.drawLine(0, i*28, 960, i*28)
         qp.restore()
+
+        # self.update_procedure() # QTimer 활용해야 할듯
 
 class ProcedureEmptyCell(QLabel):
     """ 공백 Cell """
@@ -486,16 +498,6 @@ class MainParaArea3(QGroupBox):
         self.selected_ab = ''
 
     def check_btn_press(self):
-        self.symp_satis = []
-        if Flag.call_bottom_name != "":
-            if Flag.selected_procedure != Flag.call_bottom_name:
-                Flag.selected_procedure.append(Flag.call_bottom_name)
-
-        if len(Flag.selected_procedure) > 0:
-            for i in range(len(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'])):
-                # print(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'][i]['AutoClick'])
-                self.symp_satis.append(ab_pro[list(Flag.selected_procedure)[0]]['경보 및 증상'][i]['AutoClick'])
-
         if Flag.call_bottom:
             self.symptom = []
             self.clearLayout(self.gb_layout)
@@ -518,6 +520,13 @@ class MainParaArea3(QGroupBox):
             self.clearLayout(self.gb_layout)
             self.gb.setLayout(self.gb_layout)
             Flag.call_bottom_None = False
+
+        # Symptom Check 숫자 바꾸기.
+        if self.selected_ab != '':
+            self.symp_satis = []
+            for i in range(len(ab_pro[self.selected_ab]['경보 및 증상'])):
+                self.symp_satis.append(ab_pro[self.selected_ab]['경보 및 증상'][i]['AutoClick'])
+            self.gb.setTitle(f"Symptom Check [{sum(self.symp_satis)}/{len(ab_pro[self.selected_ab]['경보 및 증상'])}]")  # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
 
     def clearLayout(self, layout):
         while layout.count():
@@ -543,9 +552,13 @@ class MainParaArea3(QGroupBox):
 
     def paintEvent(self, e: QPaintEvent) -> None:
         super(MainParaArea3, self).paintEvent(e)
-        # Symptom Check 숫자 바꾸기.
-        if self.selected_ab != '':
-            self.gb.setTitle(f"Symptom Check [{sum(self.symp_satis)}/{len(ab_pro[self.selected_ab]['경보 및 증상'])}]")  # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
+        'paintEvent에서 초마다 변경 안됨, Timer를 활용해야 할 듯함.'
+        # # Symptom Check 숫자 바꾸기.
+        # if self.selected_ab != '':
+        #     self.symp_satis = []
+        #     for i in range(len(ab_pro[self.selected_ab]['경보 및 증상'])):
+        #         self.symp_satis.append(ab_pro[self.selected_ab]['경보 및 증상'][i]['AutoClick'])
+        #     self.gb.setTitle(f"Symptom Check [{sum(self.symp_satis)}/{len(ab_pro[self.selected_ab]['경보 및 증상'])}]")  # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
 
 
 class MainParaArea3_1(QTableWidget):
