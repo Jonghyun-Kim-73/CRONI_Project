@@ -134,7 +134,7 @@ class MainParaArea1(QTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         # 테이블 셋업
-        col_info = [('비정상 절차서 명', 340), ('긴급 여부', 210), ('진입 조건', 210), ('AI 확신도', 200)]
+        col_info = [('비정상 절차서 명', 450), ('긴급 여부', 140), ('진입 조건', 160), ('AI 확신도', 200)]
         self.setColumnCount(4)
         self.setRowCount(5)
         self.horizontalHeader().setFixedHeight(28)
@@ -156,6 +156,8 @@ class MainParaArea1(QTableWidget):
         self.horizontalHeader().setStyleSheet("::section {background: rgb(128, 128, 128);font-size:14pt;border:0px solid;}")
         self.horizontalHeader().sectionPressed.disconnect()
         self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
+        self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
 
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
@@ -227,26 +229,27 @@ class MainParaArea1(QTableWidget):
         # self.add_procedure(2, 'Ab63_02: 제어봉의 계속적인 삽입', False, '0/5',  60)
 
     def mouseClick(self):
-        # print('Test 절차서 선택 시 화면 전환')
         row = self.currentIndex().row()
         if self.cellWidget(row, 0) is not None:
             Flag.call_bottom_name = self.cellWidget(row, 0).currentText()
             Flag.call_bottom = True
+
         else:
             Flag.call_bottom_None = True
 
     def mouseDoubleClick(self):
-        # print('Test 절차서 선택 시 화면 전환')
         row = self.currentIndex().row()
+
         # set 비정상절차서명
         if self.cellWidget(row, 0) is not None:
+            Flag.call_bottom_name = self.cellWidget(row, 0).currentText()
             Flag.call_prss_name = self.cellWidget(row, 0).currentText()
             Flag.call_prss = True
+            # 더블클릭 시 리스트에 비정상절차서명 추가
+            Flag.combobox_update = True
+            Flag.return_list.append(Flag.call_prss_name)
+            Flag.layout_clear_4 = True  # main_4_left 버튼 업데이트 위함
 
-        # print(self.item(row, 1))
-
-
-        # Flag.call_prss = True
 
     def paintEvent(self, e: QPaintEvent) -> None:
         """ tabelview의 위에 라인 그리기 """
@@ -528,6 +531,7 @@ class MainParaArea3(QGroupBox):
                 self.symp_satis.append(ab_pro[self.selected_ab]['경보 및 증상'][i]['AutoClick'])
             self.gb.setTitle(f"Symptom Check [{sum(self.symp_satis)}/{len(ab_pro[self.selected_ab]['경보 및 증상'])}]")  # 테이블 클릭 시 비정상 절차서의 "경보 및 증상" 요건의 개수를 반영
 
+    # 레이아웃 초기화
     def clearLayout(self, layout):
         while layout.count():
             child = layout.takeAt(0)

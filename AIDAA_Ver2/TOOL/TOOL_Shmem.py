@@ -163,6 +163,13 @@ class SHMem:
     def get_pro_symptom_color(self, procedure_name, idx):
         return self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'][idx]['AutoClick']
 
+    def get_pro_symptom_num(self, procedure_name, name):
+        return len(self.logic['Ab_Procedure'][procedure_name][name].keys())
+
+    # Symptom main_4_left name
+    def get_pro_symptom_left(self, procedure_name):
+        return self.logic['Ab_Procedure'][procedure_name].keys()
+
     def check_para(self, para_name):
         if para_name in self.mem.keys():
             return True
