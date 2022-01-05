@@ -599,7 +599,7 @@ class MainParaArea3_1(QTableWidget):
         # self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         # self.setFocusPolicy(Qt.NoFocus)
         # self.setSelectionMode(QAbstractItemView.NoSelection)
-        self.para = pd.read_csv('D:/CRONI_New_Interface/AIDAA_Ver2/DB/Final_parameter_200825.csv')['0'].tolist() # 경로 수정
+        self.para = pd.read_csv('./DB/Final_parameter_200825.csv')['0'].tolist() # 경로 수정
         self.update_shap()
 
     def paintEvent(self, e: QPaintEvent) -> None:
