@@ -599,7 +599,7 @@ class MainParaArea3_1(QTableWidget):
         # self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         # self.setFocusPolicy(Qt.NoFocus)
         # self.setSelectionMode(QAbstractItemView.NoSelection)
-        self.para = pd.read_csv('./DB/Final_parameter_200825.csv')['0'].tolist() # 경로 수정
+        self.para = pd.read_csv('./Final_parameter_200825.csv')['0'].tolist() # 경로 수정
         self.update_shap()
 
     def paintEvent(self, e: QPaintEvent) -> None:
@@ -614,7 +614,6 @@ class MainParaArea3_1(QTableWidget):
             qp.setPen(pen)
             qp.drawLine(0, i*29, 960, i*29)
         qp.restore()
-        print(Flag.call_bottom_name)
 
     def add_shap(self, row, name, shap_prob):
         '''
@@ -623,7 +622,7 @@ class MainParaArea3_1(QTableWidget):
         :param shap_prob: 변수 기여도
         '''
         item1 = ProcedureNameCell(self, name, row)
-        item2 = ProcedureInfoCell(self, shap_prob, row) # 추후 수정
+        item2 = ProcedureAIProbCell(self, name, shap_prob, row) # 추후 수정
         self.setCellWidget(row, 0, item1)
         self.setCellWidget(row, 1, item2)
 
@@ -1366,8 +1365,10 @@ class MainParaArea3_1(QTableWidget):
                                        0.00000000e+00, 0.00000000e+00]])]
 
 
-        self.add_shap(0, 'aa', '32%')
-        self.add_shap(1, 'aa', '32%')
+        self.add_shap(0, 'PV145 VALVE POSITION (0.0-1.0)', 41.47)
+        self.add_shap(1, 'NRHX OUTLET TEMPERATURE', 36.06)
+        self.add_shap(2, 'PRZ LEVEL', 9.9)
+        self.add_shap(3, 'AVERAGE FUEL TEMPERATURE', 1.9)
 
 
 class AlignDelegate(QStyledItemDelegate):
