@@ -121,14 +121,14 @@ class symp_check:
         if ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] == True:
             ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
         else:
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True  # IF-THEN dummy 확인용
+            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
 
         # 경보 및 증상 1: PZR 수위 또는 압력 감소
         if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
             if self.sym_decrease('ZINST63') or self.sym_decrease('ZINST63'):
                 ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True
             else:
-                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True  # IF-THEN dummy 확인용
+                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
 
         # 경보 및 증상 2: VCT 수위 감소 또는 보충횟수 증가
         if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
