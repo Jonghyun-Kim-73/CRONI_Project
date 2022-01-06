@@ -439,7 +439,7 @@ class MainParaArea2(QTableWidget):
 
     def mousePressEvent(self, *args, **kwargs):
         print('Test 시스템 선택 시 화면 전환')
-        #Flag.call_recv = True
+        Flag.call_recv = True
         super(MainParaArea2, self).mousePressEvent(*args, **kwargs)
 
     def paintEvent(self, e: QPaintEvent) -> None:
@@ -622,7 +622,7 @@ class MainParaArea3_1(QTableWidget):
         :param shap_prob: 변수 기여도
         '''
         item1 = ProcedureNameCell(self, name, row)
-        item2 = ProcedureAIProbCell(self, name, shap_prob, row) # 추후 수정
+        item2 = ProcedureInfoCell(self, shap_prob, row) # 추후 수정
         self.setCellWidget(row, 0, item1)
         self.setCellWidget(row, 1, item2)
 
@@ -1365,10 +1365,10 @@ class MainParaArea3_1(QTableWidget):
                                        0.00000000e+00, 0.00000000e+00]])]
 
 
-        self.add_shap(0, 'PV145 VALVE POSITION (0.0-1.0)', 41.47)
-        self.add_shap(1, 'NRHX OUTLET TEMPERATURE', 36.06)
-        self.add_shap(2, 'PRZ LEVEL', 9.9)
-        self.add_shap(3, 'AVERAGE FUEL TEMPERATURE', 1.9)
+        self.add_shap(0, 'PV145 VALVE POSITION (0.0-1.0)', '41.47%')
+        self.add_shap(1, 'NRHX OUTLET TEMPERATURE', '36.06%')
+        self.add_shap(2, 'PRZ LEVEL', '9.9%')
+        self.add_shap(3, 'AVERAGE FUEL TEMPERATURE', '1.9%')
 
 
 class AlignDelegate(QStyledItemDelegate):
