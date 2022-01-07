@@ -165,21 +165,16 @@ class MainParaArea1(QTableWidget):
 
         # 테이블 임시 데이터
         self.max_cell = 5
-        self.update_procedure()
-        # self.data = []
-        # for i in range(5):
-        #     self.data.append(QTextEdit(''))
-        # self.setcellWidget(1, 1, 'Ab15_08: 증기발생기 수위 채널 고장 (고)')
-        # self.shmem.get_procedure_info('Ab15_08: 증기발생기 수위 채널 고장 (고)')
+        # self.update_procedure() # 실시간으로 구동해야 IF-THEN Rule이 활성화됨.
         # 클릭 시 하단 비정상절차서 show
         self.cellClicked.connect(self.mouseClick)
         # 더블 클릭 시 절차서 화면 이동
         self.cellDoubleClicked.connect(self.mouseDoubleClick)
 
-        # timer1 = QTimer(self)
-        # timer1.setInterval(100)
-        # timer1.timeout.connect(self.update_procedure)
-        # timer1.start()
+        timer1 = QTimer(self)
+        timer1.setInterval(500) # 타이머 시간 조정 필요함.
+        timer1.timeout.connect(self.update_procedure)
+        timer1.start()
 
 
     def add_procedure(self, row, name, em, if_prob, ai_prob):
@@ -207,6 +202,7 @@ class MainParaArea1(QTableWidget):
         3. IF-THEN rule 반영
         '''
         # 실제 인공지능 결과를 가져와 오름차순 후 테이블 반영 -> 추후 메모리로 값을 받아와야 함.
+        global symp_satis
         ai_result = [1.04777455e-03, 1.87130286e-04, 1.96067709e-04, 3.04176280e-04,
                     3.51275333e-04, 4.60391938e-04, 1.85054867e-03, 1.70936875e-04,
                     5.40873585e-04, 8.78681517e-04, 1.25459874e-03, 9.90428406e-01,
@@ -215,18 +211,17 @@ class MainParaArea1(QTableWidget):
         diagnosis_convert_text = {0: 'Normal: 정상', 1: 'Ab21_01: 가압기 압력 채널 고장 (고)', 2: 'Ab21_02: 가압기 압력 채널 고장 (저)', 3: 'Ab20_04: 가압기 수위 채널 고장 (저)', 4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)', 5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
                                   6: 'Ab63_04: 제어봉 낙하', 7: 'Ab63_02: 제어봉의 계속적인 삽입', 8: 'Ab21_12: 가압기 PORV (열림)', 9: 'Ab19_02: 가압기 안전밸브 고장', 10: 'Ab21_11: 가압기 살수밸브 고장 (열림)', 11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
                                   12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸즈 후단누설', 14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설'}
-        # symp_sum = {k: [] for k in range(len(ai_result))}
-        # for i in range(len(ai_result)):
-        #     for j in range(len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['경보 및 증상'])):
-        #         symp_sum[i].append(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['경보 및 증상'][j]['AutoClick'])
-        # symp_check = {t:sum(symp_sum[t]) for t in range(len(ai_result))}
-        ai_ref = {i:{'name':diagnosis_convert_text[int(ai_proc.iloc[i][0])], 'em':len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['긴급 조치 사항']), 'if_prob':f'2/{self.shmem.get_pro_symptom_count(diagnosis_convert_text[int(ai_proc.iloc[i][0])])}', 'ai_prob':round(ai_proc.iloc[i][1]*100,2)} for i in range(len(ai_result))}
+        list_sum = []
+        for i in range(len(ai_result)):
+            k = []
+            for j in range(len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]["경보 및 증상"])):
+                k.append(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]["경보 및 증상"][j]["AutoClick"])
+            print(k)
+            list_sum.append(sum(k))
+        symp_satis = {i:list_sum[i] for i in range(len(ai_result))}
+        ai_ref = {i:{'name':diagnosis_convert_text[int(ai_proc.iloc[i][0])], 'em':len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['긴급 조치 사항']), 'if_prob':f'{symp_satis[i]}/{self.shmem.get_pro_symptom_count(diagnosis_convert_text[int(ai_proc.iloc[i][0])])}', 'ai_prob':round(ai_proc.iloc[i][1]*100,2)} for i in range(len(ai_result))}
         for i in range(5):
             self.add_procedure(i, ai_ref[i]['name'], ai_ref[i]['em'], ai_ref[i]['if_prob'], ai_ref[i]['ai_prob'])
-
-        # self.add_procedure(0, 'Ab21_01: 가압기 압력 채널 고장 (고)', False,  '12/12', 50)
-        # self.add_procedure(1, 'Ab63_04: 제어봉 낙하', True, '2/4', 80)
-        # self.add_procedure(2, 'Ab63_02: 제어봉의 계속적인 삽입', False, '0/5',  60)
 
     def mouseClick(self):
         row = self.currentIndex().row()
