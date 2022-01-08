@@ -1,8 +1,13 @@
 import sys
 
+import numpy as np
+import pandas as pd
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+
 
 
 class Main2Prog(QWidget):
@@ -23,6 +28,7 @@ class Main2Prog(QWidget):
             height:30px;
         }
     """
+
 
     def __init__(self, parent = None):
         super(Main2Prog, self).__init__()
@@ -47,8 +53,16 @@ class Main2Prog(QWidget):
         layout.addWidget(g2)
         layout.addWidget(g3)
         layout.addWidget(g4)
+        self.start_x = 100
+        self.start_y = 200
+        self.arrow = QPolygonF([QPointF(self.start_x - 8, self.start_y),
+                           QPointF(self.start_x, self.start_y - 6),
+                           QPointF(self.start_x, self.start_y + 6),
+                           QPointF(self.start_x - 8, self.start_y)])
+
 
         self.setLayout(layout)
+
 
 class Graph1(QGroupBox):
     def __init__(self, parent=None):
@@ -110,38 +124,70 @@ class Graph2(QGroupBox):
         self.setLayout(layout)
 
 class Graph3(QGroupBox):
-    def __init__(self, parent=None):
-        super(Graph3, self).__init__()
+    qss = """QGroupBox{
+            border: 2px solid rgb(0, 0, 0); 
+            }
+        """
+    def __init__(self, parent):
+        super(Graph3, self).__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)
+
         self.setFixedWidth(200)
         layout = QVBoxLayout(self)
 
         self.title = QLabel("단축(min)")
         self.title.setObjectName("title")
-        # self.text1 = QTextEdit("시간")
-        # self.text2 = QTextEdit("시간")
-        # self.text3 = QTextEdit("시간")
-        # self.text4 = QTextEdit("시간")
-        # self.text5 = QTextEdit("시간")
-        # self.text6 = QTextEdit("시간")
-        # self.text7 = QTextEdit("시간")
-        # self.text8 = QTextEdit("시간")
-        # self.text9 = QTextEdit("시간")
-        # self.text10 = QTextEdit("시간")
+
+        self.fig = plt.Figure()
+
+        plt.style.use('default')
+        plt.rcParams['figure.figsize'] = (2, 1)
+        # plt.rcParams['font.size'] = 3
+
+        self.fig, ax = plt.subplots()
+        self.canvas = []
+
+        # 임시 그래프 10개 생성
+        for cnt in range(10):
+            self.canvas.append(FigureCanvas(self.fig))
+
+        # 임시 그래프
+        ax.set_xlim(-2, 2)
+        ax.set_ylim(0, 2)
+        ax.set_xticks([])
+        ax.set_yticks([])
+
+        ax.spines['left'].set_position('center')  # 왼쪽 축을 가운데 위치로 이동
+        ax.spines['right'].set_visible(False)  # 오른쪽 축을 보이지 않도록
+        ax.spines['top'].set_visible(False)  # 위 축을 보이지 않도록
+        ax.spines['bottom'].set_position(('data', 0))  # 아래 축을 데이터 0의 위치로 이동
+        ax.tick_params('both', length=0)  # Tick의 눈금 길이 0
+
+        x = np.linspace(-2, 0, 100)
+        y = np.linspace(1.2, 1, 100)
+        x2 = np.linspace(0, 2, 100)
+        y2 = np.linspace(1, 0, 100)
+        ax.plot(x, y, color='#000000', linewidth=2)
+        ax.plot(x2, y2, color='#00B0DA', linewidth=2)
+        self.fig.patch.set_facecolor('#E7E7EA')  # 그래프 밖 color
+        ax.set_facecolor('#E7E7EA')  # 그래프 안 color
+
+        # canvas border 설정
+        rect = plt.Rectangle(
+            # (lower-left corner), width, height
+            (0.02, 0.02), 0.95, 0.9, fill=False, color="k", lw=0.5, alpha=0.5,
+            zorder=1000, transform=self.fig.transFigure, figure=self.fig
+        )
+        self.fig.patches.extend([rect])
+        plt.tight_layout()
 
         layout.addWidget(self.title)
-        # layout.addWidget(self.text1)
-        # layout.addWidget(self.text2)
-        # layout.addWidget(self.text3)
-        # layout.addWidget(self.text4)
-        # layout.addWidget(self.text5)
-        # layout.addWidget(self.text6)
-        # layout.addWidget(self.text7)
-        # layout.addWidget(self.text8)
-        # layout.addWidget(self.text9)
-        # layout.addWidget(self.text10)
+
+        for cnt in range(10):
+            layout.addWidget(self.canvas[cnt])
         layout.addStretch(1)
         self.setLayout(layout)
+
 
 class Graph4(QGroupBox):
     def __init__(self, parent=None):
@@ -153,30 +199,54 @@ class Graph4(QGroupBox):
         self.title = QLabel("장축(min)")
         self.title.setObjectName("title")
         self.title.setAlignment(Qt.AlignCenter)
-        # self.text1 = QTextEdit("시간")
-        # self.text2 = QTextEdit("시간")
-        # self.text3 = QTextEdit("시간")
-        # self.text4 = QTextEdit("시간")
-        # self.text5 = QTextEdit("시간")
-        # self.text6 = QTextEdit("시간")
-        # self.text7 = QTextEdit("시간")
-        # self.text8 = QTextEdit("시간")
-        # self.text9 = QTextEdit("시간")
-        # self.text10 = QTextEdit("시간")
 
+        self.fig = plt.Figure()
+        plt.style.use('default')
+        plt.rcParams['figure.figsize'] = (13, 1)
+        # plt.rcParams['font.size'] = 3
+        self.fig, ax = plt.subplots()
+        self.canvas = []
+
+        # 임시 그래프 10개 생성
+        for cnt in range(10):
+            self.canvas.append(FigureCanvas(self.fig))
+
+        # 임시 그래프
+        ax.set_xlim(-2, 120)
+        ax.set_ylim(0, 2)
+        ax.set_xticks([])
+        ax.set_yticks([])
+
+        ax.spines['left'].set_position(('data', 0))  # 왼쪽 축을 데이터 0의 위치로 이동
+        ax.spines['right'].set_visible(False)  # 오른쪽 축을 보이지 않도록
+        ax.spines['top'].set_visible(False)  # 위 축을 보이지 않도록
+        ax.spines['bottom'].set_position(('data', 0))  # 아래 축을 데이터 0의 위치로 이동
+        ax.tick_params('both', length=0)  # Tick의 눈금 길이 0
+
+        x = np.linspace(-2, 0, 120)
+        y = np.linspace(1.2, 1, 120)
+        x2 = np.linspace(0, 2, 120)
+        y2 = np.linspace(1, 0, 120)
+        ax.plot(x, y, color='#000000', linewidth=2)
+        ax.plot(x2, y2, color='#00B0DA', linewidth=2)
+        self.fig.patch.set_facecolor('#E7E7EA')  # 그래프 밖 color
+        ax.set_facecolor('#E7E7EA')  # 그래프 안 color
+
+        # canvas border 설정
+        rect = plt.Rectangle(
+            # (lower-left corner), width, height
+            (0.005, 0.02), 0.99, 0.9, fill=False, color="k", lw=0.5, alpha=0.5,
+            zorder=1000, transform=self.fig.transFigure, figure=self.fig
+        )
+        self.fig.patches.extend([rect])
+        plt.tight_layout()
         layout.addWidget(self.title)
-        # layout.addWidget(self.text1)
-        # layout.addWidget(self.text2)
-        # layout.addWidget(self.text3)
-        # layout.addWidget(self.text4)
-        # layout.addWidget(self.text5)
-        # layout.addWidget(self.text6)
-        # layout.addWidget(self.text7)
-        # layout.addWidget(self.text8)
-        # layout.addWidget(self.text9)
-        # layout.addWidget(self.text10)
+
+        for cnt in range(10):
+            layout.addWidget(self.canvas[cnt])
         layout.addStretch(1)
         self.setLayout(layout)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

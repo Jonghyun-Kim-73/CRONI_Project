@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
+from AIDAA_Ver2.TOOL.TOOL_CNS_UDP_FAST import CNS
 from AIDAA_Ver2.TOOL.TOOL_etc import p_
 from AIDAA_Ver2.TOOL.TOOL_Shmem import SHMem
 
@@ -33,6 +34,7 @@ class Mainwindow(QWidget):
     def __init__(self, parent):
         super(Mainwindow, self).__init__()
         self.shmem = parent.shmem   # <- myform.shmem
+        self.mem = parent.mem
         self.W_myform = parent
 
         # Main 기본 속성
@@ -171,10 +173,10 @@ class Mainwindow(QWidget):
 
 
 class DumyWindow(QWidget):
-    def __init__(self, shmem):
+    def __init__(self, shmem, mem):
         super(DumyWindow, self).__init__()
         self.shmem = shmem
-
+        self.mem = mem
         self.setGeometry(0, 0, 100, 100)
 
         self.cns_main_win = Mainwindow(self)
@@ -190,11 +192,15 @@ if __name__ == '__main__':
     # 1. 더미 Shared Mem
     shmem = SHMem(cnsinfo=('192.0.0.1', 7000), remoteinfo=('192.0.0.1', 7000), max_len_deque=5,
                   db_path='../DB/db.txt', db_add_path='../DB/db_add.txt')
+    # alarm test용
+    # mem = CNS('Main', '192.168.37.129', 7101, '192.168.30.151', 7300)  # 소진1
+    mem = CNS('Main', '192.168.37.129', 7101, '192.168.35.231', 7310)  # 소진2
+
     # 2. Call Interface
     app = QApplication(sys.argv)
     app.setStyle("fusion")
 
-    window = DumyWindow(shmem)
+    window = DumyWindow(shmem, mem)
     window.show()
 
     font = QFontDatabase()

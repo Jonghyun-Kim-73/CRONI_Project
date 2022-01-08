@@ -6,6 +6,8 @@ from time import sleep
 from numpy import shape
 from collections import deque
 
+from AIDAA_Ver2.Interface.Procedure.alarm_procedure import alarm_pd
+
 
 class CNS:
     def __init__(self, threrad_name, CNS_IP, CNS_Port, Remote_IP, Remote_Port, Max_len=10):
@@ -27,6 +29,9 @@ class CNS:
         # memory
         self.max_len = Max_len
         self.mem = self._make_mem_structure(max_len=self.max_len)
+        # alarm test
+        self.mem['KLAMPO251']['Val'] = 1
+        self.mem['KLAMPO252']['Val'] = 1
         # logger path
         self.LoggerPath = ''
         self.file_name = 0
@@ -36,6 +41,22 @@ class CNS:
         self.SaveControlPara = []
         self.SaveControlVal = []
 
+    # 발생한 Alarm name
+    def get_occured_alarm_name(self):
+        alarm_names = []
+        for pid_ in self.mem.keys():
+            if self.mem[pid_]['Val'] == 1:
+                alarm_names.append(pid_)
+        return alarm_names
+
+    # 발생한 Alarm des
+    def get_occured_alarm_des(self):
+        alarm_des = []
+        for pid_ in self.mem.keys():
+            if self.mem[pid_]['Val'] == 1:
+                alarm_des.append(alarm_pd[pid_])
+        return alarm_des
+
     def _make_mem_initial(self):
         for pid_ in self.mem.keys():
             self.mem[pid_]['Val'] = 0
@@ -44,7 +65,7 @@ class CNS:
         # 초기 shared_mem의 구조를 선언한다.
         idx = 0
         shared_mem = {}
-        for file_name in ['./DB/db.txt', './DB/db_add.txt']:
+        for file_name in ['../DB/db.txt', '../DB/db_add.txt']:
             with open(file_name, 'r') as f:
                 while True:
                     temp_ = f.readline().split('\t')
@@ -483,9 +504,9 @@ class CNS:
         if ((self.mem['WSGRCP1']['Val'] < CWSGRL[1] and self.mem['KRCP1']['Val'] == 1) or
                 (self.mem['WSGRCP1']['Val'] < CWSGRL[1] and self.mem['KRCP1']['Val'] == 1) or
                 (self.mem['WSGRCP1']['Val'] < CWSGRL[1] and self.mem['KRCP1']['Val'] == 1)):
-            self.mem['KLAMPO316']['Val'] = 1
+            self.mem['KLAMPO316']['Val'] = 10
         else:
-            self.mem['KLAMPO316']['Val'] = 0
+            self.mem['KLAMPO316']['Val'] = 900
         # --------- R17  PRT temp hi(45deg C )
         if self.mem['UPRT']['Val'] > self.mem['CUPRT']['Val']:
             self.mem['KLAMPO317']['Val'] = 1

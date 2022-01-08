@@ -4,6 +4,7 @@ from functools import partial
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.uic.properties import QtGui
 
 from AIDAA_Ver2.Interface import Flag
 from AIDAA_Ver2.Procedure.ab_procedure import ab_pro
@@ -78,6 +79,11 @@ class Main4Left(QWidget):
         timer1.setInterval(1)
         timer1.timeout.connect(self.update_item)
         timer1.start()
+        #
+        # timer2 = QTimer(self)
+        # timer2.setInterval(1)
+        # # timer2.timeout.connect(self.color_change)
+        # timer2.start()
 
     # 비정상 절차서 left 업데이트
     def update_item(self):
@@ -89,14 +95,15 @@ class Main4Left(QWidget):
             self.btn = []
             for num in range(self.item_list_count):
                 self.item_list_num[num] = self.shmem.get_pro_symptom_num(Flag.call_bottom_name, self.item_list[num])
-                self.btn.append(SideBtn(num+2, self.item_list[num], Flag.check_count[num], self.item_list_num[num]))
-                # self.btn.append(QPushButton("%d.0 %s [%d/%d]" % (num+2, self.item_list[num], Flag.check_count[num], self.item_list_num[num])))
+                # self.btn.append(SideBtn(num+2, self.item_list[num], Flag.check_count[num], self.item_list_num[num]))
+                self.btn.append(QPushButton("%d.0 %s [%d/%d]" % (num+2, self.item_list[num], Flag.check_count[num], self.item_list_num[num])))
 
             if Flag.layout_clear_4:
                 self.clearLayout(self.layout)
                 for cnt in range(self.item_list_count):
                     self.btn[cnt].setFixedWidth(450)
-                    self.btn[cnt].clicked.connect(partial(self.click, cnt))
+                    # self.btn[cnt].clicked.connect(partial(self.click, cnt))
+                    self.btn[cnt].clicked.connect(self.clickclick)
                     self.layout.addWidget(self.btn[cnt])
                 self.layout.addStretch(1)
                 self.setLayout(self.layout)
@@ -107,8 +114,10 @@ class Main4Left(QWidget):
 
         # if Flag.current_btn != -1:
         #     self.btn[Flag.current_btn].setStyleSheet("QPushButton:{background:black;}")
-
-
+    def clickclick(self):
+        print("클릭했으여")
+    def color_change(self):
+        print(Flag.current_btn)
 
     # 레이아웃 초기화
     def clearLayout(self, layout):
@@ -155,28 +164,6 @@ class SideBtn(QPushButton):
     def close(self):
         """버튼 명령: 닫기"""
         Flag.main_close = True
-
-class TogglePushButtonWidget(QPushButton):
-    """Toggles between on and off text
-
-    Changes color when in on state"""
-    def __init__(self, on, off):
-        super().__init__()
-        self.on = on
-        self.off = off
-        self.state = True
-
-        # self.rotate_state()
-        self.clicked().connect(self.toggle_state)
-
-    def toggle_state(self):
-        self.state = not self.state
-        if self.state:
-            self.setText(self.on)
-            self.connect_w.setStyleSheet('background: #bbffbb;')
-        else:
-            self.setText(self.off)
-            self.connect_w.setStyleSheet('')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

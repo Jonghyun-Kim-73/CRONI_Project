@@ -94,6 +94,8 @@ class Main1Right(QWidget):
             font-size: 12pt;
             border-radius: 6px;
             padding-left: 15px; 
+            padding-top: 5px;
+            padding-bottom: 5px;
         }
     """
 
@@ -102,7 +104,6 @@ class Main1Right(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.shmem = parent.shmem  # <- myform.shmem
         self.W_myform = parent
-
         self.setStyleSheet(self.qss)
         # self.setFixedWidth(990)
         # 기본 속성
@@ -114,7 +115,7 @@ class Main1Right(QWidget):
 
         label1 = MainParaArea1(self, self.shmem)
         layout.addWidget(label1)
-        label2 = MainParaArea2(self)
+        label2 = MainParaArea2(self, self.shmem)
         layout.addWidget(label2)
         label3 = MainParaArea3(self, self.shmem)
         layout.addWidget(label3)
@@ -134,7 +135,7 @@ class MainParaArea1(QTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         # 테이블 셋업
-        col_info = [('비정상 절차서 명', 450), ('긴급 여부', 140), ('진입 조건', 160), ('AI 확신도', 200)]
+        col_info = [('비정상 절차서 명', 550), ('긴급 여부', 100), ('진입 조건', 100), ('AI 확신도', 210)]
         self.setColumnCount(4)
         self.setRowCount(5)
         self.horizontalHeader().setFixedHeight(28)
@@ -293,20 +294,64 @@ class ProcedureBaseWidget(QWidget):
 
 class ProcedureNameCell(ProcedureBaseCell):
     """ 절차서 명 Cell """
-
+    x = 0
+    paused = False
+    document = None
+    speed = 20
+    timer = None
     def __init__(self, parent, name, row):
         super(ProcedureNameCell, self).__init__(parent, row)
         self.setAttribute(Qt.WA_StyledBackground, True)  # 상위 스타일 상속
         self.setObjectName('ProcedureItemInfo')
         self.isempty = False
-
         self.procedure_name = name
         self.row = row
+        self.fm = QFontMetrics(self.font())
         self.setText(name)
         self.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
 
     def currentText(self):
         return self.procedure_name
+
+    # text 자동 scroll 추가
+    def setText(self, value):
+        self.x = 0
+        self.document = QTextDocument(self)
+        self.document.setPlainText(value)
+        self.document.setDefaultFont(QFont('Arial', 14))
+        print(self.fm.width(value))
+        if self.fm.width(value) >= 180:
+            self.document.setTextWidth(self.fm.width(value) * 1.65)
+        else:
+            self.document.setTextWidth(self.fm.width(value) * 2)
+        self.document.setUseDesignMetrics(True)
+        if self.document.textWidth() > self.width():
+            self.timer = QTimer(self)
+            self.timer.timeout.connect(self.translate)
+            self.timer.start((1 / self.speed) * 1000)
+
+    @pyqtSlot()
+    def translate(self):
+        if not self.paused:
+            if self.width() - self.x < self.document.textWidth():
+                self.x -= 1
+            else:
+                self.x = 0
+        self.repaint()
+
+    def event(self, event):
+        if event.type() == QEvent.Enter:
+            self.paused = True
+        elif event.type() == QEvent.Leave:
+            self.paused = False
+        return super().event(event)
+
+    def paintEvent(self, event):
+        if self.document:
+            p = QPainter(self)
+            p.translate(self.x, 0)
+            self.document.drawContents(p)
+        return super().paintEvent(event)
 
 class ProcedureAIProbCell(ProcedureBaseWidget):
     """ AI 확신도 """
@@ -327,6 +372,7 @@ class ProcedureAIProbCell(ProcedureBaseWidget):
         prg_bar = QProgressBar()
         prg_bar.setObjectName('ProcedureItemProgress')
         prg_bar.setValue(aiprob)
+        prg_bar.setFixedWidth(100)
         prg_bar.setFixedHeight(20)
         if aiprob <= 50:
             prg_bar.setStyleSheet("QProgressBar::chunk {background-color: rgb(82, 82, 82);}"
@@ -342,12 +388,12 @@ class ProcedureAIProbCell(ProcedureBaseWidget):
 
         prg_label = QLabel()
         prg_label.setObjectName('ProcedureItemProgressLabel')
-        prg_label.setFixedWidth(45)
         prg_label.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)  # 텍스트 가운데 정렬
         prg_label.setText(f'{aiprob}%')
 
         layer.addWidget(prg_bar)
         layer.addWidget(prg_label)
+        layer.addStretch(1)
 
         self.setLayout(layer)
 
@@ -389,11 +435,12 @@ class ProcedureInfoCell(ProcedureBaseCell):
 
 
 class MainParaArea2(QTableWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, shmem):
         super(MainParaArea2, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)
         # 테이블 헤더 모양 정의
         # self.horizontalHeader().setVisible(False)
+        self.shmem = shmem  # <- myform.shmem
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
         self.setShowGrid(False)  # Grid 지우기
         self.setFixedHeight(170)
@@ -407,7 +454,7 @@ class MainParaArea2(QTableWidget):
         self.horizontalHeader().setFixedHeight(28)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
-        self.setSelectionMode(QAbstractItemView.NoSelection)
+        # self.setSelectionMode(QAbstractItemView.NoSelection)
         self.setContentsMargins(0, 0, 0, 0)
 
         col_names = []
@@ -415,27 +462,53 @@ class MainParaArea2(QTableWidget):
             self.setColumnWidth(i, w)
             col_names.append(l)
 
+        # 테이블 row click
+        self.setSelectionBehavior(QTableWidget.SelectRows)
+
         # 테이블 헤더
         self.setHorizontalHeaderLabels(col_names)
         self.horizontalHeader().setStyleSheet("::section {background: rgb(128, 128, 128);font-size:14pt;border:0px solid;}")
         self.horizontalHeader().sectionPressed.disconnect()
         self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
+        self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
 
-
-        # 편집 불가
-        # self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # self.setFocusPolicy(Qt.NoFocus)
-        # self.setSelectionMode(QAbstractItemView.NoSelection)
+        # 임시 데이터 추가
+        self.update_system()
 
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 28)
         self.setRowHeight(self.rowCount()-1, 25)
 
-    def mousePressEvent(self, *args, **kwargs):
-        print('Test 시스템 선택 시 화면 전환')
-        Flag.call_recv = True
-        super(MainParaArea2, self).mousePressEvent(*args, **kwargs)
+        # 클릭 시 하단 비정상절차서 show
+        self.cellClicked.connect(self.mouseClick)
+
+    def mouseClick(self):
+        row = self.currentIndex().row()
+        if self.cellWidget(row, 0) is not None:
+            Flag.call_recv = True
+        else:
+            pass
+
+    def update_system(self):
+        self.add_system(0, 'CVCS', '5', 50)
+        self.add_system(1, 'RCS', '3', 80)
+
+    def add_system(self, row, name, em, ai_prob):
+        """
+        테이블 임시 데이터 추가
+
+        :param name:        시스템
+        :param em:          관련 경보
+        :param ai_prob:     AI 확신도
+        """
+        item1 = ProcedureNameCell(self, name, row)
+        item2 = ProcedureInfoCell(self, em, row)
+        item3 = ProcedureAIProbCell(self, name, ai_prob, row)
+        self.setCellWidget(row, 0, item1)
+        self.setCellWidget(row, 1, item2)
+        self.setCellWidget(row, 2, item3)
 
     def paintEvent(self, e: QPaintEvent) -> None:
         """ tabelview의 위에 라인 그리기 """
@@ -451,7 +524,6 @@ class MainParaArea2(QTableWidget):
             qp.drawLine(0, i*28, 960, i*28)
         qp.restore()
 
-
 # 비정상절차서
 class MainParaArea3(QGroupBox):
     def __init__(self, parent, shmem):
@@ -461,11 +533,22 @@ class MainParaArea3(QGroupBox):
         self.setTitle("비정상절차서:")
         self.setObjectName("main")
         layout = QHBoxLayout()
+
         self.gb_layout = QVBoxLayout()
+
+        # scroll 적용
+        self.scrollwidget = QWidget()
+        self.scrollwidget.setLayout(self.gb_layout)
+
+        self.scroll = QScrollArea()
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.scrollwidget)
 
         self.gb = QGroupBox("Symptom Check [0/0]")  # 개수 받아와야 함
         self.gb.setObjectName("sub1")
         self.gb.setFixedWidth(600)
+        self.gb.setLayout(QVBoxLayout())
+        self.gb.layout().addWidget(self.scroll)
 
         sublayout = QVBoxLayout()
         self.gb2 = QLabel("AI 확신도")
@@ -481,14 +564,6 @@ class MainParaArea3(QGroupBox):
         timer1.timeout.connect(self.check_btn_press)
         timer1.start()
 
-        # if len(self.symptom) != 0:
-        #     for i in range(len(self.symptom)):
-        #         gb_layout.addWidget(self.symptom[i])
-        #
-        #         self.symptom[i].setObjectName("symptom")
-        # gb_layout.addStretch(1)
-        # self.gb.setLayout(gb_layout)
-
         layout.addWidget(self.gb)
         layout.addLayout(sublayout)
         self.setLayout(layout)
@@ -500,16 +575,13 @@ class MainParaArea3(QGroupBox):
             self.symptom = []
             self.clearLayout(self.gb_layout)
             self.add_symptom(Flag.call_bottom_name)
-            self.setTitle(f"비정상절차서 : {Flag.call_bottom_name}") # 테이블 클릭 시 비정상 절차서 이름을 Title로 반영
+            self.setTitle(f"비정상절차서 : {Flag.call_bottom_name}")  # 테이블 클릭 시 비정상 절차서 이름을 Title로 반영
             self.selected_ab = Flag.call_bottom_name
-
             if len(self.symptom) != 0:
                 for i in range(len(self.symptom)):
                     self.gb_layout.addWidget(self.symptom[i])
-
                     self.symptom[i].setObjectName("symptom")
             self.gb_layout.addStretch(1)
-            self.gb.setLayout(self.gb_layout)
 
             Flag.call_bottom = False
             Flag.call_bottom_name = ""
@@ -541,9 +613,7 @@ class MainParaArea3(QGroupBox):
             self.symptom_color = self.shmem.get_pro_symptom_color(title, item) # T/F
             self.symptom.append(QLabel("• %s" % self.symptom_des))
             self.symptom[item].setWordWrap(True)
-            self.symptom[item].setFixedHeight(33)
-            if len(self.symptom_des) > 55:
-                self.symptom[item].setFixedHeight(59)
+
             if self.symptom_color:
                 self.symptom[item].setStyleSheet("background-color : rgb(255,204,0)")
             else:
@@ -570,10 +640,11 @@ class MainParaArea3_1(QTableWidget):
         self.setShowGrid(False)  # Grid 지우기
 
         # 테이블 셋업
-        col_info = [('변수명', 180), ('기여도', 147)]
+        col_info = [('변수명', 240), ('기여도', 87)]
         self.setColumnCount(2)
         self.setRowCount(16)
         self.horizontalHeader().setFixedHeight(29)
+        self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.NoSelection)

@@ -1,8 +1,12 @@
 import sys
-
+from datetime import datetime
+import time
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+
+from AIDAA_Ver2.Interface import Flag
+from AIDAA_Ver2.Interface.Procedure.alarm_procedure import alarm_pd
 
 
 class Main1Left(QWidget):
@@ -14,6 +18,7 @@ class Main1Left(QWidget):
             border-radius: 6px;
         }
         QTableWidget {
+            color : white;
             background: rgb(231, 231, 234);
             border: 1px solid rgb(128, 128, 128);
             border-radius: 6px;
@@ -37,8 +42,8 @@ class Main1Left(QWidget):
             border-bottom-left-radius : 0px;
             border-bottom-right-radius : 0px;
         }
+        
         QTableView::item {
-            color:black;
             padding:50px;
             font-size:14pt;
         }
@@ -47,10 +52,10 @@ class Main1Left(QWidget):
         }
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, parent):
         super(Main1Left, self).__init__()
         self.setAttribute(Qt.WA_StyledBackground, True)
-        self.parent = parent
+        self.mem = parent.mem  # <- CNS mem
         self.setStyleSheet(self.qss)
         # self.setFixedWidth(990)
         # 기본 속성
@@ -63,14 +68,21 @@ class Main1Left(QWidget):
         label1 = FreezeTableWidget(self)
         self.btn_suppress = QPushButton("Suppress button")
         self.btn_suppress.setFixedHeight(35)
+        self.btn_suppress.clicked.connect(self.suppress)
         layout.addWidget(label1)
         layout.addWidget(self.btn_suppress)
         self.setLayout(layout)
+
+    # Alarm clear
+    def suppress(self):
+        Flag.alarm_clear = True
+
 
 
 class FreezeTableWidget(QTableView):
     def __init__(self, parent):
         super(FreezeTableWidget, self).__init__(parent)
+        self.mem = parent.mem
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setMinimumSize(800, 600)
 
@@ -113,6 +125,9 @@ class FreezeTableWidget(QTableView):
         self.scrollBar = self.frozenTableView.verticalScrollBar()
         self.scrollBar.valueChanged.connect(lambda value: self.scrolled(self.scrollBar, value))
 
+        # row 클릭
+        self.frozenTableView.setSelectionBehavior(QTableView.SelectRows)
+
     def scrolled(self, scrollbar, value):
         if value == scrollbar.maximum():
             print(value)  # that will be the bottom/right end
@@ -150,11 +165,75 @@ class MyTableModel(QAbstractTableModel):
         # header
         self.colLabels = ['DESCRIPTION', 'VALUE', 'SETPOINT', 'UNIT', 'DATE', 'TIME']
         # col_info = [('DESCRIPTION', 340), ('VALUE', 160), ('SETPOINT',160),('UNIT',100),('DATE',100),('TIME',93)]  # 475
-
         # data  rows[index.row()][index.column()]
+        # 데이터 받아오기
+        self.mem = parent.mem  # <- CNS mem
+        self.dataCached = []
 
-        self.dataCached = [['cell%02d,%02d' % (i, j) for i in range(1, 7)]
-                           for j in range(1, 51)]
+        timer1 = QTimer(self)
+        timer1.setInterval(1)
+        timer1.timeout.connect(self.update_alarm)
+        timer1.start()
+
+        # 1초 간격으로 blink
+        blink_thread = Blink(self)
+        blink_thread.start()
+
+    def update_alarm(self):
+        self.alarm_cnt = len(Flag.alarm_occur_list)
+        # self.dataCached = []
+        # 발생한 Alarm list(des)
+        self.alarm_names = self.mem.get_occured_alarm_des()
+
+        # 떠있는 Alarm
+        self.current_alarm_name = []
+        for i in range(len(self.dataCached)):
+            self.current_alarm_name.append(self.dataCached[i][0])
+
+        # Alarm 테이블에 넣기(중복 제외) - 알람 발생 time 초기화 문제 해결
+        if len(self.alarm_names) != 0:
+            for i in range(len(self.alarm_names)):
+                if not self.alarm_names[i] in self.current_alarm_name:
+                    # alarm blink 테스트용
+                    if i == 0:
+                        self.dataCached.append([self.alarm_names[i], 0.1, 0.3, "  kg/cm",
+                                            datetime.now().strftime('%m.%d'),
+                                            datetime.now().strftime('%H:%M:%S')])
+                    if i == 1:
+                        self.dataCached.append([self.alarm_names[i], 0.5, 0.2, "  kg/cm",
+                                            datetime.now().strftime('%m.%d'),
+                                            datetime.now().strftime('%H:%M:%S')])
+
+        # 현재 발생한 전체 알람 cnt
+        Flag.all_alarm_cnt = len(self.current_alarm_name)
+
+        # 이상 알람 check
+        for idx in range(Flag.all_alarm_cnt):
+            # Value, SetPoint 값 비교
+            if self.dataCached[idx][1] > self.dataCached[idx][2]:
+                Flag.alarm_blink[idx] = True  # 이상 알람
+
+        # alarm clear
+        if Flag.alarm_clear:
+            self.mem._make_mem_initial()
+            self.dataCached = []
+            Flag.alarm_clear = False
+
+        # layout 업데이트
+        self.layoutAboutToBeChanged.emit()
+        self.layoutChanged.emit()
+
+    # 1초 간격 blink
+    def resetBlink(self):
+        for idx in range(Flag.all_alarm_cnt):
+            print(Flag.alarm_color_change)
+            if Flag.alarm_blink[idx]:
+                if Flag.alarm_color_change[idx]:
+                    Flag.alarm_color_change[idx] = False
+                elif Flag.alarm_color_change[idx] == 1:
+                    Flag.alarm_color_change[idx] = 2
+            else:
+                Flag.alarm_color_change[idx] = 0
 
     def rowCount(self, parent):
         return len(self.dataCached)
@@ -168,9 +247,34 @@ class MyTableModel(QAbstractTableModel):
         return self.dataCached[i][j]
 
     def data(self, index, role):
+        # background color blink
+        if role == Qt.BackgroundRole:
+            for idx in range(Flag.all_alarm_cnt):
+                if idx == index.row():
+                    if Flag.alarm_blink[idx]:
+                        if Flag.alarm_color_change[idx]:
+                            return QBrush(QColor(255, 204, 0))
+                        elif not Flag.alarm_color_change[idx]:
+                            return QBrush(QColor(231, 230, 230))
+                    else:
+                        return QBrush(QColor(Qt.black))
+
+        # text color blink
+        if role == Qt.TextColorRole:
+            for idx in range(Flag.all_alarm_cnt):
+                if idx == index.row():
+                    if Flag.alarm_blink[idx]:
+                        if Flag.alarm_color_change[idx]:
+                            return QBrush(QColor(128, 128, 128))
+                        elif not Flag.alarm_color_change[idx]:
+                            return QBrush(QColor(Qt.black))
+                    else:
+                        return QBrush(Qt.white)
+
         if not index.isValid():
             return None
         value = self.get_value(index)
+
         if role == Qt.DisplayRole or role == Qt.EditRole:
             return value
         elif role == Qt.TextAlignmentRole:
@@ -180,6 +284,7 @@ class MyTableModel(QAbstractTableModel):
     def setData(self, index, value, role):
         if index.isValid() and role == Qt.EditRole:
             self.dataCached[index.row()][index.column()] = value
+            # self.dataChanged.emit(index, index)#원래 여기까지
             self.dataChanged.emit(index, index)
             return True
         else:
@@ -194,8 +299,25 @@ class MyTableModel(QAbstractTableModel):
 
         return None
 
+class Blink(QThread):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+
+    def run(self):
+        while True:
+            for idx in range(Flag.all_alarm_cnt):
+                print(Flag.alarm_color_change)
+                if Flag.alarm_blink[idx]:
+                    if Flag.alarm_color_change[idx]:
+                        Flag.alarm_color_change[idx] = False
+                    elif not Flag.alarm_color_change[idx]:
+                        Flag.alarm_color_change[idx] = True
+            self.sleep(1)
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setStyle("fusion")
     window = Main1Left()
     font = QFontDatabase()
     font.addApplicationFont('./Arial.ttf')
