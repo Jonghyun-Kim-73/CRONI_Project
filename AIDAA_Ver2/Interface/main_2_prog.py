@@ -8,6 +8,7 @@ from PyQt5.QtGui import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
+from AIDAA_Ver2.Interface.arrow import Arrow
 
 
 class Main2Prog(QWidget):
@@ -21,6 +22,12 @@ class Main2Prog(QWidget):
             background: rgb(128, 128, 128);
             padding:10px;
             border-radius:5px;
+        }
+        QLabel#graph{
+            background: rgb(128, 128, 128);
+            padding:10px;
+            border-radius:5px;
+            margin-bottom:20px;
         }
         QTextEdit{
             background: rgb(178, 178, 178);
@@ -53,13 +60,6 @@ class Main2Prog(QWidget):
         layout.addWidget(g2)
         layout.addWidget(g3)
         layout.addWidget(g4)
-        self.start_x = 100
-        self.start_y = 200
-        self.arrow = QPolygonF([QPointF(self.start_x - 8, self.start_y),
-                           QPointF(self.start_x, self.start_y - 6),
-                           QPointF(self.start_x, self.start_y + 6),
-                           QPointF(self.start_x - 8, self.start_y)])
-
 
         self.setLayout(layout)
 
@@ -72,7 +72,7 @@ class Graph1(QGroupBox):
         layout = QVBoxLayout(self)
         self.setFixedWidth(200)
         self.title = QLabel("변수 명")
-        self.title.setFixedHeight(40)
+        # self.title.setFixedHeight(40)
         self.title.setObjectName("title")
 
         self.text = []
@@ -106,7 +106,7 @@ class Graph2(QGroupBox):
         layout = QVBoxLayout(self)
 
         self.title = QLabel("Trip 도달 시간")
-        self.title.setFixedHeight(40)
+        # self.title.setFixedHeight(40)
         self.title.setObjectName("title")
 
         self.text = []
@@ -124,10 +124,6 @@ class Graph2(QGroupBox):
         self.setLayout(layout)
 
 class Graph3(QGroupBox):
-    qss = """QGroupBox{
-            border: 2px solid rgb(0, 0, 0); 
-            }
-        """
     def __init__(self, parent):
         super(Graph3, self).__init__(parent)
         self.setAttribute(Qt.WA_StyledBackground, True)
@@ -135,8 +131,11 @@ class Graph3(QGroupBox):
         self.setFixedWidth(200)
         layout = QVBoxLayout(self)
 
-        self.title = QLabel("단축(min)")
-        self.title.setObjectName("title")
+        self.title = QLabel("단축 (min)")
+        self.title.setObjectName("graph")
+        self.title.setAlignment(Qt.AlignCenter)
+        # 상단 x축 수평선
+        self.horizon = Arrow(self, x=20, y=72, x2=180, y2=72, type=0)
 
         self.fig = plt.Figure()
 
@@ -181,12 +180,15 @@ class Graph3(QGroupBox):
         self.fig.patches.extend([rect])
         plt.tight_layout()
 
+
         layout.addWidget(self.title)
 
         for cnt in range(10):
             layout.addWidget(self.canvas[cnt])
         layout.addStretch(1)
         self.setLayout(layout)
+
+    # def paintEvent(self, QPaintEvent):
 
 
 class Graph4(QGroupBox):
@@ -196,9 +198,12 @@ class Graph4(QGroupBox):
 
         layout = QVBoxLayout(self)
 
-        self.title = QLabel("장축(min)")
-        self.title.setObjectName("title")
+        self.title = QLabel("장축 (min)")
+        self.title.setObjectName("graph")
         self.title.setAlignment(Qt.AlignCenter)
+
+        # 상단 x축 수평선
+        self.horizon = Arrow(self, x=20, y=72, x2=1300, y2=72, type=1)
 
         self.fig = plt.Figure()
         plt.style.use('default')
@@ -240,6 +245,7 @@ class Graph4(QGroupBox):
         )
         self.fig.patches.extend([rect])
         plt.tight_layout()
+
         layout.addWidget(self.title)
 
         for cnt in range(10):
