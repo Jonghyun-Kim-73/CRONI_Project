@@ -320,8 +320,10 @@ class ProcedureNameCell(ProcedureBaseCell):
         self.document.setPlainText(value)
         self.document.setDefaultFont(QFont('Arial', 14))
         print(self.fm.width(value))
-        if self.fm.width(value) >= 180:
-            self.document.setTextWidth(self.fm.width(value) * 1.65)
+        if self.fm.width(value) >= 400:
+            self.document.setTextWidth(self.fm.width(value) * 1.3)
+        elif self.fm.width(value) >= 250:
+            self.document.setTextWidth(self.fm.width(value) * 1.5)
         else:
             self.document.setTextWidth(self.fm.width(value) * 2)
         self.document.setUseDesignMetrics(True)

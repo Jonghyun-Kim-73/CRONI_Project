@@ -194,7 +194,8 @@ if __name__ == '__main__':
                   db_path='../DB/db.txt', db_add_path='../DB/db_add.txt')
     # alarm test용
     # mem = CNS('Main', '192.168.37.129', 7101, '192.168.30.151', 7300)  # 소진1
-    mem = CNS('Main', '192.168.37.129', 7101, '192.168.35.231', 7310)  # 소진2
+    # mem = CNS('Main', '192.168.37.129', 7101, '192.168.35.231', 7310)  # 소진 2
+    mem = CNS('Main', '192.168.37.129', 7101, '192.168.0.4', 7300)  # 소진 3
 
     # 2. Call Interface
     app = QApplication(sys.argv)
