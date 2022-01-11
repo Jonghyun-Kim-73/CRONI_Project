@@ -1982,7 +1982,7 @@ ab_pro = {
 
         }
     },
-    'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설 시': {
+    'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
