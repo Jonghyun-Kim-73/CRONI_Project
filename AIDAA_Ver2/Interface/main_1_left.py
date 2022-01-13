@@ -1,3 +1,4 @@
+import os
 import sys
 from datetime import datetime
 import time
@@ -6,6 +7,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from AIDAA_Ver2.Interface import Flag
+from AIDAA_Ver2.Interface.Custom_Popup import Popup
 from AIDAA_Ver2.Interface.Procedure.alarm_procedure import alarm_pd
 
 
@@ -127,6 +129,18 @@ class FreezeTableWidget(QTableView):
 
         # row 클릭
         self.frozenTableView.setSelectionBehavior(QTableView.SelectRows)
+        self.doubleClicked.connect(self.mouseDoubleClick)
+
+    def mouseDoubleClick(self, index):
+        print("더블클릭")
+        model = self.model()
+        Flag.alarm_popup_name = model.click_alarm_name(index)
+        print(Flag.alarm_popup_name)
+        test_pdf = "test.pdf"
+        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), test_pdf))
+        self.popup = Popup(file_path=file_path)
+        self.popup.show()
+
 
     def scrolled(self, scrollbar, value):
         if value == scrollbar.maximum():
@@ -166,6 +180,7 @@ class MyTableModel(QAbstractTableModel):
         self.colLabels = ['DESCRIPTION', 'VALUE', 'SETPOINT', 'UNIT', 'DATE', 'TIME']
         # col_info = [('DESCRIPTION', 340), ('VALUE', 160), ('SETPOINT',160),('UNIT',100),('DATE',100),('TIME',93)]  # 475
         # data  rows[index.row()][index.column()]
+
         # 데이터 받아오기
         self.mem = parent.mem  # <- CNS mem
         self.dataCached = []
@@ -203,7 +218,6 @@ class MyTableModel(QAbstractTableModel):
                         self.dataCached.append([self.alarm_names[i], 0.5, 0.2, "  kg/cm",
                                             datetime.now().strftime('%m.%d'),
                                             datetime.now().strftime('%H:%M:%S')])
-
         # 현재 발생한 전체 알람 cnt
         Flag.all_alarm_cnt = len(self.current_alarm_name)
 
@@ -245,6 +259,10 @@ class MyTableModel(QAbstractTableModel):
         i = index.row()
         j = index.column()
         return self.dataCached[i][j]
+
+    def click_alarm_name(self, index):
+        i = index.row()
+        return self.dataCached[i][0]
 
     def data(self, index, role):
         # background color blink

@@ -44,6 +44,8 @@ all_alarm_cnt = 0  # 현재 발생한 전체 알람 cnt
 alarm_blink = [False] * 100  # 이상 알람
 alarm_color_change = [False] * 100  # 알람 color change  0:B  1:Y 2 G
 
+# 알람 double click
+alarm_popup_name = ""  # 팝업창 이름(더블 클릭한 알람)
 # 발생한 알람 리스트 및 알람 변수와 des 매핑
 alarm_occur_list = ['KLAMPO268', 'KLAMPO269']     # 'KLAMPO268' CNS 변수로 입력됨.
 alarm_des_mapping = alarm_pd                      # 'KLAMPO268':'L/D HX outlet flow hi' 으로 구성된 dict

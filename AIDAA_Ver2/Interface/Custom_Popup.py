@@ -4,6 +4,10 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtWebEngineWidgets import QWebEngineSettings, QWebEngineView
+
+from AIDAA_Ver2.Interface import Flag
+
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -11,7 +15,7 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 source1 = resource_path(".//img/close.png")
-class Popup(QDialog):
+class Popup(QWidget):
     qss = """
             QDialog{
             background:white;
@@ -19,7 +23,7 @@ class Popup(QDialog):
             }
         """
 
-    def __init__(self):
+    def __init__(self, file_path=None):
         super().__init__()
         self.layout = QVBoxLayout()
         self.layout.addWidget(MyBar(self))
@@ -27,18 +31,31 @@ class Popup(QDialog):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet(self.qss)
         self.layout.addStretch(-1)
-        self.setGeometry(950, 130, 500, 100)
+        self.setWindowTitle(f"{Flag.alarm_popup_name}")
+        # self.setGeometry(0, 0, 1000, 750)
         self.setWindowFlags(Qt.FramelessWindowHint)
 
-        #popup1 이미지
-        pic = QPushButton()
-        # pic.setIcon(QIcon(source2))
-        pic.setStyleSheet("border:0px")
-        # pic.setIconSize(QSize(600, 800))
-        self.layout.addWidget(pic)
+        # self.centralWidget = QWidget(self)
+
+        # test_pdf = "test.pdf"
+        # file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), test_pdf))
+        # print(file_path)
+
+        self.webView = QWebEngineView()
+        self.webView.setUrl(QUrl.fromLocalFile(file_path))
+        self.webView.settings().setAttribute(QWebEngineSettings.PluginsEnabled, True)
+        self.webView.settings().setAttribute(QWebEngineSettings.PdfViewerEnabled, True)
+
+        self.layout.addWidget(self.webView)
 
     def showModal(self):
         return super().exec_()
+
+    def url_changed(self):
+        self.setWindowTitle(self.webView.title())
+
+    def go_back(self):
+        self.webView.back()
 
 class MyBar(QWidget):
     qss = """
@@ -63,7 +80,9 @@ class MyBar(QWidget):
         self.setMinimumWidth(400)
         self.layout = QHBoxLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.title = QLabel("첨부 D")
+
+        # Flag.alarm_popup_name 받아오기
+        self.title = QLabel(f"{Flag.alarm_popup_name}")
 
         self.title.setAlignment(Qt.AlignCenter)
         self.title.setFixedSize(50,40)
@@ -83,6 +102,10 @@ class MyBar(QWidget):
         self.layout.addWidget(self.title)
         self.layout.addWidget(btn_close)
         self.setLayout(self.layout)
+
+
+    def showModal(self):
+        return super().exec_()
 
     def close(self):
         self.setDisabled(True)
@@ -111,7 +134,7 @@ class MyBar(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Popup()
+    ex = Popup(file_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "test.pdf")))
     ex.show()
     font = QFontDatabase()
     font.addApplicationFont('./Arial.ttf')
