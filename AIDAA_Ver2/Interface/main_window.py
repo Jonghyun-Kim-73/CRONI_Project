@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import socket
 
 from AIDAA_Ver2.TOOL.TOOL_CNS_UDP_FAST import CNS
 from AIDAA_Ver2.TOOL.TOOL_etc import p_
@@ -195,7 +196,9 @@ if __name__ == '__main__':
     # alarm test용
     # mem = CNS('Main', '192.168.37.129', 7101, '192.168.30.151', 7300)  # 소진1
     # mem = CNS('Main', '192.168.37.129', 7101, '192.168.35.231', 7310)  # 소진 2
-    mem = CNS('Main', '192.168.37.129', 7101, '192.168.0.4', 7300)  # 소진 3
+
+    get_com_ip = socket.gethostbyname(socket.getfqdn())
+    mem = CNS('Main', f'{get_com_ip}', 7101, f'{get_com_ip}', 7300)  # 공용 <- 자동
 
     # 2. Call Interface
     app = QApplication(sys.argv)
