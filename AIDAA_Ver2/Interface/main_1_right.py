@@ -217,7 +217,6 @@ class MainParaArea1(QTableWidget):
             k = []
             for j in range(len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]["경보 및 증상"])):
                 k.append(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]["경보 및 증상"][j]["AutoClick"])
-            print(k)
             list_sum.append(sum(k))
         symp_satis = {i:list_sum[i] for i in range(len(ai_result))}
         ai_ref = {i:{'name':diagnosis_convert_text[int(ai_proc.iloc[i][0])], 'em':len(ab_pro[diagnosis_convert_text[int(ai_proc.iloc[i][0])]]['긴급 조치 사항']), 'if_prob':f'{symp_satis[i]}/{self.shmem.get_pro_symptom_count(diagnosis_convert_text[int(ai_proc.iloc[i][0])])}', 'ai_prob':round(ai_proc.iloc[i][1]*100,2)} for i in range(len(ai_result))}
@@ -585,8 +584,8 @@ class MainParaArea3(QGroupBox):
                     self.symptom[i].setObjectName("symptom")
             self.gb_layout.addStretch(1)
 
-            Flag.call_bottom = False
-            Flag.call_bottom_name = ""
+            # Flag.call_bottom = False
+            # Flag.call_bottom_name = ""
 
         if Flag.call_bottom_None:
             self.clearLayout(self.gb_layout)
@@ -667,8 +666,13 @@ class MainParaArea3_1(QTableWidget):
         # self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         # self.setFocusPolicy(Qt.NoFocus)
         # self.setSelectionMode(QAbstractItemView.NoSelection)
-        self.para = pd.read_csv('./Final_parameter_200825.csv')['0'].tolist() # 경로 수정
-        self.update_shap()
+        self.selected_para = pd.read_csv('./Final_parameter_200825.csv')['1'].tolist() # 경로 수정
+        # self.update_shap()
+
+        timer1 = QTimer(self)
+        timer1.setInterval(100)
+        timer1.timeout.connect(self.update_shap)
+        timer1.start()
 
     def paintEvent(self, e: QPaintEvent) -> None:
         """ tabelview의 위에 라인 그리기 """
@@ -695,6 +699,14 @@ class MainParaArea3_1(QTableWidget):
         self.setCellWidget(row, 1, item2)
 
     def update_shap(self):
+        diagnosis_convert_num = {'Normal: 정상': 0, 'Ab21_01: 가압기 압력 채널 고장 (고)': 1, 'Ab21_02: 가압기 압력 채널 고장 (저)': 2,
+                                  'Ab20_04: 가압기 수위 채널 고장 (저)': 3, 'Ab15_07: 증기발생기 수위 채널 고장 (저)': 4,
+                                  'Ab15_08: 증기발생기 수위 채널 고장 (고)': 5,
+                                  'Ab63_04: 제어봉 낙하': 6, 'Ab63_02: 제어봉의 계속적인 삽입': 7, 'Ab21_12: 가압기 PORV (열림)': 8,
+                                  'Ab19_02: 가압기 안전밸브 고장': 9, 'Ab21_11: 가압기 살수밸브 고장 (열림)': 10,
+                                  'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설': 11,
+                                  'Ab60_02: 재생열교환기 전단부위 파열': 12, 'Ab59_02: 충전수 유량조절밸즈 후단누설': 13,
+                                  'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설': 14, 'Ab23_06: 증기발생기 전열관 누설': 15}
         self.shap_result = [np.array([[-3.31006987e-02, -3.36973963e-01, -2.08896416e-03,
                                        -1.61364092e-02, -9.82960399e-02, 6.26495166e-03,
                                        -4.44070779e-02, -6.48119616e-02, -4.90427708e-01,
@@ -1431,12 +1443,15 @@ class MainParaArea3_1(QTableWidget):
                                        0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
                                        0.00000000e+00, 0.00000000e+00, 0.00000000e+00,
                                        0.00000000e+00, 0.00000000e+00]])]
+        if Flag.call_bottom_name != '':
+            temp1 = pd.DataFrame(self.shap_result[diagnosis_convert_num[Flag.call_bottom_name]],
+                                 columns=self.selected_para).T
+            prob = [np.round((np.abs(temp1[0][i]) / sum(np.abs(temp1[0]))) * 100, 2) for i in range(len(temp1[0]))]
+            temp2 = pd.DataFrame([temp1.index, prob], index=['describe', 'probability']).T.sort_values(by='probability', ascending=False, axis=0).reset_index(drop=True)
 
+            [self.add_shap(i, f"{temp2['describe'][i]}", f"<span style=\"color:#0000ff;\" >{temp2['probability'][i]}%</span>") for i in range(20)] # 추후 색상 입히기
+            # 색상변경: 헥스 색상코드 참고 -> ff0000: Red, 0000ff: Blue
 
-        self.add_shap(0, 'PV145 VALVE POSITION (0.0-1.0)', '41.47%')
-        self.add_shap(1, 'NRHX OUTLET TEMPERATURE', '36.06%')
-        self.add_shap(2, 'PRZ LEVEL', '9.9%')
-        self.add_shap(3, 'AVERAGE FUEL TEMPERATURE', '1.9%')
 
 
 class AlignDelegate(QStyledItemDelegate):
