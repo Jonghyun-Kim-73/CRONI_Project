@@ -173,7 +173,7 @@ class MainParaArea1(QTableWidget):
         self.cellDoubleClicked.connect(self.mouseDoubleClick)
 
         timer1 = QTimer(self)
-        timer1.setInterval(500) # 타이머 시간 조정 필요함.
+        timer1.setInterval(200) # 타이머 시간 조정 필요함.
         timer1.timeout.connect(self.update_procedure)
         timer1.start()
 
@@ -236,14 +236,20 @@ class MainParaArea1(QTableWidget):
         row = self.currentIndex().row()
 
         # set 비정상절차서명
-        if self.cellWidget(row, 0) is not None:
+        if self.cellWidget(row, 0).currentText() != "":
             Flag.call_bottom_name = self.cellWidget(row, 0).currentText()
+            Flag.call_bottom_name_backup = self.cellWidget(row, 0).currentText()
             Flag.call_prss_name = self.cellWidget(row, 0).currentText()
-            Flag.call_prss = True
+
             # 더블클릭 시 리스트에 비정상절차서명 추가
-            Flag.combobox_update = True
-            Flag.return_list.append(Flag.call_prss_name)
+            # Flag.combobox_update = True
+            if Flag.call_prss_name not in Flag.combo_list:
+                Flag.combo_list.append(Flag.call_prss_name)
+            Flag.return_list.append(Flag.call_prss_name) # 뒤로가기
+            Flag.clear_layout_right_4 = True   # main_4_right 레이아웃 초기화
             Flag.layout_clear_4 = True  # main_4_left 버튼 업데이트 위함
+            Flag.combobox_update = True
+            Flag.call_prss = True
 
 
     def paintEvent(self, e: QPaintEvent) -> None:
@@ -561,7 +567,7 @@ class MainParaArea3(QGroupBox):
         self.symptom = []
 
         timer1 = QTimer(self)
-        timer1.setInterval(100)
+        timer1.setInterval(300)
         timer1.timeout.connect(self.check_btn_press)
         timer1.start()
 

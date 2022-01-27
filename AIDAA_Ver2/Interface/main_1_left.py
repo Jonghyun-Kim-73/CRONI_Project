@@ -31,7 +31,7 @@ class Main1Left(QWidget):
             border-radius:6px;
         }
         QHeaderView::section {
-            padding:3px;
+            padding:1px;
             padding-left:15px;
             background: rgb(128, 128, 128);
             font-size:14pt;
@@ -44,7 +44,6 @@ class Main1Left(QWidget):
             border-bottom-left-radius : 0px;
             border-bottom-right-radius : 0px;
         }
-        
         QTableView::item {
             padding:50px;
             font-size:14pt;
@@ -69,7 +68,7 @@ class Main1Left(QWidget):
 
         label1 = FreezeTableWidget(self)
         self.btn_suppress = QPushButton("Suppress button")
-        self.btn_suppress.setFixedHeight(35)
+        self.btn_suppress.setFixedHeight(34)
         self.btn_suppress.clicked.connect(self.suppress)
         layout.addWidget(label1)
         layout.addWidget(self.btn_suppress)
@@ -86,7 +85,7 @@ class FreezeTableWidget(QTableView):
         super(FreezeTableWidget, self).__init__(parent)
         self.mem = parent.mem
         self.setAttribute(Qt.WA_StyledBackground, True)
-        self.setMinimumSize(800, 600)
+        # self.setMinimumSize(800, 600)
 
         # set the table model
         tm = MyTableModel(self)
@@ -95,6 +94,7 @@ class FreezeTableWidget(QTableView):
         self.frozenTableView = QTableView(self)
         self.frozenTableView.setModel(tm)
         self.frozenTableView.verticalHeader().hide()
+
         self.frozenTableView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.frozenTableView.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         # self.viewport().stackUnder(self.frozenTableView)
@@ -127,6 +127,13 @@ class FreezeTableWidget(QTableView):
         self.scrollBar = self.frozenTableView.verticalScrollBar()
         self.scrollBar.valueChanged.connect(lambda value: self.scrolled(self.scrollBar, value))
 
+
+
+        # 테이블 높이 set
+        self.table_item = self.verticalHeader()
+        self.table_item.setSectionResizeMode(QHeaderView.Fixed)
+        self.table_item.setDefaultSectionSize(27)
+
         # row 클릭
         self.frozenTableView.setSelectionBehavior(QTableView.SelectRows)
         self.doubleClicked.connect(self.mouseDoubleClick)
@@ -149,6 +156,15 @@ class FreezeTableWidget(QTableView):
             print(value)  # top/left end
 
     def updateFrozenTableGeometry(self):
+        # if self.verticalHeader().isVisible():
+        #     self.frozenTableView.setGeometry(self.verticalHeader().width() + self.frameWidth(),
+        #                                      self.frameWidth(), self.frameWidth(),
+        #                                      self.viewport().height() + self.horizontalHeader().height())
+        # else:
+        #     self.frozenTableView.setGeometry(self.frameWidth(),
+        #                                      self.frameWidth(), self.frameWidth(),
+        #                                      self.viewport().height() + self.horizontalHeader().height())
+
         if self.verticalHeader().isVisible():
             self.frozenTableView.setGeometry(self.verticalHeader().width() + self.frameWidth(),
                                              self.frameWidth(), self.frameWidth(),
@@ -166,11 +182,11 @@ class FreezeTableWidget(QTableView):
         pen = QPen()
         pen.setColor(QColor(128, 128, 128))
         # 가로선 set width
-        for i in range(30):
+        for i in range(50):
             if i % 5 == 0: pen.setWidth(3)
             else: pen.setWidth(1)
             qp.setPen(pen)
-            qp.drawLine(0, i * 30, 960, i * 30)
+            qp.drawLine(0, i * 27, 960, i * 27)
         qp.restore()
 
 class MyTableModel(QAbstractTableModel):
@@ -186,7 +202,7 @@ class MyTableModel(QAbstractTableModel):
         self.dataCached = []
 
         timer1 = QTimer(self)
-        timer1.setInterval(1)
+        timer1.setInterval(300)
         timer1.timeout.connect(self.update_alarm)
         timer1.start()
 
@@ -211,9 +227,13 @@ class MyTableModel(QAbstractTableModel):
                 if not self.alarm_names[i] in self.current_alarm_name:
                     # alarm blink 테스트용
                     if i == 0:
-                        self.dataCached.append([self.alarm_names[i], 0.1, 0.3, "  kg/cm",
-                                            datetime.now().strftime('%m.%d'),
-                                            datetime.now().strftime('%H:%M:%S')])
+                        # self.dataCached.append([self.alarm_names[i], 0.1, 0.3, "  kg/cm",
+                        #                     datetime.now().strftime('%m.%d'),
+                        #                     datetime.now().strftime('%H:%M:%S')])
+                        for j in range(50):
+                            self.dataCached.append([self.alarm_names[i], 0.1, 0.3, "  kg/cm",
+                                                    datetime.now().strftime('%m.%d'),
+                                                    datetime.now().strftime('%H:%M:%S')])
                     if i == 1:
                         self.dataCached.append([self.alarm_names[i], 0.5, 0.2, "  kg/cm",
                                             datetime.now().strftime('%m.%d'),

@@ -163,12 +163,27 @@ class SHMem:
     def get_pro_symptom_color(self, procedure_name, idx):
         return self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'][idx]['AutoClick']
 
+    def get_pro_symptom_color2(self, procedure_name, name, idx):
+        return self.logic['Ab_Procedure'][procedure_name][name][idx]['AutoClick']
+
+    # get manual click
+    def get_pro_manclick(self, procedure_name, name, idx):
+        return self.logic['Ab_Procedure'][procedure_name][name][idx]['ManClick']
+
+    # Symptom cnt
     def get_pro_symptom_num(self, procedure_name, name):
         return len(self.logic['Ab_Procedure'][procedure_name][name].keys())
+
+    # Symptom all des name
+    def get_pro_symptom_all_des(self, procedure_name, name, idx):
+        return self.logic['Ab_Procedure'][procedure_name][name][idx]['Des']
 
     # Symptom main_4_left name
     def get_pro_symptom_left(self, procedure_name):
         return self.logic['Ab_Procedure'][procedure_name].keys()
+
+    def get_pro_symptom_Nub(self, procedure_name, name, idx):
+        return self.logic['Ab_Procedure'][procedure_name][name][idx]['Nub']
 
     def check_para(self, para_name):
         if para_name in self.mem.keys():

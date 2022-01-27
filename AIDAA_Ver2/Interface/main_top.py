@@ -84,7 +84,7 @@ class MainTop(QWidget):
         layout.addWidget(btn_close)
 
         timer = QTimer(self)
-        timer.setInterval(100)
+        timer.setInterval(300)
         timer.timeout.connect(self.call_page)
         timer.start()
 

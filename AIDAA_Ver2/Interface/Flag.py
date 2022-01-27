@@ -16,10 +16,33 @@ call_recv = False       # 시스템 복구 화면
 call_bottom = False     # Sympotom Check
 call_bottom_None = False
 
-combobox_update = False  # 절차서 combobox 추가위함
+
+# combobox 관련
+combobox_update = False  # 절차서 combobox 추가 위함
+combo_list = []  # 더블클릭한 절차서들 추가
+combo_current = -1
+combo_click_left = False
+combo_click_right = False
+combo_click_text = ""
+combo_text_final = ""
+combo_blink_start = False
+combo_blink = False
+combo_blink_idx = -1
+
+# main4
+show_right_4 = False
+clear_layout_right_4 = False  # 오른쪽 레이아웃 초기화
+blink_manclick_start = False  # 운전원 blink
+blink_manclick = False  # 운전원 blink
+
+ok_btn = False
+together_btn = False
+redo_btn = False
+complete_btn = False
 
 # 절차서 name call
 call_bottom_name = ""   # 비정상 절차서 명
+call_bottom_name_backup = ""
 call_prss_name = ""     # 비정상 절차서 명
 
 # main2 left button click
@@ -29,7 +52,7 @@ main2_btn = [0] * 20
 return_list = ['Main']
 return_page = False
 
-# 비정상절차서 박스 체크 카운트
+# 비정상절차서 체크된 카운트 불러오기 - 수정 필요
 check_count = [0] * 10
 
 # main_4_left

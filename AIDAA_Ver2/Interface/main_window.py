@@ -106,11 +106,11 @@ class Mainwindow(QWidget):
         window_vbox.addLayout(self.stack_widget)
         #
         self.setLayout(window_vbox)
-        # self.showMaximized() <- 초기 Geometry 의 크기에 따라감. 삭제.
+        self.showMaximized() #<- 초기 Geometry 의 크기에 따라감. 삭제.
 
         # 테스트
         timer1 = QTimer(self)
-        timer1.setInterval(100)
+        timer1.setInterval(300)
         timer1.timeout.connect(self.call)
         timer1.start()
 
@@ -127,7 +127,7 @@ class Mainwindow(QWidget):
         Flag.call_prog = self.change_pp(1) if Flag.call_prog else False  # 예지
         Flag.call_recv = self.change_pp(2) if Flag.call_recv else False  # 복구
         Flag.call_prss = self.change_pp(3) if Flag.call_prss else False  # 절차서
-        print(Flag.return_list)
+        # print(Flag.return_list)
         """ SHmem <<-->> Flag """
         # TODO 향후 공유 메모리와 Flag의 값 사이의 교환 구현 필요함. ex. AI 계산 결과 -> interface 표현
 
@@ -146,6 +146,7 @@ class Mainwindow(QWidget):
     def change_pp(self, page):
         """ page 번호 받아서 stack_widget 페이지로 변경 """
         self.stack_widget.setCurrentIndex(page)
+
 
     def return_page(self):
         print('Return Page ...')

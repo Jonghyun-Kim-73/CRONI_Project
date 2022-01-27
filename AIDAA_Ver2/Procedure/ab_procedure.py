@@ -163,20 +163,20 @@ ab_pro = {
     'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
         '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
-                'Des': '모든 원자로냉각재계통 누설 시 공통적 증상 ',
+                'ManClick': False, 'AutoClick': True, 'Nub': '2.1',
+                'Des': '모든 원자로냉각재계통 누설 시 공통적 증상 ', 'Blink': False, 'BlinkStart': False,
             },
             1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1.1',
-                'Des': 'PZR 수위 또는 압력 감소',
+                'Des': 'PZR 수위 또는 압력 감소', 'Blink': False, 'BlinkStart': False,
             },
             2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
                 'Des': '주의사항 : PZR 증기영역 및 계기 접속부에서의 누설 시에는 수위 감소현상은 발생하지 않을 수도 있다. ',
             },
             3: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.2',
-                'Des': 'VCT 수위 감소 또는 보충횟수 증가',
+                'ManClick': False, 'AutoClick': True, 'Nub': '2.1.2',
+                'Des': 'VCT 수위 감소 또는 보충횟수 증가', 'Blink': False, 'BlinkStart': False,
             },
             4: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1.3',
@@ -276,16 +276,16 @@ ab_pro = {
                 'Des': '1차기기 냉각수계통의 방사성물질에 의한 오염을 최소로 하기 위하여 정상운전중 차단 가능한 곳은 아래의 해당 누설 부위에 따라 즉시 차단한다. ',
             },
             4: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '5.1.4',
-                'Des': '참고사항 : 원자로냉각재가 1차기기 냉각수계통으로 누설 가능한 개소는 다음과 같은 곳이 있다.'
-                       '◦ 결함연료 검출계통 시료 냉각기(GFFD Sample Cooler)'
-                       '◦ 가압기 액체영역 시료 냉각기(PZR Liquid Sample Cooler)'
-                       '◦ 가압기 증기영역 시료 냉각기(PZR Steam Sample Cooler)'
-                       '◦ 잔열제거계통 시료 냉각기(RHR Sample Cooler)'
-                       '◦ 유출수 열교환기(L/D Hx)'
-                       '◦ 예비유출 열교환기(Excess L/D Hx)'
-                       '◦ 원자로냉각재펌프 열방벽 열교환기(RCP Thermal Barrier Hx)'
-                       ' 잔열제거 열교환기(RHR Hx)',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'Des': '참고사항 : 원자로냉각재가 1차기기 냉각수계통으로 누설 가능한 개소는 다음과 같은 곳이 있다.\n'
+                       '◦ 결함연료 검출계통 시료 냉각기(GFFD Sample Cooler)\n'
+                       '◦ 가압기 액체영역 시료 냉각기(PZR Liquid Sample Cooler)\n'
+                       '◦ 가압기 증기영역 시료 냉각기(PZR Steam Sample Cooler)\n'
+                       '◦ 잔열제거계통 시료 냉각기(RHR Sample Cooler)\n'
+                       '◦ 유출수 열교환기(L/D Hx)\n'
+                       '◦ 예비유출 열교환기(Excess L/D Hx)\n'
+                       '◦ 원자로냉각재펌프 열방벽 열교환기(RCP Thermal Barrier Hx)\n'
+                       '◦ 잔열제거 열교환기(RHR Hx)',
             },
             5: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1.4',
@@ -979,11 +979,11 @@ ab_pro = {
     'Ab63_04: 제어봉 낙하': {
         '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'ManClick': True, 'AutoClick': False, 'Nub': '2.1',
                 'Des': '제어봉 위치 지시계의 바닥 지시등(RB)점등',
             },
             1: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
+                'ManClick': True, 'AutoClick': False, 'Nub': '2.2',
                 'Des': '원자로 출력 감소',
             },
             2: {
