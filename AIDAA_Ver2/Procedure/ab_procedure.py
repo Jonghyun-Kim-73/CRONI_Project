@@ -163,27 +163,27 @@ ab_pro = {
     'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
         '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': True, 'Nub': '2.1',
-                'Des': '모든 원자로냉각재계통 누설 시 공통적 증상 ', 'Blink': False, 'BlinkStart': False,
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '모든 원자로냉각재계통 누설 시 공통적 증상 ',
             },
             1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1.1',
-                'Des': 'PZR 수위 또는 압력 감소', 'Blink': False, 'BlinkStart': False,
+                'Des': 'PZR 수위 또는 압력 감소',
             },
             2: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : PZR 증기영역 및 계기 접속부에서의 누설 시에는 수위 감소현상은 발생하지 않을 수도 있다. ',
             },
             3: {
-                'ManClick': False, 'AutoClick': True, 'Nub': '2.1.2',
-                'Des': 'VCT 수위 감소 또는 보충횟수 증가', 'Blink': False, 'BlinkStart': False,
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1.2',
+                'Des': 'VCT 수위 감소 또는 보충횟수 증가',
             },
             4: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1.3',
                 'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가',
             },
             5: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '참고사항 : 위 사항은 모든 원자로냉각재계통 누설 시의 증상에 공통적으로 적용된다.',
             },
             6: {
@@ -276,16 +276,16 @@ ab_pro = {
                 'Des': '1차기기 냉각수계통의 방사성물질에 의한 오염을 최소로 하기 위하여 정상운전중 차단 가능한 곳은 아래의 해당 누설 부위에 따라 즉시 차단한다. ',
             },
             4: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
-                'Des': '참고사항 : 원자로냉각재가 1차기기 냉각수계통으로 누설 가능한 개소는 다음과 같은 곳이 있다.\n'
-                       '◦ 결함연료 검출계통 시료 냉각기(GFFD Sample Cooler)\n'
-                       '◦ 가압기 액체영역 시료 냉각기(PZR Liquid Sample Cooler)\n'
-                       '◦ 가압기 증기영역 시료 냉각기(PZR Steam Sample Cooler)\n'
-                       '◦ 잔열제거계통 시료 냉각기(RHR Sample Cooler)\n'
-                       '◦ 유출수 열교환기(L/D Hx)\n'
-                       '◦ 예비유출 열교환기(Excess L/D Hx)\n'
-                       '◦ 원자로냉각재펌프 열방벽 열교환기(RCP Thermal Barrier Hx)\n'
-                       '◦ 잔열제거 열교환기(RHR Hx)',
+                'ManClick': False, 'AutoClick': False, 'Nub': '5.1.4',
+                'Des': '참고사항 : 원자로냉각재가 1차기기 냉각수계통으로 누설 가능한 개소는 다음과 같은 곳이 있다.'
+                       '◦ 결함연료 검출계통 시료 냉각기(GFFD Sample Cooler)'
+                       '◦ 가압기 액체영역 시료 냉각기(PZR Liquid Sample Cooler)'
+                       '◦ 가압기 증기영역 시료 냉각기(PZR Steam Sample Cooler)'
+                       '◦ 잔열제거계통 시료 냉각기(RHR Sample Cooler)'
+                       '◦ 유출수 열교환기(L/D Hx)'
+                       '◦ 예비유출 열교환기(Excess L/D Hx)'
+                       '◦ 원자로냉각재펌프 열방벽 열교환기(RCP Thermal Barrier Hx)'
+                       ' 잔열제거 열교환기(RHR Hx)',
             },
             5: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1.4',
@@ -356,7 +356,7 @@ ab_pro = {
                 'Des': '예비유출유로(Excess L/D Line)를 운전한다.',
             },
             22: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0.0',
                 'Des': '주의사항 :  1. 예비유출유로를 운전할 경우 원자로냉각재계통의 수질(용존산소 등) 및 원자로냉각재펌프의 밀봉에 특별한 주의를 요한다.'
                        '2. 원자로냉각재계통의 수질 제한치를 유지할 수 없으면 발전소를 정지한다.',
             },
@@ -689,7 +689,7 @@ ab_pro = {
                 'Des': '유출관 차단 및 충전 유량 감소로 인해 “CHARGING LINE FLOW HI/LO” 경보 발생(JP005, Hi. 경보 : 26.57㎥/hr, Lo. 경보 : 4.77㎥/hr)',
             },
             15: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 가압기 수위는 RCP 밀봉주입수에 의해 서서히 증가한다.',
             },
             16: {
@@ -979,11 +979,11 @@ ab_pro = {
     'Ab63_04: 제어봉 낙하': {
         '경보 및 증상': {
             0: {
-                'ManClick': True, 'AutoClick': False, 'Nub': '2.1',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
                 'Des': '제어봉 위치 지시계의 바닥 지시등(RB)점등',
             },
             1: {
-                'ManClick': True, 'AutoClick': False, 'Nub': '2.2',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
                 'Des': '원자로 출력 감소',
             },
             2: {
@@ -1123,7 +1123,7 @@ ab_pro = {
                 'Des': '낙하된 제어봉 뱅크의 해당그룹 스텝 계수기 위치를 ‘0’으로 조정',
             },
             13: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 동일 뱅크의 반대 그룹(예 : 1AC 낙하시 2AC)의 스텝 계수기 위치는 조정할 필요 없음',
             },
             14: {
@@ -1134,11 +1134,11 @@ ab_pro = {
                        '3) 자동-수동 스위치를 놓아 자동으로 전환',
             },
             15: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 자동/수동 선택스위치는 스프링 복귀형태이므로, 수동위치에서 계속 누르고 있어야 함',
             },
             16: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : “ROD BANKS LOW/LO-LO LIMIT” 경보 발생할 수 있음',
             },
             17: {
@@ -1146,7 +1146,7 @@ ab_pro = {
                 'Des': '제어봉 제어계통 긴급고장 경보를 원상복귀',
             },
             18: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 긴급고장 경보를 원상복구하기 전 반드시 정지권선의 여자상태 확인',
             },
             19: {
@@ -1154,7 +1154,7 @@ ab_pro = {
                 'Des': '스텝 계수기 및 제어봉 위치 지시계를 감시하면서 제어봉을 약 6스텝 정도 인출',
             },
             20: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 2스텝 정도 인출시 제어봉 제어계통 긴급고장 경보가 발생함'
                        '이유) 반대 그룹의 올림권선이 개방(ROD DISCONNECTED) 위치로 전환되어 있어, 전력함에 전류 신호가 공급되지 않음',
             },
@@ -1172,7 +1172,7 @@ ab_pro = {
                 'Des': '스텝 계수기 및 제어봉 위치 지시계를 감시하면서 초기 기록된 위치까지 낙하된 제어봉을 인출',
             },
             23: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 낙하된 제어봉을 인출할 때 사분출력 경사비를 계속 감시',
             },
             24: {
@@ -1935,54 +1935,54 @@ ab_pro = {
 
         },
         '후속 조치 사항': {
-            1: {
+            0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '만약 충전관로의 고장 시 고장난 관로를 차단하여 격리시키고 계통을 정비할 수 있는 조치를 취한다.',
             },
-            2: {
+            1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2',
                 'Des': '고장난 충전관로의 정비 완료 후 아래 항목에 따라 유출 및 충전유량을 형성시킨다.',
             },
-            3: {
+            2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.1',
                 'Des': '격납건물 충전수 차단밸브(BG-HV36/37) 연다.',
             },
-            4: {
+            3: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.2',
                 'Des': '충전수 유량 조절밸브(BG-FV122) 서서히 열어 충전유량을 형성한다.',
             },
-            5: {
+            4: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.3',
                 'Des': '유출수 차단밸브(BG-LV459/460) 연다.',
             },
-            6: {
+            5: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.4',
                 'Des': '유출수 오리피스 차단밸브(BG-HV1/2/3) 중 적당한 밸브 1개 열어 유출유량을 형성한다.',
             },
-            7: {
+            6: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.5',
                 'Des': '충전 유량 및 유출 유량이 정상적으로 유지되는 것을 확인한 후 잉여 유출수조절밸브(BG-HV137)를 서서히 닫는다.',
             },
-            8: {
+            7: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.6',
                 'Des': '잉여 유출수 유로밸브(BG-HV41/42) 닫는다.',
             },
-            9: {
+            8: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.7',
                 'Des': 'RCP #1 밀봉 주입수 유량이 0.5～0.82 ℓ/s(8～13 gpm)이 되도록 RCP 밀봉수 주입 조절밸브(BG-HV186)를 조절한다.(BG-FR154A/155A/156A)',
             },
-            10: {
+            9: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.8',
                 'Des': '충전수 유량 제어기(BG-FK122)를 ‘수동‘위치에 놓고 가압기 수위를 원자로 냉각재 평균온도에 따라 프로그램된 수위(22～55.1 %)로 유지한다.',
             },
-            11: {
+            10: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2.9',
                 'Des': '가압기 수위(BB-LI459A/460)가 프로그램된 수위(22～55.1%)의 ±3% 이내로 회복되면 충전수 유량 제어기(BG-FK122) ‘자동‘으로 전환한다.',
             }
 
         }
     },
-    'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
+    'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설 시': {
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1993,7 +1993,7 @@ ab_pro = {
                 'Des': 'PZR 수위 또는 압력 감소',
             },
             2: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : PZR 증기영역 및 계기 접속부에서의 누설 시에는 수위 감소현상은 발생하지 않을 수도 있다.',
             },
             3: {
@@ -2005,7 +2005,7 @@ ab_pro = {
                 'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가',
             },
             5: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 위 사항은 모든 원자로냉각재계통 누설 시의 증상에 공통적으로 적용된다.',
             },
             6: {
@@ -2092,7 +2092,7 @@ ab_pro = {
                 'Des': 'CV Sump 수위증가율을 감시하고, 정기-발-13(RCS 누설량 평형점검) 점검 절차서에 따라 원자로냉각재 누설율을 계산하여 계산된 누설율이 운영기술지침서에서 정한 제한치 이내인지 확인한다.',
             },
             3: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '참고사항 : 누설율의 제한치는 붙임 6.5(원자로냉각재계통 누설율에 대한 운영기술지침서의 제한치 및 규제사항)을 참조한다.',
             },
             4: {
@@ -2116,7 +2116,7 @@ ab_pro = {
                 'Des': 'VCT 수위를 주의 깊게 감시하고 수위 유지를 위하여 필요한 경우 수동보충을 실시한다.',
             },
             9: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 충전유량을 최대로 하기 위하여 충전펌프의 최소 유량관 차단밸브(BG-HV024/025/026)를 닫아도 되나, 반드시 충분한 유량이 있음을 확인한 후에 닫아 펌프과열을 방지한다.',
             },
             10: {
@@ -2161,7 +2161,7 @@ ab_pro = {
                 'Des': 'PZR 수위 또는 압력 감소',
             },
             2: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : PZR 증기영역 및 계기 접속부에서의 누설 시에는 수위 감소현상은 발생하지 않을 수도 있다. ',
             },
             3: {
@@ -2173,7 +2173,7 @@ ab_pro = {
                 'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가',
             },
             5: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
+                'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '참고사항 : 위 사항은 모든 원자로냉각재계통 누설 시의 증상에 공통적으로 적용된다. ',
             },
             6: {
