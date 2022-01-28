@@ -37,6 +37,12 @@ class Main4Right(QWidget):
             margin-left: 154px;
             margin-bottom: 10px;
         }
+        QWidget#box3{
+            background: white;
+            border : 2px solid rgb(190,10,10);
+            margin-left: 160px;
+            margin-bottom: 10px;
+        }
         QWidget#main_4_right {
             background: rgb(231, 231, 234);
             border: 1px solid rgb(128,128,128);
@@ -284,8 +290,10 @@ class Main4Right_content(QWidget):
                 self.man = self.shmem.get_pro_manclick(self.road_name, self.label_list[Flag.combo_current], num)
 
                 # 주의사항 / 참고사항
-                if self.nub == "0.0":
+                if self.nub == "0.0": # 추후수정
                     self.layout_content.addWidget(Box2(self, self.des))
+                elif self.nub == "0.0.0": # 추후수정
+                    self.layout_content.addWidget(Box3(self, self.des))
                 # 레벨 1 : 2.x ~ 2.xx
                 elif len(self.nub) in [3, 4]:
                     self.layout_content.addWidget(Box1(self, self.road_name, self.label_list[Flag.combo_current], num, self.nub, self.des, 1, self.auto, self.man))
@@ -447,6 +455,39 @@ class Box2(QWidget):
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.shmem = parent.shmem  # <- myform.shmem
         self.setObjectName("box2")
+        self.des = des  # des
+        self.setContentsMargins(0, 5, 0, 5)
+        self.setFixedWidth(1490)
+        # 레이아웃
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(160, 0, 0, 20)
+
+        # 주의사항 / 참고사항 분리
+        label_title = QLabel("%s" % self.des[:4])
+        label_content = QLabel("%s" % self.des[7:])
+        label_title.setAlignment(Qt.AlignCenter)
+        # label_title.setContentsMargins(160, 0, 0, 0)
+        label_title.setObjectName("label_title")
+        label_content.setObjectName("label_content")
+        label_content.setWordWrap(True)
+        # label_title.setFixedWidth(800)
+        # label_content.setFixedWidth(800)
+
+        # label_nub.setFixedWidth(99)  # - 테두리
+        # label_nub.setFixedHeight(33)
+        self.layout.addWidget(label_title)
+        self.layout.addWidget(label_content)
+        # self.layout.setAlignment(Qt.AlignTop)
+
+        self.layout.addStretch(1)
+        self.setLayout(self.layout)
+
+class Box3(QWidget):
+    def __init__(self, parent, des):
+        super(Box3, self).__init__()
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.shmem = parent.shmem  # <- myform.shmem
+        self.setObjectName("box3")
         self.des = des  # des
         self.setContentsMargins(0, 5, 0, 5)
         self.setFixedWidth(1490)

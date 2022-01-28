@@ -675,10 +675,10 @@ class MainParaArea3_1(QTableWidget):
         self.selected_para = pd.read_csv('./Final_parameter_200825.csv')['1'].tolist() # 경로 수정
         # self.update_shap()
 
-        timer1 = QTimer(self)
-        timer1.setInterval(100)
-        timer1.timeout.connect(self.update_shap)
-        timer1.start()
+        # timer1 = QTimer(self)
+        # timer1.setInterval(100)
+        # timer1.timeout.connect(self.update_shap)
+        # timer1.start()
 
     def paintEvent(self, e: QPaintEvent) -> None:
         """ tabelview의 위에 라인 그리기 """
