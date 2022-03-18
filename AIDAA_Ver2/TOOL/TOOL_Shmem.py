@@ -5,16 +5,18 @@ from collections import deque
 
 
 class SHMem:
-    def __init__(self, cnsinfo, remoteinfo, max_len_deque, db_path='./DB/db.txt', db_add_path='./DB/db_add.txt'):
+    def __init__(self, cnsinfo, remoteinfo, max_len_deque, test=False, db_path='./DB/db.txt', db_add_path='./DB/db_add.txt'):
         self.cnsip, self.cnsport = cnsinfo
         self.remoteip, self.remoteport = remoteinfo
+        self.max_len_deque = max_len_deque
+        self.test = test
         # 0] 기능 동작 로직
         self.AI = True          # AI 모듈들 동작 허용
         self.XAI = True         # XAI 모듈 동작
         self.ProDiag = True     # 절차서 진단용 AI 모듈 동작
 
         # 1] CNS 변수용 shmem
-        self.mem = db_make().make_mem_structure(max_len_deque, db_path, db_add_path)
+        self.mem = db_make().make_mem_structure(self.max_len_deque, db_path, db_add_path)
 
         print('Main 메모리 생성 완료')
         # 2] Trig 변수용 shmem
@@ -48,6 +50,25 @@ class SHMem:
         self.save_mem = {
             'KCNTOMS': [], 'PPRZ': [],
         }
+
+        # 위젯 id
+        self.Wid = {}
+
+    def get_test(self):
+        return self.test
+
+    def get_max_len(self):
+        return self.max_len_deque
+
+    def get_w_id(self, name):
+        return self.Wid[name]
+
+    def add_w_id(self, widget):
+        name = type(widget).__name__
+        self.Wid[name] = widget
+
+    def show_w(self):
+        print(self.Wid)
 
     def call_init(self, init_nub):
         self.logic = {'Run': False,
@@ -123,11 +144,17 @@ class SHMem:
     def get_logic_info(self):
         return self.logic
 
-    def get_cns_info(self):
-        return self.cnsip, self.cnsport
+    def get_cnsip(self):
+        return self.cnsip
 
-    def get_remote_info(self):
-        return self.remoteip, self.remoteport
+    def get_cnsport(self):
+        return int(self.cnsport)
+
+    def get_remoteip(self):
+        return self.remoteip
+
+    def get_remoteport(self):
+        return int(self.remoteport)
 
     def get_shmem_val(self, val_name):
         return self.mem[val_name]['Val']
@@ -207,3 +234,8 @@ class SHMem:
 
         print(f"[TOOL_Shmem.py]_{self.mem['KCNTOMS']['Val']}")
 
+
+def make_shmem(parent, child):
+    result = parent.shmem
+    result.add_w_id(child)
+    return result

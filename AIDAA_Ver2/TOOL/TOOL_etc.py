@@ -14,6 +14,11 @@ def p_(c:str, s:str):
     print(f'[{file_name:30}][{s}]')
 
 
+def pc_(class_, s):
+    file_name = type(class_).__name__
+    print(f'[{file_name:30}][{s}]')
+
+
 class ToolEtc:
     @staticmethod
     def get_now_time() -> str:
@@ -204,6 +209,7 @@ def AlarmCheck(mem):
         if mem[f'KLAMPO3{i}']['Val'] == 1:
             alarm_list.append(f'KLAMPO3{i}')
     return alarm_list
+
 
 def CLogic(prob):
     if int(np.random.choice(2, 1, p=[1 - prob, prob])[0]) == 1:

@@ -65,7 +65,7 @@ class CNS:
         # 초기 shared_mem의 구조를 선언한다.
         idx = 0
         shared_mem = {}
-        for file_name in ['../DB/db.txt', '../DB/db_add.txt']:
+        for file_name in ['./DB/db.txt', './DB/db_add.txt']:
             with open(file_name, 'r') as f:
                 while True:
                     temp_ = f.readline().split('\t')

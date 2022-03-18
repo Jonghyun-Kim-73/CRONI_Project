@@ -13,8 +13,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 #
 from AIDAA_Ver2.Interface.CNS_Controller import CNS_Platform_controller_interface as CNS_controller
-from AIDAA_Ver2.Interface import main_window as main_window
-from AIDAA_Ver2.TOOL.TOOL_etc import p_
+from AIDAA_Ver2.Interface.main_window import Mainwindow
+from AIDAA_Ver2.TOOL.TOOL_etc import p_, pc_
 from AIDAA_Ver2.Interface.Graph.MatGP import Trend
 
 
@@ -36,13 +36,21 @@ class InterfaceFun(multiprocessing.Process):
         sys.exit(app.exec_())
 
 
+class myQpush(QPushButton):
+    def __init__(self, geo, str, parent=None, connect_fun=None):
+        super(myQpush, self).__init__(str, parent)
+        self.setGeometry(geo[0], geo[1], geo[2], geo[3])
+        if connect_fun is not None:
+            self.clicked.connect(connect_fun)
+
+
 class MyForm(QWidget):
     def __init__(self, shmem):
         super(MyForm, self).__init__()
         # shmem
         self.shmem = shmem
         # ---- UI 호출
-        p_(__file__, f'[SHMem:{self.shmem}][Controller UI 호출]')
+        pc_(__file__, f'[SHMem:{self.shmem}][Controller UI 호출]')
         self.ui = CNS_controller.Ui_Form()
         self.ui.setupUi(self)
 
@@ -50,26 +58,13 @@ class MyForm(QWidget):
         self.setGeometry(0, 0, 269, 620)
         self.auto_data_info_list = AutoDataList(parent=self)
         self.auto_data_info_list.setGeometry(20, 380, 225, 100)
-
-        # ----------- ADD 절차서 정보 입력 용 ---------------------
-        self.call_procedure_editor = QPushButton('Show Procedure Editor', self)
-        self.call_procedure_editor.setGeometry(20, 500, 225, 30)
-        self.call_procedure_editor.clicked.connect(self.show_procedure_editor)
-
-        # ----------- Value 값 수정용 ----------------------------
-        self.call_val_change_editor = QPushButton('Change Val Editor', self)
-        self.call_val_change_editor.setGeometry(20, 540, 225, 30)
-        self.call_val_change_editor.clicked.connect(self.go_val_change)
-
-        # ----------- Trend 테스트 용 ----------------------------
-        self.call_trend_view = QPushButton('Call Trend View', self)
-        self.call_trend_view.setGeometry(20, 580, 225, 30)
-        self.call_trend_view.clicked.connect(self.go_trend_view)
-
+        # ------------------------------------------------------
+        self.call_procedure_editor = myQpush([20, 500, 225, 30], 'Show Procedure Editor', self, self.show_procedure_editor)
+        self.call_val_change_editor = myQpush([20, 540, 225, 30], 'Change Val Editor', self, self.go_val_change)
+        self.call_trend_view = myQpush([20, 580, 225, 30], 'Call Trend View', self, self.go_trend_view)
         # ---- UI 초기 세팅
         self.ui.Cu_SP.setText(str(self.shmem.get_logic('Speed')))
         self.ui.Se_SP.setText(str(self.shmem.get_logic('Speed')))
-        # ---- 초기함수 호출
         # ---- 버튼 명령
         self.ui.Run.clicked.connect(self.run_cns)
         self.ui.Freeze.clicked.connect(self.freeze_cns)
@@ -82,22 +77,22 @@ class MyForm(QWidget):
         self.show()
 
         # Call
-        self.cns_main_win = main_window.Mainwindow(self)
+        self.cns_main_win = Mainwindow(shmem, self)
         self.cns_main_win.show()
 
     def run_cns(self):
         if self.shmem.get_logic('Initial_condition'):
-            p_(__file__, 'CNS 시작')
+            pc_(__file__, 'CNS 시작')
             self.shmem.change_logic_val('Run', True)
         else:
-            p_(__file__, '먼저 초기 조건을 선언')
+            pc_(__file__, '먼저 초기 조건을 선언')
 
     def freeze_cns(self):
         if self.shmem.get_logic('Initial_condition'):
-            p_(__file__, 'CNS 일시정지')
+            pc_(__file__, 'CNS 일시정지')
             self.shmem.change_logic_val('Run', False)
         else:
-            p_(__file__, '먼저 초기 조건을 선언')
+            pc_(__file__, '먼저 초기 조건을 선언')
 
     def go_mal(self):
         if self.ui.Mal_nub.text() != '' and self.ui.Mal_type.text() != '' and self.ui.Mal_time.text() != '':
@@ -116,12 +111,12 @@ class MyForm(QWidget):
             self.ui.Mal_nub.clear()
             self.ui.Mal_type.clear()
             self.ui.Mal_time.clear()
-            p_(__file__, 'Malfunction 입력 완료')
+            pc_(__file__, 'Malfunction 입력 완료')
         else:
-            p_(__file__, 'Malfunction 입력 실패')
+            pc_(__file__, 'Malfunction 입력 실패')
 
     def go_init(self):
-        p_(__file__, 'CNS 초기 조건 선언')
+        pc_(__file__, 'CNS 초기 조건 선언')
         # 1. Mal list clear
         self.ui.Mal_list.clear()
         # 2. Mal trig_mem clear
@@ -134,10 +129,10 @@ class MyForm(QWidget):
     def go_save(self):
         # 실시간 레코딩 중 ...
         self.shmem.change_logic_val('Run_rc', True)
-        p_(__file__, 'Ester_Egg_Run_ROD CONTROL TRICK')
+        pc_(__file__, 'Ester_Egg_Run_ROD CONTROL TRICK')
 
     def go_speed(self):
-        p_(__file__, 'CNS 속도 조절')
+        pc_(__file__, 'CNS 속도 조절')
         self.ui.Cu_SP.setText(self.shmem.get_speed(int(self.ui.Se_SP.text())))
 
     def go_val_change(self):
@@ -155,11 +150,12 @@ class MyForm(QWidget):
         pass
 
     def show_procedure_editor(self):
-        self.procedure_editor_wid = PrcedureEditor(self, mem=self.shmem)
-        self.procedure_editor_wid.show()
+        print('TEST!!')
+        # self.procedure_editor_wid = PrcedureEditor(self, mem=self.shmem)
+        # self.procedure_editor_wid.show()
 
     def closeEvent(self, QCloseEvent):
-        p_(__file__, 'Close')
+        pc_(__file__, 'Close')
         self.shmem.send_close()
         sys.exit()
 
@@ -179,174 +175,72 @@ class AutoDataList(QListWidget):
     def contextMenuEvent(self, event) -> None:
         """ ChartArea 에 기능 올리기  """
         menu = QMenu(self)
-        add_input1 = menu.addAction("Add input")
+        menu.addAction('Add_input').triggered.connect(self._add_input)
+        menu_emergency = QMenu('Emergency')
+        menu_emergency.addAction("Gen LOCA")
+        menu_emergency.addAction("Gen LOCA+SI")
 
-        add_input1_1 = menu.addAction("Gen 2101")
-        add_input1_2 = menu.addAction("Gen 2102")
-        add_input1_3 = menu.addAction("Gen 2001")
-        add_input1_4 = menu.addAction("Gen 2004")
-        add_input1_5 = menu.addAction("Gen 1507")
-        add_input1_6 = menu.addAction("Gen 1508")
-        add_input1_7 = menu.addAction("Gen 6304")
-        add_input1_8 = menu.addAction("Gen 2112")
-        add_input1_9 = menu.addAction("Gen 1902")
-        add_input1_10 = menu.addAction("Gen 2111")
-        add_input1_11 = menu.addAction("Gen 5901")
-        add_input1_12 = menu.addAction("Gen 8002")
-        add_input1_13 = menu.addAction("Gen 6403")
-        add_input1_14 = menu.addAction("Gen 6002")
-        add_input1_15 = menu.addAction("Gen 2303")
-        add_input1_16 = menu.addAction("Gen 5902")
-        add_input1_17 = menu.addAction("Gen 2301")
-        add_input1_18 = menu.addAction("Gen 2306")
+        menu_abnormal = QMenu('Abnormal')
+        menu_abnormal.addAction("Gen 2101").triggered.connect(lambda: self._gen_ab(19, random.randint(158, 170), 100))
+        menu_abnormal.addAction("Gen 2102").triggered.connect(lambda: self._gen_ab(19, random.randint(140, 150), 100))
+        menu_abnormal.addAction("Gen 2001").triggered.connect(lambda: self._gen_ab(20, random.randint(96, 100), 100))
+        menu_abnormal.addAction("Gen 2004").triggered.connect(lambda: self._gen_ab(20, random.randint(0, 14), 50))
+        menu_abnormal.addAction("Gen 1507").triggered.connect(lambda: self._gen_ab1507)
+        menu_abnormal.addAction("Gen 1508").triggered.connect(lambda: self._gen_ab1508)
+        menu_abnormal.addAction("Gen 6304").triggered.connect(lambda: self._gen_ab6304)
+        menu_abnormal.addAction("Gen 2112").triggered.connect(lambda: self._gen_ab(15, random.randint(1, 100) * 5, 100))
+        menu_abnormal.addAction("Gen 1902").triggered.connect(lambda: self._gen_ab(16, random.randint(1, 100) * 5, 100))
+        menu_abnormal.addAction("Gen 2111").triggered.connect(lambda: self._gen_ab(22, random.randint(1, 50) * 2, 100))
+        menu_abnormal.addAction("Gen 5901").triggered.connect(lambda: self._gen_ab(35, 1, 100))
+        menu_abnormal.addAction("Gen 8002").triggered.connect(lambda: self._gen_ab8002)
+        menu_abnormal.addAction("Gen 6403").triggered.connect(lambda: self._gen_ab(50, random.randint(1, 3), 30))
+        menu_abnormal.addAction("Gen 6002").triggered.connect(lambda: self._gen_ab(36, random.randint(1, 20) * 30, 100))
+        menu_abnormal.addAction("Gen 2303").triggered.connect(lambda: self._gen_ab(37, random.randint(1, 50) * 2, 100))
+        menu_abnormal.addAction("Gen 5902").triggered.connect(lambda: self._gen_ab(38, random.randint(20, 40) * 5, 100))
+        menu_abnormal.addAction("Gen 2301").triggered.connect(lambda: self._gen_ab2301)
+        menu_abnormal.addAction("Gen 2306").triggered.connect(lambda: self._gen_ab2306)
 
-        add_input2 = menu.addAction("Run")
-
-        add_input1.triggered.connect(self._add_input)
-
-        add_input1_1.triggered.connect(self._gen_ab2101)
-        add_input1_2.triggered.connect(self._gen_ab2102)
-        add_input1_3.triggered.connect(self._gen_ab2001)
-        add_input1_4.triggered.connect(self._gen_ab2004)
-        add_input1_5.triggered.connect(self._gen_ab1507)
-        add_input1_6.triggered.connect(self._gen_ab1508)
-        add_input1_7.triggered.connect(self._gen_ab6304)
-        add_input1_8.triggered.connect(self._gen_ab2112)
-        add_input1_9.triggered.connect(self._gen_ab1902)
-        add_input1_10.triggered.connect(self._gen_ab2111)
-        add_input1_11.triggered.connect(self._gen_ab5901)
-        add_input1_12.triggered.connect(self._gen_ab8002)
-        add_input1_13.triggered.connect(self._gen_ab6403)
-        add_input1_14.triggered.connect(self._gen_ab6002)
-        add_input1_15.triggered.connect(self._gen_ab2303)
-        add_input1_16.triggered.connect(self._gen_ab5902)
-        add_input1_17.triggered.connect(self._gen_ab2301)
-        add_input1_18.triggered.connect(self._gen_ab2306)
-
-        add_input2.triggered.connect(self._run_cns)
-
+        menu.addAction("Run").triggered.connect(self._run_cns)
+        menu.addMenu(menu_emergency)
+        menu.addMenu(menu_abnormal)
+        # -------------------------------------------------------
         menu.exec_(event.globalPos())
 
     def _add_input(self):
         mal, ok = QInputDialog.getText(self, 'Input Man', 'Mal nub')
-
         #for i in range(10, 21):
         #    self.addItem(f'12_{mal}{i}_10800')
         self.addItem(f'{mal}')
-
         # self.addItem(mal)
 
-    def _gen_ab2101(self):
-        # 100개 샘플링해서 만들기
-        for i in range(0, 100):
-            make_mal_itme = f'19_{random.randint(158, 170)}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab2102(self):
-        # 100개 샘플링해서 만들기
-        for i in range(0, 100):
-            make_mal_itme = f'19_{random.randint(140, 150)}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab2001(self):
-        # 100개 샘플링해서 만들기
-        for i in range(0, 100):
-            make_mal_itme = f'20_{random.randint(96, 100)}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab2004(self):
-        # 100개 샘플링해서 만들기
-        for i in range(0, 50):
-            make_mal_itme = f'20_{random.randint(0, 14)}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
+    def _gen_ab(self, case, opt, nub):
+        [self.addItem(f'{case}_{opt}_{random.randint(5, 10) * 60}') for i in range(0, nub)]
 
     def _gen_ab1507(self):
-        # 100개 샘플링해서 만들기
-        for i in range(0, 30):
-            make_mal_itme = f'30_{random.randint(1, 25) * 2 + 1000}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-        for i in range(0, 30):
-            make_mal_itme = f'30_{random.randint(1, 25) * 2 + 2000}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-        for i in range(0, 30):
-            make_mal_itme = f'30_{random.randint(1, 25) * 2 + 3000}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
+        self._gen_ab(30, random.randint(1, 25) * 2 + 1000, 30)
+        self._gen_ab(30, random.randint(1, 25) * 2 + 2000, 30)
+        self._gen_ab(30, random.randint(1, 25) * 2 + 3000, 30)
 
     def _gen_ab1508(self):
-        # 100개 샘플링해서 만들기
-        for i in range(0, 30):
-            make_mal_itme = f'30_{random.randint(26, 50) * 2 + 1000}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-        for i in range(0, 30):
-            make_mal_itme = f'30_{random.randint(26, 50) * 2 + 2000}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-        for i in range(0, 30):
-            make_mal_itme = f'30_{random.randint(26, 50) * 2 + 3000}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
+        self._gen_ab(30, random.randint(26, 50) * 2 + 1000, 30)
+        self._gen_ab(30, random.randint(26, 50) * 2 + 2000, 30)
+        self._gen_ab(30, random.randint(26, 50) * 2 + 3000, 30)
 
     def _gen_ab6304(self):
         for j in range(1, 5):
-            for i in range(0, 20):
-                make_mal_itme = f'2_{random.randint(11, 44) + 100 * j}_{random.randint(5, 10) * 60}'
-                self.addItem(make_mal_itme)
-
-    def _gen_ab2112(self):
-        for i in range(0, 100):
-            make_mal_itme = f'15_{random.randint(1, 100) * 5}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab1902(self):
-        for i in range(0, 100):
-            make_mal_itme = f'16_{random.randint(1, 100) * 5}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab2111(self):
-        for i in range(0, 100):
-            make_mal_itme = f'22_{random.randint(1, 50) * 2}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab5901(self):
-        for i in range(0, 100):
-            make_mal_itme = f'35_{1}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
+            [self.addItem(f'2_{random.randint(11, 44) + 100 * j}_{random.randint(5, 10) * 60}') for i in range(0, 20)]
 
     def _gen_ab8002(self):
-        for i in range(0, 50):
-            case = [11, 12, 13, 22, 23, 33]
-            make_mal_itme = f'67_{case[random.randint(0, 5)]}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab6403(self):
-        for i in range(30):
-            make_mal_itme = f'50_{random.randint(1, 3)}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab6002(self):
-        for i in range(100):
-            make_mal_itme = f'36_{random.randint(1, 20) * 30}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab2303(self):
-        for i in range(100):
-            make_mal_itme = f'37_{random.randint(1, 50) * 2}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
-
-    def _gen_ab5902(self):
-        for i in range(100):
-            make_mal_itme = f'38_{random.randint(20, 40) * 5}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
+        case = [11, 12, 13, 22, 23, 33]
+        [self.addItem(f'67_{case[random.randint(0, 5)]}_{random.randint(5, 10) * 60}') for i in range(0, 50)]
 
     def _gen_ab2301(self):
-        for i in range(100):
-            case = [10000, 80000, 140000, 70000, 330000, 200000]
-            make_mal_itme = f'12_{case[random.randint(0, 5)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
+        case = [10000, 80000, 140000, 70000, 330000, 200000]
+        [self.addItem(f'12_{case[random.randint(0, 5)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}') for i in range(100)]
 
     def _gen_ab2306(self):
-        for i in range(50):
-            case = [10000, 20000, 30000]
-            make_mal_itme = f'13_{case[random.randint(0, 2)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}'
-            self.addItem(make_mal_itme)
+        case = [10000, 20000, 30000]
+        [self.addItem(f'13_{case[random.randint(0, 2)] + random.randint(1, 3)}_{random.randint(5, 10) * 60}') for i in range(50)]
 
     def _check_list(self):
         if self.__len__() > 0 and self.run_tirg:
@@ -354,14 +248,30 @@ class AutoDataList(QListWidget):
             if local_logic['Run']:
                 pass
             else:
-                get_first_row = self.item(0).text().split('_')
-                print(get_first_row, 'Start first line mal function')
+                """ Mal function 1개 이상 입력 방법"""
                 self.parent().go_init()
                 time.sleep(5)
-                self.parent().ui.Mal_nub.setText(get_first_row[0])
-                self.parent().ui.Mal_type.setText(get_first_row[1])
-                self.parent().ui.Mal_time.setText(get_first_row[2])
-                self.parent().go_mal()
+
+                # 12_10010_30-12_10010_30- ... 형태를 가짐
+                split_malcase = self.item(0).text().split('-')
+                for i, malcase in enumerate(split_malcase):
+                    print(malcase, f'Start [{i}] line mal function')
+                    malcase_info = malcase.split('_')
+                    self.parent().ui.Mal_nub.setText(malcase_info[0])
+                    self.parent().ui.Mal_type.setText(malcase_info[1])
+                    self.parent().ui.Mal_time.setText(malcase_info[2])
+                    self.parent().go_mal()
+                    time.sleep(2)
+
+                # get_first_row = self.item(0).text().split('_')                    # Old version
+                # print(get_first_row, 'Start first line mal function')
+                # self.parent().go_init()
+                # time.sleep(5)
+                # self.parent().ui.Mal_nub.setText(get_first_row[0])
+                # self.parent().ui.Mal_type.setText(get_first_row[1])
+                # self.parent().ui.Mal_time.setText(get_first_row[2])
+                # self.parent().go_mal()
+
                 time.sleep(5)
                 self.parent().run_cns()
                 time.sleep(5)

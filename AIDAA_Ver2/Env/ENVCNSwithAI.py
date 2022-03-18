@@ -8,25 +8,17 @@ from AIDAA_Ver2.TOOL.TOOL_Shmem import SHMem
 
 
 class All_Function_module(multiprocessing.Process):
-    def __init__(self, shmem, max_len_deque, test_mode):
+    def __init__(self, shmem):
         multiprocessing.Process.__init__(self)
         self.daemon = True
-
         self.shmem:SHMem = shmem
-
-        self.test_mode = test_mode
         self.local_mem = self.shmem.get_shmem_db()      # Test Mode 용 메모리 복사
-
-        # 1 CNS 환경 생성 ----------------------------------------------------
-        # CNS 정보 읽기
-        self.cns_ip, self.cns_port = self.shmem.get_cns_info()
-        self.remote_ip, self.remote_port = self.shmem.get_remote_info()
-        self.cns_env = ENVCNS(Name='EnvCNS', IP=self.cns_ip, PORT=int(self.cns_port),
-                              RIP=self.remote_ip, RPORT=int(self.remote_port),
-                              Max_len=max_len_deque)
+        self.cns_env = ENVCNS(Name='EnvCNS', IP=self.shmem.get_cnsip(), PORT=self.shmem.get_cnsport(),
+                              RIP=self.shmem.get_remoteip(), RPORT=self.shmem.get_remoteport(),
+                              Max_len=shmem.get_max_len())
 
     def _update_cnsenv_to_sharedmem(self):
-        if self.test_mode:
+        if self.shmem.get_test():
             self.shmem.change_shmem_db(self.local_mem)
         else:
             self.shmem.change_shmem_db(self.cns_env.mem)
@@ -37,7 +29,7 @@ class All_Function_module(multiprocessing.Process):
     def check_init(self):
         if self.shmem.get_logic('Init_Call'):
             p_(__file__, 'Initial Start...')
-            if not self.test_mode:
+            if not self.shmem.get_test():
                 self.cns_env.reset(file_name='cns_log', initial_nub=self.shmem.get_logic('Init_nub'))
             self._update_cnsenv_to_sharedmem()
             self.shmem.change_logic_val('Init_Call', False)
@@ -53,7 +45,7 @@ class All_Function_module(multiprocessing.Process):
             p_(__file__, 'Mal Start...')
             self.shmem.change_logic_val('Mal_Call', False)
 
-            if self.test_mode:
+            if self.shmem.get_test():
                 # 동작하지 않음
                 p_(__file__, 'Mal End!')
                 pass
@@ -88,8 +80,6 @@ class All_Function_module(multiprocessing.Process):
     def run(self):
         # ==============================================================================================================
         # - 공유 메모리에서 logic 부분을 취득 후 사용되는 AI 네트워크 정보 취득
-        local_logic = self.shmem.get_logic_info()
-
         while True:
             local_logic = self.shmem.get_logic_info()
             if local_logic['Close']: sys.exit()
@@ -105,7 +95,7 @@ class All_Function_module(multiprocessing.Process):
                     # end AI
                 # One Step CNS -------------------------------------------------------------------------------------
                 Action_dict = {'AB': True}  # 향후 액션 추가
-                if self.test_mode:
+                if self.shmem.get_test():
                     self.local_mem['KCNTOMS']['Val'] += 5
                     time.sleep(0.1)
                     print(self.local_mem['KCNTOMS']['Val'])
@@ -118,11 +108,10 @@ class All_Function_module(multiprocessing.Process):
                 #자동 멈춤 조건
                 if self.cns_env.mem['KCNTOMS']['Val'] > 5 * 60 * 25 or self.cns_env.mem['KLAMPO9']['Val'] == 1:
                     self.shmem.change_logic_val('Run', False)
-
             else:
                 self.check_init()
                 self.check_mal()
                 self.check_speed()
 
-                if self.test_mode:
+                if self.shmem.get_test():
                     self._update_shardmem_to_localmem()

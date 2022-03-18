@@ -7,11 +7,14 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from AIDAA_Ver2.Interface import Flag
+from AIDAA_Ver2.TOOL.TOOL_etc import p_
+from AIDAA_Ver2.TOOL.TOOL_Shmem import SHMem, make_shmem
+from AIDAA_Ver2.TOOL.TOOL_Widget import ABCWidget, WithNoMargin
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
-class MainTop(QWidget):
+class MainTop(ABCWidget):
     qss = """
         QWidget {
             background: rgb(128, 128, 128);
@@ -35,18 +38,16 @@ class MainTop(QWidget):
         }
         """
 
-    def __init__(self):
-        super(MainTop, self).__init__()
-
-        self.bar_height = 35
+    def __init__(self, parent, bar_height=35):
+        super(MainTop, self).__init__(parent)
+        self.bar_height = bar_height
         self.setStyleSheet(self.qss)
 
         # 타이틀 레이어 셋업 ----------------------------------------------------------------------------------------------
-        layout = QHBoxLayout(self)  # 수평 방향 레이아웃
-        layout.setContentsMargins(5, 5, 5, 5)  # 위젯의 여백 설정
+        layout = WithNoMargin(QHBoxLayout(self), c_m=5)  # 수평 방향 레이아웃
 
         #DayBarm TimeBar
-        widget1 = TimeBar(self, load_realtime=True, load_realtime2=True)
+        widget1 = TimeBar(self, h=bar_height, w=380)
         widget1.setFixedHeight(self.bar_height)
         widget1.setFixedWidth(380)
 
@@ -60,7 +61,7 @@ class MainTop(QWidget):
         self.label1.setStyleSheet('background: rgb(24, 144, 255);')
         self.label1.clicked.connect(self.call_main)
 
-        #AlignVCenter 수직가운데정렬 / AlignHCenter 수평가운데정렬 / AlignCenter 모두 적용
+        # AlignVCenter 수직가운데정렬 / AlignHCenter 수평가운데정렬 / AlignCenter 모두 적용
         # label1.setAlignment(Qt.AlignCenter)
         self.label1.setFixedHeight(self.bar_height)
         self.label1.setFixedWidth(620)
@@ -73,8 +74,8 @@ class MainTop(QWidget):
         self.label2.setFixedHeight(self.bar_height)
         self.label2.setFixedWidth(620)
 
-        btn_return = ReturnBTN()
-        btn_close = CloseBTN()
+        btn_return = ReturnBTN(self)
+        btn_close = CloseBTN(self)
 
         layout.addWidget(widget1)
         layout.addWidget(label0)
@@ -122,26 +123,19 @@ class TimeBar(QWidget):
         }
     """
 
-    def __init__(self, parent, load_realtime: bool = False, load_realtime2: bool = False):
+    def __init__(self, parent, h, w):
         super(TimeBar, self).__init__()
         self.parent = parent
-        self.load_realtime = load_realtime
-        self.load_realtime2 = load_realtime2
-
-        self.setObjectName('TimeBar')
         self.setStyleSheet(self.qss)
-
-        layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
+        self.setFixedWidth(w)
+        self.setFixedHeight(h)
 
         self.timebarlabel = QLabel('time')
         self.timebarlabel.setAlignment(Qt.AlignCenter)  # 텍스트 정렬
         self.timebarlabel.setObjectName('TimeBarLabel')
-        self.dis_update()
 
+        layout = WithNoMargin(QHBoxLayout(self))
         layout.addWidget(self.timebarlabel)
-
-        self.setLayout(layout)
 
         # timer section
         timer = QTimer(self)
@@ -171,8 +165,10 @@ class ReturnBTN(QPushButton):
     }
     """
 
-    def __init__(self):
+    def __init__(self, parent):
         super(ReturnBTN, self).__init__()
+        self.shmem = make_shmem(parent, self)
+        # --------------------------------------------------------------------------------------------------------------
         self.setStyleSheet(self.qss)
         icon = os.path.join(ROOT_PATH, 'img', 'return.png')
         self.setIcon(QIcon(icon))
@@ -201,8 +197,10 @@ class CloseBTN(QPushButton):
     }
     """
 
-    def __init__(self):
+    def __init__(self, parent):
         super(CloseBTN, self).__init__()
+        self.shmem = make_shmem(parent, self)
+        # --------------------------------------------------------------------------------------------------------------
         self.setStyleSheet(self.qss)
         icon = os.path.join(ROOT_PATH, 'img', 'close.png')
         self.setIcon(QIcon(icon))
@@ -212,7 +210,7 @@ class CloseBTN(QPushButton):
 
     def close(self):
         """버튼 명령: 닫기"""
-        Flag.main_close = True
+        self.shmem.get_w_id('Mainwindow').close()
 
 
 if __name__ == '__main__':

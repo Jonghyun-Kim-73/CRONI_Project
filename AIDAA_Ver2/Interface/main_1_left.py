@@ -79,7 +79,6 @@ class Main1Left(QWidget):
         Flag.alarm_clear = True
 
 
-
 class FreezeTableWidget(QTableView):
     def __init__(self, parent):
         super(FreezeTableWidget, self).__init__(parent)
@@ -188,6 +187,7 @@ class FreezeTableWidget(QTableView):
             qp.setPen(pen)
             qp.drawLine(0, i * 27, 960, i * 27)
         qp.restore()
+
 
 class MyTableModel(QAbstractTableModel):
     def __init__(self, parent):
