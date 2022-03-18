@@ -7,8 +7,8 @@ import socket
 
 from AIDAA_Ver2.TOOL.TOOL_CNS_UDP_FAST import CNS
 from AIDAA_Ver2.TOOL.TOOL_etc import p_, pc_
-from AIDAA_Ver2.TOOL.TOOL_Shmem import SHMem, make_shmem
-from AIDAA_Ver2.TOOL.TOOL_Widget import ABCWidget, WithNoMargin
+from AIDAA_Ver2.TOOL.TOOL_Shmem import SHMem
+from AIDAA_Ver2.TOOL.TOOL_Widget import *
 
 from AIDAA_Ver2.Interface import Flag
 from AIDAA_Ver2.Interface.main_top import MainTop
@@ -33,11 +33,9 @@ from AIDAA_Ver2.Procedure.symptom_check import symp_check
 
 class Mainwindow(QWidget):
     """메인 윈도우"""
-    def __init__(self, shmem, w_widget=None):
+    def __init__(self, shmem, top_widget=None):
         super(Mainwindow, self).__init__()
-        self.shmem = shmem
-        self.shmem.add_w_id(self)
-        self.w_widget = w_widget
+        self.inmem = InterfaceMEM(shmem, top_widget, self)
         # Main 기본 속성
         self.setGeometry(0, 0, 1920, 1010)
         self.setStyleSheet('background: rgb(128, 128, 128);')
@@ -55,20 +53,18 @@ class Mainwindow(QWidget):
 
     def closeEvent(self, QCloseEvent):
         pc_(self, 'Close')
-        if self.w_widget is not None:
-            self.W_myform.closeEvent(QCloseEvent)
+        if self.inmem.top_widget is not None:
+            self.inmem.top_widget.closeEvent(QCloseEvent)
 
 
 class WMain(ABCWidget, QWidget):
     def __init__(self, parent):
         super(WMain, self).__init__(parent)
 
-        window_vobx = WithNoMargin(QVBoxLayout(self), c_m=5)
+        window_vbox = WithNoMargin(QVBoxLayout(self))
 
         WL_Main = WLMain(self)
-        window_vobx.addWidget(WL_Main)
-
-
+        window_vbox.addWidget(WL_Main)
 
 
     #     main_1_pp.addWidget(Main1Left(self))
@@ -179,6 +175,10 @@ class WMain(ABCWidget, QWidget):
 if __name__ == '__main__':
     shmem = SHMem(cnsinfo=('1', 100), remoteinfo=('1', 100), max_len_deque=10, test=True,
                   db_path='../DB/db.txt', db_add_path='../DB/db_add.txt')
+
+    # 알람 발생.!
+    shmem.change_shmem_val('UCCWIN', -1)
+    shmem.change_shmem_db(shmem.mem)
 
     app = QApplication(sys.argv)
     app.setStyle("fusion")

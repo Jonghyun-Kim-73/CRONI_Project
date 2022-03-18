@@ -8,8 +8,8 @@ from PyQt5.QtGui import *
 
 from AIDAA_Ver2.Interface import Flag
 from AIDAA_Ver2.TOOL.TOOL_etc import p_
-from AIDAA_Ver2.TOOL.TOOL_Shmem import SHMem, make_shmem
-from AIDAA_Ver2.TOOL.TOOL_Widget import ABCWidget, WithNoMargin
+from AIDAA_Ver2.TOOL.TOOL_Shmem import SHMem
+from AIDAA_Ver2.TOOL.TOOL_Widget import *
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -167,7 +167,7 @@ class ReturnBTN(QPushButton):
 
     def __init__(self, parent):
         super(ReturnBTN, self).__init__()
-        self.shmem = make_shmem(parent, self)
+        self.inmem = make_shmem(parent, self)
         # --------------------------------------------------------------------------------------------------------------
         self.setStyleSheet(self.qss)
         icon = os.path.join(ROOT_PATH, 'img', 'return.png')
@@ -199,7 +199,7 @@ class CloseBTN(QPushButton):
 
     def __init__(self, parent):
         super(CloseBTN, self).__init__()
-        self.shmem = make_shmem(parent, self)
+        self.inmem = make_shmem(parent, self)
         # --------------------------------------------------------------------------------------------------------------
         self.setStyleSheet(self.qss)
         icon = os.path.join(ROOT_PATH, 'img', 'close.png')
@@ -210,7 +210,7 @@ class CloseBTN(QPushButton):
 
     def close(self):
         """버튼 명령: 닫기"""
-        self.shmem.get_w_id('Mainwindow').close()
+        self.inmem.get_w_id('Mainwindow').close()
 
 
 if __name__ == '__main__':

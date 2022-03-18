@@ -50,7 +50,7 @@ class MyForm(QWidget):
         # shmem
         self.shmem = shmem
         # ---- UI 호출
-        pc_(__file__, f'[SHMem:{self.shmem}][Controller UI 호출]')
+        pc_(self, f'[SHMem:{self.shmem}][Controller UI 호출]')
         self.ui = CNS_controller.Ui_Form()
         self.ui.setupUi(self)
 
@@ -82,17 +82,17 @@ class MyForm(QWidget):
 
     def run_cns(self):
         if self.shmem.get_logic('Initial_condition'):
-            pc_(__file__, 'CNS 시작')
+            pc_(self, 'CNS 시작')
             self.shmem.change_logic_val('Run', True)
         else:
-            pc_(__file__, '먼저 초기 조건을 선언')
+            pc_(self, '먼저 초기 조건을 선언')
 
     def freeze_cns(self):
         if self.shmem.get_logic('Initial_condition'):
-            pc_(__file__, 'CNS 일시정지')
+            pc_(self, 'CNS 일시정지')
             self.shmem.change_logic_val('Run', False)
         else:
-            pc_(__file__, '먼저 초기 조건을 선언')
+            pc_(self, '먼저 초기 조건을 선언')
 
     def go_mal(self):
         if self.ui.Mal_nub.text() != '' and self.ui.Mal_type.text() != '' and self.ui.Mal_time.text() != '':
@@ -111,12 +111,12 @@ class MyForm(QWidget):
             self.ui.Mal_nub.clear()
             self.ui.Mal_type.clear()
             self.ui.Mal_time.clear()
-            pc_(__file__, 'Malfunction 입력 완료')
+            pc_(self, 'Malfunction 입력 완료')
         else:
-            pc_(__file__, 'Malfunction 입력 실패')
+            pc_(self, 'Malfunction 입력 실패')
 
     def go_init(self):
-        pc_(__file__, 'CNS 초기 조건 선언')
+        pc_(self, 'CNS 초기 조건 선언')
         # 1. Mal list clear
         self.ui.Mal_list.clear()
         # 2. Mal trig_mem clear
@@ -129,10 +129,10 @@ class MyForm(QWidget):
     def go_save(self):
         # 실시간 레코딩 중 ...
         self.shmem.change_logic_val('Run_rc', True)
-        pc_(__file__, 'Ester_Egg_Run_ROD CONTROL TRICK')
+        pc_(self, 'Ester_Egg_Run_ROD CONTROL TRICK')
 
     def go_speed(self):
-        pc_(__file__, 'CNS 속도 조절')
+        pc_(self, 'CNS 속도 조절')
         self.ui.Cu_SP.setText(self.shmem.get_speed(int(self.ui.Se_SP.text())))
 
     def go_val_change(self):
@@ -155,7 +155,7 @@ class MyForm(QWidget):
         # self.procedure_editor_wid.show()
 
     def closeEvent(self, QCloseEvent):
-        pc_(__file__, 'Close')
+        pc_(self, 'Close')
         self.shmem.send_close()
         sys.exit()
 

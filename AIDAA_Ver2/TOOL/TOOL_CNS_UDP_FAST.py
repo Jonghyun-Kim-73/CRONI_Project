@@ -29,9 +29,6 @@ class CNS:
         # memory
         self.max_len = Max_len
         self.mem = self._make_mem_structure(max_len=self.max_len)
-        # alarm test
-        self.mem['KLAMPO251']['Val'] = 1
-        self.mem['KLAMPO252']['Val'] = 1
         # logger path
         self.LoggerPath = ''
         self.file_name = 0

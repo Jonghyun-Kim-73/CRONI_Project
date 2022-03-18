@@ -1,5 +1,6 @@
 from AIDAA_Ver2.Procedure.ab_procedure import ab_pro
 from AIDAA_Ver2.DB.db import db_make
+from AIDAA_Ver2.TOOL.TOOL_Alarm import init_alarm_db, update_alarm
 
 from collections import deque
 
@@ -50,25 +51,14 @@ class SHMem:
         self.save_mem = {
             'KCNTOMS': [], 'PPRZ': [],
         }
-
-        # 위젯 id
-        self.Wid = {}
+        # 4] 알람 감시용
+        self.alarm_dict = init_alarm_db()
 
     def get_test(self):
         return self.test
 
     def get_max_len(self):
         return self.max_len_deque
-
-    def get_w_id(self, name):
-        return self.Wid[name]
-
-    def add_w_id(self, widget):
-        name = type(widget).__name__
-        self.Wid[name] = widget
-
-    def show_w(self):
-        print(self.Wid)
 
     def call_init(self, init_nub):
         self.logic = {'Run': False,
@@ -100,6 +90,9 @@ class SHMem:
         for key in self.save_mem:
             self.save_mem[key].clear()
 
+    def call_subpression(self):
+        self.alarm_dict = init_alarm_db()
+
     def append_strategy_list(self, st):
         self.logic['Operation_Strategy_list'].append(st)
 
@@ -115,11 +108,16 @@ class SHMem:
 
     def change_shmem_db(self, mem):
         saved_mem_key = self.save_mem.keys()
-
+        # 기존 CNS 데이터 업데이트
         for key_val in mem.keys():
             self.mem[key_val] = mem[key_val]
             if key_val in saved_mem_key:
                 self.save_mem[key_val].append(mem[key_val]['Val'])
+        # 현재 기준으로 발생한 알람 업데이트
+        self.alarm_dict = update_alarm(mem, self.alarm_dict)
+
+    def change_alarm_val(self, val_name, val):
+        self.alarm_dict[val_name]['Val'] = val
 
     def change_shmem_val(self, val_name, val):
         self.mem[val_name]['Val'] = val
@@ -212,6 +210,20 @@ class SHMem:
     def get_pro_symptom_Nub(self, procedure_name, name, idx):
         return self.logic['Ab_Procedure'][procedure_name][name][idx]['Nub']
 
+    def get_occur_alarm_nub(self):
+        result = 0
+        for key in self.alarm_dict.keys():
+            if self.alarm_dict[key]['Val'] == 1:
+                result += self.alarm_dict[key]['Val']
+        return result
+
+    def get_occur_alarm_info(self):
+        result = {}
+        for key in self.alarm_dict.keys():
+            if self.alarm_dict[key]['Val'] == 1:
+                result[key] = self.alarm_dict[key]['Des']
+        return result
+
     def check_para(self, para_name):
         if para_name in self.mem.keys():
             return True
@@ -233,9 +245,3 @@ class SHMem:
             self.mem[key]['List'].append(self.mem[key]['Val'])
 
         print(f"[TOOL_Shmem.py]_{self.mem['KCNTOMS']['Val']}")
-
-
-def make_shmem(parent, child):
-    result = parent.shmem
-    result.add_w_id(child)
-    return result
