@@ -11,6 +11,7 @@ from datetime import datetime
 
 from AIDAA_Ver2.TOOL.TOOL_Shmem import SHMem
 from AIDAA_Ver2.TOOL.TOOL_Widget import *
+from AIDAA_Ver2.Interface.main_0_Left_Pop import Popup
 
 
 class WLMain(ABCWidget):
@@ -33,8 +34,6 @@ class WLMain(ABCWidget):
                 border-radius:6px;
             }
             QHeaderView::section {
-                padding:1px;
-                padding-left:15px;
                 background: rgb(128, 128, 128);
                 font-size:14pt;
                 border:0px solid;
@@ -57,10 +56,10 @@ class WLMain(ABCWidget):
 
     def __init__(self, parent):
         super(WLMain, self).__init__(parent)
+        self.setAttribute(Qt.WA_StyledBackground, True)
         self.setStyleSheet(self.qss)
         layout = WithNoMargin(QVBoxLayout(self))
         layout.addWidget(WAlarmTable(self, hcell=36, ncell=24))     # hcell 는 3의 배수
-        #layout.addWidget(WAlarmTable(self, hcell=36, ncell=9))     # hcell 는 3의 배수
         layout.addWidget(SuppressBTN('Suppress button', self))
 
 
@@ -81,11 +80,12 @@ class WAlarmTable(ABCTableView, QTableView):
         self.hcell, self.ncell = hcell, ncell
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setModel(WAlarmTableModel(self))
-        self.set_Body()
-        self.set_Horizontal()
-        self.set_Vertical()
+        self.set_body()
+        self.set_horizontal()
+        self.set_vertical()
+        self.doubleClicked.connect(self.call_double_click)
 
-    def set_Horizontal(self):
+    def set_horizontal(self):
         self.horizontalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
         self.horizontalHeader().setFixedHeight(self.hcell)
         self.horizontalHeader().setDefaultSectionSize(self.hcell)
@@ -93,7 +93,7 @@ class WAlarmTable(ABCTableView, QTableView):
         [self.setColumnWidth(i+1, s) for i, s in enumerate([150, 150, 100, 80, 100])]
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def set_Vertical(self):
+    def set_vertical(self):
         self.verticalHeader().hide()
         self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         self.verticalHeader().setDefaultSectionSize(self.hcell)
@@ -101,7 +101,7 @@ class WAlarmTable(ABCTableView, QTableView):
         self.verticalScrollBar().setSingleStep(self.hcell/3)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
 
-    def set_Body(self):
+    def set_body(self):
         self.setShowGrid(False)
         self.setFixedHeight(self.hcell * (self.ncell + 1))
 
@@ -121,6 +121,13 @@ class WAlarmTable(ABCTableView, QTableView):
             draw_acc += self.columnWidth(j)
             qp.drawLine(draw_acc, 0, draw_acc, self.height())
         qp.restore()
+
+    def call_double_click(self, index):
+        alarm_des = self.inmem.shmem.get_alarm_des(self.inmem.get_w_id('WAlarmTableModel').get_row_alarm_name(index))
+
+        self.popup = Popup(file_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "test.pdf")),
+                           alarm_des=alarm_des)
+        self.popup.show()
 
 
 class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
@@ -161,7 +168,7 @@ class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
         if not occ_alarm in self.dis_alarm.keys():
             self.dis_alarm[occ_alarm] = {'Time': datetime.now()}
             # 앞쪽에 넣기
-            self.dis_data.appendleft([self.alarm_cnt[occ_alarm], 0.5, 0.2, "  kg/cm",
+            self.dis_data.appendleft([self.alarm_cnt[occ_alarm], 0.5, 0.2, "kg/cm",
                                       datetime.now().strftime('%m.%d'),
                                       datetime.now().strftime('%H:%M:%S'),
                                       occ_alarm,
@@ -200,23 +207,23 @@ class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
     def columnCount(self, parent=None, *args, **kwargs):
         return len(self.column_label)
 
-    def dbisNotEmpty(self, index):
+    def db_is_not_empty(self, index):
         return len(self.dis_data) > (self.rowCount() - index.row() - 1)
 
     def get_row_values(self, index):
         return self.dis_data[self.rowCount() - index.row() - 1][index.column()]
 
     def get_row_alarm_name(self, index):
-        return self.dis_data[self.rowCount() - index.row() - 1][-1] if self.dbisNotEmpty(index) else ''
+        return self.dis_data[self.rowCount() - index.row() - 1][-1] if self.db_is_not_empty(index) else ''
 
     def get_row_text(self, index):
-        return self.get_row_values(index) if self.dbisNotEmpty(index) else ''
+        return self.get_row_values(index) if self.db_is_not_empty(index) else ''
 
     def get_row_paint_freeze(self, index):
         return self.get_row_alarm_name(index) in self.find_mismatch_list()
 
     def get_row_paint(self, index):
-        if self.dbisNotEmpty(index):
+        if self.db_is_not_empty(index):
             if self.blick or self.get_row_paint_freeze(index):
                 return QBrush(QColor(255, 204, 0))
             else:
@@ -225,7 +232,7 @@ class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
             return QBrush(QColor(0, 0, 0))
 
     def get_row_font_paint(self, index):
-        if self.dbisNotEmpty(index):
+        if self.db_is_not_empty(index):
             if self.blick or self.get_row_paint_freeze(index):
                 return QBrush(QColor(128, 128, 128))
             else:
@@ -246,12 +253,6 @@ class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
         if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             header = self.column_label[section]
             return header
-
-
-
-
-
-
 
 
 

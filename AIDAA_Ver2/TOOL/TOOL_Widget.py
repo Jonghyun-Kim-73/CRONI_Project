@@ -9,6 +9,14 @@ def WithNoMargin(layout, c_m=0, s_m=0):
     return layout
 
 
+def make_frame_round(parent):
+    """ 라운드 테두리 """
+    path = QPainterPath()
+    path.addRoundedRect(QRectF(parent.rect()), 10, 10)
+    mask = QRegion(path.toFillPolygon().toPolygon())
+    parent.setMask(mask)
+
+
 def make_shmem(parent, child):
     result = parent.inmem
     result.add_w_id(child)

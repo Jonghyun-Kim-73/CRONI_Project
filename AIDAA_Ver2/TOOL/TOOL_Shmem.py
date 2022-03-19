@@ -210,6 +210,9 @@ class SHMem:
     def get_pro_symptom_Nub(self, procedure_name, name, idx):
         return self.logic['Ab_Procedure'][procedure_name][name][idx]['Nub']
 
+    def get_alarm_des(self, alarm_name):
+        return self.alarm_dict[alarm_name]['Des']
+
     def get_occur_alarm_nub(self):
         result = 0
         for key in self.alarm_dict.keys():

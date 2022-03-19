@@ -89,6 +89,9 @@ class MainTop(ABCWidget):
         timer.timeout.connect(self.call_page)
         timer.start()
 
+        self.is_moved = False
+        self.mouseMovePos = None
+
     def call_page(self):
         if Flag.return_page == 0:
             self.label1.setStyleSheet('background: rgb(24, 144, 255);')
@@ -110,6 +113,30 @@ class MainTop(ABCWidget):
         Flag.return_list.append("예지")
         self.label1.setStyleSheet('background: rgb(231, 231, 234);')
         self.label2.setStyleSheet('background: rgb(24, 144, 255);')
+
+    def mousePressEvent(self, event):
+        """오버로딩: 마우스 클릭 이벤트
+        - 제목 표시줄 클릭시 이동 가능 플래그
+        """
+        if event.button() == Qt.LeftButton:
+            self.mouseMovePos = event.globalPos()
+            self.is_moved = True
+
+    def mouseReleaseEvent(self, event) -> None:
+        self.mouseMovePos = None
+        self.is_moved = False
+
+    def mouseMoveEvent(self, event):
+        """오버로딩: 마우스 이동 이벤트
+        - 제목 표시줄 드래그시 창 이동
+        """
+        if self.is_moved:
+            curPos = self.mapToGlobal(self.parent().pos())  # 전체 창에서의 현재 위젯 위치 Pos 얻기
+            globalPos = event.globalPos()  # 현재 클릭 지점의 전체 창에서의 위치 Pos 얻기
+            diff = globalPos - self.mouseMovePos  # 움직인 거리 = 현재 - 이전 클릭 지점
+            newPos = self.mapFromGlobal(curPos + diff)  # 전체 창에서의 위젯이 움직인 거리 계산 후 상위 위젯의 위치에 적합하게 값 변환
+            self.parent().move(newPos)
+            self.mouseMovePos = globalPos
 
 
 class TimeBar(QWidget):

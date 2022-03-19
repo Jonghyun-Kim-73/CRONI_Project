@@ -13,14 +13,11 @@ from AIDAA_Ver2.TOOL.TOOL_Widget import *
 from AIDAA_Ver2.Interface import Flag
 from AIDAA_Ver2.Interface.main_top import MainTop
 from AIDAA_Ver2.Interface.main_0_Lefe import WLMain
-
-
+from AIDAA_Ver2.Interface.main_0_Right import WRMain
 
 
 from AIDAA_Ver2.Interface.main_top2 import MainTop2
 
-from AIDAA_Ver2.Interface.main_1_left import Main1Left
-from AIDAA_Ver2.Interface.main_1_right import Main1Right
 from AIDAA_Ver2.Interface.main_2_prog import Main2Prog
 from AIDAA_Ver2.Interface.main_3_left import Main3Left
 from AIDAA_Ver2.Interface.main_3_right import Main3Right
@@ -51,6 +48,9 @@ class Mainwindow(QWidget):
         window_vbox.addLayout(self.WStack)
         self.WStack.addWidget(self.WMain)
 
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        make_frame_round(self)
+
     def closeEvent(self, QCloseEvent):
         pc_(self, 'Close')
         if self.inmem.top_widget is not None:
@@ -60,19 +60,11 @@ class Mainwindow(QWidget):
 class WMain(ABCWidget, QWidget):
     def __init__(self, parent):
         super(WMain, self).__init__(parent)
-
         window_vbox = WithNoMargin(QVBoxLayout(self))
+        window_vbox.addWidget(WLMain(self))
+        window_vbox.addWidget(WRMain(self))
 
-        WL_Main = WLMain(self)
-        window_vbox.addWidget(WL_Main)
 
-
-    #     main_1_pp.addWidget(Main1Left(self))
-    #     main_1_pp.addWidget(Main1Right(self))
-    #     main_1 = QWidget(self)
-    #     main_1.setLayout(main_1_pp)
-    #     self.stack_widget.addWidget(main_1)
-    #
     #     # Page 2 (prog-예지)
     #     self.stack_widget.addWidget(Main2Prog(self))
     #
