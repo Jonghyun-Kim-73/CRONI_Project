@@ -218,6 +218,10 @@ class SHMem:
         return result
 
     def get_occur_alarm_info(self):
+        """
+        현재 발생한 알람 dict 로 제공함.
+        :return: {'KLAMPOxx': 'lo/lo...', 'KLAMPOxx': 'hi/hi...'}
+        """
         result = {}
         for key in self.alarm_dict.keys():
             if self.alarm_dict[key]['Val'] == 1:

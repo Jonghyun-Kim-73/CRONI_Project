@@ -15,6 +15,22 @@ def make_shmem(parent, child):
     return result
 
 
+def fun_updater(parent, iter_, funs):
+    """
+    위젯 안에서 timer 로 함수들 업데이트
+    :param parent: 위젯 -> self
+    :param iter_: 간격
+    :param funs: 함수 List
+    :return:
+    """
+    result = QTimer(parent)
+    result.setInterval(iter_)
+    for f_ in funs:
+        result.timeout.connect(f_)
+    result.start()
+    return result
+
+
 class InterfaceMEM:
     def __init__(self, shmem, top_widget, parent):
         self.shmem = shmem

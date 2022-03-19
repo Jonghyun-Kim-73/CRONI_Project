@@ -126,8 +126,6 @@ class FreezeTableWidget(QTableView):
         self.scrollBar = self.frozenTableView.verticalScrollBar()
         self.scrollBar.valueChanged.connect(lambda value: self.scrolled(self.scrollBar, value))
 
-
-
         # 테이블 높이 set
         self.table_item = self.verticalHeader()
         self.table_item.setSectionResizeMode(QHeaderView.Fixed)

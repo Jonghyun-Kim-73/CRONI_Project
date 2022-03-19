@@ -17,51 +17,22 @@ class WLMain(ABCWidget):
                 font-size: 14pt;
                 border-radius: 6px;
             }
-            QTableWidget {
-                color : white;
-                background: rgb(231, 231, 234);
-                border: 1px solid rgb(128, 128, 128);
-                border-radius: 6px;
-            }
             QPushButton{
                 background: White;
                 color: Black;
                 border-radius:6px;
             }
-            QHeaderView::section {
-                padding:1px;
-                padding-left:15px;
-                background: rgb(128, 128, 128);
-                font-size:14pt;
-                border:0px solid;
-            }
-            QHeaderView {
-                border:1px solid rgb(128, 128, 128);
-                border-top-left-radius :6px;
-                border-top-right-radius : 6px;
-                border-bottom-left-radius : 0px;
-                border-bottom-right-radius : 0px;
-            }
-            QTableView::item {
-                padding:50px;
-                font-size:14pt;
-            }
             QScrollBar:vertical {
                 width:30px;
             }
         """
-
     def __init__(self, parent):
         super(WLMain, self).__init__(parent)
         self.setStyleSheet(self.qss)
-
         layout = WithNoMargin(QVBoxLayout(self))
-
-        alarm_table = WAlarmTable(self)
-        btn = SuppressBTN('Suppress button', self)
-
-        layout.addWidget(alarm_table)
-        layout.addWidget(btn)
+        # layout.addWidget(WAlarmTable(self, hcell=36, ncell=25))     # hcell 는 3의 배수
+        layout.addWidget(WAlarmTable(self, hcell=36, ncell=9))     # hcell 는 3의 배수
+        layout.addWidget(SuppressBTN('Suppress button', self))
 
 
 class SuppressBTN(ABCPushButton):
@@ -73,17 +44,75 @@ class SuppressBTN(ABCPushButton):
 
     def call_Suppress(self):
         print('Click SBTN')
-        self.inmem.shmem.call_subpression()
 
 
 class WAlarmTable(ABCTableView, QTableView):
-    def __init__(self, parent):
+    qss = """
+        QTableView {
+            color : white;
+            background: rgb(231, 231, 234);
+            border: none;
+        }
+        QHeaderView {
+            border:1px solid rgb(128, 128, 128);
+            border-top-left-radius :6px;
+            border-top-right-radius : 6px;
+            border-bottom-left-radius : 0px;
+            border-bottom-right-radius : 0px;
+        }
+        QHeaderView::section {
+            border: none;
+            font-size:14pt;
+            background: rgb(128, 128, 128);
+        }
+        
+    """
+    def __init__(self, parent, hcell, ncell):
         super(WAlarmTable, self).__init__(parent)
+        self.hcell, self.ncell = hcell, ncell
         self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet(self.qss)
+        self.setModel(WAlarmTableModel(self))
+        self.set_Body()
+        self.set_Horizontal()
+        self.set_Vertical()
 
-        # set the table model
-        tm = WAlarmTableModel(self)
-        self.setModel(tm)
+    def set_Horizontal(self):
+        self.horizontalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.horizontalHeader().setFixedHeight(self.hcell)
+        self.horizontalHeader().setDefaultSectionSize(self.hcell)
+        self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        [self.setColumnWidth(i+1, s) for i, s in enumerate([160, 160, 100, 100])]
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+    def set_Vertical(self):
+        self.verticalHeader().hide()
+        self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
+        self.verticalHeader().setDefaultSectionSize(self.hcell)
+        self.setVerticalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
+        self.verticalScrollBar().setSingleStep(self.hcell/3)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+
+    def set_Body(self):
+        self.setShowGrid(False)
+        self.setFixedHeight(self.hcell * (self.ncell + 1))
+
+    def paintEvent(self, e: QPaintEvent) -> None:
+        super(WAlarmTable, self).paintEvent(e)
+        qp = QPainter(self.viewport())
+        qp.save()
+        # 가로선
+        for i in range(self.ncell):
+            pen_size = 2 if i % 5 == 0 else 1
+            qp.setPen(QPen(QColor(128, 128, 128), pen_size))
+            qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
+        # 세로선
+        draw_acc = 0
+        for j in range(self.model().columnCount()):
+            qp.setPen(QPen(QColor(128, 128, 128), 1))
+            draw_acc += self.columnWidth(j)
+            qp.drawLine(draw_acc, 0, draw_acc, self.height())
+        qp.restore()
 
 
 class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
@@ -92,11 +121,7 @@ class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
 
     def __init__(self, parent):
         super(WAlarmTableModel, self).__init__(parent)
-        #
-        timer1 = QTimer(self)
-        timer1.setInterval(1000)
-        timer1.timeout.connect(self.update_alarm)
-        timer1.start()
+        fun_updater(self, 1000, [self.update_alarm])
 
     def update_alarm(self):
         # TEST 로직
@@ -111,23 +136,26 @@ class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
         self.alarm_cnt = self.inmem.shmem.get_occur_alarm_info()
 
 
-        # TODO 알람 리스트 업데이트 부분 만들기 ...
-
-
-
         # layout 업데이트
         self.layoutAboutToBeChanged.emit()
         self.layoutChanged.emit()
 
     def rowCount(self, parent=None):
-        return self.inmem.shmem.get_occur_alarm_nub()
+        ncell = self.inmem.get_w_id('WAlarmTable').ncell
+        occur_alarm_num = self.inmem.shmem.get_occur_alarm_nub()
+        return ncell if ncell >= occur_alarm_num else occur_alarm_num
 
     def columnCount(self, parent=None, *args, **kwargs):
         return len(self.column_label)
 
-
-
-
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...):
+        """ 행과 열의 이름 부분 """
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            header = self.column_label[section]
+            return header
+        # if orientation == Qt.Vertical and role == Qt.DisplayRole:
+        #     return str(section + 1)
+        return None
 
 
 
