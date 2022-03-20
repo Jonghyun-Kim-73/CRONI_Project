@@ -63,18 +63,56 @@ class ABCWidget(QWidget):
     def __init__(self, parent):
         super(ABCWidget, self).__init__()
         self.inmem: InterfaceMEM = make_shmem(parent, self)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
 
 class ABCPushButton(QPushButton):
     def __init__(self, parent, str):
         super(ABCPushButton, self).__init__(str)
         self.inmem: InterfaceMEM = make_shmem(parent, self)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+
+
+class ABCTableWidget(QTableWidget):
+    def __init__(self, parent, hcell, ncell):
+        super(QTableWidget, self).__init__()
+        self.inmem: InterfaceMEM = make_shmem(parent, self)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.hcell, self.ncell = hcell, ncell
+
+    def draw_col_line(self, qp):
+        draw_acc = 0
+        for j in range(self.model().columnCount() - 1):
+            qp.setPen(QPen(QColor(128, 128, 128), 1))
+            draw_acc += self.columnWidth(j)
+            qp.drawLine(draw_acc, 0, draw_acc, self.height())
+
+    def draw_row_line(self, qp):
+        for i in range(self.ncell + 1):
+            pen_size = 2 if i % 5 == 0 else 1
+            qp.setPen(QPen(QColor(128, 128, 128), pen_size))
+            qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
 
 
 class ABCTableView(QTableView):
-    def __init__(self, parent):
+    def __init__(self, parent, hcell, ncell):
         super(ABCTableView, self).__init__()
         self.inmem: InterfaceMEM = make_shmem(parent, self)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.hcell, self.ncell = hcell, ncell
+
+    def draw_col_line(self, qp):
+        draw_acc = 0
+        for j in range(self.model().columnCount() - 1):
+            qp.setPen(QPen(QColor(128, 128, 128), 1))
+            draw_acc += self.columnWidth(j)
+            qp.drawLine(draw_acc, 0, draw_acc, self.height())
+
+    def draw_row_line(self, qp):
+        for i in range(self.ncell + 1):
+            pen_size = 2 if i % 5 == 0 else 1
+            qp.setPen(QPen(QColor(128, 128, 128), pen_size))
+            qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
 
 
 class ABCAbstractTableModel(QAbstractTableModel):

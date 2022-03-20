@@ -34,7 +34,7 @@ class Mainwindow(QWidget):
         super(Mainwindow, self).__init__()
         self.inmem = InterfaceMEM(shmem, top_widget, self)
         # Main 기본 속성
-        self.setGeometry(0, 0, 1920, 1010)
+        self.setGeometry(10, 10, 1920, 1010)
         self.setStyleSheet('background: rgb(128, 128, 128);')
         # 레이아웃 설정
         window_vbox = WithNoMargin(QVBoxLayout(self))
@@ -60,7 +60,7 @@ class Mainwindow(QWidget):
 class WMain(ABCWidget, QWidget):
     def __init__(self, parent):
         super(WMain, self).__init__(parent)
-        window_vbox = WithNoMargin(QVBoxLayout(self))
+        window_vbox = WithNoMargin(QHBoxLayout(self))
         window_vbox.addWidget(WLMain(self))
         window_vbox.addWidget(WRMain(self))
 

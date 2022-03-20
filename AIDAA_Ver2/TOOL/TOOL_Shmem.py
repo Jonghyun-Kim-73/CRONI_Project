@@ -180,6 +180,9 @@ class SHMem:
     def get_pro_symptom_count(self, procedure_name):
         return len(self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'].keys())
 
+    def get_pro_symptom_satify(self, procedure_name):
+        return 5
+
     # Symptom des name
     def get_pro_symptom_des(self, procedure_name, idx):
         return self.logic['Ab_Procedure'][procedure_name]['경보 및 증상'][idx]['Des']

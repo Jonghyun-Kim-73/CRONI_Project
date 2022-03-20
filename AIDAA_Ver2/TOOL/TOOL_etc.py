@@ -217,9 +217,32 @@ def CLogic(prob):
     else:
         return True, False
 
+
 def Actprob(prob, f):
     """ prob % 확률로 1 이 나오면 동작함. """
     if int(np.random.choice(2, 1, p=[1 - prob, prob])[0]) == 1:
         return f
     else:
         return 0
+
+
+def GetTop(raw_list, get_top):
+    """ 리스트에서 최대값 랭크와 인덱스 제공 """
+    result = []
+    index_ = [i for i in range(len(raw_list))]
+
+    for i in range(get_top):
+        max_idx = np.array(raw_list).argmax()
+
+        maxv_ = np.array(raw_list).max()
+        maxv_id = index_[max_idx]
+
+        index_.pop(max_idx)
+        raw_list.pop(max_idx)
+
+        result.append((maxv_, maxv_id))
+    return result
+
+
+if __name__ == '__main__':
+    print(GetTop([1, 1, 4, 5, 10, 2, 3, 6, 2, 3], 5))
