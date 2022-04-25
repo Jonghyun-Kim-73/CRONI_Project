@@ -175,6 +175,9 @@ class SHMem:
             return self.logic['Ab_Procedure'][procedure_name]
         else:
             return None
+    # Urgent action or not
+    def get_pro_urgent_act(self, procedure_name):
+        return self.logic['Ab_Procedure'][procedure_name]['긴급조치']
 
     # Symptom count
     def get_pro_symptom_count(self, procedure_name):

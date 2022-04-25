@@ -20,12 +20,10 @@ class WLMain(ABCWidget):
                 background: rgb(231, 231, 234);
                 border: 0px solid rgb(0, 0, 0); 
                 font-size: 14pt;
-                border-radius: 6px;
             }
             QPushButton{
                 background: White;
                 color: Black;
-                border-radius:6px;
             }
             QHeaderView::section {
                 background: rgb(128, 128, 128);
@@ -34,32 +32,25 @@ class WLMain(ABCWidget):
             }
             QHeaderView {
                 border:1px solid rgb(128, 128, 128);
-                border-top-left-radius :6px;
-                border-top-right-radius : 6px;
-                border-bottom-left-radius : 0px;
-                border-bottom-right-radius : 0px;
             }
             QTableView::item {
                 padding:50px;
                 font-size:14pt;
-            }
-            QScrollBar:vertical {
-                width:30px;
             }
         """
 
     def __init__(self, parent):
         super(WLMain, self).__init__(parent)
         self.setStyleSheet(self.qss)
-        layout = WithNoMargin(QVBoxLayout(self))
-        layout.addWidget(WAlarmTable(parent=self, hcell=36, ncell=24))     # hcell 는 3의 배수
+        layout = WithNoMargin(QVBoxLayout(self), c_m=5)
+        layout.addWidget(WAlarmTable(parent=self, hcell=30, ncell=30))     # hcell 는 3의 배수
         layout.addWidget(SuppressBTN('Suppress button', self))
 
 
 class SuppressBTN(ABCPushButton):
     def __init__(self, str, parent):
         super(SuppressBTN, self).__init__(parent, str)
-        self.setFixedHeight(34)
+        self.setFixedHeight(30)
         self.clicked.connect(self.call_Suppress)
 
     def call_Suppress(self):
@@ -102,7 +93,7 @@ class WAlarmTable(ABCTableView, QTableView):
         qp = QPainter(self.viewport())
         qp.save()
         self.draw_row_line(qp)
-        self.draw_col_line(qp)
+        #self.draw_col_line(qp)
         qp.restore()
 
     def call_double_click(self, index):
@@ -129,13 +120,13 @@ class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
         # TEST 로직
         if self.num_alarm == 2:
             self.inmem.shmem.change_shmem_val('UCCWIN', 1)
-            self.inmem.shmem.change_shmem_db(self.inmem.shmem.mem)
+            self.inmem.shmem.change_shmem_db(self.inmem.shmem.get_shmem_db())
         if self.num_alarm == 5:
             self.inmem.shmem.change_shmem_val('UCCWIN', -1)
-            self.inmem.shmem.change_shmem_db(self.inmem.shmem.mem)
+            self.inmem.shmem.change_shmem_db(self.inmem.shmem.get_shmem_db())
         if self.num_alarm == 20:
             self.inmem.shmem.change_shmem_val('UCCWIN', 1)
-            self.inmem.shmem.change_shmem_db(self.inmem.shmem.mem)
+            self.inmem.shmem.change_shmem_db(self.inmem.shmem.get_shmem_db())
         self.num_alarm += 1
         # -----------------------------------------------------------
         self.alarm_cnt = self.inmem.shmem.get_occur_alarm_info()
@@ -210,9 +201,9 @@ class WAlarmTableModel(ABCAbstractTableModel, QAbstractTableModel):
             if self.blick or self.get_row_paint_freeze(index):
                 return QBrush(QColor(255, 204, 0))
             else:
-                return QBrush(QColor(231, 230, 230))
+                return QBrush(QColor(231, 231, 234))
         else:
-            return QBrush(QColor(0, 0, 0))
+            return QBrush((QColor(231, 231, 234)))
 
     def get_row_font_paint(self, index):
         if self.db_is_not_empty(index):

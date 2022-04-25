@@ -90,8 +90,8 @@ class ABCTableWidget(QTableWidget):
     def draw_row_line(self, qp):
         for i in range(self.ncell + 1):
             pen_size = 2 if i % 5 == 0 else 1
-            qp.setPen(QPen(QColor(128, 128, 128), pen_size))
-            qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
+            # qp.setPen(QPen(QColor(128, 128, 128), pen_size))
+            # qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
 
 
 class ABCTableView(QTableView):
@@ -110,9 +110,10 @@ class ABCTableView(QTableView):
 
     def draw_row_line(self, qp):
         for i in range(self.ncell + 1):
-            pen_size = 2 if i % 5 == 0 else 1
-            qp.setPen(QPen(QColor(128, 128, 128), pen_size))
-            qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
+            if i % 5 == 0:
+            #pen_size = 2 if i % 5 == 0 else 1
+                qp.setPen(QPen(QColor(128, 128, 128), 2.5))
+                qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
 
 
 class ABCAbstractTableModel(QAbstractTableModel):

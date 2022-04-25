@@ -64,7 +64,6 @@ class WMain(ABCWidget, QWidget):
         window_vbox.addWidget(WLMain(self))
         window_vbox.addWidget(WRMain(self))
 
-
     #     # Page 2 (prog-예지)
     #     self.stack_widget.addWidget(Main2Prog(self))
     #
@@ -173,10 +172,10 @@ if __name__ == '__main__':
     shmem.change_shmem_db(shmem.mem)
 
     app = QApplication(sys.argv)
-    app.setStyle("fusion")
-    font = QFontDatabase()
-    font.addApplicationFont('./Arial.ttf')
-    app.setFont(QFont('Arial'))
+    #app.setStyle("fusion")
+    #font = QFontDatabase()
+    #font.addApplicationFont('./Arial.ttf')
+    #app.setFont(QFont('Arial'))
 
     w = Mainwindow(shmem)
     w.show()

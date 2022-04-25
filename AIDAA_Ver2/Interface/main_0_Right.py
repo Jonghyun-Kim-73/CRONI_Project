@@ -1,4 +1,6 @@
 import sys
+
+import PyQt5.QtBluetooth
 import numpy as np
 import pandas as pd
 from PyQt5.QtWidgets import *
@@ -18,12 +20,6 @@ class WRMain(ABCWidget, QWidget):
             background: rgb(231, 231, 234);
             border: 0px solid rgb(0, 0, 0); 
             font-size: 14pt;
-            border-radius: 6px;
-        }
-        QPushButton{
-            background: White;
-            color: Black;
-            border-radius:3px;
         }
         QHeaderView::section {
             background: rgb(128, 128, 128);
@@ -37,79 +33,15 @@ class WRMain(ABCWidget, QWidget):
             border-bottom-left-radius : 0px;
             border-bottom-right-radius : 0px;
         }
-        QTableView::item {
-            padding:50px;
-            font-size:14pt;
-        }
-        QGroupBox#main  {
-            border : 1px solid rgb(128, 128, 128);
-            margin-top: 20px;
-            margin-left:0px;
-            font-size: 14pt;
-        }
-        QGroupBox::title#main  {
-            subcontrol-origin: margin;
-            subcontrol-position: top left;
-            padding: 4px 900px 4px 10px;
-            background-color: rgb(128, 128, 128);
-            color: black;
-            font-size: 14pt;       
-        }
-        QGroupBox#sub1  {
-            border : 1px solid rgb(128, 128, 128);
-            margin-top:20px;
-            font-size: 14pt;
-        }
-        QGroupBox::title#sub1  {
-            subcontrol-origin: margin;
-            top: 7px;
-            left: 7px;
-            padding: 0px 5px 0px 5px;
-        }
-        QLabel#sub2  {
-            margin-top: 3px;
-            padding: 5px 0px 0px 0px;
-        }
-        QLabel{
-            background-color:None;
-        }
-        QProgressBar{
-            border : 1px solid black;
-            background-color:rgb(231, 231, 234); 
-        }
-        QCheckBox::indicator {
-                width:  22px;
-                height: 22px;
-                background-color:rgb(231, 231, 234); 
-        }
-        QCheckBox::indicator::unchecked {
-            width:  22px;
-            height: 22px;
-            border : 1px solid;
-        }
-        QCheckBox::indicator::checked {
-            image : url(../interface/img/check.png);
-            height:22px;
-            width:22px;
-            border : 1px solid;
-        }
-        QLabel#symptom{
-            border : 0px solid;
-            font-size: 12pt;
-            border-radius: 6px;
-            padding-left: 15px; 
-            padding-top: 5px;
-            padding-bottom: 5px;
-        }
     """
 
     def __init__(self, parent):
         super(WRMain, self).__init__(parent)
-        self.setAttribute(Qt.WA_StyledBackground, True)
         self.setStyleSheet(self.qss)
         layout = WithNoMargin(QVBoxLayout(self))
         layout.addWidget(WRMain1(parent=self, hcell=36, ncell=5))
-        
+
+
         # TODO 이거 붙이다가 종료
 
         # label2 = MainParaArea2(self, self.shmem)
@@ -124,10 +56,10 @@ class WRMain1(ABCTableWidget, QTableWidget):
         self.set_body()
         self.set_horizontal()
         self.set_vertical()
-        fun_updater(self, 500, self.update_table)
+        fun_updater(self, 500, [self.update_table])
 
     def set_horizontal(self):
-        col_info = [('비정상 절차서 명', 550), ('긴급 여부', 100), ('진입 조건', 100), ('AI 확신도', 210)]
+        col_info = [('비정상 절차서 명', 550), ('긴급', 80), ('방사선', 80), ('진입 조건', 100), ('AI 확신도', 100)]
         self.setColumnCount(len(col_info))
         self.setHorizontalHeaderLabels([l for l, _ in col_info])
         self.horizontalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -154,17 +86,28 @@ class WRMain1(ABCTableWidget, QTableWidget):
 
     def update_table(self):
         '''
-                1. 인공지능 출력값 반영 -> 1) 확률, 2) 비정상 절차서 이름 (확률 오름차순 반영)
-                2. 각 비정상 절차서 별 요구사항 리스트 반영
-                3. IF-THEN rule 반영
-                '''
+            1. 인공지능 출력값 반영 -> 1) 확률, 2) 비정상 절차서 이름 (확률 오름차순 반영)
+            2. 각 비정상 절차서 별 요구사항 리스트 반영
+            3. IF-THEN rule 반영
+        '''
         # 실제 인공지능 결과를 가져와 오름차순 후 테이블 반영 -> 추후 메모리로 값을 받아와야 함.
         ai_result = [1.04777455e-03, 1.87130286e-04, 1.96067709e-04, 3.04176280e-04,
                      3.51275333e-04, 4.60391938e-04, 1.85054867e-03, 1.70936875e-04,
                      5.40873585e-04, 8.78681517e-04, 1.25459874e-03, 9.90428406e-01,
                      1.32304912e-03, 8.37134484e-04, 9.51688051e-05, 7.37859320e-05]  # 실제 인공지능 결과
 
+        # GetTop(ai_result, n) : 각 사고 카테고리별 진단 확률(ai_result)에 대하여 n 순위의 확률 값과 리스트의 위치를 반환함.
         self.dis_data = [self.make_raw(max_v, max_i) for (max_v, max_i) in GetTop(ai_result, 5)]
+        # self.dis_data 는 테이블 한줄에 정보(절차서명, 긴급 여부, ?, AI 확신도) 를 담고 있음.
+
+        # TODO 2022.04.24 작업하기
+        print(self.dis_data)
+        for row, info_ in enumerate(self.dis_data):
+            self.setCellWidget(row, 0, ProcedureCell(self, info_[0], Label=True))
+            self.setCellWidget(row, 1, ProcedureCell(self, info_[1], CheckBox=True))
+            self.setCellWidget(row, 2, ProcedureCell(self, info_[1], CheckBox=True))
+            self.setCellWidget(row, 3, ProcedureCell(self, info_[2], Label=True, LabelCenter=True))
+            self.setCellWidget(row, 4, ProcedureCell(self, info_[3], Label=True, LabelCenter=True))
 
     def make_raw(self, max_v, max_i):
         diagnosis_convert_text = {0: 'Normal: 정상', 1: 'Ab21_01: 가압기 압력 채널 고장 (고)', 2: 'Ab21_02: 가압기 압력 채널 고장 (저)',
@@ -177,23 +120,65 @@ class WRMain1(ABCTableWidget, QTableWidget):
                                   14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설'}
 
         procedure_name = diagnosis_convert_text[max_i]
+        urgent_action = self.inmem.shmem.get_pro_urgent_act(procedure_name)         # True / False
         total_symptomc = self.inmem.shmem.get_pro_symptom_count(procedure_name)
         total_symptoms = self.inmem.shmem.get_pro_symptom_satify(procedure_name)
-        return [procedure_name, 0, f'{total_symptoms}/{total_symptomc}', f'{max_v * 100:2.2f}[%]']
+        return [procedure_name, urgent_action, f'{total_symptoms:02}/{total_symptomc:02}', f'{max_v * 100:2.2f}%']
 
     def paintEvent(self, e: QPaintEvent) -> None:
         super(WRMain1, self).paintEvent(e)
         qp = QPainter(self.viewport())
         qp.save()
         self.draw_row_line(qp)
-        self.draw_col_line(qp)
+        #self.draw_col_line(qp)
         qp.restore()
 
-        # # self.update_procedure() # 실시간으로 구동해야 IF-THEN Rule이 활성화됨.
-        # # 클릭 시 하단 비정상절차서 show
-        # self.cellClicked.connect(self.mouseClick)
-        # # 더블 클릭 시 절차서 화면 이동
-        # self.cellDoubleClicked.connect(self.mouseDoubleClick)
+
+class ProcedureCell(QWidget):
+    qss = """
+    QWidget {
+        background-color:None;
+    }
+    QLabel {
+        background-color:None;
+    }
+    QCheckBox::indicator {
+        width:  22px;
+        height: 22px;
+        background-color:rgb(231, 231, 234); 
+    }
+    QCheckBox::indicator::unchecked {
+        width:  22px;
+        height: 22px;
+        border : 1px solid;
+    }
+    QCheckBox::indicator::checked {
+        image : url(../interface/img/check.png);
+        height:22px;
+        width:22px;
+        border : 1px solid;
+    }
+    """
+
+    def __init__(self, parent, val, CheckBox=False, Label=False, LabelCenter=False):
+        super(ProcedureCell, self).__init__(parent=parent)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.setStyleSheet(self.qss)
+        self.layout = WithNoMargin(QHBoxLayout(self))
+        _ = self.make_checkbox(val) if CheckBox else 0
+        _ = self.make_label(val, LabelCenter) if Label else 0
+
+    def make_checkbox(self, val):
+        w = QCheckBox(self)
+        _ = w.setCheckState(Qt.CheckState.Checked) if val else w.setCheckState(Qt.CheckState.Unchecked)
+        self.layout.addWidget(w)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    def make_label(self, val, LabelCenter):
+        w = QLabel(val, self)
+        self.layout.addWidget(w)
+        _ = self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter) if LabelCenter else 0
+
 
     # def mouseClick(self):
     #     row = self.currentIndex().row()

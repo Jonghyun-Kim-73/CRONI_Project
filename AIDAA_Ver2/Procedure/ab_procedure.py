@@ -1,5 +1,6 @@
 ab_pro = {
     'Normal: 정상': {
+        '긴급조치': False, '방사선': False,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '1.1',
@@ -17,6 +18,7 @@ ab_pro = {
         },
     },
     'Ab15_08: 증기발생기 수위 채널 고장 (고)': {
+        '긴급조치': False, '방사선': False,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
@@ -161,6 +163,7 @@ ab_pro = {
         },
     },
     'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
+        '긴급조치': True, '방사선': True,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -451,6 +454,7 @@ ab_pro = {
         },
     },
     'Ab21_01: 가압기 압력 채널 고장 (고)': {
+        '긴급조치': True, '방사선': False,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
@@ -551,6 +555,7 @@ ab_pro = {
         },
     },
     'Ab21_02: 가압기 압력 채널 고장 (저)': {
+        '긴급조치': True, '방사선': False,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
@@ -627,6 +632,7 @@ ab_pro = {
         }
     },
     'Ab20_04: 가압기 수위 채널 고장 (저)': {
+        '긴급조치': True, '방사선': False,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -837,6 +843,7 @@ ab_pro = {
         }
     },
     'Ab15_07: 증기발생기 수위 채널 고장 (저)': {
+        '긴급조치': False, '방사선': False,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
@@ -977,6 +984,7 @@ ab_pro = {
         }
     },
     'Ab63_04: 제어봉 낙하': {
+        '긴급조치': False, '방사선': False,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1220,6 +1228,7 @@ ab_pro = {
         }
     },
     'Ab63_02: 제어봉의 계속적인 삽입': {
+        '긴급조치': False, '방사선': False,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1310,6 +1319,7 @@ ab_pro = {
         }
     },
     'Ab21_12: 가압기 PORV (열림)': {
+        '긴급조치': True, '방사선': True,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1403,6 +1413,7 @@ ab_pro = {
         }
     },
     'Ab19_02: 가압기 안전밸브 고장': {
+        '긴급조치': True, '방사선': True,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1508,6 +1519,7 @@ ab_pro = {
         }
     },
     'Ab21_11: 가압기 살수밸브 고장 (열림)': {
+        '긴급조치': False, '방사선': True,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1655,6 +1667,7 @@ ab_pro = {
         }
     },
     'Ab60_02: 재생열교환기 전단부위 파열': {
+        '긴급조치': True, '방사선': True,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1792,6 +1805,7 @@ ab_pro = {
         }
     },
     'Ab59_02: 충전수 유량조절밸즈 후단누설': {
+        '긴급조치': True, '방사선': True,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1983,6 +1997,7 @@ ab_pro = {
         }
     },
     'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
+        '긴급조치': False, '방사선': True,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -2151,6 +2166,7 @@ ab_pro = {
         }
     },
     'Ab23_06: 증기발생기 전열관 누설': {
+        '긴급조치': True, '방사선': True,
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',

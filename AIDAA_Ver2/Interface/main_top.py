@@ -44,7 +44,7 @@ class MainTop(ABCWidget):
         self.setStyleSheet(self.qss)
 
         # 타이틀 레이어 셋업 ----------------------------------------------------------------------------------------------
-        layout = WithNoMargin(QHBoxLayout(self), c_m=5)  # 수평 방향 레이아웃
+        layout = WithNoMargin(QHBoxLayout(self), c_m=5, s_m=5)  # 수평 방향 레이아웃
 
         #DayBarm TimeBar
         widget1 = TimeBar(self, h=bar_height, w=380)
@@ -54,7 +54,7 @@ class MainTop(ABCWidget):
         #라벨 설정
         label0 = QLabel("")
         label0.setObjectName("black")
-        label0.setFixedWidth(200)
+        label0.setFixedWidth(180)
 
         self.label1 = QPushButton("Main")
         self.label1.setObjectName('main1')

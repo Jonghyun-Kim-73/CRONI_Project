@@ -286,7 +286,6 @@ class ProcedureBaseCell(QLabel):
         self.procedure_name = ''
         self.row = row
 
-
 class ProcedureBaseWidget(QWidget):
     """ 셀 Widget 공통 """
 
