@@ -53,7 +53,7 @@ class InterfaceMem:
         # Top_widget 정보 등록
         self.add_widget_id(top_widget)
         # Current system
-        self.system_switch = {'Main': 1, 'IFEP': 0, 'AIDAA': 0, 'EGIS': 0}
+        self.system_switch = {'Main': 1, 'IFAP': 0, 'AIDAA': 0, 'EGIS': 0}
         self.system_state_switch = {'Normal': 1, 'Pre-abnormal': 0, 'Abnormal': 0, 'Emergency': 0}
 
     # Widget 링크 용 ----------------------------------------------------------------------------------------------------
@@ -66,6 +66,7 @@ class InterfaceMem:
     def change_current_system_name(self, system_name):
         for name in self.system_switch.keys():
             self.system_switch[name] = 1 if system_name == name else 0
+        self.widget_ids['MainTab'].change_system_page(system_name)
 
     def get_time(self):
         return str(timedelta(seconds=self.ShMem.get_para_val('KCNTOMS')/5))

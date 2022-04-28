@@ -3,6 +3,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
+from AIDAA_Ver21.Interface_MainTabMain import *
+from AIDAA_Ver21.Interface_MainTabAIDAA import *
 
 
 class Main(QWidget):
@@ -11,19 +13,25 @@ class Main(QWidget):
         self.inmem:InterfaceMem = InterfaceMem(ShMem, self)
         self.setGeometry(200, 200, 1900, 1000)
 
-        lay = QHBoxLayout(self)
+        lay = QVBoxLayout(self)
         lay.addWidget(MainTop(self))
+        lay.addWidget(MainTab(self))
+
+# ----------------------------------------------------------------------------------------------------------------------
+# MainTop
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class MainTop(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTop, self).__init__(parent)
+        self.setStyleSheet('background-color: rgb(149, 185, 211);')
 
         lay = QHBoxLayout(self)
         lay.addWidget(MainTopTime(self))
         lay.addWidget(MainTopSystemName(self))
         lay.addWidget(MainTopCallMain(self))
-        lay.addWidget(MainTopCallIFEP(self))
+        lay.addWidget(MainTopCallIFAP(self))
         lay.addWidget(MainTopCallAIDAA(self))
         lay.addWidget(MainTopCallEGIS(self))
         lay.addWidget(MainTopClose(self))
@@ -63,14 +71,14 @@ class MainTopCallMain(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
 
 
-class MainTopCallIFEP(ABCPushButton, QPushButton):
+class MainTopCallIFAP(ABCPushButton, QPushButton):
     def __init__(self, parent):
-        super(MainTopCallIFEP, self).__init__(parent)
-        self.setText('IFEP')
+        super(MainTopCallIFAP, self).__init__(parent)
+        self.setText('IFAP')
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
-        self.inmem.change_current_system_name('IFEP')
+        self.inmem.change_current_system_name('IFAP')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
 
 
@@ -105,4 +113,27 @@ class MainTopClose(ABCPushButton, QPushButton):
     def close_main(self):
         self.inmem.widget_ids['Main'].close()
 
+# ----------------------------------------------------------------------------------------------------------------------
+# MainTab
+# ----------------------------------------------------------------------------------------------------------------------
 
+
+class MainTab(ABCStackWidget, QStackedWidget):
+    def __init__(self, parent):
+        super(MainTab, self).__init__(parent)
+        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self)]]
+
+    def change_system_page(self, system_name):
+        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3}[system_name])
+
+
+class MainTabIFAP(ABCWidget, QWidget):
+    def __init__(self, parent):
+        super(MainTabIFAP, self).__init__(parent)
+        self.setStyleSheet('background-color: rgb(213, 242, 211);')
+
+
+class MainTabEGIS(ABCWidget, QWidget):
+    def __init__(self, parent):
+        super(MainTabEGIS, self).__init__(parent)
+        self.setStyleSheet('background-color: rgb(244, 242, 211);')

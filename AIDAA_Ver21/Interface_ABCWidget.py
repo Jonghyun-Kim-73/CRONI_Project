@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
 
 
@@ -12,6 +14,7 @@ class ABCWidget(QWidget):
     def __init__(self, parent, widget_name=''):
         super(ABCWidget, self).__init__()
         self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.setAttribute(Qt.WA_StyledBackground, True)
 
 
 class ABCPushButton(QPushButton):
@@ -24,3 +27,17 @@ class ABCLabel(QLabel):
     def __init__(self, parent, widget_name=''):
         super(ABCLabel, self).__init__()
         self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+
+
+class ABCTabWidget(QTabWidget):
+    def __init__(self, parent, widget_name=''):
+        super(ABCTabWidget, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+
+
+class ABCStackWidget(QStackedWidget):
+    def __init__(self, parent, widget_name=''):
+        super(ABCStackWidget, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.setAttribute(Qt.WA_StyledBackground, True)
