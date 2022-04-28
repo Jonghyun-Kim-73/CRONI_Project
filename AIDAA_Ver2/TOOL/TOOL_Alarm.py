@@ -557,5 +557,4 @@ def update_alarm(mem, alarm_dict):
     else:
         alarm_dict['KLAMPO341']['Val'] = 0
 
-
     return alarm_dict

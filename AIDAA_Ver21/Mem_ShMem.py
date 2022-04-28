@@ -1,3 +1,4 @@
+from AIDAA_Ver21.DB_AlarmDB import AlarmDB
 from collections import deque
 from datetime import timedelta
 
@@ -5,6 +6,7 @@ from datetime import timedelta
 class ShMem:
     def __init__(self):
         self.mem = self.make_cns_mem(max_len=10)
+        self.AlarmDB: AlarmDB = AlarmDB(self)
         self.add_val_to_list()
 
     def make_cns_mem(self, max_len, db_path='./db.txt', db_add_path='./db_add.txt'):
@@ -27,6 +29,9 @@ class ShMem:
         # 다음과정을 통하여 shared_mem 은 PID : { type. val, num }를 가진다.
         return shared_mem
 
+    def update_alarmdb(self):
+        self.AlarmDB.update_alarmdb_from_ShMem()
+
     def add_val_to_list(self):
         [self.mem[para]['List'].append(self.mem[para]['Val']) for para in self.mem.keys()]
 
@@ -39,6 +44,12 @@ class ShMem:
     def get_para_list(self, para):
         return self.mem[para]['List']
 
+    def get_mem(self):
+        return self.mem
+
+    def get_alarmdb(self):
+        return self.AlarmDB.alarmdb
+
     def check_para_name(self, para):
         return True if para in self.mem.keys() else False
 
@@ -48,7 +59,7 @@ class ShMem:
 
 class InterfaceMem:
     def __init__(self, Shmem, top_widget):
-        self.ShMem:ShMem = Shmem
+        self.ShMem: ShMem = Shmem
         self.widget_ids = {}
         # Top_widget 정보 등록
         self.add_widget_id(top_widget)

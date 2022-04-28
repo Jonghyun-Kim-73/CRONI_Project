@@ -33,6 +33,7 @@ class CNS(QWidget):
     def one_step(self):
         self.ShMem.change_para_val('KCNTOMS', self.ShMem.get_para_val('KCNTOMS') + 5)
         self.ShMem.add_val_to_list()
+        self.ShMem.update_alarmdb()
         self.mes.setText(f'OneStep 진행함. [KCNTOMS: {self.ShMem.get_para_val("KCNTOMS")}]')
 
     def change_val(self):
