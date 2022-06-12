@@ -5,9 +5,10 @@ from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Simulator_CNS import *
 from AIDAA_Ver21.Interface_Search import *
+from AIDAA_Ver21.Interface_Procedure import *
+from AIDAA_Ver21.Interface_Main import *
 
 # ----------------------------------------------------------------------------------------------------------------------
-
 
 class Diagnosis(ABCWidget, QWidget):
     def __init__(self, parent):
@@ -20,6 +21,7 @@ class Diagnosis(ABCWidget, QWidget):
         lay.addWidget(ProcedureDiagonsisTable(self))
         lay.addWidget(SystemDiagnosisTable(self))
         lay.addWidget(ProcedureCheckTable(self))
+
 
 class DiagnosisTop(ABCWidget, QWidget):
     def __init__(self, parent):
@@ -40,7 +42,6 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton, QPushButton):
     def dis_update(self):
         print('비정상 절차서 검색 창으로 이동')
         ProcedureSearch(self).show()
-
 
 class DiagnosisTopCallSystemSearch(ABCPushButton, QPushButton):
     def __init__(self, parent):
@@ -75,6 +76,7 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
                             QTableWidget::item::focus
                             {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
 
+        self.doubleClicked.connect(self.dis_procedure)
         self.make_centerCB()
 
         self.widget_timer(iter_=500, funs=[self.dis_update])
@@ -127,6 +129,10 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
         [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI[i][4])) for i in range(5)]
         # [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI[i][1])) for i in range(5)]
         # self.radiation_chbox1.setChecked(True)
+
+    def dis_procedure(self):
+        self.inmem.change_current_system_name('Procedure')
+        self.inmem.widget_ids['MainTopSystemName'].dis_update()
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -175,3 +181,15 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
         self.setHorizontalHeaderLabels([l for l in self.column_labels])
 
         self.setRowCount(10)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class DiagnosisTab(ABCStackWidget, QStackedWidget):
+    def __init__(self, parent):
+        super(DiagnosisTab, self).__init__(parent)
+        [self.addWidget(_) for _ in [Procedure(self)]]
+
+    def change_system_page(self, system_name):
+        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3}[system_name])
