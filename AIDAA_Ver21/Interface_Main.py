@@ -5,6 +5,7 @@ from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_MainTabMain import *
 from AIDAA_Ver21.Interface_MainTabAIDAA import *
+from AIDAA_Ver21.Interface_Procedure import *
 
 
 class Main(QWidget):
@@ -57,7 +58,10 @@ class MainTopSystemName(ABCLabel, QLabel):
         timer.start()
 
     def dis_update(self):
-        self.setText(self.inmem.get_current_system_name())
+        if self.inmem.get_current_system_name() == 'Procedure':
+            self.setText('AIDAA')
+        else:
+            self.setText(self.inmem.get_current_system_name())
 
 
 class MainTopCallMain(ABCPushButton, QPushButton):
@@ -121,10 +125,10 @@ class MainTopClose(ABCPushButton, QPushButton):
 class MainTab(ABCStackWidget, QStackedWidget):
     def __init__(self, parent):
         super(MainTab, self).__init__(parent)
-        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self)]]
+        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self), Procedure(self)]]
 
     def change_system_page(self, system_name):
-        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3}[system_name])
+        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3, 'Procedure': 4}[system_name])
 
 
 class MainTabIFAP(ABCWidget, QWidget):
