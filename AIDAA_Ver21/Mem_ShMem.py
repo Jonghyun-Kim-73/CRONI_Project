@@ -50,6 +50,15 @@ class ShMem:
 
     def get_alarmdb(self):
         return self.AlarmDB.alarmdb
+    
+    def get_on_alarms(self):
+        return self.AlarmDB.get_on_alarms()
+
+    def get_on_alarms_des(self):
+        return self.AlarmDB.get_on_alarms_des()
+
+    def get_alarm_des(self, para):
+        return self.AlarmDB.get_alarm_des(para)
 
     def check_para_name(self, para):
         return True if para in self.mem.keys() else False

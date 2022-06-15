@@ -92,7 +92,28 @@ class AlarmTable(ABCTableWidget, QTableWidget):
         self.setColumnCount(len(self.column_labels))
         self.setHorizontalHeaderLabels([l for l in self.column_labels])
 
-        self.setRowCount(20)
+        self.widget_timer(500, [self.dis_update])
+        self.dis_alarm_list = []
+
+    def dis_update(self):
+        new_alarm_list = self.update_dis_alarm_list()
+
+        for alarm_name in new_alarm_list:
+            self.insertRow(0)
+            self.setItem(0, 0, QTableWidgetItem(f'{self.inmem.ShMem.get_alarm_des(alarm_name)}'))
+            self.setItem(0, 1, QTableWidgetItem('0'))
+            self.setItem(0, 2, QTableWidgetItem('0'))
+            self.setItem(0, 3, QTableWidgetItem('0'))
+            self.setItem(0, 4, QTableWidgetItem('0'))
+            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))
+
+    def update_dis_alarm_list(self):
+        new_alarm_list = []
+        for alarm_name in self.inmem.ShMem.get_on_alarms():
+            if not alarm_name in self.dis_alarm_list:
+                self.dis_alarm_list.append(alarm_name)
+                new_alarm_list.append(alarm_name)
+        return new_alarm_list
 
 # ----------------------------------------------------------------------------------------------------------------------
 
