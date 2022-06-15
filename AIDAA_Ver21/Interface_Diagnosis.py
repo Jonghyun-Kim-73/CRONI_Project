@@ -156,12 +156,17 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
                             {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
 
         self.widget_timer(iter_=500, funs=[self.dis_update])
+        self.doubleClicked.connect(self.dis_system)
 
     def dis_update(self):
         # print('시스템 진단 AI 업데이트 예정')
         [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI_system[i][0])) for i in range(1)]
         [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(1)]
         [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(1)]
+
+    def dis_system(self):
+        self.inmem.change_current_system_name('Action')
+        self.inmem.widget_ids['MainTopSystemName'].dis_update()
 
 # ----------------------------------------------------------------------------------------------------------------------
 

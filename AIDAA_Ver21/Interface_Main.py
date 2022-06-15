@@ -7,6 +7,8 @@ from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_MainTabMain import *
 from AIDAA_Ver21.Interface_MainTabAIDAA import *
 from AIDAA_Ver21.Interface_Procedure import *
+from AIDAA_Ver21.Interface_Action import *
+
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -62,6 +64,8 @@ class MainTopSystemName(ABCLabel):
 
     def dis_update(self):
         if self.inmem.get_current_system_name() == 'Procedure':
+            self.setText('AIDAA')
+        elif self.inmem.get_current_system_name() == 'Action':
             self.setText('AIDAA')
         else:
             self.setText(self.inmem.get_current_system_name())
@@ -125,22 +129,25 @@ class MainTopClose(ABCPushButton):
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-class MainTab(ABCStackWidget, QStackedWidget):
+class MainTab(ABCStackWidget):
     def __init__(self, parent):
         super(MainTab, self).__init__(parent)
-        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self), Procedure(self)]]
+        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self), Procedure(self), Action(self)]]
 
-    def change_system_page(self, system_name):
-        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3, 'Procedure': 4}[system_name])
+    def change_system_page(self, system_name: str):
+        """요청한 index 페이지로 전환
 
+        Args:
+            system_name (str): Main, IFAP, ...
+        """
+        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3, 'Procedure': 4, 'Action': 5}[system_name])
 
-class MainTabIFAP(ABCWidget, QWidget):
+class MainTabIFAP(ABCWidget):
     def __init__(self, parent):
         super(MainTabIFAP, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(213, 242, 211);')
 
-
-class MainTabEGIS(ABCWidget, QWidget):
+class MainTabEGIS(ABCWidget):
     def __init__(self, parent):
         super(MainTabEGIS, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(244, 242, 211);')
