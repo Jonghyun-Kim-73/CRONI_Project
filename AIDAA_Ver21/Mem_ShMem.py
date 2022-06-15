@@ -65,7 +65,7 @@ class ShMem:
     # radiation or not
     def get_pro_radiation(self, procedure_name):
         return ab_pro[procedure_name]['방사선']
-
+    
     def get_pro_symptom(self, procedure_name):
         return ab_pro[procedure_name]['경보 및 증상']
 
@@ -75,6 +75,9 @@ class ShMem:
 
     def get_pro_symptom_satify(self, procedure_name):
         return 5
+
+    def show_ai_diagnosis_result(self, ranked_list):
+        return ranked_list
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -85,7 +88,7 @@ class InterfaceMem:
         # Top_widget 정보 등록
         self.add_widget_id(top_widget)
         # Current system
-        self.system_switch = {'Main': 1, 'IFAP': 0, 'AIDAA': 0, 'EGIS': 0, 'Procedure': 0}
+        self.system_switch = {'Main': 1, 'IFAP': 0, 'AIDAA': 0, 'EGIS': 0, 'Procedure': 0, 'Action': 0}
         self.system_state_switch = {'Normal': 1, 'Pre-abnormal': 0, 'Abnormal': 0, 'Emergency': 0}
         self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', False, False, '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', True, True, '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸즈 후단누설', True, True, '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', False, False, '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', True, True, '05/15', '0.76%']]}
         self.dis_AI_system = [['CVCS', '03/09', '72%']]
@@ -95,12 +98,23 @@ class InterfaceMem:
 
     # Widget 링크 용 ----------------------------------------------------------------------------------------------------
     def add_widget_id(self, widget, widget_name=''):
+        """새롭게 생성된 위젯의 정보를 self.widget_ids:dict 에 저장하는 함수
+
+        Args:
+            widget (_type_): Qwidget, QPushButton를 기반한 ABC 클래스
+            widget_name (str, optional): 클래스의 이름이 중복적으로 사용되는 경우 수동 할당을 위해서 존재. Defaults to '' 는 class 명을 따라감.
+        """
         self.widget_ids[type(widget).__name__ if widget_name == '' else widget_name] = widget
 
     def show_widget_ids(self):
         return self.widget_ids
 
-    def change_current_system_name(self, system_name):
+    def change_current_system_name(self, system_name:str):
+        """ 버튼 클릭시 화면 전환
+
+        Args:
+            system_name (str): Main, IFAP 등 self.system_switch에 작성된 값중 하나여야 함.
+        """
         for name in self.system_switch.keys():
             self.system_switch[name] = 1 if system_name == name else 0
         self.widget_ids['MainTab'].change_system_page(system_name)
@@ -110,3 +124,7 @@ class InterfaceMem:
 
     def get_current_system_name(self):
         return list(self.system_switch.keys())[list(self.system_switch.values()).index(1)]
+
+    def update_ai_diagnosis_result(self, ranked_list):
+        self.dis_AI = ranked_list
+
