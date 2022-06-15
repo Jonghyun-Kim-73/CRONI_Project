@@ -67,8 +67,7 @@ class CNS(QWidget):
         AIProcedureValue = [self.ShMem.get_para_val(i) for i in self.AIProcedurePara]
         ai_result = self.AIProcedureModel.predict([AIProcedureValue])
         dis_data = [self.make_raw(max_v, max_i) for (max_v, max_i) in self.GetTop(ai_result[0], 5)]
-        print(dis_data)
-        self.inmem.update_ai_diagnosis_result(dis_data)
+        self.inmem.dis_AI['AI'] = dis_data
 
     def make_raw(self, max_v, max_i):
         diagnosis_convert_text = {0: 'Normal: 정상', 1: 'Ab21_01: 가압기 압력 채널 고장 (고)', 2: 'Ab21_02: 가압기 압력 채널 고장 (저)',
