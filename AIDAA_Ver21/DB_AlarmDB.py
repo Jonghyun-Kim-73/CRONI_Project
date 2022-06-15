@@ -565,3 +565,13 @@ class AlarmDB:
             alarm_dict['KLAMPO341']['Val'] = 0
 
         return alarm_dict
+    
+    def get_on_alarms(self):
+        alarms = [k if self.alarmdb[k]['Val'] == 1 else 0 for k in self.alarmdb.keys()]
+        return [] if alarms is None else [i for i in alarms if i != 0]
+
+    def get_on_alarms_des(self):
+        return [self.alarmdb[k]['Des'] for k in self.get_on_alarms()]
+
+    def get_alarm_des(self, para):
+        return self.alarmdb[para]['Des']
