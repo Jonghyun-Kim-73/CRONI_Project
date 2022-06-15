@@ -7,6 +7,7 @@ from AIDAA_Ver21.Simulator_CNS import *
 from AIDAA_Ver21.Interface_Search import *
 from AIDAA_Ver21.Interface_Procedure import *
 from AIDAA_Ver21.Interface_Main import *
+from AIDAA_Ver21.symptom_check import *
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -99,9 +100,6 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
         self.radiation_chbox = {0: self.radiation_chbox1, 1: self.radiation_chbox2, 2: self.radiation_chbox3,
                                 3: self.radiation_chbox4, 4: self.radiation_chbox5}
 
-        # [self.urgent_chbox[i].setStyleSheet("QCheckBo" "x::indicator" "{""background-color : black;""}") for i in range(5)]
-        # [self.radiation_chbox[i].setStyleSheet("QCheckBo" "x::indicator" "{""background-color : black;""}") for i in range(5)]
-
         # urgent checkbox 가운데 정렬
         for i in range(5):
             uregent_cellwidget = QWidget()
@@ -122,13 +120,12 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
 
     def dis_update(self):
         # print('절차서 진단 AI 업데이트 예정')
-        [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI[i][0])) for i in range(5)]
-        [self.urgent_chbox[i].setChecked(self.inmem.dis_AI[i][1]) for i in range(5)]
-        [self.radiation_chbox[i].setChecked(self.inmem.dis_AI[i][2]) for i in range(5)]
-        [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI[i][3])) for i in range(5)]
-        [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI[i][4])) for i in range(5)]
-        # [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI[i][1])) for i in range(5)]
-        # self.radiation_chbox1.setChecked(True)
+        [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
+        [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
+        [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
+        [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
+        [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+        self.inmem.current_table['Procedure'] = self.currentRow()
 
     def dis_procedure(self):
         self.inmem.change_current_system_name('Procedure')
@@ -165,7 +162,6 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
         [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI_system[i][0])) for i in range(1)]
         [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(1)]
         [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(1)]
-        pass
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -181,15 +177,21 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
         self.setHorizontalHeaderLabels([l for l in self.column_labels])
 
         self.setRowCount(10)
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.current_table['Procedure'] != -1:
+            self.inmem.current_procedure[0]=self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
+            self.column_labels = [f'비정상 절차서: {self.inmem.current_procedure[0]}', 'Value', 'Set-point', 'Unit']
+            self.setColumnCount(len(self.column_labels))
+            self.setHorizontalHeaderLabels([l for l in self.column_labels])
+
+            symptom_count = self.inmem.ShMem.get_pro_symptom_count(self.inmem.current_procedure[0])
+            self.setRowCount(symptom_count)
+            symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.current_procedure[0])
+            [self.setItem(i, 0, QTableWidgetItem(symptom[i]['Des'])) for i in range(symptom_count)]
+
+            [self.item(i,0).setBackground(QColor(150,100,100)) for i in range(symptom_count)]
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-
-
-class DiagnosisTab(ABCStackWidget, QStackedWidget):
-    def __init__(self, parent):
-        super(DiagnosisTab, self).__init__(parent)
-        [self.addWidget(_) for _ in [Procedure(self)]]
-
-    def change_system_page(self, system_name):
-        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3}[system_name])

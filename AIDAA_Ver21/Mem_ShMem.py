@@ -66,15 +66,15 @@ class ShMem:
     def get_pro_radiation(self, procedure_name):
         return ab_pro[procedure_name]['방사선']
 
+    def get_pro_symptom(self, procedure_name):
+        return ab_pro[procedure_name]['경보 및 증상']
+
     # Symptom count
     def get_pro_symptom_count(self, procedure_name):
         return len(ab_pro[procedure_name]['경보 및 증상'].keys())
 
     def get_pro_symptom_satify(self, procedure_name):
         return 5
-
-    def show_ai_diagnosis_result(self, ranked_list):
-        return ranked_list
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -87,8 +87,10 @@ class InterfaceMem:
         # Current system
         self.system_switch = {'Main': 1, 'IFAP': 0, 'AIDAA': 0, 'EGIS': 0, 'Procedure': 0}
         self.system_state_switch = {'Normal': 1, 'Pre-abnormal': 0, 'Abnormal': 0, 'Emergency': 0}
-        self.dis_AI = [['Ab63_02: 제어봉의 계속적인 삽입', False, False, '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', True, True, '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸즈 후단누설', True, True, '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', False, False, '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', True, True, '05/15', '0.76%']]
+        self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', False, False, '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', True, True, '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸즈 후단누설', True, True, '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', False, False, '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', True, True, '05/15', '0.76%']]}
         self.dis_AI_system = [['CVCS', '03/09', '72%']]
+        self.current_table = {'Procedure':-1, 'System': -1}
+        self.current_procedure = {0:''}
 
 
     # Widget 링크 용 ----------------------------------------------------------------------------------------------------
@@ -108,7 +110,3 @@ class InterfaceMem:
 
     def get_current_system_name(self):
         return list(self.system_switch.keys())[list(self.system_switch.values()).index(1)]
-
-    def update_ai_diagnosis_result(self, ranked_list):
-        self.dis_AI = ranked_list
-
