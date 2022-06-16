@@ -65,3 +65,8 @@ class ABCStackWidget(QStackedWidget, TOOL):
         super(ABCStackWidget, self).__init__()
         self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+
+class ABCGraphicsScene(QGraphicsScene, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsScene, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
