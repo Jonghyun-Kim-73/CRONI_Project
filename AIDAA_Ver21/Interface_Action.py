@@ -5,6 +5,7 @@ from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 import pandas as pd
 from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
+from CVCS.Core_mimic import CVCS
 
 
 class Action(ABCWidget):
@@ -51,11 +52,21 @@ class Action_system_mimic_area(ABCWidget):
         # ---------------------------------
         self.shortcut_save_scene = QShortcut(QKeySequence('Ctrl+S'), self, self.inmem.widget_ids['Action_system_scene'].save_scene)
         self.shortcut_load_scene = QShortcut(QKeySequence('Ctrl+L'), self, self.inmem.widget_ids['Action_system_scene'].load_scene)
+        self.shortcut_show_sim__ = QShortcut(Qt.Key.Key_F1, self, self.show_controller)
         self.shortcut_move_item_up = QShortcut(Qt.Key.Key_Up, self, lambda: self.inmem.widget_ids['Action_system_scene'].move_item('up'))
         self.shortcut_move_item_up = QShortcut(Qt.Key.Key_Down, self, lambda: self.inmem.widget_ids['Action_system_scene'].move_item('down'))
         self.shortcut_move_item_up = QShortcut(Qt.Key.Key_Right, self, lambda: self.inmem.widget_ids['Action_system_scene'].move_item('right'))
         self.shortcut_move_item_up = QShortcut(Qt.Key.Key_Left, self, lambda: self.inmem.widget_ids['Action_system_scene'].move_item('left'))
-
+        # ---------------------------------
+        # CVCS Core
+        # ---------------------------------
+        self.CVCS = CVCS()
+        self.TIME = 1           # 1: 1 Sec
+        self.RUN = False        # 0: Freeze, 1: Run
+        self.mal_info = {}
+        
+        self.widget_timer(100, [self.cvcs_run])
+            
     def resizeEvent(self, a0) -> None:
         w, h = self.Action_system_view_.size().width(), self.Action_system_view_.size().height()
         self.Action_system_scene_.setSceneRect(QRectF(0, 0, w, h))
@@ -63,6 +74,56 @@ class Action_system_mimic_area(ABCWidget):
 
     def update(self):
         self.Action_system_scene_.update()
+        
+    def show_controller(self):
+        w = Action_system_controller(self)
+        w.show()
+        
+    def cvcs_run(self):
+        if self.RUN:
+            self.CVCS.step()
+            print(self.CVCS.mem['SimTime']['V'])
+    
+    def cvcs_call_run(self):
+        self.RUN = False if self.RUN else True
+        
+    def cvcs_call_init(self):
+        self.RUN = False
+        self.CVCS.call_init()
+        self.mal_info = {}
+
+# =============================================================
+# Mimic 화면 - CVCS 시뮬레이터 컨트롤러
+# =============================================================
+
+class Action_system_controller(ABCWidget):
+    def __init__(self, parent):
+        super(Action_system_controller, self).__init__(parent)
+        self.setGeometry(0, 0, 100, 200)
+        lay = QVBoxLayout(self)
+        #------------------------------------------------------
+        # Init + Run/Freeze
+        layv1 = QHBoxLayout()
+        self.init_btn = QPushButton("Init")
+        self.init_btn.clicked.connect(self._click_init_btn)
+        self.run_btn = QPushButton("Freeze")
+        self.run_btn.clicked.connect(self._click_run_btn)
+        layv1.addWidget(self.init_btn)
+        layv1.addWidget(self.run_btn)
+        lay.addLayout(layv1)
+        #------------------------------------------------------
+        # Mal
+        
+    def _click_init_btn(self):
+        self.inmem.widget_ids['Action_system_mimic_area'].cvcs_call_init()
+        self.run_btn.setText('Freeze')
+    
+    def _click_run_btn(self):
+        self.inmem.widget_ids['Action_system_mimic_area'].cvcs_call_run()
+
+# =============================================================
+# Mimic 화면 - CVCS 화면
+# =============================================================
 
 class Action_system_scene(ABCGraphicsScene):
     def __init__(self, parent):
@@ -75,6 +136,19 @@ class Action_system_scene(ABCGraphicsScene):
         """
         현재 화면 저장 (Ctrl+S)
         """
+        # Pipe line
+        with open('./CVCS/Core_pip_info.csv', 'w') as f:
+            f.writelines(f'Type,X1,Y1,X2,Y2,Opt\n')
+            for item in self.items():
+                if isinstance(item, Pipeline):
+                    f.writelines(f'PIPE,{item.line().p1().x()},{item.line().p1().y()},{item.line().p2().x()},{item.line().p2().y()},{item.arrow_type}\n')
+        # Non-item
+        with open('./CVCS/Core_nonitem_info.csv', 'w') as f:
+            f.writelines(f'Type,X1,Y1,Rota,Scal,Comment\n')
+            for item in self.items():
+                if isinstance(item, SVGnonitem):
+                    f.writelines(f'{item.elementId()},{item.x()},{item.y()},{item.rotation()},{item.scale()},{item.comment}\n')
+
         print('현재 화면 저장')
 
     def load_scene(self):
@@ -87,7 +161,7 @@ class Action_system_scene(ABCGraphicsScene):
         # Draw
         self._update_line() # Update the pipes
         self._update_nonitem() # Update the non-item components
-        print('화면 로딩')
+        print(f'{self.__module__}|CVCS 화면 로딩')
 
     def move_item(self, direction):
         # If one or more than one item is selected and Up key is pressed, the item selected will be moved up, down, right or left.
