@@ -1,0 +1,23 @@
+Nub,Type,X1,Y1,Id,Comment
+40,WLETDNO5UPA,238.0,12.0,F,UpA (Filter)
+41,WTOV084,459.0,321.0,F,Charging Flow (V084->)
+42,DEPRZ,786.0,308.0,L,PZR Level
+43,WLETDNO,796.0,429.0,F,Letdown Flow
+44,WLETDNO1,611.0,641.0,F,Letdown Flow(1)
+45,WLETDNO2,611.0,493.0,F,Letdown Flow(2)
+46,WLETDNO3,610.0,384.0,F,Letdown Flow(3)
+47,WLETDNO4,609.0,35.0,F,Letdown Flow(4)
+48,WLETDNO5DOWN,107.0,142.0,F,Letdown Flow(5-down)
+49,WLETDNO5UP,326.0,52.0,F,Letdown Flow(5-up)
+50,WLETDNO6,54.0,174.0,F,Letdown Flow(6)
+51,PLETDB,435.0,45.0,P,Back Pressure
+52,WDEMI,52.0,305.0,F,Demi Flow
+53,ZVCT,56.0,363.0,L,VCT Level
+54,PVCT,56.0,388.0,P,VCT Pressure
+55,WEXLD,137.0,325.0,F,Excess L/D Flow
+56,WLV616,26.0,504.0,F,Charging Flow (LV616 ->)
+57,WCHGNO,522.0,221.0,F,Charging Flow (FV122 -> RCS)
+58,CWCHARG,284.0,710.0,F,Charging Flow (CHP ->)
+59,WTOFV122,506.0,374.0,F,Charging Flow (FV122 ->)
+60,WNETCH,785.0,244.0,F,NetCharging Flow (CVCS -> RCS)
+61,RTFLOW,766.0,148.0,F,Return Flow(Seal->RCS)
