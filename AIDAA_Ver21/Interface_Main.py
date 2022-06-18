@@ -7,7 +7,7 @@ from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_MainTabMain import *
 from AIDAA_Ver21.Interface_MainTabAIDAA import *
 from AIDAA_Ver21.Interface_Procedure import *
-from AIDAA_Ver21.Interface_Action import *
+from AIDAA_Ver21.Interface_Action_ import *
 
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
