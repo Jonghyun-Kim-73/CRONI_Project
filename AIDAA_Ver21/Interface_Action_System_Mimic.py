@@ -6,11 +6,7 @@ import pandas as pd
 
 from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
-from CVCS.Core_mimic import CVCS
-
-Top_CVCS = CVCS()
-gray_a = QColor(191, 206, 220, 255)
-alarm_a = QColor(255, 183, 0, 255)
+from AIDAA_Ver21.CVCS.Core_CVCS_mem import *
 
 # =============================================================
 # Mimic 화면
