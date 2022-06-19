@@ -20,10 +20,32 @@ class Main(QWidget):
         self.inmem:InterfaceMem = InterfaceMem(ShMem, self)
         self.setGeometry(0, 0, 1920, 1080)
         self.setWindowFlags(Qt.FramelessWindowHint)  # 상단바 제거
+        QFontDatabase.addApplicationFont("Arial.ttf")
+        QFontDatabase.addApplicationFont("맑은 고딕.ttf")
+        self.top = MainTop(self)
+        self.tab = MainTab(self)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)  # margin 제거
-        lay.addWidget(MainTop(self))
-        lay.addWidget(MainTab(self))
+        lay.addWidget(self.top)
+        lay.addWidget(self.tab)
+        lay.setSpacing(0)   # margin 제거
+
+    # window drag
+    def mousePressEvent(self, event):
+        if (event.button() == Qt.LeftButton) and self.top.underMouse():
+            self.m_flag = True
+            self.m_Position = event.globalPos() - self.pos()
+            event.accept()
+            self.setCursor(QCursor(Qt.OpenHandCursor))
+
+    def mouseMoveEvent(self, QMouseEvent):
+        if Qt.LeftButton and self.m_flag and self.top.underMouse():
+            self.move(QMouseEvent.globalPos() - self.m_Position)  # 윈도우 position 변경
+            QMouseEvent.accept()
+
+    def mouseReleaseEvent(self, QMouseEvent):
+        self.m_flag = False
+        self.setCursor(QCursor(Qt.ArrowCursor))
 
 # ----------------------------------------------------------------------------------------------------------------------
 # MainTop
@@ -36,7 +58,6 @@ class MainTop(ABCWidget):
         self.setStyleSheet(qss.Top_Bar)
         self.setObjectName("BG")
         self.setFixedHeight(45)
-        QFontDatabase.addApplicationFont("Arial.ttf")
         lay = QHBoxLayout(self)
         lay.setContentsMargins(5, 0, 0, 0)
         lay.addWidget(MainTopTime(self))
@@ -71,6 +92,7 @@ class MainTop(ABCWidget):
                 button.setStyleSheet("QPushButton {background: rgb(231, 231, 234);} QPushButton:hover {background: rgb(0, 176, 218)}")
 
 
+
 class MainTopTime(ABCLabel):
     def __init__(self, parent):
         super(MainTopTime, self).__init__(parent)
@@ -79,16 +101,15 @@ class MainTopTime(ABCLabel):
         # timer section
         timer = QTimer(self)
         timer.setInterval(200)
-        #timer.timeout.connect(lambda: self.setText(self.inmem.get_time()))
         timer.timeout.connect(self.dis_update)
         timer.start()
 
     def dis_update(self):
         """ 타이머 디스플레이 업데이트 """
-        real_time = datetime.now().strftime('%Y.%m.%d')
-        real_time2 = datetime.now().strftime('%H:%M:%S')
+        current_time = datetime.now() + self.inmem.get_td() # 현재시간 + time_delta()
+        real_time = current_time.strftime('%Y.%m.%d')
+        real_time2 = current_time.strftime("%H:%M:%S")
         self.setText(real_time + " / " + real_time2)
-
 
 class MainTopSystemName(ABCLabel):
     def __init__(self, parent):

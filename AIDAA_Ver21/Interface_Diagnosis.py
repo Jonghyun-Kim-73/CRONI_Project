@@ -8,37 +8,44 @@ from AIDAA_Ver21.Interface_Search import *
 from AIDAA_Ver21.Interface_Procedure import *
 from AIDAA_Ver21.Interface_Main import *
 from AIDAA_Ver21.symptom_check import *
+import Interface_QSS as qss
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-class Diagnosis(ABCWidget, QWidget):
+class Diagnosis(ABCWidget):
     def __init__(self, parent):
         super(Diagnosis, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(212, 245, 211);')
-        self.setGeometry(200, 200, 1900, 1000)
+        self.setStyleSheet(qss.AIDAA_Diagnosis)
+        self.setObjectName("BG")
+        # self.setGeometry(200, 200, 1900, 1000)
+        self.setContentsMargins(0, 0, 0, 0)
 
         lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(DiagnosisTop(self))
         lay.addWidget(ProcedureDiagonsisTable(self))
         lay.addWidget(SystemDiagnosisTable(self))
         lay.addWidget(ProcedureCheckTable(self))
 
 
-class DiagnosisTop(ABCWidget, QWidget):
+class DiagnosisTop(ABCWidget):
     def __init__(self, parent):
         super(DiagnosisTop, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(212, 245, 211);')
         lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 30, 5)
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
 
-class DiagnosisTopCallProcedureSearch(ABCPushButton, QPushButton):
+class DiagnosisTopCallProcedureSearch(ABCPushButton):
     def __init__(self, parent):
         super(DiagnosisTopCallProcedureSearch, self).__init__(parent)
+        self.setObjectName("Button")
+        icon = os.path.join(ROOT_PATH, 'Img', 'close.png')  #돋보기로 수정
+        self.setIcon(QIcon(icon))
+        self.setFixedHeight(35)
         self.setText('비정상 절차서 검색')
         self.clicked.connect(self.dis_update)
-        self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
-
 
     def dis_update(self):
         print('비정상 절차서 검색 창으로 이동')
@@ -47,9 +54,12 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton, QPushButton):
 class DiagnosisTopCallSystemSearch(ABCPushButton, QPushButton):
     def __init__(self, parent):
         super(DiagnosisTopCallSystemSearch, self).__init__(parent)
+        self.setObjectName("Button")
+        icon = os.path.join(ROOT_PATH, 'Img', 'close.png')  # 돋보기로 수정
+        self.setIcon(QIcon(icon))
+        self.setFixedHeight(35)
         self.setText('시스템 검색')
         self.clicked.connect(self.dis_update)
-        self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
 
     def dis_update(self):
         print('시스템 검색 창으로 이동')

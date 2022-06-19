@@ -22,3 +22,26 @@ Top_Bar = """
                 background: rgb(0, 176, 218);
             }
 """
+
+# AIDAA Tab
+AIDAA = """
+            QWidget#BG {
+                background: rgb(231, 231, 234);
+                border:0px;
+            }
+"""
+
+AIDAA_Diagnosis = """
+            QWidget#BG {
+                background: rgb(231, 231, 234);
+                border:0px;
+            }
+            QPushButton#Button{
+                background: rgb(255, 255, 255);
+                border-radius: 5px;
+                font: 23px 맑은 고딕;
+            }
+            QPushButton#Button:hover {
+                background: rgb(0, 176, 218);
+            }
+"""

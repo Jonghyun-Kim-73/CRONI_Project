@@ -131,6 +131,9 @@ class InterfaceMem:
     def get_time(self):
         return str(timedelta(seconds=self.ShMem.get_para_val('KCNTOMS')/5))
 
+    def get_td(self):
+        return timedelta(seconds=self.ShMem.get_para_val('KCNTOMS') / 5)
+
     def get_current_system_name(self):
         return list(self.system_switch.keys())[list(self.system_switch.values()).index(1)]
 
