@@ -39,7 +39,7 @@ AIDAA_Diagnosis = """
             QPushButton#Button{
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
-                font: 23px 맑은 고딕;
+                font: 23px Arial;
             }
             QPushButton#Button:hover {
                 background: rgb(0, 176, 218);

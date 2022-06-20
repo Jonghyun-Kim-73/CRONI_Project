@@ -18,9 +18,8 @@ class Diagnosis(ABCWidget):
         super(Diagnosis, self).__init__(parent)
         self.setStyleSheet(qss.AIDAA_Diagnosis)
         self.setObjectName("BG")
-        # self.setGeometry(200, 200, 1900, 1000)
-        self.setContentsMargins(0, 0, 0, 0)
-
+        self.setContentsMargins(0, 0, 8, 0)
+        self.setFixedWidth(950)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(DiagnosisTop(self))
@@ -32,18 +31,21 @@ class Diagnosis(ABCWidget):
 class DiagnosisTop(ABCWidget):
     def __init__(self, parent):
         super(DiagnosisTop, self).__init__(parent)
+        self.setContentsMargins(0, 0, 30, 0)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 30, 5)
+        lay.setContentsMargins(0, 0, 0, 5)
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
+        lay.setSpacing(8)
 
 class DiagnosisTopCallProcedureSearch(ABCPushButton):
     def __init__(self, parent):
         super(DiagnosisTopCallProcedureSearch, self).__init__(parent)
         self.setObjectName("Button")
-        icon = os.path.join(ROOT_PATH, 'Img', 'close.png')  #돋보기로 수정
+        icon = os.path.join(ROOT_PATH, 'Img', 'search.png')
         self.setIcon(QIcon(icon))
-        self.setFixedHeight(35)
+        self.setIconSize(QSize(25, 25))
+        self.setFixedSize(451, 35)
         self.setText('비정상 절차서 검색')
         self.clicked.connect(self.dis_update)
 
@@ -51,13 +53,14 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton):
         print('비정상 절차서 검색 창으로 이동')
         ProcedureSearch(self).show()
 
-class DiagnosisTopCallSystemSearch(ABCPushButton, QPushButton):
+class DiagnosisTopCallSystemSearch(ABCPushButton):
     def __init__(self, parent):
         super(DiagnosisTopCallSystemSearch, self).__init__(parent)
         self.setObjectName("Button")
-        icon = os.path.join(ROOT_PATH, 'Img', 'close.png')  # 돋보기로 수정
+        icon = os.path.join(ROOT_PATH, 'Img', 'search.png')  
         self.setIcon(QIcon(icon))
-        self.setFixedHeight(35)
+        self.setIconSize(QSize(25, 25))
+        self.setFixedSize(451, 35)
         self.setText('시스템 검색')
         self.clicked.connect(self.dis_update)
 
