@@ -230,15 +230,45 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
 class ProcedureCheckTable(ABCTableWidget, QTableWidget):
     def __init__(self, parent):
         super(ProcedureCheckTable, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238);')
+        self.setObjectName("Table")
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.setShowGrid(False)  # Grid 지우기
+        self.setFixedWidth(950)
+        # self.setFixedHeight(211)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
 
-        self.column_labels = ['비정상 절차서:', 'Value', 'Set-point', 'Unit']
+        self.column_labels = [('비정상 절차서:', 665), ('Value', 95), ('Set-point', 92), ('Unit', 95)]
         self.setColumnCount(len(self.column_labels))
-        self.setHorizontalHeaderLabels([l for l in self.column_labels])
-
         self.setRowCount(10)
+        # self.setHorizontalHeaderLabels([l for l in self.column_labels])
+        col_names = []
+        for i, (l, w) in enumerate(self.column_labels):
+            self.setColumnWidth(i, w)
+            col_names.append(l)
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setFocusPolicy(Qt.NoFocus)
+        # self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.setContentsMargins(0, 0, 0, 0)
+
+        self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
+        self.horizontalHeader().setFixedHeight(35)
+
+        # 테이블 헤더
+        self.setHorizontalHeaderLabels(col_names)
+        self.horizontalHeader().setStyleSheet(
+            "::section {background: rgb(128, 128, 128);font-size:14pt;border:0px solid;}")
+        self.horizontalHeader().sectionPressed.disconnect()
+        self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
+        self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
+
+        # 테이블 행 높이 조절
+        for i in range(0, self.rowCount()):
+            self.setRowHeight(i, 35)
+
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
