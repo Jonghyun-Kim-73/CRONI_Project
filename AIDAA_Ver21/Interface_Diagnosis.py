@@ -18,7 +18,7 @@ class Diagnosis(ABCWidget):
         super(Diagnosis, self).__init__(parent)
         self.setStyleSheet(qss.AIDAA_Diagnosis)
         self.setObjectName("BG")
-        self.setContentsMargins(0, 0, 8, 0)
+        self.setContentsMargins(0, 0, 5, 0)
         self.setFixedWidth(950)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -33,7 +33,7 @@ class DiagnosisTop(ABCWidget):
         super(DiagnosisTop, self).__init__(parent)
         self.setContentsMargins(0, 0, 30, 0)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 5)
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
         lay.setSpacing(8)
@@ -69,28 +69,87 @@ class DiagnosisTopCallSystemSearch(ABCPushButton):
         SystemSearch(self).show()
 # ----------------------------------------------------------------------------------------------------------------------
 
+# class MyDelegate(QStyledItemDelegate):
+#     def __init__(self, parent=None, *args):
+#         QStyledItemDelegate.__init__(self, parent, *args)
+#
+#     def initStyleOption(self, option, index):
+#         super().initStyleOption(option, index)
+#         option.backgroundBrush = QBrush(QColor(232, 244, 252))
+
+class MyStyledItem(QStyledItemDelegate):
+    def __init__(self, margin, radius, border_color, border_width, parent=None):
+        """
+        margin: distance between border and top of cell
+        radius: radius of rounded corner
+        border_color: color of border
+        border_width: width of border
+        """
+        super().__init__(parent)
+        self.margin = margin
+        self.radius = radius
+        self.border_color = border_color
+        self.border_width = border_width
+
+    def sizeHint(self, option, index):
+        # increase original sizeHint to accommodate space needed for border
+        size = super().sizeHint(option, index)
+        size = size.grownBy(QMargins(0, self.margin, 0, self.margin))
+        return size
+
+    def paint(self, painter, option, index):
+        painter.save()
+        painter.setRenderHint(painter.Antialiasing)
+
+        # set clipping rect of painter to avoid painting outside the borders
+        painter.setClipping(True)
+        painter.setClipRect(option.rect)
+
+        # call original paint method where option.rect is adjusted to account for border
+        option.rect.adjust(0, self.margin, 0, -self.margin)
+        # option.backgroundBrush = QBrush(QColor(232, 244, 252))
+        super().paint(painter, option, index)
+
+        pen = painter.pen()
+        pen.setColor(self.border_color)
+        pen.setWidth(self.border_width)
+        painter.setPen(pen)
+        # draw either rounded rect for items in first or last column or ordinary rect
+        if index.column() == 0:
+            rect = option.rect.adjusted(self.border_width, 0, self.radius + self.border_width, 0)
+            painter.drawRoundedRect(rect, self.radius, self.radius)
+        elif index.column() == index.model().columnCount(index.parent()) - 1:
+            rect = option.rect.adjusted(-self.radius - self.border_width, 0, -self.border_width, 0)
+            painter.drawRoundedRect(rect, self.radius, self.radius)
+        else:
+            rect = option.rect.adjusted(-self.border_width, 0, self.border_width, 0)
+            painter.drawRect(rect)
+        # draw lines between columns
+        if index.column() > 0:
+            painter.drawLine(option.rect.topLeft(), option.rect.bottomLeft())
+        painter.restore()
+
 class ProcedureDiagonsisTable(ABCTableWidget):
     def __init__(self, parent):
         super(ProcedureDiagonsisTable, self).__init__(parent)
-        self.setObjectName("Table")
+        # self.setObjectName("Table")
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setShowGrid(False)  # Grid 지우기
-        self.setFixedWidth(950)
+        # self.setFixedWidth(950)
         self.setFixedHeight(211)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
-
-        column_labels = [('비정상 절차서 명', 555), ('긴급', 95), ('방사선', 95), ('진입조건', 107), ('AI 정확도', 95)]
+        delegate = MyStyledItem(margin=3, radius=10, border_width=2, border_color=QColor("navy"))
+        self.setItemDelegate(delegate)
+        column_labels = [('비정상 절차서 명', 510), ('긴급', 105), ('방사선', 105), ('진입조건', 107), ('AI 정확도', 120)]
         self.setColumnCount(len(column_labels))
         self.setRowCount(5)
-        # self.setHorizontalHeaderLabels([l for l in self.column_labels])
+
         col_names = []
         for i, (l, w) in enumerate(column_labels):
             self.setColumnWidth(i, w)
             col_names.append(l)
-
 
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
@@ -102,8 +161,6 @@ class ProcedureDiagonsisTable(ABCTableWidget):
 
         # 테이블 헤더
         self.setHorizontalHeaderLabels(col_names)
-        self.horizontalHeader().setStyleSheet(
-            "::section {background: rgb(128, 128, 128);font-size:14pt;border:0px solid;}")
         self.horizontalHeader().sectionPressed.disconnect()
         self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
@@ -174,9 +231,7 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
         super(SystemDiagnosisTable, self).__init__(parent)
         self.setObjectName("Table")
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setShowGrid(False)  # Grid 지우기
-        self.setFixedWidth(950)
         self.setFixedHeight(211)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -201,13 +256,10 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
 
         # 테이블 헤더
         self.setHorizontalHeaderLabels(col_names)
-        self.horizontalHeader().setStyleSheet(
-            "::section {background: rgb(128, 128, 128);font-size:14pt;border:0px solid;}")
         self.horizontalHeader().sectionPressed.disconnect()
         self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
-
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 35)
@@ -230,11 +282,9 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
 class ProcedureCheckTable(ABCTableWidget, QTableWidget):
     def __init__(self, parent):
         super(ProcedureCheckTable, self).__init__(parent)
-        self.setObjectName("Table")
+        self.setObjectName("tab3")
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setShowGrid(False)  # Grid 지우기
-        self.setFixedWidth(950)
         # self.setFixedHeight(211)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -258,8 +308,6 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
 
         # 테이블 헤더
         self.setHorizontalHeaderLabels(col_names)
-        self.horizontalHeader().setStyleSheet(
-            "::section {background: rgb(128, 128, 128);font-size:14pt;border:0px solid;}")
         self.horizontalHeader().sectionPressed.disconnect()
         self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가

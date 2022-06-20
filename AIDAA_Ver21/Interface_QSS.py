@@ -44,24 +44,53 @@ AIDAA_Diagnosis = """
             QPushButton#Button:hover {
                 background: rgb(0, 176, 218);
             }
-            QTableWidget#Table{
+            QTableWidget{
                 background: rgb(231, 231, 234);
                 border: 1px solid rgb(128, 128, 128); 
+                font: 23px Arial;
             }
-            QHeaderView#Table::section {
-                padding-left: 15px; 
+            QHeaderView::section {
+                background: rgb(128, 128, 128);
                 border: 0px;
+                font: 23px Arial;
+                padding-left:5px;
             }
-            QTableWidget#Table::item::selected {
+            QTableWidget::item::selected {
                 background-color: rgb(0, 176, 218);
+                font: 23px Arial;
             }
-            QTableWidget#Table::item {
-                padding-left: 15px; 
+            QTableWidget::item {
+                padding: 5px 0px 0px 0px;
+                font: 23px Arial;
+                left:10px;
             }
- 
+            QTableWidget::item::selected#tab3 {
+                height:32px;
+                background-color: rgb(0, 176, 218);
+                font: 23px Arial;
+                border-radius: 5px;
+            }
+            QTableWidget::item#tab3 {
+                background-color: rgb(178, 178, 178);
+                margin:3px;
+                font: 23px Arial;
+                left:10px;
+                
+                margin: 5px 0px 5px 0px;
+            }
+            
+            
+            
            
 """
-'''           QCheckBox::indicator {
+
+'''
+           border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+           
+           QCheckBox::indicator {
                     width:  22px;
                     height: 22px;
                     background-color:rgb(231, 231, 234); 
