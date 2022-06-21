@@ -64,54 +64,18 @@ AIDAA_Diagnosis = """
                 font: 23px Arial;
                 left:10px;
             }
+            
             QTableWidget::item::selected#tab3 {
-                height:32px;
+                margin: 1px 0px 1px 0px;
                 background-color: rgb(0, 176, 218);
                 font: 23px Arial;
-                border-radius: 5px;
+                border-radius: 2px;
             }
             QTableWidget::item#tab3 {
+                margin: 1px 0px 1px 0px;
                 background-color: rgb(178, 178, 178);
-                margin:3px;
                 font: 23px Arial;
-                left:10px;
-                
-                margin: 5px 0px 5px 0px;
+                border-radius: 2px;
             }
-            
-            
-            
            
 """
-
-'''
-           border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-           
-           QCheckBox::indicator {
-                    width:  22px;
-                    height: 22px;
-                    background-color:rgb(231, 231, 234); 
-            }
-            QCheckBox::indicator::unchecked {
-                width:  22px;
-                height: 22px;
-                border : 1px solid;
-            }
-            QCheckBox::indicator::checked {
-                image : url(../img/check.png);
-                height:22px;
-                width:22px;
-                border : 1px solid;
-            }'''
-
-''' QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
-                            selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
-                            color: #202020;
-                            outline: 0;}
-                            QTableWidget::item::hover{
-                            background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
-                            QTableWidget::item::focus
-                            {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}'''

@@ -69,13 +69,13 @@ class DiagnosisTopCallSystemSearch(ABCPushButton):
         SystemSearch(self).show()
 # ----------------------------------------------------------------------------------------------------------------------
 
-# class MyDelegate(QStyledItemDelegate):
-#     def __init__(self, parent=None, *args):
-#         QStyledItemDelegate.__init__(self, parent, *args)
-#
-#     def initStyleOption(self, option, index):
-#         super().initStyleOption(option, index)
-#         option.backgroundBrush = QBrush(QColor(232, 244, 252))
+class MyDelegate(QStyledItemDelegate):
+    def __init__(self, parent=None, *args):
+        QStyledItemDelegate.__init__(self, parent, *args)
+
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+        option.backgroundBrush = QBrush(QColor(0, 176, 218))
 
 class MyStyledItem(QStyledItemDelegate):
     def __init__(self, margin, radius, border_color, border_width, parent=None):
@@ -101,32 +101,34 @@ class MyStyledItem(QStyledItemDelegate):
         painter.save()
         painter.setRenderHint(painter.Antialiasing)
 
-        # set clipping rect of painter to avoid painting outside the borders
         painter.setClipping(True)
         painter.setClipRect(option.rect)
 
-        # call original paint method where option.rect is adjusted to account for border
+        # border enable
         option.rect.adjust(0, self.margin, 0, -self.margin)
-        # option.backgroundBrush = QBrush(QColor(232, 244, 252))
         super().paint(painter, option, index)
 
         pen = painter.pen()
         pen.setColor(self.border_color)
         pen.setWidth(self.border_width)
         painter.setPen(pen)
-        # draw either rounded rect for items in first or last column or ordinary rect
+        # 라인 그리기
         if index.column() == 0:
-            rect = option.rect.adjusted(self.border_width, 0, self.radius + self.border_width, 0)
+            rect = option.rect.adjusted(0, 0, self.radius + self.border_width, 0)
             painter.drawRoundedRect(rect, self.radius, self.radius)
         elif index.column() == index.model().columnCount(index.parent()) - 1:
             rect = option.rect.adjusted(-self.radius - self.border_width, 0, -self.border_width, 0)
             painter.drawRoundedRect(rect, self.radius, self.radius)
         else:
-            rect = option.rect.adjusted(-self.border_width, 0, self.border_width, 0)
+            rect = option.rect.adjusted(0, 0, self.border_width, 0)
             painter.drawRect(rect)
+
         # draw lines between columns
-        if index.column() > 0:
-            painter.drawLine(option.rect.topLeft(), option.rect.bottomLeft())
+        # if index.column() > 0:
+        #     painter.drawLine(rect.top(), rect.bottom())
+        #     pen.setWidth(20)
+        #     painter.setPen(pen)
+        #     painter.drawLine(option.rect.topLeft(), option.rect.bottomLeft())
         painter.restore()
 
 class ProcedureDiagonsisTable(ABCTableWidget):
@@ -140,8 +142,6 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
-        delegate = MyStyledItem(margin=3, radius=10, border_width=2, border_color=QColor("navy"))
-        self.setItemDelegate(delegate)
         column_labels = [('비정상 절차서 명', 510), ('긴급', 105), ('방사선', 105), ('진입조건', 107), ('AI 정확도', 120)]
         self.setColumnCount(len(column_labels))
         self.setRowCount(5)
@@ -237,10 +237,9 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
 
-        self.column_labels = [('System', 739), ('관련 경보', 98), ('AI 정확도', 95)]
+        self.column_labels = [('System', 705), ('관련 경보', 118), ('AI 정확도', 120)]
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(5)
-        # self.setHorizontalHeaderLabels([l for l in self.column_labels])
         col_names = []
         for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
@@ -248,7 +247,6 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
 
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
-        # self.setSelectionMode(QAbstractItemView.NoSelection)
         self.setContentsMargins(0, 0, 0, 0)
 
         self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
@@ -279,7 +277,7 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-class ProcedureCheckTable(ABCTableWidget, QTableWidget):
+class ProcedureCheckTable(ABCTableWidget):
     def __init__(self, parent):
         super(ProcedureCheckTable, self).__init__(parent)
         self.setObjectName("tab3")
@@ -290,34 +288,33 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
 
-        self.column_labels = [('비정상 절차서:', 665), ('Value', 95), ('Set-point', 92), ('Unit', 95)]
+
+        self.column_labels = [('비정상 절차서:', 615), ('Value', 105), ('Set-point', 122), ('Unit', 105)]
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(10)
-        # self.setHorizontalHeaderLabels([l for l in self.column_labels])
         col_names = []
         for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
             col_names.append(l)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
-        # self.setSelectionMode(QAbstractItemView.NoSelection)
         self.setContentsMargins(0, 0, 0, 0)
 
         self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
         self.horizontalHeader().setFixedHeight(35)
-
+        self.setItemDelegate(MyStyledItem(margin=3, radius=5, border_width=3, border_color=QColor(178,178,178)))
         # 테이블 헤더
         self.setHorizontalHeaderLabels(col_names)
         self.horizontalHeader().sectionPressed.disconnect()
         self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
-
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 35)
 
         self.widget_timer(iter_=500, funs=[self.dis_update])
+
 
     def dis_update(self):
         if self.inmem.current_table['Procedure'] != -1:
@@ -325,13 +322,11 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
             self.column_labels = [f'비정상 절차서: {self.inmem.current_procedure[0]}', 'Value', 'Set-point', 'Unit']
             self.setColumnCount(len(self.column_labels))
             self.setHorizontalHeaderLabels([l for l in self.column_labels])
-
+            # self.item(1, 1).setBackground(QColor(0, 0, 0))
             symptom_count = self.inmem.ShMem.get_pro_symptom_count(self.inmem.current_procedure[0])
             self.setRowCount(symptom_count)
             symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.current_procedure[0])
             [self.setItem(i, 0, QTableWidgetItem(symptom[i]['Des'])) for i in range(symptom_count)]
-
-            [self.item(i,0).setBackground(QColor(150,100,100)) for i in range(symptom_count)]
-
+            # self.item(i, 0).setBackground(QBrush(QColor(0, 0, 0))) for i in range(symptom_count))
 
 # ----------------------------------------------------------------------------------------------------------------------
