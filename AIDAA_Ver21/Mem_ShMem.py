@@ -2,6 +2,7 @@ from AIDAA_Ver21.DB_AlarmDB import AlarmDB
 from collections import deque
 from datetime import timedelta
 from AIDAA_Ver21.ab_procedure import ab_pro
+from collections import deque
 
 
 class ShMem:
@@ -87,6 +88,13 @@ class ShMem:
 
     def show_ai_diagnosis_result(self, ranked_list):
         return ranked_list
+
+    # Procedure
+    def get_pro_procedure(self, procedure_name):
+        return {'경보 및 증상': ab_pro[procedure_name]['경보 및 증상'], '자동 동작 사항': ab_pro[procedure_name]['자동 동작 사항'], '긴급 조치 사항': ab_pro[procedure_name]['긴급 조치 사항'], '후속 조치 사항': ab_pro[procedure_name]['후속 조치 사항']}
+
+    def get_pro_procedure_count(self, procedure_name):
+        return {'경보 및 증상': len(ab_pro[procedure_name]['경보 및 증상'].keys()), '자동 동작 사항': len(ab_pro[procedure_name]['자동 동작 사항'].keys()), '긴급 조치 사항': len(ab_pro[procedure_name]['긴급 조치 사항'].keys()), '후속 조치 사항': len(ab_pro[procedure_name]['후속 조치 사항'].keys())}
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -101,8 +109,9 @@ class InterfaceMem:
         self.system_state_switch = {'Normal': 1, 'Pre-abnormal': 0, 'Abnormal': 0, 'Emergency': 0}
         self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', False, False, '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', True, True, '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸즈 후단누설', True, True, '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', False, False, '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', True, True, '05/15', '0.76%']]}
         self.dis_AI_system = [['CVCS', '03/09', '72%']]
-        self.current_table = {'Procedure':-1, 'System': -1}
-        self.current_procedure = {0:''}
+        self.current_table = {'Procedure':0, 'System': 0}
+        self.current_procedure = {'num':0, 'des':{0:'내용 없음', 1:'목적', 2:'경보 및 증상', 3: '자동 동작 사항', 4: '긴급 조치 사항', 5: '후속 조치 사항'}}
+        self.current_procedure_log = 0
 
 
     # Widget 링크 용 ----------------------------------------------------------------------------------------------------
