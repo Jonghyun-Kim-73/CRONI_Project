@@ -85,7 +85,6 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
         xai_menu.triggered.connect(self.XAISearchShow)
         self.addAction(xai_menu)
 
-
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def XAISearchShow(self):
@@ -219,23 +218,27 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
         self.column_labels = ['비정상 절차서:', 'Value', 'Set-point', 'Unit']
         self.setColumnCount(len(self.column_labels))
         self.setHorizontalHeaderLabels([l for l in self.column_labels])
-
         self.setRowCount(10)
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
+        print(self.inmem.current_table['procedure_name'])
         if self.inmem.current_table['current_window'] == 0:
             if self.inmem.current_table['Procedure'] != -1:
-                self.inmem.current_procedure[0]=self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
-                self.column_labels = [f'비정상 절차서: {self.inmem.current_procedure[0]}', 'Value', 'Set-point', 'Unit']
                 self.setColumnCount(len(self.column_labels))
                 self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
+                if self.inmem.current_table['procedure_name'] != self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]:
+                    self.column_labels = [
+                        f'비정상 절차서: {self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}', 'Value',
+                        'Set-point', 'Unit']
+                    symptom_count = self.inmem.ShMem.get_pro_symptom_count(
+                        self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
+                    self.setRowCount(symptom_count)
+                    [self.setItem(i, 0, QTableWidgetItem(symptom[i]['Des'])) for i in range(symptom_count)]
+                    [self.item(i,0).setBackground(QColor(150,100,100)) for i in range(symptom_count)]
+                self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
 
-                symptom_count = self.inmem.ShMem.get_pro_symptom_count(self.inmem.current_procedure[0])
-                self.setRowCount(symptom_count)
-                symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.current_procedure[0])
-                [self.setItem(i, 0, QTableWidgetItem(symptom[i]['Des'])) for i in range(symptom_count)]
-                [self.item(i,0).setBackground(QColor(150,100,100)) for i in range(symptom_count)]
 
         elif self.inmem.current_table['current_window'] == 1:
             if self.inmem.current_table['System'] != -1:
