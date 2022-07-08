@@ -39,7 +39,6 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton, QPushButton):
         self.clicked.connect(self.dis_update)
         self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
 
-
     def dis_update(self):
         print('비정상 절차서 검색 창으로 이동')
         ProcedureSearch(self).show()
@@ -78,9 +77,19 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
                             {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
 
         self.doubleClicked.connect(self.dis_procedure)
+        self.clicked.connect(self.control_table)
         self.make_centerCB()
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.setContextMenuPolicy(Qt.ActionsContextMenu) # 우클릭 컨텍스트 메뉴 구성
+        xai_menu = QAction("XAI", self)
+        xai_menu.triggered.connect(self.XAISearchShow)
+        self.addAction(xai_menu)
+
 
         self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def XAISearchShow(self):
+        XAISearch(self).show()
 
     def make_centerCB(self):
         # urgent checkbox 삽입 (행길이 5; checkbox 5개)
@@ -120,12 +129,26 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
 
     def dis_update(self):
         # print('절차서 진단 AI 업데이트 예정')
-        [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-        [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-        [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-        [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-        [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
         self.inmem.current_table['Procedure'] = self.currentRow()
+        try:
+            if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
+                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
+                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+            else:
+                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
+                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
+                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
+                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
+                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+        except:
+            [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
+            [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
+            [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
+            [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
+            [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+
+    def control_table(self):
+        self.inmem.current_table['current_window'] = 0
 
     def dis_procedure(self):
         self.inmem.change_current_system_name('Procedure')
@@ -155,14 +178,30 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
                             QTableWidget::item::focus
                             {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
 
-        self.widget_timer(iter_=500, funs=[self.dis_update])
         self.doubleClicked.connect(self.dis_system)
+        self.clicked.connect(self.control_table)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.setContextMenuPolicy(Qt.ActionsContextMenu) # 우클릭 컨텍스트 메뉴 구성
+        xai_menu = QAction("XAI", self)
+        xai_menu.triggered.connect(self.XAISearchShow)
+        self.addAction(xai_menu)
+
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def XAISearchShow(self):
+        XAISearch(self).show()
 
     def dis_update(self):
         # print('시스템 진단 AI 업데이트 예정')
+
         [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI_system[i][0])) for i in range(1)]
         [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(1)]
         [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(1)]
+        self.inmem.current_table['System'] = self.currentRow()
+
+
+    def control_table(self):
+        self.inmem.current_table['current_window'] = 1
 
     def dis_system(self):
         self.inmem.change_current_system_name('Action')
@@ -185,18 +224,26 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
-        if self.inmem.current_table['Procedure'] != -1:
-            self.inmem.current_procedure[0]=self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
-            self.column_labels = [f'비정상 절차서: {self.inmem.current_procedure[0]}', 'Value', 'Set-point', 'Unit']
-            self.setColumnCount(len(self.column_labels))
-            self.setHorizontalHeaderLabels([l for l in self.column_labels])
+        if self.inmem.current_table['current_window'] == 0:
+            if self.inmem.current_table['Procedure'] != -1:
+                self.inmem.current_procedure[0]=self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
+                self.column_labels = [f'비정상 절차서: {self.inmem.current_procedure[0]}', 'Value', 'Set-point', 'Unit']
+                self.setColumnCount(len(self.column_labels))
+                self.setHorizontalHeaderLabels([l for l in self.column_labels])
 
-            symptom_count = self.inmem.ShMem.get_pro_symptom_count(self.inmem.current_procedure[0])
-            self.setRowCount(symptom_count)
-            symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.current_procedure[0])
-            [self.setItem(i, 0, QTableWidgetItem(symptom[i]['Des'])) for i in range(symptom_count)]
+                symptom_count = self.inmem.ShMem.get_pro_symptom_count(self.inmem.current_procedure[0])
+                self.setRowCount(symptom_count)
+                symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.current_procedure[0])
+                [self.setItem(i, 0, QTableWidgetItem(symptom[i]['Des'])) for i in range(symptom_count)]
+                [self.item(i,0).setBackground(QColor(150,100,100)) for i in range(symptom_count)]
 
-            [self.item(i,0).setBackground(QColor(150,100,100)) for i in range(symptom_count)]
+        elif self.inmem.current_table['current_window'] == 1:
+            if self.inmem.current_table['System'] != -1:
+                self.column_labels = [f'시스템: CVCS', 'Value', 'Set-point', 'Unit']
+                self.setColumnCount(len(self.column_labels))
+                self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                [self.setItem(i, 0, QTableWidgetItem('추후 업데이트 예정')) for i in range(15)]
+
 
 
 # ----------------------------------------------------------------------------------------------------------------------
