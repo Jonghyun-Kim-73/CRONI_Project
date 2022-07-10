@@ -52,3 +52,22 @@ class SystemSearchName(ABCLabel, QLabel):
     def __init__(self, parent):
         super(SystemSearchName, self).__init__(parent)
         self.setText('시스템')
+
+class XAISearch(ABCWidget, QWidget):
+    def __init__(self, parent):
+        super(XAISearch, self).__init__(parent)
+        self.setStyleSheet('background-color: rgb(212, 245, 211);')
+        self.setGeometry(200, 200, 390, 300)
+        lay = QVBoxLayout(self)
+        lay.addWidget(XAISearchWindow(self))
+
+class XAISearchWindow(ABCWidget, QWidget):
+    def __init__(self, parent):
+        super(XAISearchWindow, self).__init__(parent)
+        lay = QVBoxLayout(self)
+        lay.addWidget(XAISearchName(self))
+
+class XAISearchName(ABCLabel, QLabel):
+    def __init__(self, parent):
+        super(XAISearchName, self).__init__(parent)
+        self.setText('XAI')
