@@ -1,6 +1,8 @@
 from multiprocessing.managers import BaseManager
 from multiprocessing import Process
 import sys
+
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from AIDAA_Ver21.Mem_ShMem import ShMem
@@ -31,6 +33,9 @@ class InterfaceRun(Process):
     def __init__(self, mem):
         super(InterfaceRun, self).__init__()
         app = QApplication(sys.argv)
+        font = QFont()
+        font.setFamily("Malgun Gothic")
+        app.setFont(font)
         cns = CNS(mem)
         cns.show()
         w = Main(mem)

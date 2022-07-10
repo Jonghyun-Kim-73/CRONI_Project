@@ -22,6 +22,7 @@ class Main(QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)  # 상단바 제거
         QFontDatabase.addApplicationFont("Arial.ttf")
         QFontDatabase.addApplicationFont("맑은 고딕.ttf")
+
         self.top = MainTop(self)
         self.tab = MainTab(self)
         lay = QVBoxLayout(self)
@@ -59,10 +60,10 @@ class MainTop(ABCWidget):
         self.setObjectName("BG")
         self.setFixedHeight(45)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(5, 0, 0, 0)
+        lay.setContentsMargins(5, 5, 5, 5)
         lay.addWidget(MainTopTime(self))
         lay.addWidget(MainTopSystemName(self))
-
+        lay.setSpacing(5)
         # 현재 click된 btn & btn hover color 변경 위함
         self.btnGroup = QButtonGroup()
         self.btnGroup.setExclusive(False)
@@ -97,7 +98,7 @@ class MainTopTime(ABCLabel):
     def __init__(self, parent):
         super(MainTopTime, self).__init__(parent)
         self.setObjectName("Title")
-        self.setFixedSize(314, 35)
+        self.setFixedSize(315, 35)
         # timer section
         timer = QTimer(self)
         timer.setInterval(200)
@@ -115,7 +116,7 @@ class MainTopSystemName(ABCLabel):
     def __init__(self, parent):
         super(MainTopSystemName, self).__init__(parent)
         self.setObjectName("Title")
-        self.setFixedSize(633, 35)
+        self.setFixedSize(634, 35)
         # timer section
         timer = QTimer(self)
         timer.setInterval(200)
@@ -136,7 +137,7 @@ class MainTopCallMain(ABCPushButton):
         super(MainTopCallMain, self).__init__(parent)
         self.setText('Main')
         self.setObjectName("Tab")
-        self.setFixedSize(223, 35)
+        self.setFixedSize(224, 35)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -149,7 +150,7 @@ class MainTopCallIFAP(ABCPushButton):
         super(MainTopCallIFAP, self).__init__(parent)
         self.setText('IFAP')
         self.setObjectName("Tab")
-        self.setFixedSize(223, 35)
+        self.setFixedSize(224, 35)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -162,7 +163,7 @@ class MainTopCallAIDAA(ABCPushButton):
         super(MainTopCallAIDAA, self).__init__(parent)
         self.setText('AIDAA')
         self.setObjectName("Tab")
-        self.setFixedSize(223, 35)
+        self.setFixedSize(224, 35)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -175,7 +176,7 @@ class MainTopCallEGIS(ABCPushButton):
         super(MainTopCallEGIS, self).__init__(parent)
         self.setText('EGIS')
         self.setObjectName("Tab")
-        self.setFixedSize(223, 35)
+        self.setFixedSize(224, 35)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -204,7 +205,6 @@ class MainTab(ABCStackWidget):
     def __init__(self, parent):
         super(MainTab, self).__init__(parent)
         [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self), Procedure(self), Action(self)]]
-
     def change_system_page(self, system_name: str):
         """요청한 index 페이지로 전환
 

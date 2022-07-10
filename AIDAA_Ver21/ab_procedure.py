@@ -1081,92 +1081,92 @@ ab_pro = {
             }
 
         },
-        '후속 조치 사항': {
-            1: {
+        '후속 조치 사항': {  # 0부터 시작하도록 수정함.
+            0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '1시간 내에 “노심-2-2(정지여유도 계산) 절차서”에 따라 정지여유도 계산',
             },
-            2: {
+            1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.2',
                 'Des': '1시간 내에 “고리 3,4호기 운영기술지침서 제1편 3.1.1(정지여유도)”에 따라 수행',
             },
-            3: {
+            2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.3',
                 'Des': '1개의 제어봉이 낙하된 경우 “제어봉 구동장치 작동불능시의 후속 조치사항 5.2.2항” 수행',
             },
-            4: {
+            3: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.4',
                 'Des': '2개 이상의 제어봉이 낙하된 경우 “제어봉 구동장치 작동불능시의 후속 조치사항 5.2.3항” 수행',
             },
-            5: {
+            4: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.5',
                 'Des': '사분출력 경사비를 계산하여 1.02 초과하면 “고리 3,4호기 운영기술지침서 1편 3.2.4(사분출력 경사비)”에 따라 조치',
             },
-            6: {
+            5: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.6',
                 'Des': '필요시 터빈출력을 감발하여 Tavg와 Tref를 일치시킴',
             },
-            7: {
+            6: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7',
                 'Des': '고리3,4,호기 운영기술지침서상 계속적인 출력운전이 허용되면 낙하된 제어봉을 다음 순서에 따라 인출',
             },
-            8: {
+            7: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
                 'Des': '주의사항 : 운전원은 모든 핵계측 장치를 주의 깊게 감시',
             },
-            9: {
+            8: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.1',
                 'Des': '발전소가 안정상태를 유지하면 제어봉 제어선택스위치를 낙하된 제어봉 뱅크에 선택',
             },
-            10: {
+            9: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.2',
                 'Des': '낙하된 제어봉을 제외한 해당 뱅크 모든 제어봉의 올림권선(Lift Coil)을 개방(ROD DISCONNECTED)위치로 전환 (ZJ-P045)',
             },
-            11: {
+            10: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.3',
                 'Des': '낙하된 제어봉 뱅크의 해당그룹 스텝 계수기 위치를 기록',
             },
-            12: {
+            11: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.4',
                 'Des': '낙하된 제어봉 뱅크의 해당그룹 스텝 계수기 위치를 ‘0’으로 조정',
             },
-            13: {
+            12: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 동일 뱅크의 반대 그룹(예 : 1AC 낙하시 2AC)의 스텝 계수기 위치는 조정할 필요 없음',
             },
-            14: {
+            13: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.5',
                 'Des': '낙하된 제어봉이 출력제어군(Control Bank)에 속하면 다음 방법에 따라 해당펄스-아날로그 변환기를 ‘0’으로 조정'
                        '1) 펄스-아날로그 변환기의 디지털 표시 스위치를 해당뱅크에 선택'
                        '2) 자동-수동 스위치를 수동으로 전환하고, 해당 뱅크의 디지털 표시가 ‘0’이 될 때까지 반복해서 하향(Down) 스위치 누름'
                        '3) 자동-수동 스위치를 놓아 자동으로 전환',
             },
-            15: {
+            14: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 자동/수동 선택스위치는 스프링 복귀형태이므로, 수동위치에서 계속 누르고 있어야 함',
             },
-            16: {
+            15: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : “ROD BANKS LOW/LO-LO LIMIT” 경보 발생할 수 있음',
             },
-            17: {
+            16: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.6',
                 'Des': '제어봉 제어계통 긴급고장 경보를 원상복귀',
             },
-            18: {
+            17: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 긴급고장 경보를 원상복구하기 전 반드시 정지권선의 여자상태 확인',
             },
-            19: {
+            18: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.7',
                 'Des': '스텝 계수기 및 제어봉 위치 지시계를 감시하면서 제어봉을 약 6스텝 정도 인출',
             },
-            20: {
+            19: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 2스텝 정도 인출시 제어봉 제어계통 긴급고장 경보가 발생함'
                        '이유) 반대 그룹의 올림권선이 개방(ROD DISCONNECTED) 위치로 전환되어 있어, 전력함에 전류 신호가 공급되지 않음',
             },
-            21: {
+            20: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.8',
                 'Des': '낙하된 제어봉이 움직이지 않으면 다음사항에 따라 조치'
                        '1) 절차 5.7.2항에서 개방(ROD DISCONNECTED)위치로 전환했던 모든 올림 권선을 투입(ROD CONNECTED)위치로 전환 (ZJ-P045)'
@@ -1175,35 +1175,35 @@ ab_pro = {
                        '4) 제어봉 선택스위치를 수동 또는 자동으로 위치'
                        '5) “제어봉 구동장치 작동불능시의 후속 조치 사항 5.0항”을 수행',
             },
-            22: {
+            21: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.9',
                 'Des': '스텝 계수기 및 제어봉 위치 지시계를 감시하면서 초기 기록된 위치까지 낙하된 제어봉을 인출',
             },
-            23: {
+            22: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0.0',
                 'Des': '주의사항 : 낙하된 제어봉을 인출할 때 사분출력 경사비를 계속 감시',
             },
-            24: {
+            23: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.10',
                 'Des': 'Tavg가 증가하면 터빈출력을 증가 시키거나 붕소주입을 실시하여, Tref와 Tavg를 일치시킴',
             },
-            25: {
+            24: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.11',
                 'Des': '제어봉 위치 지시계를 이용하여 낙하된 제어봉이 동일 그룹의 다른 제어봉들과 같은 위치인지 확인',
             },
-            26: {
+            25: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.12',
                 'Des': '낙하된 제어봉이 원위치까지 인출되면 개방(ROD DISCONNECTED)위치로 전환했던 모든 제어봉의 올림권선을 투입(ROD CONNECTED)위치로 전환',
             },
-            27: {
+            26: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.13',
                 'Des': '제어봉 제어계통 긴급 고장 경보를 원상복귀',
             },
-            28: {
+            27: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.14',
                 'Des': '낙하된 제어봉에 의해 발생되었던 경보들이 원상복귀 되었는지 확인',
             },
-            29: {
+            28: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.15',
                 'Des': '다음 사항들이 정상으로 회복되었는가를 확인'
                        '1) 4개 채널간 원자로 출력영역 계측기 정상 확인'
@@ -1212,11 +1212,11 @@ ab_pro = {
                        '4) 노심출구 열전대를 이용한 제어봉 위치이상 여부확인 및 사분출력 경사비1.02이내 확인'
                        '5) 축방향 출력 편차가 제어범위이내 지시',
             },
-            30: {
+            29: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.16',
                 'Des': '제어봉 제어선택스위치를 자동으로 전환',
             },
-            31: {
+            30: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.7.17',
                 'Des': '발전소가 안정상태를 유지하면 필요시 다음과 같은 사항 확인'
                        '1) 제어군 제어선택스위치를 낙하되었던 뱅크에 선택'

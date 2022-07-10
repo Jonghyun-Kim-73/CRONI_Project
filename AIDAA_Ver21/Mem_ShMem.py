@@ -95,6 +95,7 @@ class ShMem:
 
     def get_pro_procedure_count(self, procedure_name):
         return {'경보 및 증상': len(ab_pro[procedure_name]['경보 및 증상'].keys()), '자동 동작 사항': len(ab_pro[procedure_name]['자동 동작 사항'].keys()), '긴급 조치 사항': len(ab_pro[procedure_name]['긴급 조치 사항'].keys()), '후속 조치 사항': len(ab_pro[procedure_name]['후속 조치 사항'].keys())}
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -149,3 +150,13 @@ class InterfaceMem:
     def update_ai_diagnosis_result(self, ranked_list):
         self.dis_AI = ranked_list
 
+    def get_ab_procedure_num(self, content):
+        return self.ShMem.get_pro_procedure(
+            self.dis_AI['AI'][self.current_table['Procedure']][0])[
+            self.current_procedure['des'][self.current_procedure['num']]][content]['Nub']
+
+    def get_ab_procedure_des(self, content):
+        return self.ShMem.get_pro_procedure(
+                    self.dis_AI['AI'][self.current_table['Procedure']][0])[
+                                    self.current_procedure['des'][self.current_procedure['num']]][
+                                    content]['Des']

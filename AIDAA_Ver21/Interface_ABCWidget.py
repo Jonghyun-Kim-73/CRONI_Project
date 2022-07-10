@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
-
+import Interface_QSS as qss
 
 def make_shmem(parent, child, widget_name):
     result = parent.inmem
@@ -43,6 +43,12 @@ class ABCPushButton(QPushButton, TOOL):
 class ABCLabel(QLabel, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCLabel, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+
+class Content_Label(QLabel, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(Content_Label, self).__init__()
+        self.setStyleSheet(qss.AIDAA_Diagnosis2)
         self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
 
 
