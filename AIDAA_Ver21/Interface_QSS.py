@@ -44,6 +44,20 @@ AIDAA_Diagnosis = """
                 background: rgb(231, 231, 234);
                 border:0px;
             }
+            QToolTip { 
+                background: white;
+                border: 1px solid #808080;
+           }
+            QCheckBox::indicator { 
+                width: 18px; 
+                height: 18px; 
+            } 
+            QCheckBox::indicator:unchecked {
+                image: url(./img/uncheck.png);
+            }
+            QCheckBox::indicator:checked {
+                image: url(./img/check.png);
+            }
             QPushButton#Button{
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
@@ -57,37 +71,33 @@ AIDAA_Diagnosis = """
             QTableWidget{
                 background: rgb(231, 231, 234);
                 border: 1px solid rgb(128, 128, 128); 
-                font: 23px;
+                font: 18px;
+                font-weight: bold;
             }
             QHeaderView::section {
                 background: rgb(128, 128, 128);
                 border: 0px;
-                font: 23px;
-                padding-left:5px;
+                font: 18px;
+                font-weight: bold;
+                qproperty-alignment: AlignCenter;
             }
             QTableWidget::item::selected {
                 background-color: rgb(0, 176, 218);
-                font: 23px;
-            }
-            QTableWidget::item {
-                padding: 5px 0px 0px 0px;
-                font: 23px;
-                left:10px;
+                color:black;
+                font-weight: bold;
+                font: 18px;
+                outline: 0;
             }
             
-            QTableWidget::item::selected#tab3 {
-                margin: 1px 0px 1px 0px;
-                background-color: rgb(0, 176, 218);
-                font: 23px;
-                border-radius: 2px;
+            QTableWidget::item {
+                font: 18px;
+                font-weight: bold;
             }
-            QTableWidget::item#tab3 {
-                margin: 1px 0px 1px 0px;
-                background-color: rgb(178, 178, 178);
-                font: 23px;
-                border-radius: 2px;
+            QTableView
+            {
+                outline: 0;
             }
-           
+  
 """
 
 AIDAA_Diagnosis2 = """
