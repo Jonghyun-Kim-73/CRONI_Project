@@ -1,13 +1,13 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
-from AIDAA_Ver21.Simulator_CNS import *
-from AIDAA_Ver21.Interface_Search import *
-from AIDAA_Ver21.Interface_Procedure import *
+from AIDAA_Ver21.Function_Simulator_CNS import *
+from AIDAA_Ver21.Interface_AIDAA_Procedure_Search import *
+from AIDAA_Ver21.Interface_AIDAA_Procedure import *
 from AIDAA_Ver21.Interface_Main import *
-from AIDAA_Ver21.symptom_check import *
+from AIDAA_Ver21.Function_AIDAA_Procedure_symptom_check import *
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -222,7 +222,7 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
-        print(self.inmem.current_table['procedure_name'])
+        # print(self.inmem.current_table['procedure_name'])
         if self.inmem.current_table['current_window'] == 0:
             if self.inmem.current_table['Procedure'] != -1:
                 self.setColumnCount(len(self.column_labels))

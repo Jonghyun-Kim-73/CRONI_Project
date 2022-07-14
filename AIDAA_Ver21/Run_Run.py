@@ -3,9 +3,9 @@ from multiprocessing import Process
 import sys
 from PyQt5.QtWidgets import *
 
-from AIDAA_Ver21.Mem_ShMem import ShMem
+from AIDAA_Ver21.Function_Mem_ShMem import ShMem
 from AIDAA_Ver21.Interface_Main import Main
-from AIDAA_Ver21.Simulator_CNS import CNS
+from AIDAA_Ver21.Function_Simulator_CNS import CNS
 
 
 class Run:

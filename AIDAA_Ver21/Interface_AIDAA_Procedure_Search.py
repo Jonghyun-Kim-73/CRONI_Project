@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
-from AIDAA_Ver21.Simulator_CNS import *
+from AIDAA_Ver21.Function_Simulator_CNS import *
 
 # ----------------------------------------------------------------------------------------------------------------------
 
