@@ -8,6 +8,7 @@ from AIDAA_Ver21.Interface_MainTabMain import *
 from AIDAA_Ver21.Interface_MainTabAIDAA import *
 from AIDAA_Ver21.Interface_AIDAA_Procedure import *
 from AIDAA_Ver21.Interface_AIDAA_Action_ import *
+from AIDAA_Ver21.Interface_AIDAA_Pretrip import *
 
 import Interface_QSS as qss
 from datetime import datetime
@@ -204,14 +205,16 @@ class MainTopClose(ABCPushButton):
 class MainTab(ABCStackWidget):
     def __init__(self, parent):
         super(MainTab, self).__init__(parent)
-        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self), Procedure(self), Action(self)]]
+        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self),
+                                     Procedure(self), Action(self), PreTrip(self)]]
+
     def change_system_page(self, system_name: str):
         """요청한 index 페이지로 전환
 
         Args:
             system_name (str): Main, IFAP, ...
         """
-        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3, 'Procedure': 4, 'Action': 5}[system_name])
+        self.setCurrentIndex({'Main': 0, 'IFAP': 1, 'AIDAA': 2, 'EGIS': 3, 'Procedure': 4, 'Action': 5, 'PreTrip': 6}[system_name])
 
 class MainTabIFAP(ABCWidget):
     def __init__(self, parent):

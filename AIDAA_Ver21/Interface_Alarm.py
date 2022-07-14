@@ -51,21 +51,31 @@ class AlarmFix(ABCWidget, QWidget):
             # self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
             # self.blick = False
 
-class AlarmFixPreTrip(ABCLabel, QLabel):
+class AlarmFixPreTrip(ABCPushButton, QLabel):
     def __init__(self, parent):
         super(AlarmFixPreTrip, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
         self.widget_timer(iter_=500, funs=[self.dis_update])
         self.setText('Prediction')
+        self.clicked.connect(self.change_main_display)
         self.blick = False
 
     def dis_update(self):
+        """
+        Prediction Blink 시 AIDAA도 blick.
+        """
         if self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 and self.blick == False:
             self.setStyleSheet('background-color: rgb(255, 255, 0); border: 1px solid rgb(128, 128, 128);')
+            self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 0);')
             self.blick = True
         else:
             self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
+            self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(238, 238, 238);')
             self.blick = False
+
+    def change_main_display(self):
+        self.inmem.change_current_system_name('PreTrip')
+        self.inmem.widget_ids['MainTopSystemName'].dis_update()
 
 class AlarmFixTrip(ABCLabel, QLabel):
     def __init__(self, parent):
@@ -151,16 +161,16 @@ class AlarmSortAIDAABtns(ABCWidget, QWidget):
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
         lay = QHBoxLayout(self)
         lay.addWidget(AlarmAIDAA_Suppress_SortPress(self))
-        lay.addWidget(AlarmSystem_Sort_SortPress(self))
+        lay.addWidget(AlarmSystem_Sortsystem_SortPress(self))
 
 class AlarmAIDAA_Suppress_SortPress(ABCPushButton, QPushButton):
     def __init__(self, parent):
-        super(AlarmAIDAA_SortPress_SortPress, self).__init__(parent)
+        super(AlarmAIDAA_Suppress_SortPress, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
         self.setText('Sort Press')
 
 class AlarmSystem_Sortsystem_SortPress(ABCPushButton, QPushButton):
     def __init__(self, parent):
-        super(AlarmSystem_Sort_SortPress, self).__init__(parent)
+        super(AlarmSystem_Sortsystem_SortPress, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
         self.setText('Sort System')
