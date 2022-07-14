@@ -3,10 +3,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 import pandas as pd
-from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
-from AIDAA_Ver21.Interface_Action_System_Mimic import *
-from AIDAA_Ver21.Interface_Action_alarm_area import *
+from AIDAA_Ver21.Interface_AIDAA_Action_System_Mimic import *
+from AIDAA_Ver21.Interface_AIDAA_Action_alarm_area import *
 
 
 class Action(ABCWidget):

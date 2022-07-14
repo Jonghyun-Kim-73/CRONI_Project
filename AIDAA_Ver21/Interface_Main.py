@@ -2,12 +2,12 @@ import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_MainTabMain import *
 from AIDAA_Ver21.Interface_MainTabAIDAA import *
-from AIDAA_Ver21.Interface_Procedure import *
-from AIDAA_Ver21.Interface_Action_ import *
+from AIDAA_Ver21.Interface_AIDAA_Procedure import *
+from AIDAA_Ver21.Interface_AIDAA_Action_ import *
 
 import Interface_QSS as qss
 from datetime import datetime
