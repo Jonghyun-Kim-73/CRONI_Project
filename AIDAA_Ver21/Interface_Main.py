@@ -68,6 +68,8 @@ class MainTopSystemName(ABCLabel):
             self.setText('AIDAA')
         elif self.inmem.get_current_system_name() == 'Action':
             self.setText('AIDAA')
+        elif self.inmem.get_current_system_name() == 'PreTrip':
+            self.setText('AIDAA')
         else:
             self.setText(self.inmem.get_current_system_name())
 

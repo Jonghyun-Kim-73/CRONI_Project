@@ -66,7 +66,10 @@ class AlarmFixPreTrip(ABCPushButton, QLabel):
         """
         if self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 and self.blick == False:
             self.setStyleSheet('background-color: rgb(255, 255, 0); border: 1px solid rgb(128, 128, 128);')
-            self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 0);')
+            if self.inmem.get_current_system_name() == 'Main':
+                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 0);')
+            else:
+                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(238, 238, 238);')
             self.blick = True
         else:
             self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
