@@ -105,7 +105,7 @@ class InterfaceMem:
         # Top_widget 정보 등록
         self.add_widget_id(top_widget)
         # Current system
-        self.system_switch = {'Main': 1, 'IFAP': 0, 'AIDAA': 0, 'EGIS': 0, 'Procedure': 0, 'Action': 0}
+        self.system_switch = {'Main': 1, 'IFAP': 0, 'AIDAA': 0, 'EGIS': 0, 'Procedure': 0, 'Action': 0, 'PreTrip': 0}
         self.system_state_switch = {'Normal': 1, 'Pre-abnormal': 0, 'Abnormal': 0, 'Emergency': 0}
         self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', False, False, '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', True, True, '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸즈 후단누설', True, True, '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', False, False, '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', True, True, '05/15', '0.76%']]}
         self.dis_AI_system = [['CVCS', '03/09', '72%']]
