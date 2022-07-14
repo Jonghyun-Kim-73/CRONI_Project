@@ -123,19 +123,26 @@ class AlarmSortBtns(ABCWidget, QWidget):
         super(AlarmSortBtns, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
         lay = QHBoxLayout(self)
-        lay.addWidget(AlarmSortPress(self))
-        lay.addWidget(AlarmSortSystem(self))
+        lay.addWidget(Alarm_IFAP_SortPress(self))
+        lay.addWidget(Alarm_AIDAA_SortPress(self))
+        lay.addWidget(Alarm_EGIS_SortPress(self))
 
 
-class AlarmSortPress(ABCPushButton, QPushButton):
+class Alarm_IFAP_SortPress(ABCPushButton, QPushButton):
     def __init__(self, parent):
-        super(AlarmSortPress, self).__init__(parent)
+        super(Alarm_IFAP_SortPress, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
-        self.setText('SortPress')
+        self.setText('Alarm_IFAP')
 
 
-class AlarmSortSystem(ABCPushButton, QPushButton):
+class Alarm_AIDAA_SortPress(ABCPushButton, QPushButton):
     def __init__(self, parent):
-        super(AlarmSortSystem, self).__init__(parent)
+        super(Alarm_AIDAA_SortPress, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
-        self.setText('SortSystem')
+        self.setText('Alarm_AIDAA')
+
+class Alarm_EGIS_SortPress(ABCPushButton, QPushButton):
+    def __init__(self, parent):
+        super(Alarm_EGIS_SortPress, self).__init__(parent)
+        self.setStyleSheet('background-color: rgb(238, 238, 238);')
+        self.setText('Alarm_EGIS')
