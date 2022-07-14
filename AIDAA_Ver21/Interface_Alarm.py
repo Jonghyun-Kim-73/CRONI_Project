@@ -24,26 +24,26 @@ class AlarmFix(ABCWidget, QWidget):
         super(AlarmFix, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
         lay = QHBoxLayout(self)
-        lay.addWidget(AlarmFixUrgentAct(self))
+        # lay.addWidget(AlarmFixUrgentAct(self))
         lay.addWidget(AlarmFixPreTrip(self))
         lay.addWidget(AlarmFixTrip(self))
 
 
-class AlarmFixUrgentAct(ABCLabel, QLabel):
-    def __init__(self, parent):
-        super(AlarmFixUrgentAct, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.setText('긴급조치')
-        self.blick = False
+# class AlarmFixUrgentAct(ABCLabel, QLabel):
+    # def __init__(self, parent):
+        # super(AlarmFixUrgentAct, self).__init__(parent)
+        # self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
+        # self.widget_timer(iter_=500, funs=[self.dis_update])
+        # self.setText('긴급조치')
+        # self.blick = False
 
-    def dis_update(self):
-        if self.inmem.ShMem.get_para_val('iFixUgentAct') == 1 and self.blick == False:
-            self.setStyleSheet('background-color: rgb(255, 255, 0); border: 1px solid rgb(128, 128, 128);')
-            self.blick = True
-        else:
-            self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
-            self.blick = False
+    # def dis_update(self):
+        # if self.inmem.ShMem.get_para_val('iFixUgentAct') == 1 and self.blick == False:
+            # self.setStyleSheet('background-color: rgb(255, 255, 0); border: 1px solid rgb(128, 128, 128);')
+            # self.blick = True
+        # else:
+            # self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
+            # self.blick = False
 
 
 class AlarmFixPreTrip(ABCLabel, QLabel):
@@ -51,7 +51,7 @@ class AlarmFixPreTrip(ABCLabel, QLabel):
         super(AlarmFixPreTrip, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
         self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.setText('Pre-Trip')
+        self.setText('Prediction')
         self.blick = False
 
     def dis_update(self):
