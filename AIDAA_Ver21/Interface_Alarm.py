@@ -91,9 +91,14 @@ class AlarmFixTrip(ABCLabel, QLabel):
     def dis_update(self):
         if self.inmem.ShMem.get_para_val('iFixTrip') == 1 and self.blick == False:
             self.setStyleSheet('background-color: rgb(255, 255, 0); border: 1px solid rgb(128, 128, 128);')
+            if self.inmem.get_current_system_name() == 'Main':
+                self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(255, 255, 0);')
+            else:
+                self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(238, 238, 238);')
             self.blick = True
         else:
             self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
+            self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(238, 238, 238);')
             self.blick = False
 
 class AlarmTable(ABCTableWidget, QTableWidget):
