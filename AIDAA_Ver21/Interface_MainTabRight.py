@@ -6,27 +6,55 @@ from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 
 
-class MainTabRight(ABCWidget, QWidget):
+class MainTabRight(ABCWidget):
     def __init__(self, parent):
         super(MainTabRight, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(230, 184, 175);')
-
+        self.setContentsMargins(0, 0, 0, 0)
         self.vl = QVBoxLayout(self)
         self.hl = QHBoxLayout()
-        self.hl.addWidget(MainTabRightTopNormalBtn(self))
-        self.hl.addWidget(MainTabRightTopPreabnormalBtn(self))
-        self.hl.addWidget(MainTabRightTopAbnormalBtn(self))
-        self.hl.addWidget(MainTabRightTopEmergencyBtn(self))
+        self.vl.setContentsMargins(0, 0, 0, 0)
+        self.hl.setContentsMargins(0, 0, 0, 0)
+        # 현재 click된 btn & btn hover color 변경 위함
+        self.btnGroup = QButtonGroup()
+        self.btnGroup.setExclusive(False)
+        self.btnGroup.buttonClicked[int].connect(self.btnClicked)
+
+        btn1 = MainTabRightTopNormalBtn(self)
+        btn2 = MainTabRightTopPreabnormalBtn(self)
+        btn3 = MainTabRightTopAbnormalBtn(self)
+        btn4 = MainTabRightTopEmergencyBtn(self)
+
+        self.btnGroup.addButton(btn1, 0)
+        self.btnGroup.addButton(btn2, 1)
+        self.btnGroup.addButton(btn3, 2)
+        self.btnGroup.addButton(btn4, 3)
+
+        self.hl.addWidget(btn1)
+        self.hl.addWidget(btn2)
+        self.hl.addWidget(btn3)
+        self.hl.addWidget(btn4)
+
+        self.hl.setSpacing(5)
+        self.hl.addStretch(1)
         self.vl.addLayout(self.hl)
         self.vl.addWidget(MainTabRightBottomWid(self))
-        
+        self.vl.setSpacing(5)
         self.inmem.widget_ids['MainTabRightTopNormalBtn'].dis_update()
-        
+
+    def btnClicked(self, id):
+        for button in self.btnGroup.buttons():
+            if button is self.btnGroup.button(id):
+                button.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+            else:
+                button.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
+
 # ------------------------------------------------------------------------------------------
-class MainTabRightTopNormalBtn(ABCPushButton, QPushButton):
+class MainTabRightTopNormalBtn(ABCPushButton):
     def __init__(self, parent):
         super(MainTabRightTopNormalBtn, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
+        self.setObjectName("Right")
+        self.setFixedSize(224, 35)
         self.setText('Normal')
         self.clicked.connect(self.dis_update)
         
@@ -38,15 +66,16 @@ class MainTabRightTopNormalBtn(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTabRightTopEmergencyBtn'].dis_off()
     
     def dis_on(self):
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
         
     def dis_off(self):
-        self.setStyleSheet('background-color: rgb(130, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
     
-class MainTabRightTopPreabnormalBtn(ABCPushButton, QPushButton):
+class MainTabRightTopPreabnormalBtn(ABCPushButton):
     def __init__(self, parent):
         super(MainTabRightTopPreabnormalBtn, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
+        self.setObjectName("Right")
+        self.setFixedSize(224, 35)
         self.setText('Pre-abnormal')
         self.clicked.connect(self.dis_update)
     
@@ -56,17 +85,18 @@ class MainTabRightTopPreabnormalBtn(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTabRightTopPreabnormalBtn'].dis_on()
         self.inmem.widget_ids['MainTabRightTopAbnormalBtn'].dis_off()
         self.inmem.widget_ids['MainTabRightTopEmergencyBtn'].dis_off()
-    
+
     def dis_on(self):
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
-        
+        self.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
     def dis_off(self):
-        self.setStyleSheet('background-color: rgb(130, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
     
-class MainTabRightTopAbnormalBtn(ABCPushButton, QPushButton):
+class MainTabRightTopAbnormalBtn(ABCPushButton):
     def __init__(self, parent):
         super(MainTabRightTopAbnormalBtn, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
+        self.setObjectName("Right")
+        self.setFixedSize(224, 35)
         self.setText('Abnormal')
         self.clicked.connect(self.dis_update)
     
@@ -76,17 +106,18 @@ class MainTabRightTopAbnormalBtn(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTabRightTopPreabnormalBtn'].dis_off()
         self.inmem.widget_ids['MainTabRightTopAbnormalBtn'].dis_on()
         self.inmem.widget_ids['MainTabRightTopEmergencyBtn'].dis_off()
-    
+
     def dis_on(self):
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
-        
+        self.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
     def dis_off(self):
-        self.setStyleSheet('background-color: rgb(130, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
         
-class MainTabRightTopEmergencyBtn(ABCPushButton, QPushButton):
+class MainTabRightTopEmergencyBtn(ABCPushButton):
     def __init__(self, parent):
         super(MainTabRightTopEmergencyBtn, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
+        self.setObjectName("Right")
+        self.setFixedSize(224, 35)
         self.setText('Emergency')
         self.clicked.connect(self.dis_update)
     
@@ -96,23 +127,23 @@ class MainTabRightTopEmergencyBtn(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTabRightTopPreabnormalBtn'].dis_off()
         self.inmem.widget_ids['MainTabRightTopAbnormalBtn'].dis_off()
         self.inmem.widget_ids['MainTabRightTopEmergencyBtn'].dis_on()
-    
+
     def dis_on(self):
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
-        
+        self.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
     def dis_off(self):
-        self.setStyleSheet('background-color: rgb(130, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
             
 # ------------------------------------------------------------------------------------------
-class MainTabRightBottomWid(ABCStackWidget, QWidget):
+class MainTabRightBottomWid(ABCStackWidget):
     def __init__(self, parent):
         super(MainTabRightBottomWid, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(230, 184, 10);')
-        [self.addWidget(_) for _ in [MainTabRightBottomNormalW(self), 
-                                     MainTabRightBottomPreabnormalW(self), 
-                                     MainTabRightBottomAbnormalW(self), 
+        self.setStyleSheet('background-color: rgb(231,231,234);')   # 수정 예정
+        [self.addWidget(_) for _ in [MainTabRightBottomNormalW(self),
+                                     MainTabRightBottomPreabnormalW(self),
+                                     MainTabRightBottomAbnormalW(self),
                                      MainTabRightBottomEmergencyW(self)]]
-        
+
     def change_condition_page(self, condition_name: str):
         """요청한 index 페이지로 전환
 
@@ -124,19 +155,19 @@ class MainTabRightBottomWid(ABCStackWidget, QWidget):
 class MainTabRightBottomNormalW(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTabRightBottomNormalW, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(176, 224, 230);')
+        self.setStyleSheet('background-color: rgb(231,231,234);')
 
 class MainTabRightBottomPreabnormalW(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTabRightBottomPreabnormalW, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(180, 210, 230);')
+        self.setStyleSheet('background-color: rgb(231,231,234);')
         
 class MainTabRightBottomAbnormalW(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTabRightBottomAbnormalW, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(190, 200, 230);')
+        self.setStyleSheet('background-color: rgb(231,231,234);')
 
 class MainTabRightBottomEmergencyW(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTabRightBottomEmergencyW, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(200, 190, 230);')
+        self.setStyleSheet('background-color: rgb(231,231,234);')

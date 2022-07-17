@@ -5,35 +5,38 @@ from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 
 
-class MainAlarm(ABCWidget, QWidget):
+class MainAlarm(ABCWidget):
     def __init__(self, parent):
         super(MainAlarm, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(167, 242, 211);')
-
         lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(AlarmFix(self))
         lay.addWidget(AlarmTable(self))
         lay.addWidget(AlarmSortSystemBtns(self))
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(5)
 
-class AIDAAAlarm(ABCWidget, QWidget):
+class AIDAAAlarm(ABCWidget):
     def __init__(self, parent):
         super(AIDAAAlarm, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(167, 242, 211);')
-
+        self.setFixedWidth(900) # 임시
         lay = QVBoxLayout(self)
         lay.addWidget(AlarmFix(self))
         lay.addWidget(AlarmTable(self))
         lay.addWidget(AlarmSortAIDAABtns(self))
 
 # ----------------------------------------------------------------------------------------------------------------------
-class AlarmFix(ABCWidget, QWidget):
+class AlarmFix(ABCWidget):
     def __init__(self, parent):
         super(AlarmFix, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238);')
         lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+
         # lay.addWidget(AlarmFixUrgentAct(self))
         lay.addWidget(AlarmFixPreTrip(self))
         lay.addWidget(AlarmFixTrip(self))
+        lay.setSpacing(5)
 
 # class AlarmFixUrgentAct(ABCLabel, QLabel):
     # def __init__(self, parent):
@@ -51,10 +54,11 @@ class AlarmFix(ABCWidget, QWidget):
             # self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
             # self.blick = False
 
-class AlarmFixPreTrip(ABCPushButton, QLabel):
+class AlarmFixPreTrip(ABCPushButton):
     def __init__(self, parent):
         super(AlarmFixPreTrip, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
+        self.setObjectName("Left")
+        self.setFixedSize(474, 35)
         self.widget_timer(iter_=500, funs=[self.dis_update])
         self.setText('Prediction')
         self.clicked.connect(self.change_main_display)
@@ -65,51 +69,52 @@ class AlarmFixPreTrip(ABCPushButton, QLabel):
         Prediction Blink 시 AIDAA도 blick.
         """
         if self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 and self.blick == False:
-            self.setStyleSheet('background-color: rgb(255, 255, 0); border: 1px solid rgb(128, 128, 128);')
+            self.setStyleSheet('background-color: rgb(0, 176, 218);')
             if self.inmem.get_current_system_name() == 'Main':
-                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 0);')
+                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(0, 176, 218);')
             else:
-                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(238, 238, 238);')
+                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = True
-        else:
-            self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
-            self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(238, 238, 238);')
+        elif self.inmem.ShMem.get_para_val('iFixPreTrip') == 1:  # 1값이 아닐때 영향받음
+            self.setStyleSheet('background-color: rgb(0, 176, 86);')
+            self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = False
 
     def change_main_display(self):
         self.inmem.change_current_system_name('PreTrip')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
 
-class AlarmFixTrip(ABCLabel, QLabel):
+class AlarmFixTrip(ABCLabel):
     def __init__(self, parent):
         super(AlarmFixTrip, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
+        self.setObjectName("Left")
+        self.setFixedSize(475, 35)
         self.widget_timer(iter_=500, funs=[self.dis_update])
         self.setText('Trip')
         self.blick = False
 
     def dis_update(self):
         if self.inmem.ShMem.get_para_val('iFixTrip') == 1 and self.blick == False:
-            self.setStyleSheet('background-color: rgb(255, 255, 0); border: 1px solid rgb(128, 128, 128);')
+            self.setStyleSheet('background-color: rgb(0, 176, 218);')
             if self.inmem.get_current_system_name() == 'Main':
-                self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(255, 255, 0);')
+                self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(0, 176, 218);')
             else:
-                self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(238, 238, 238);')
+                self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = True
-        else:
-            self.setStyleSheet('background-color: rgb(238, 238, 238); border: 1px solid rgb(128, 128, 128);')
-            self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(238, 238, 238);')
+        elif self.inmem.ShMem.get_para_val('iFixTrip') == 1:
+            self.setStyleSheet('background-color: rgb(0, 176, 86);')
+            self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = False
 
-class AlarmTable(ABCTableWidget, QTableWidget):
+class AlarmTable(ABCTableWidget):
     def __init__(self, parent):
         super(AlarmTable, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
-
         self.column_labels = ['DESCRIPTION', 'VALUE', 'SETPOINT', 'UNIT', 'DATE', 'TIME']
         self.setColumnCount(len(self.column_labels))
+        self.setFixedWidth(900) # 임시
         self.setHorizontalHeaderLabels([l for l in self.column_labels])
-
+        self.setContentsMargins(0, 0, 0, 0)
         self.widget_timer(500, [self.dis_update])
         self.dis_alarm_list = []
 
@@ -134,36 +139,37 @@ class AlarmTable(ABCTableWidget, QTableWidget):
         return new_alarm_list
 # ----------------------------------------------------------------------------------------------------------------------
 # Main 에서 Sort 버튼
-class AlarmSortSystemBtns(ABCWidget, QWidget):
+class AlarmSortSystemBtns(ABCWidget):
     def __init__(self, parent):
         super(AlarmSortSystemBtns, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238);')
         lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(AlarmSystem_IFAP_SortPress(self))
         lay.addWidget(AlarmSystem_AIDAA_SortPress(self))
         lay.addWidget(AlarmSystem_EGIS_SortPress(self))
+        lay.setSpacing(5)
 
-class AlarmSystem_IFAP_SortPress(ABCPushButton, QPushButton):
+class AlarmSystem_IFAP_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_IFAP_SortPress, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238);')
+        self.setObjectName("Bottom")
         self.setText('Alarm_IFAP')
 
-class AlarmSystem_AIDAA_SortPress(ABCPushButton, QPushButton):
+class AlarmSystem_AIDAA_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_AIDAA_SortPress, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238);')
+        self.setObjectName("Bottom")
         self.setText('Alarm_AIDAA')
 
-class AlarmSystem_EGIS_SortPress(ABCPushButton, QPushButton):    
+class AlarmSystem_EGIS_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_EGIS_SortPress, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(238, 238, 238);')
+        self.setObjectName("Bottom")
         self.setText('Alarm_EGIS')
 
 # ----------------------------------------------------------------------------------------------------------------------
 # AIDAA 에서 Sort 버튼
-class AlarmSortAIDAABtns(ABCWidget, QWidget):
+class AlarmSortAIDAABtns(ABCWidget):
     def __init__(self, parent):
         super(AlarmSortAIDAABtns, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
@@ -171,13 +177,13 @@ class AlarmSortAIDAABtns(ABCWidget, QWidget):
         lay.addWidget(AlarmAIDAA_Suppress_SortPress(self))
         lay.addWidget(AlarmSystem_Sortsystem_SortPress(self))
 
-class AlarmAIDAA_Suppress_SortPress(ABCPushButton, QPushButton):
+class AlarmAIDAA_Suppress_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmAIDAA_Suppress_SortPress, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
         self.setText('Sort Press')
 
-class AlarmSystem_Sortsystem_SortPress(ABCPushButton, QPushButton):
+class AlarmSystem_Sortsystem_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_Sortsystem_SortPress, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(238, 238, 238);')

@@ -23,7 +23,7 @@ Top_Bar = """
             }
             QPushButton#Tab:hover {
                 background: rgb(0, 176, 218);
-                 border-radius: 5px;
+                border-radius: 5px;
                 border:0px;
                 color: rgb(0, 0, 0);
                 font: 27px;
@@ -238,5 +238,56 @@ AIDAA_Diagnosis2 = """
             QScrollBar::handle::pressed
             {
                 background : white;
+            }
+"""
+
+Main_Tab = """
+            QPushButton#Left{
+                background: rgb(0, 176, 86);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 23px;
+                qproperty-alignment: AlignCenter;
+            }
+            QLabel#Left{
+                background: rgb(0, 176, 86);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 23px;
+                qproperty-alignment: AlignCenter;
+            }
+            QPushButton#Bottom{
+                background: rgb(255, 255, 255);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 23px;
+                qproperty-alignment: AlignCenter;
+            }
+            QPushButton#Bottom::hover{
+                background: rgb(0, 178, 218);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 23px;
+                qproperty-alignment: AlignCenter;
+            }
+            QPushButton#Right{
+                background: rgb(128, 128, 128);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 23px;
+                qproperty-alignment: AlignCenter;
+            }
+            QPushButton#Right::hover{
+                background: rgb(0, 178, 128);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 23px;
+                qproperty-alignment: AlignCenter;
             }
 """
