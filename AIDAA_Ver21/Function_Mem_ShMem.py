@@ -116,24 +116,23 @@ class InterfaceMem:
         self.system_state_switch = {'Normal': 1, 'Pre-abnormal': 0, 'Abnormal': 0, 'Emergency': 0}
 
         self.diagnosis_convert_text = {0: 'Normal: 정상', 1: 'Ab21_01: 가압기 압력 채널 고장 (고)', 2: 'Ab21_02: 가압기 압력 채널 고장 (저)',
-                                       3: 'Ab20_04: 가압기 수위 채널 고장 (저)', 4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)',
-                                       5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
-                                       6: 'Ab63_04: 제어봉 낙하', 7: 'Ab63_02: 제어봉의 계속적인 삽입', 8: 'Ab21_12: 가압기 PORV (열림)',
-                                       9: 'Ab19_02: 가압기 안전밸브 고장', 10: 'Ab21_11: 가압기 살수밸브 고장 (열림)',
-                                       11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
-                                       12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸즈 후단누설',
-                                       14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설'}
+                                  3: 'Ab20_04: 가압기 수위 채널 고장 (저)', 4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)',
+                                  5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
+                                  6: 'Ab63_04: 제어봉 낙하', 7: 'Ab63_02: 제어봉의 계속적인 삽입', 8: 'Ab21_12: 가압기 PORV (열림)',
+                                  9: 'Ab19_02: 가압기 안전밸브 고장', 10: 'Ab21_11: 가압기 살수밸브 고장 (열림)',
+                                  11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
+                                  12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸즈 후단누설',
+                                  14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설',
+                                  16: '해당 시나리오는 학습되지 않은 시나리오입니다.', 17: '학습여부를 아직 확인할 수 없습니다.'}
         self.current_procedure = {self.diagnosis_convert_text[i]: {'num': 0, 'des': {0: '내용 없음', 1: '목적', 2: '경보 및 증상',
                                                                                      3: '자동 동작 사항', 4: '긴급 조치 사항',
-                                                                                     5: '후속 조치 사항'}} for i in range(16)}
+                                                                                     5: '후속 조치 사항'}} for i in range(18)}
         self.current_procedure_log = [0, 0]  # [절차서 화면 전환 용도, 선택 절차서 전환 용도]
         self.current_table = {'Procedure':0, 'System': 0, 'current_window': -1, 'procedure_name':""}
-        self.current_procedure = {'num':0, 'des':{0:'내용 없음', 1:'목적', 2:'경보 및 증상', 3: '자동 동작 사항', 4: '긴급 조치 사항', 5: '후속 조치 사항'}}
-        self.current_procedure_log = 0
 
         self.procedure_progress_state = {
             self.diagnosis_convert_text[i]: {'목적': 0, '경보 및 증상': 0, '자동 동작 사항': 0, '긴급 조치 사항': 0, '후속 조치 사항': 0} for i
-            in range(16)}
+            in range(18)}
         self.pro_procedure_count = [self.ShMem.get_pro_procedure_count(self.diagnosis_convert_text[i]) for i in
                                     range(16)]
         self.procedure_click_state = {self.diagnosis_convert_text[i]: {'목적': [0 for k in range(20)],
