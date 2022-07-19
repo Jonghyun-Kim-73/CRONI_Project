@@ -2349,13 +2349,10 @@ class ProcedureComplet(ABCPushButton, QPushButton):
             pass
         else:
             if 0 in self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state]:
-                print('비홯성화')
                 self.setEnabled(False)
             elif 2 in self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state]:
-                print('비홯성화')
                 self.setEnabled(False)
             else:
-                print('활성화')
                 self.setEnabled(True)
 
     def dis_update(self):

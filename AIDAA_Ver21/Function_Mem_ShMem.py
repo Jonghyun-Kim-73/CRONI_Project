@@ -122,14 +122,11 @@ class InterfaceMem:
                                        11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
                                        12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸즈 후단누설',
                                        14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설'}
-        self.current_table = {'Procedure': 0, 'System': 0}
         self.current_procedure = {self.diagnosis_convert_text[i]: {'num': 0, 'des': {0: '내용 없음', 1: '목적', 2: '경보 및 증상',
                                                                                      3: '자동 동작 사항', 4: '긴급 조치 사항',
                                                                                      5: '후속 조치 사항'}} for i in range(16)}
         self.current_procedure_log = [0, 0]  # [절차서 화면 전환 용도, 선택 절차서 전환 용도]
         self.current_table = {'Procedure':0, 'System': 0, 'current_window': -1, 'procedure_name':""}
-        self.current_procedure = {'num':0, 'des':{0:'내용 없음', 1:'목적', 2:'경보 및 증상', 3: '자동 동작 사항', 4: '긴급 조치 사항', 5: '후속 조치 사항'}}
-        self.current_procedure_log = 0
 
         self.procedure_progress_state = {
             self.diagnosis_convert_text[i]: {'목적': 0, '경보 및 증상': 0, '자동 동작 사항': 0, '긴급 조치 사항': 0, '후속 조치 사항': 0} for i
