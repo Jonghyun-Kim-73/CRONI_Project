@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from AIDAA_Ver21.Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
-from AIDAA_Ver21.Simulator_CNS import *
+from AIDAA_Ver21.Function_Simulator_CNS import *
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -52,3 +52,24 @@ class SystemSearchName(ABCLabel, QLabel):
     def __init__(self, parent):
         super(SystemSearchName, self).__init__(parent)
         self.setText('시스템')
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+class XAISearch(ABCWidget, QWidget):
+    def __init__(self, parent):
+        super(XAISearch, self).__init__(parent)
+        self.setStyleSheet('background-color: rgb(212, 245, 211);')
+        self.setGeometry(200, 200, 390, 300)
+        lay = QVBoxLayout(self)
+        lay.addWidget(XAISearchWindow(self))
+
+class XAISearchWindow(ABCWidget, QWidget):
+    def __init__(self, parent):
+        super(XAISearchWindow, self).__init__(parent)
+        lay = QVBoxLayout(self)
+        lay.addWidget(XAISearchName(self))
+
+class XAISearchName(ABCLabel, QLabel):
+    def __init__(self, parent):
+        super(XAISearchName, self).__init__(parent)
+        self.setText('XAI')
