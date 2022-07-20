@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
+import Interface_QSS as qss
 
 
 class MainAlarm(ABCWidget):
@@ -19,12 +20,16 @@ class MainAlarm(ABCWidget):
 class AIDAAAlarm(ABCWidget):
     def __init__(self, parent):
         super(AIDAAAlarm, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(167, 242, 211);')
-        self.setFixedWidth(900) # 임시
+        self.setStyleSheet(qss.Main_Tab)
+        # self.setStyleSheet('background-color: rgb(167, 242, 211);')
+        # self.setFixedWidth(900) # 임시
         lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(AlarmFix(self))
         lay.addWidget(AlarmTable(self))
         lay.addWidget(AlarmSortAIDAABtns(self))
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(5)
 
 # ----------------------------------------------------------------------------------------------------------------------
 class AlarmFix(ABCWidget):
