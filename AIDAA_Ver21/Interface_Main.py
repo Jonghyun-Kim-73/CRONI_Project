@@ -128,7 +128,7 @@ class MainTopCallMain(ABCPushButton):
 class MainTopCallIFAP(ABCPushButton):
     def __init__(self, parent):
         super(MainTopCallIFAP, self).__init__(parent)
-        self.setText('IFAP')
+        self.setText('Pre-abnormal')
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -139,7 +139,7 @@ class MainTopCallIFAP(ABCPushButton):
 class MainTopCallAIDAA(ABCPushButton):
     def __init__(self, parent):
         super(MainTopCallAIDAA, self).__init__(parent)
-        self.setText('AIDAA')
+        self.setText('Abnormal')
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -150,7 +150,7 @@ class MainTopCallAIDAA(ABCPushButton):
 class MainTopCallEGIS(ABCPushButton):
     def __init__(self, parent):
         super(MainTopCallEGIS, self).__init__(parent)
-        self.setText('EGIS')
+        self.setText('Emergency')
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
