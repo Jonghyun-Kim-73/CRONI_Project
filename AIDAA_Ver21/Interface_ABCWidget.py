@@ -1,13 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-<<<<<<< HEAD
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 
-=======
-import Interface_QSS as qss
-from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
->>>>>>> 70f664082441d7028fabc04215fb46cf1ed7697a
 
 def make_shmem(parent, child, widget_name):
     result = parent.inmem

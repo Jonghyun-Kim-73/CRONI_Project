@@ -9,9 +9,6 @@ from AIDAA_Ver21.Interface_AIDAA_Diagnosis import *
 class MainTabAIDAA(ABCWidget):
     def __init__(self, parent):
         super(MainTabAIDAA, self).__init__(parent)
-        self.setStyleSheet(qss.AIDAA)
-        self.setObjectName("BG")
-
         lay = QHBoxLayout(self)
         lay.addWidget(AIDAAAlarm(self))
         lay.addWidget(Diagnosis(self))

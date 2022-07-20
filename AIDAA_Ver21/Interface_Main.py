@@ -10,11 +10,6 @@ from AIDAA_Ver21.Interface_AIDAA_Procedure import *
 from AIDAA_Ver21.Interface_AIDAA_Action_ import *
 from AIDAA_Ver21.Interface_AIDAA_Pretrip import *
 
-<<<<<<< HEAD
-=======
-import Interface_QSS as qss
-from datetime import datetime
->>>>>>> 70f664082441d7028fabc04215fb46cf1ed7697a
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
