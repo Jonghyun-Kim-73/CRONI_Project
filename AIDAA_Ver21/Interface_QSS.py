@@ -19,7 +19,6 @@ Top_Bar = """
                 border:0px;
                 color: rgb(0, 0, 0);
                 font: 27px;
-                qproperty-alignment: AlignCenter;
             }
             QPushButton#Tab:hover {
                 background: rgb(0, 176, 218);
@@ -27,7 +26,6 @@ Top_Bar = """
                 border:0px;
                 color: rgb(0, 0, 0);
                 font: 27px;
-                qproperty-alignment: AlignCenter;
             }
 """
 
@@ -264,7 +262,6 @@ Main_Tab = """
                 border:0px;
                 color: rgb(0, 0, 0);
                 font: 23px;
-                qproperty-alignment: AlignCenter;
             }
             QPushButton#Bottom::hover{
                 background: rgb(0, 178, 218);
@@ -272,7 +269,6 @@ Main_Tab = """
                 border:0px;
                 color: rgb(0, 0, 0);
                 font: 23px;
-                qproperty-alignment: AlignCenter;
             }
             QPushButton#Right{
                 background: rgb(128, 128, 128);
@@ -280,7 +276,6 @@ Main_Tab = """
                 border:0px;
                 color: rgb(0, 0, 0);
                 font: 23px;
-                qproperty-alignment: AlignCenter;
             }
             QPushButton#Right::hover{
                 background: rgb(0, 178, 128);
@@ -288,6 +283,25 @@ Main_Tab = """
                 border:0px;
                 color: rgb(0, 0, 0);
                 font: 23px;
-                qproperty-alignment: AlignCenter;
+            }
+            QLabel#RightTabTitle{
+                background-color: rgb(128, 128, 128);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 23px;
+            }
+            QLabel#RightTabTitle:disabled{
+                color: rgb(231, 231, 231);
+            }
+            QLabel#RightTabcont{
+                background-color: rgb(128, 128, 128);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 23px;
+            }
+            QLabel#RightTabcont:disabled{
+                color: rgb(128, 128, 128);
             }
 """

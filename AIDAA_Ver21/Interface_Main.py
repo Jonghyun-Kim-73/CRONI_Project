@@ -31,6 +31,8 @@ class Main(QWidget):
         lay.addWidget(self.top)
         lay.addWidget(self.tab)
         lay.setSpacing(0)   # margin 제거
+        
+        self.m_flag = False
 
     # window drag
     def mousePressEvent(self, event):
@@ -151,7 +153,7 @@ class MainTopCallMain(ABCPushButton):
 class MainTopCallIFAP(ABCPushButton):
     def __init__(self, parent):
         super(MainTopCallIFAP, self).__init__(parent)
-        self.setText('IFAP')
+        self.setText('Pre-abnormal')
         self.setObjectName("Tab")
         self.setFixedSize(224, 35)
         self.clicked.connect(self.dis_update)
@@ -164,7 +166,7 @@ class MainTopCallIFAP(ABCPushButton):
 class MainTopCallAIDAA(ABCPushButton):
     def __init__(self, parent):
         super(MainTopCallAIDAA, self).__init__(parent)
-        self.setText('AIDAA')
+        self.setText('Abnormal')
         self.setObjectName("Tab")
         self.setFixedSize(224, 35)
         self.clicked.connect(self.dis_update)
@@ -177,7 +179,7 @@ class MainTopCallAIDAA(ABCPushButton):
 class MainTopCallEGIS(ABCPushButton):
     def __init__(self, parent):
         super(MainTopCallEGIS, self).__init__(parent)
-        self.setText('EGIS')
+        self.setText('Emergency')
         self.setObjectName("Tab")
         self.setFixedSize(224, 35)
         self.clicked.connect(self.dis_update)
