@@ -270,12 +270,14 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                     [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
                     [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
                     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
             except:
                 [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
                 [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
                 [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
                 [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
                 [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
 
         elif self.inmem.dis_AI['Train'] == 1 or self.inmem.ShMem.get_para_val('iFixTrain') == 2: # 훈련되지 않은 시나리오
             try:
@@ -292,12 +294,14 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                     [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1,5)]
                     [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1,5)]
                     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1,5)]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
             except:
                 [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
                 [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(1,5)]
                 [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1,5)]
                 [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1, 5)]
                 [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, 5)]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
 
         else:
             try:
@@ -311,12 +315,14 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                     [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
                     [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
                     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
             except:
                 [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
                 [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
                 [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
                 [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
                 [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
 
             # try:
             #     if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
@@ -335,23 +341,26 @@ class ProcedureDiagonsisTable(ABCTableWidget):
             #     [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1,5)]
             #     [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1, 5)]
             #     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, 5)]
+        if self.inmem.current_table['current_window'] == 1:
+            self.clearselect()
 
 
     def control_table(self):
         self.inmem.current_table['current_window'] = 0
+
     def clearselect(self):
         self.clearSelection()
         self.repaint()
+
     def dis_procedure(self):
         self.inmem.change_current_system_name('Procedure')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
+class SystemDiagnosisTable(ABCTableWidget):
     def __init__(self, parent):
         super(SystemDiagnosisTable, self).__init__(parent)
-        self.table1 = ProcedureDiagonsisTable(self)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setShowGrid(False)  # Grid 지우기
         self.setFixedHeight(212)    # 변경하려면 row height 변경 필요
@@ -405,15 +414,33 @@ class SystemDiagnosisTable(ABCTableWidget, QTableWidget):
 
     def dis_update(self):
         # print('시스템 진단 AI 업데이트 예정')
+        if self.currentRow() != -1:
+            self.inmem.current_table['System'] = self.currentRow()
+        try:
+            if self.item(0, 0).text() == self.inmem.dis_AI_system[0][0] and self.item(1, 0).text() == self.inmem.dis_AI_system[1][0] and self.item(2, 0).text() == self.inmem.dis_AI_system[2][0] and self.item(3, 0).text() == self.inmem.dis_AI_system[3][0] and self.item(4, 0).text() == self.inmem.dis_AI_system[4][0]:
+                [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(5)]
+                [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(5)]
+            else:
+                [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI_system[i][0])) for i in range(5)]
+                [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(5)]
+                [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(5)]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+        except:
+            [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI_system[i][0])) for i in range(5)]
+            [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(5)]
+            [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(5)]
+            [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
 
-        [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI_system[i][0])) for i in range(1)]
-        [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(1)]
-        [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(1)]
-        self.inmem.current_table['System'] = self.currentRow()
+        if self.inmem.current_table['current_window'] == 0:
+            self.clearselect()
+
 
     def control_table(self):
         self.inmem.current_table['current_window'] = 1
-        self.table1.clearselect()
+
+    def clearselect(self):
+        self.clearSelection()
+        self.repaint()
 
     def dis_system(self):
         self.inmem.change_current_system_name('Action')
@@ -483,10 +510,13 @@ class ProcedureCheckTable(ABCTableWidget):
 
         elif self.inmem.current_table['current_window'] == 1:
             if self.inmem.current_table['System'] != -1:
-                self.column_labels = [f'시스템: CVCS', 'Value', 'Set-point', 'Unit']
+                self.column_labels = [' System: %s' % f'{self.inmem.dis_AI_system[self.inmem.current_table["System"]][0]}', 'Value', 'Set-point', 'Unit']
                 self.setColumnCount(len(self.column_labels))
                 self.setHorizontalHeaderLabels([l for l in self.column_labels])
-                [self.setItem(i, 0, QTableWidgetItem('추후 업데이트 예정')) for i in range(15)]
+                system_alarm = int(self.inmem.dis_AI_system[self.inmem.current_table["System"]][1])
+                self.setRowCount(system_alarm)
+                [self.setItem(i, 0, QTableWidgetItem('추후 업데이트 예정')) for i in range(system_alarm)]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(system_alarm)]
 
 
 
