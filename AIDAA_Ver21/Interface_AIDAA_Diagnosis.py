@@ -152,7 +152,6 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
             self.inmem.get_train_check_result()
         # --------------------------------------------------------------------------------------------------------------
         self.inmem.current_table['Procedure'] = self.currentRow()
-        print(self.inmem.dis_AI['AI'])
 
         if self.inmem.dis_AI['Train'] == 0: # 훈련된 시나리오
             try:
