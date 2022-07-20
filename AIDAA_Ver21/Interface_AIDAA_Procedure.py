@@ -196,13 +196,13 @@ class ProcedureSequenceFirst_2(ABCPushButton):
     def dis_update(self):
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '목적'] == 0:
-            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+            self.setStyleSheet('background-color:rgb(255, 255, 255)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '목적'] == 1:
-            self.setStyleSheet('background-color: lightgray')
+            self.setStyleSheet('background-color: rgb(0,0,0)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '목적'] == 2:
-            self.setStyleSheet('background-color: yellow')
+            self.setStyleSheet('background-color: rgb(255,0,0)')
 
 class ProcedureSequenceSecond(ABCWidget):
     def __init__(self, parent):
@@ -246,6 +246,15 @@ class ProcedureSequenceSecond_2(ABCPushButton):
     def dis_update(self):
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '경보 및 증상'] == 0:
+            self.setStyleSheet('background-color:rgb(255, 255, 255)')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '경보 및 증상'] == 1:
+            self.setStyleSheet('background-color: rgb(0,0,0)')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '경보 및 증상'] == 2:
+            self.setStyleSheet('background-color: rgb(255,0,0)')
+'''        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '경보 및 증상'] == 0:
             self.setStyleSheet('background-color:rgb(212, 245, 211)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '경보 및 증상'] == 1:
@@ -253,6 +262,7 @@ class ProcedureSequenceSecond_2(ABCPushButton):
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '경보 및 증상'] == 2:
             self.setStyleSheet('background-color: yellow')
+'''
 
 class ProcedureSequenceThird(ABCWidget):
     def __init__(self, parent):
@@ -295,15 +305,16 @@ class ProcedureSequenceThird_2(ABCPushButton):
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
+
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '자동 동작 사항'] == 0:
-            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+            self.setStyleSheet('background-color:rgb(255, 255, 255)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '자동 동작 사항'] == 1:
-            self.setStyleSheet('background-color: lightgray')
+            self.setStyleSheet('background-color:rgb(0,0,0)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '자동 동작 사항'] == 2:
-            self.setStyleSheet('background-color: yellow')
+            self.setStyleSheet('background-color:rgb(255,0,0)')
 
 class ProcedureSequenceFourth(ABCWidget):
     def __init__(self, parent):
@@ -347,13 +358,13 @@ class ProcedureSequenceFourth_2(ABCPushButton):
     def dis_update(self):
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '긴급 조치 사항'] == 0:
-            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+            self.setStyleSheet('background-color:rgb(255, 255, 255)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '긴급 조치 사항'] == 1:
-            self.setStyleSheet('background-color: lightgray')
+            self.setStyleSheet('background-color: rgb(0,0,0)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '긴급 조치 사항'] == 2:
-            self.setStyleSheet('background-color: yellow')
+            self.setStyleSheet('background-color: rgb(255,0,0)')
 
 class ProcedureSequenceFifth(ABCWidget):
     def __init__(self, parent):
@@ -397,13 +408,13 @@ class ProcedureSequenceFifth_2(ABCPushButton):
     def dis_update(self):
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '후속 조치 사항'] == 0:
-            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+            self.setStyleSheet('background-color:rgb(255, 255, 255)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '후속 조치 사항'] == 1:
-            self.setStyleSheet('background-color: lightgray')
+            self.setStyleSheet('background-color: rgb(0,0,0)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '후속 조치 사항'] == 2:
-            self.setStyleSheet('background-color: yellow')
+            self.setStyleSheet('background-color: rgb(255,0,0)')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -662,11 +673,11 @@ class Procedure_Content_Check(ABCPushButton, QPushButton):
 
     def dis_update1(self):
         if self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] == 0:
-            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+            self.setStyleSheet('background-color:rgb(255, 255, 255)')
         elif self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] == 1:
-            self.setStyleSheet('background-color: lightgray')
+            self.setStyleSheet('background-color: rgb(0,0,0)')
         elif self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] == 2:
-            self.setStyleSheet('background-color: yellow')
+            self.setStyleSheet('background-color: rgb(192,0,0)')
 
 
 class ProcedureBottom(ABCWidget, QWidget):
