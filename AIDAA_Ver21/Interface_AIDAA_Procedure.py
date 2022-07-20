@@ -125,7 +125,6 @@ class ProcedureInfo(ABCLabel):
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
-        print(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])
         # self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0] ; 비정상 절차서 명 ex) Ab63_02: 제어봉의 계속적인 삽입
         self.setText(f" 비정상 절차서 이름: {self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]}")
 # ----------------------------------------------------------------------------------------------------------------------

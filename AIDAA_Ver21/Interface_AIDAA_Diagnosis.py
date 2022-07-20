@@ -250,7 +250,8 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 self.setCellWidget(i, 2, radiation_cellwidget)
 
     def dis_update(self):
-        self.inmem.current_table['Procedure'] = self.currentRow()
+        if self.currentRow() != -1:
+            self.inmem.current_table['Procedure'] = self.currentRow()
 
         # AI Diagnosis Calculation -------------------------------------------------------------------------------------
         self.inmem.get_diagnosis_result()
