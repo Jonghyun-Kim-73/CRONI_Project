@@ -50,6 +50,13 @@ class UrgentBTN(ABCLabel):
         self.setObjectName("Label")
         self.setFixedSize(155, 35)
         self.setText('긴급 조치')
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][1] is False:
+            self.setStyleSheet('background-color: lightgray;')
+        elif self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][1] is True:
+            self.setStyleSheet('background-color: rgb(255,0,0);')
 
 class RadiationBTN(ABCLabel):
     def __init__(self, parent):
@@ -57,6 +64,13 @@ class RadiationBTN(ABCLabel):
         self.setObjectName("Label")
         self.setFixedSize(155, 35)
         self.setText('방사선비상')
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][2] is False:
+            self.setStyleSheet('background-color: lightgray;')
+        elif self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][2] is True:
+            self.setStyleSheet('background-color: rgb(255,0,0);')
 
 class PredictionBTN(ABCPushButton):
     def __init__(self, parent):
@@ -107,9 +121,11 @@ class ProcedureInfo(ABCLabel):
     def __init__(self, parent):
         super(ProcedureInfo, self).__init__(parent)
         self.setObjectName("Title")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
         self.setFixedHeight(35)
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
     def dis_update(self):
+        print(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])
         # self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0] ; 비정상 절차서 명 ex) Ab63_02: 제어봉의 계속적인 삽입
         self.setText(f" 비정상 절차서 이름: {self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]}")
 # ----------------------------------------------------------------------------------------------------------------------
@@ -161,19 +177,33 @@ class ProcedureSequenceFirst_1(ABCPushButton):
 
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure['num'] != 1:
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 1:
+            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
+                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
+        else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                             QPushButton:hover {background: rgb(0, 176, 218);}""")
     def dis_click_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure['num'] = 1
-        self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                    QPushButton:hover {background: rgb(0, 176, 218);}""")
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 1
+
 class ProcedureSequenceFirst_2(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSequenceFirst_2, self).__init__(parent)
         self.setFixedSize(35, 35)
         self.setObjectName("Check")
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '목적'] == 0:
+            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '목적'] == 1:
+            self.setStyleSheet('background-color: lightgray')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '목적'] == 2:
+            self.setStyleSheet('background-color: yellow')
 
 class ProcedureSequenceSecond(ABCWidget):
     def __init__(self, parent):
@@ -195,21 +225,35 @@ class ProcedureSequenceSecond_1(ABCPushButton):
 
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure['num'] != 2:
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 2:
+            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
+                                                QPushButton:hover {background: rgb(0, 176, 218);}""")
+        else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                                         QPushButton:hover {background: rgb(0, 176, 218);}""")
 
     def dis_click_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure['num'] = 2
-        self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                            QPushButton:hover {background: rgb(0, 176, 218);}""")
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 2
+
 
 class ProcedureSequenceSecond_2(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSequenceSecond_2, self).__init__(parent)
         self.setFixedSize(35, 35)
         self.setObjectName("Check")
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '경보 및 증상'] == 0:
+            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '경보 및 증상'] == 1:
+            self.setStyleSheet('background-color: lightgray')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '경보 및 증상'] == 2:
+            self.setStyleSheet('background-color: yellow')
 
 class ProcedureSequenceThird(ABCWidget):
     def __init__(self, parent):
@@ -232,21 +276,35 @@ class ProcedureSequenceThird_1(ABCPushButton, QPushButton):
 
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure['num'] != 3:
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 3:
+            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
+                                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
+        else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                                         QPushButton:hover {background: rgb(0, 176, 218);}""")
 
     def dis_click_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure['num'] = 3
-        self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                            QPushButton:hover {background: rgb(0, 176, 218);}""")
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 3
+
 
 class ProcedureSequenceThird_2(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSequenceThird_2, self).__init__(parent)
         self.setFixedSize(35, 35)
         self.setObjectName("Check")
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '자동 동작 사항'] == 0:
+            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '자동 동작 사항'] == 1:
+            self.setStyleSheet('background-color: lightgray')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '자동 동작 사항'] == 2:
+            self.setStyleSheet('background-color: yellow')
 
 class ProcedureSequenceFourth(ABCWidget):
     def __init__(self, parent):
@@ -268,21 +326,35 @@ class ProcedureSequenceFourth_1(ABCPushButton):
 
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure['num'] != 4:
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 4:
+            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
+                                                QPushButton:hover {background: rgb(0, 176, 218);}""")
+        else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                                         QPushButton:hover {background: rgb(0, 176, 218);}""")
 
     def dis_click_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure['num'] = 4
-        self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                            QPushButton:hover {background: rgb(0, 176, 218);}""")
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 4
+
 
 class ProcedureSequenceFourth_2(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSequenceFourth_2, self).__init__(parent)
         self.setFixedSize(35, 35)
         self.setObjectName("Check")
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '긴급 조치 사항'] == 0:
+            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '긴급 조치 사항'] == 1:
+            self.setStyleSheet('background-color: lightgray')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '긴급 조치 사항'] == 2:
+            self.setStyleSheet('background-color: yellow')
 
 class ProcedureSequenceFifth(ABCWidget):
     def __init__(self, parent):
@@ -304,21 +376,35 @@ class ProcedureSequenceFifth_1(ABCPushButton):
 
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure['num'] != 5:
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 5:
+            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
+                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
+        else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                                         QPushButton:hover {background: rgb(0, 176, 218);}""")
 
     def dis_click_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure['num'] = 5
-        self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                    QPushButton:hover {background: rgb(0, 176, 218);}""")
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 5
+
 
 class ProcedureSequenceFifth_2(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSequenceFifth_2, self).__init__(parent)
         self.setFixedSize(35, 35)
         self.setObjectName("Check")
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '후속 조치 사항'] == 0:
+            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '후속 조치 사항'] == 1:
+            self.setStyleSheet('background-color: lightgray')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            '후속 조치 사항'] == 2:
+            self.setStyleSheet('background-color: yellow')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -356,22 +442,24 @@ class Procedurecontents(ABCWidget):
         --> inmem.get_pro_procedure와 inmem.get_pro_procedure_count dictionary 접속을 위해 활용
         4. self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0] ; 비정상 절차서 명 ex) Ab63_02: 제어봉의 계속적인 삽입
         '''
-        if self.inmem.current_procedure_log != self.inmem.current_procedure['num']:
-            current_state = self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]
+
+        current_state = self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
+        if current_state == '내용 없음':
+            self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 0
             self.clearLayout(self.lay)
-            self.lay.addWidget(ProcedureTitleBar(self))
-            self.func_dict = {i: Procedure_Content(self, i) for i in range(18)}
-            if current_state == '내용 없음':
-                pass
-            else:
+        else:
+            if self.inmem.current_procedure_log[0] != self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] or self.inmem.current_procedure_log[1] != self.inmem.current_table['Procedure']:
+                self.clearLayout(self.lay)
+                self.lay.addWidget(ProcedureTitleBar(self))
+                self.func_dict = {i: Procedure_Content(self, i) for i in range(18)}
                 try:
                     [self.lay.addWidget(self.func_dict[i]) for i in range(self.inmem.ShMem.get_pro_procedure_count(
                         self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state])]
-                except:
-                    pass
-            self.lay.setSpacing(15)
-            self.lay.addStretch(1)
-        self.inmem.current_procedure_log = self.inmem.current_procedure['num']
+                except: pass
+                self.inmem.current_procedure_log[0] = self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']
+        self.inmem.current_procedure_log[1] = self.inmem.current_table['Procedure']
+        self.lay.setSpacing(15)
+        self.lay.addStretch(1)
 
     def clearLayout(self, layout):
         while layout.count():
@@ -396,7 +484,7 @@ class ProcedureTitleBar_1(ABCLabel):
 
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.setText(f"{float(self.inmem.current_procedure['num'])}")
+        self.setText(f"{float(self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'])}")
 
 class ProcedureTitleBar_2(ABCLabel):
     def __init__(self, parent):
@@ -408,7 +496,7 @@ class ProcedureTitleBar_2(ABCLabel):
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
         # self.inmem.current_procedure['des'] ; global navigation btn name ex) '목적', '경보 및 증상' 등.
-        self.setText(self.inmem.current_procedure['des'][self.inmem.current_procedure['num']])
+        self.setText(self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']])
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -423,12 +511,11 @@ class Procedure_Content(ABCWidget):
         # num label 상단 정렬 위해
         content1_lay = QHBoxLayout(self)
         content1_lay.setAlignment(Qt.AlignTop)
-        if self.inmem.current_procedure['des'][self.inmem.current_procedure['num']] == '내용 없음' or self.inmem.current_procedure['des'][self.inmem.current_procedure['num']] == '목적':
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음' or self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '목적':
             pass
         else:
-            current_state = self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]
-            if self.content + 1 <= self.inmem.ShMem.get_pro_procedure_count(
-                    self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
+            current_state = self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
+            if self.content + 1 <= self.inmem.ShMem.get_pro_procedure_count(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
                 if self.inmem.get_ab_procedure_num(self.content)[0] == "0":
                     lay.addWidget(Procedure_Content2_1(self, self.content))
                 else:
@@ -453,13 +540,13 @@ class Procedure_Content1(ABCLabel):
         3. self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0] ; 비정상 절차서 명 ex) Ab63_02: 제어봉의 계속적인 삽입
         4. self.content ; 해당 행 번호 ex) 행 개수에 비해 내용이 많을 경우 오류 발생, 이를 방지하기위한 조건문
         '''
-        if self.inmem.current_procedure['des'][self.inmem.current_procedure['num']] == '내용 없음' or self.inmem.current_procedure['des'][self.inmem.current_procedure['num']] == '목적':
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음' or self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '목적':
             pass
         else:
-            current_state = self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]
+            current_state = self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
             if self.content+1 <= self.inmem.ShMem.get_pro_procedure_count(
                     self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
-                self.setText(self.inmem.ShMem.get_pro_procedure(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]][self.content]['Nub'])
+                self.setText(self.inmem.ShMem.get_pro_procedure(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]][self.content]['Nub'])
 
 # 참고사항 / 주의사항 label
 class Procedure_Content2_1(ABCLabel):
@@ -494,14 +581,14 @@ class Procedure_Content2_1(ABCLabel):
         3. self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0] ; 비정상 절차서 명 ex) Ab63_02: 제어봉의 계속적인 삽입
         4. self.content ; 해당 행 번호 ex) 행 개수에 비해 내용이 많을 경우 오류 발생, 이를 방지하기위한 조건문
         '''
-        if (self.inmem.current_procedure['des'][self.inmem.current_procedure['num']] == '내용 없음' or self.inmem.current_procedure['des'][self.inmem.current_procedure['num']] == '목적'):
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음' or self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '목적':
             pass
         else:
-            current_state = self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]
+            current_state = self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
             if self.content+1 <= self.inmem.ShMem.get_pro_procedure_count(
                     self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
 
-                num_len = len(self.inmem.ShMem.get_pro_procedure(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]][self.content]['Nub'])
+                num_len = len(self.inmem.ShMem.get_pro_procedure(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]][self.content]['Nub'])
                 if num_len <= 3:
                     self.setFixedWidth(1364)
                 elif num_len <= 5:
@@ -532,13 +619,13 @@ class Procedure_Content2_2(ABCLabel):
         3. self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0] ; 비정상 절차서 명 ex) Ab63_02: 제어봉의 계속적인 삽입
         4. self.content ; 해당 행 번호 ex) 행 개수에 비해 내용이 많을 경우 오류 발생, 이를 방지하기위한 조건문
         '''
-        if (self.inmem.current_procedure['des'][self.inmem.current_procedure['num']] == '내용 없음' or self.inmem.current_procedure['des'][self.inmem.current_procedure['num']] == '목적'):
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음' or self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '목적':
             pass
         else:
-            current_state = self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]
+            current_state = self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
             if self.content+1 <= self.inmem.ShMem.get_pro_procedure_count(
                     self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
-                num_len = len(self.inmem.ShMem.get_pro_procedure(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]][self.content]['Nub'])
+                num_len = len(self.inmem.ShMem.get_pro_procedure(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]][self.content]['Nub'])
                 if num_len <= 3:
                     self.setFixedWidth(1364)
                 elif num_len <= 5:
@@ -549,27 +636,38 @@ class Procedure_Content2_2(ABCLabel):
                     self.setFixedWidth(1250)
                 self.setText(self.inmem.ShMem.get_pro_procedure(
                     self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[
-                                    self.inmem.current_procedure['des'][self.inmem.current_procedure['num']]][
+                                    self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]][
                                     self.content]['Des'])
 
 class Procedure_Content_Check(ABCPushButton, QPushButton):
     def __init__(self, parent, content):
         super(Procedure_Content_Check, self).__init__(parent)
-        self.content = content
+        self.check_btn_num = content
+        self.current_state = \
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][
+            self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
         self.setFixedSize(35, 35)
+        if self.check_btn_num >= self.inmem.ShMem.get_pro_procedure_count(
+                self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.current_state]:
+            pass
+        else:
+            self.widget_timer(iter_=500, funs=[self.dis_update1])
         self.clicked.connect(self.dis_update)
-        self.clicked_state = 0
+
 
     def dis_update(self):
-        if self.clicked_state == 2:
-            self.clicked_state = 0
-            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+        if self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] == 2:
+            self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] = 0
         else:
-            self.clicked_state = self.clicked_state + 1
-            if self.clicked_state == 1:
-                self.setStyleSheet('background-color: lightgray')
-            elif self.clicked_state == 2:
-                self.setStyleSheet('background-color: yellow')
+            self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] = self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] + 1
+
+    def dis_update1(self):
+        if self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] == 0:
+            self.setStyleSheet('background-color:rgb(212, 245, 211)')
+        elif self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] == 1:
+            self.setStyleSheet('background-color: lightgray')
+        elif self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] == 2:
+            self.setStyleSheet('background-color: yellow')
 
 
 class ProcedureBottom(ABCWidget, QWidget):
@@ -589,6 +687,30 @@ class ProcedureComplet(ABCPushButton, QPushButton):
         self.setFixedSize(274, 35)
         self.setObjectName("Bottom")
         self.setText('완료')
+        self.widget_timer(iter_=500, funs=[self.dis_update1])
+        self.clicked.connect(self.dis_update)
+
+    def dis_update1(self):
+        self.current_state = \
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][
+            self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
+        if self.current_state == '내용 없음':
+            pass
+        else:
+            if 0 in self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+                self.current_state]:
+                self.setEnabled(False)
+            elif 2 in \
+                    self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+                        self.current_state]:
+                self.setEnabled(False)
+            else:
+                self.setEnabled(True)
+
+    def dis_update(self):
+        self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            self.current_state] = 1
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] += 1
 
 class ProcedureParallel(ABCPushButton, QPushButton):
     def __init__(self, parent):
@@ -596,6 +718,15 @@ class ProcedureParallel(ABCPushButton, QPushButton):
         self.setFixedSize(274, 35)
         self.setObjectName("Bottom")
         self.setText('병행')
+        self.clicked.connect(self.dis_update)
+
+    def dis_update(self):
+        self.current_state = \
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][
+            self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
+        self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            self.current_state] = 2
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] += 1
 
 class ProcedureReconduct(ABCPushButton, QPushButton):
     def __init__(self, parent):
@@ -603,4 +734,14 @@ class ProcedureReconduct(ABCPushButton, QPushButton):
         self.setFixedSize(274, 35)
         self.setObjectName("Bottom")
         self.setText('재수행')
+        self.clicked.connect(self.dis_update)
+
+    def dis_update(self):
+        self.current_state = \
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][
+            self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
+        self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            self.current_state][:] = [0 for i in range(len(
+            self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+                self.current_state]))]
 

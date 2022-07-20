@@ -250,13 +250,13 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 self.setCellWidget(i, 2, radiation_cellwidget)
 
     def dis_update(self):
+        self.inmem.current_table['Procedure'] = self.currentRow()
+
         # AI Diagnosis Calculation -------------------------------------------------------------------------------------
         self.inmem.get_diagnosis_result()
         if np.shape(self.inmem.get_train_check_val()) == (1,10,46):
             self.inmem.get_train_check_result()
         # --------------------------------------------------------------------------------------------------------------
-        self.inmem.current_table['Procedure'] = self.currentRow()
-
         if self.inmem.dis_AI['Train'] == 0: # 훈련된 시나리오
             try:
                 if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
@@ -441,10 +441,10 @@ class ProcedureCheckTable(ABCTableWidget):
         if self.inmem.current_table['current_window'] == 0:
             if self.inmem.current_table['Procedure'] != -1:
                 self.setColumnCount(len(self.column_labels))
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
                 self.column_labels = [
                     ' 비정상 절차서: %s' % f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}', 'Value',
                     'Set-point', 'Unit']
+                self.setHorizontalHeaderLabels([l for l in self.column_labels])
                 if self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '학습여부를 아직 확인할 수 없습니다.' or self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '해당 시나리오는 학습되지 않은 시나리오입니다.':
                     print('해당 사항은 선택할 수 없습니다.')
                     [self.setItem(i, 0, QTableWidgetItem('해당 사항은 선택할 수 없습니다.')) for i in range(10)]

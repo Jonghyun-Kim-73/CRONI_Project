@@ -292,10 +292,10 @@ class InterfaceMem:
     def get_ab_procedure_num(self, content):
         return self.ShMem.get_pro_procedure(
             self.dis_AI['AI'][self.current_table['Procedure']][0])[
-            self.current_procedure['des'][self.current_procedure['num']]][content]['Nub']
+            self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][content]['Nub']
 
     def get_ab_procedure_des(self, content):
         return self.ShMem.get_pro_procedure(
                     self.dis_AI['AI'][self.current_table['Procedure']][0])[
-                                    self.current_procedure['des'][self.current_procedure['num']]][
+                                    self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][
                                     content]['Des']
