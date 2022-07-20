@@ -54,7 +54,7 @@ class ShMem:
 
     def get_alarmdb(self):
         return self.AlarmDB.alarmdb
-    
+
     def get_on_alarms(self):
         return self.AlarmDB.get_on_alarms()
 
@@ -70,7 +70,7 @@ class ShMem:
     def check_para_type(self, para):
         return self.mem[para]['Sig']
 
-# ----------------------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------------------
     # Urgent action or not
     def get_pro_urgent_act(self, procedure_name):
         return ab_pro[procedure_name]['긴급조치']
@@ -78,7 +78,7 @@ class ShMem:
     # radiation or not
     def get_pro_radiation(self, procedure_name):
         return ab_pro[procedure_name]['방사선']
-    
+
     def get_pro_symptom(self, procedure_name):
         return ab_pro[procedure_name]['경보 및 증상']
 
@@ -88,9 +88,6 @@ class ShMem:
 
     def get_pro_symptom_satify(self, procedure_name):
         return 5
-
-    def show_ai_diagnosis_result(self, ranked_list):
-        return ranked_list
 
     # Procedure
     def get_pro_procedure(self, procedure_name):
@@ -102,6 +99,8 @@ class ShMem:
                 '자동 동작 사항': len(ab_pro[procedure_name]['자동 동작 사항'].keys()),
                 '긴급 조치 사항': len(ab_pro[procedure_name]['긴급 조치 사항'].keys()),
                 '후속 조치 사항': len(ab_pro[procedure_name]['후속 조치 사항'].keys())}
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -216,7 +215,7 @@ class InterfaceMem:
 
     def GetTop(self, raw_list, get_top):
         """ 리스트에서 최대값 랭크와 인덱스 제공 """
-        if self.dis_AI['Train'] == 0:
+        if self.dis_AI['Train'] == 0 or self.ShMem.get_para_val('iFixTrain') == 1:
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
@@ -227,7 +226,7 @@ class InterfaceMem:
                 index_.pop(max_idx)
                 raw_list_.pop(max_idx)
                 result.append((maxv_, maxv_id))
-        elif self.dis_AI['Train'] == 1 or self.ShMem.get_para_val('iFixTrain') == 1:
+        elif self.dis_AI['Train'] == 1 or self.ShMem.get_para_val('iFixTrain') == 2:
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
@@ -243,7 +242,7 @@ class InterfaceMem:
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
-            # result.append((0, 17)) # 10초전 모델 비활성 상태
+            # result.append((0, 17))
             for i in range(get_top):
                 max_idx = np.array(raw_list_).argmax()
                 maxv_ = raw_list_[max_idx]
@@ -267,7 +266,7 @@ class InterfaceMem:
     def show_widget_ids(self):
         return self.widget_ids
 
-    def change_current_system_name(self, system_name:str):
+    def change_current_system_name(self, system_name: str):
         """ 버튼 클릭시 화면 전환
 
         Args:
@@ -278,7 +277,7 @@ class InterfaceMem:
         self.widget_ids['MainTab'].change_system_page(system_name)
 
     def get_time(self):
-        return str(timedelta(seconds=self.ShMem.get_para_val('KCNTOMS')/5))
+        return str(timedelta(seconds=self.ShMem.get_para_val('KCNTOMS') / 5))
 
     def get_td(self):
         return timedelta(seconds=self.ShMem.get_para_val('KCNTOMS') / 5)
@@ -286,16 +285,15 @@ class InterfaceMem:
     def get_current_system_name(self):
         return list(self.system_switch.keys())[list(self.system_switch.values()).index(1)]
 
-    def update_ai_diagnosis_result(self, ranked_list):
-        self.dis_AI = ranked_list
-
     def get_ab_procedure_num(self, content):
         return self.ShMem.get_pro_procedure(
             self.dis_AI['AI'][self.current_table['Procedure']][0])[
-            self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][content]['Nub']
+            self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][
+                self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][content]['Nub']
 
     def get_ab_procedure_des(self, content):
         return self.ShMem.get_pro_procedure(
-                    self.dis_AI['AI'][self.current_table['Procedure']][0])[
-                                    self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][
-                                    content]['Des']
+            self.dis_AI['AI'][self.current_table['Procedure']][0])[
+            self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][
+                self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][
+            content]['Des']

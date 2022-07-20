@@ -42,4 +42,4 @@ MAKE_UP	INTEGER	MAKE_UP
 iFixUgentAct	INTEGER	UrgentAct(0:off|1:on)
 iFixPreTrip	INTEGER	FixPreTrip(0:off|1:on)
 iFixTrip	INTEGER	FixTrip(0:off|1:on)
-iFixTrain	INTEGER	FixTrain(0:Train|1:Untrain)
+iFixTrain	INTEGER	FixTrain(1:Train|2:Untrain)
