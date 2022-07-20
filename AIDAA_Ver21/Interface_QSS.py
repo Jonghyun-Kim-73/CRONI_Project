@@ -72,26 +72,26 @@ AIDAA_Diagnosis = """
                 background: rgb(231, 231, 234);
                 border: 1px solid rgb(128, 128, 128); 
                 font: 18px;
-                font-weight: bold;
+                
             }
             QHeaderView::section {
                 background: rgb(128, 128, 128);
                 border: 0px;
                 font: 18px;
-                font-weight: bold;
+                
                 qproperty-alignment: AlignCenter;
             }
             QTableWidget::item::selected {
                 background-color: rgb(0, 176, 218);
                 color:black;
-                font-weight: bold;
+                
                 font: 18px;
                 outline: 0;
             }
             
             QTableWidget::item {
                 font: 18px;
-                font-weight: bold;
+                
             }
             QTableView
             {
@@ -114,7 +114,7 @@ AIDAA_Diagnosis2 = """
                 background: rgb(192, 0, 0);
                 border-radius: 5px;
                 font: 23px;
-                font-weight: bold;
+                
                 border:0px;
                 qproperty-alignment: AlignCenter;
             }
@@ -122,7 +122,7 @@ AIDAA_Diagnosis2 = """
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
                 font: 23px;
-                font-weight: bold;
+                
                 border:0px;
             }
             QPushButton#Button{
@@ -136,21 +136,21 @@ AIDAA_Diagnosis2 = """
                 border-radius: 5px;
                 border:0px;
                 font: 23px;
-                font-weight: bold;
+                
             }
             QPushButton#Search::hover{
                 background: rgb(0, 176, 218);
                 border-radius: 5px;
                 border:0px;
                 font: 23px;
-                font-weight: bold;
+                
             }
             QPushButton#Tab{
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
                 border:0px;
                 font: 23px;
-                font-weight: bold;
+                
                 text-align: left;
             }
             QPushButton#Tab::hover{
@@ -158,7 +158,7 @@ AIDAA_Diagnosis2 = """
                 border-radius: 5px;
                 border:0px;
                 font: 23px;
-                font-weight: bold;
+                
                 text-align: left;
             }
             QPushButton#Check{
@@ -169,7 +169,7 @@ AIDAA_Diagnosis2 = """
             QPushButton#Bottom{
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
-                font-weight: bold;
+                
                 font: 23px;
             }
             QLabel{
@@ -177,7 +177,7 @@ AIDAA_Diagnosis2 = """
                 border-radius: 5px;
                 padding-left:5px;
                 font: 23px;
-                font-weight: bold;
+                
                 border:0px;
             }
             QLabel#TitleBar{
@@ -185,7 +185,7 @@ AIDAA_Diagnosis2 = """
                 border-radius: 5px;
                 padding-left:5px;
                 font: 23px;
-                font-weight: bold;
+                
                 border:0px;
             }
             QPushButton{
@@ -199,17 +199,17 @@ AIDAA_Diagnosis2 = """
                 border-radius: 5px;
                 border: 1px solid #C00000;
                 font: 23px;
-                font-weight: bold;
+                
             }
             QLabel#label_title{
                 color: #C00000;
                 font: 23px;
-                font-weight: bold;
+                
             }
             QLabel#label_content{
                 color: rgb(0, 0, 0);
                 font: 23px;
-                font-weight: bold;
+                
             }
             QLabel#Notice{
                 background: rgb(255, 255, 255);

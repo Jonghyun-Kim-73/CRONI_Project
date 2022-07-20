@@ -158,19 +158,19 @@ class AlarmSystem_IFAP_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_IFAP_SortPress, self).__init__(parent)
         self.setObjectName("Bottom")
-        self.setText('Alarm_IFAP')
+        self.setText('Alarm_Pre-abnormal')
 
 class AlarmSystem_AIDAA_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_AIDAA_SortPress, self).__init__(parent)
         self.setObjectName("Bottom")
-        self.setText('Alarm_AIDAA')
+        self.setText('Alarm_Abnormal')
 
 class AlarmSystem_EGIS_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_EGIS_SortPress, self).__init__(parent)
         self.setObjectName("Bottom")
-        self.setText('Alarm_EGIS')
+        self.setText('Alarm_Emergency')
 
 # ----------------------------------------------------------------------------------------------------------------------
 # AIDAA 에서 Sort 버튼
