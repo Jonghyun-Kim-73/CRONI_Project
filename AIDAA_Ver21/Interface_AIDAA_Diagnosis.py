@@ -214,8 +214,8 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                                 3: self.radiation_chbox4, 4: self.radiation_chbox5}
 
         # urgent checkbox 가운데 정렬
-        if self.inmem.dis_AI['Train'] == 0 or self.inmem.dis_AI['Train'] == '' or self.inmem.ShMem.get_para_val('iFixTrain') == 1: # 훈련된 시나리오
-            for i in range(5):
+        if self.inmem.dis_AI['Train'] == 1 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:
+            for i in range(1,5):
                 uregent_cellwidget = QWidget()
                 urgent_layCB = QHBoxLayout(uregent_cellwidget)
                 urgent_layCB.addWidget(self.urgent_chbox[i])
@@ -223,7 +223,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 urgent_layCB.setContentsMargins(0, 0, 0, 0)
                 uregent_cellwidget.setLayout(urgent_layCB)
                 self.setCellWidget(i, 1, uregent_cellwidget)
-            for i in range(5):
+            for i in range(1,5):
                 radiation_cellwidget = QWidget()
                 radiation_layCB = QHBoxLayout(radiation_cellwidget)
                 radiation_layCB.addWidget(self.radiation_chbox[i])
@@ -231,8 +231,10 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 radiation_layCB.setContentsMargins(0, 0, 0, 0)
                 radiation_cellwidget.setLayout(radiation_layCB)
                 self.setCellWidget(i, 2, radiation_cellwidget)
+
+        # if self.inmem.dis_AI['Train'] == 0 or self.inmem.dis_AI['Train'] == '' or self.inmem.ShMem.get_para_val('iFixTrain') == 1: # 훈련된 시나리오
         else:
-            for i in range(1,5):
+            for i in range(5):
                 uregent_cellwidget = QWidget()
                 urgent_layCB = QHBoxLayout(uregent_cellwidget)
                 urgent_layCB.addWidget(self.urgent_chbox[i])
@@ -240,7 +242,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 urgent_layCB.setContentsMargins(0, 0, 0, 0)
                 uregent_cellwidget.setLayout(urgent_layCB)
                 self.setCellWidget(i, 1, uregent_cellwidget)
-            for i in range(1,5):
+            for i in range(5):
                 radiation_cellwidget = QWidget()
                 radiation_layCB = QHBoxLayout(radiation_cellwidget)
                 radiation_layCB.addWidget(self.radiation_chbox[i])
@@ -248,6 +250,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 radiation_layCB.setContentsMargins(0, 0, 0, 0)
                 radiation_cellwidget.setLayout(radiation_layCB)
                 self.setCellWidget(i, 2, radiation_cellwidget)
+
 
     def dis_update(self):
         if self.currentRow() != -1:
@@ -258,28 +261,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         if np.shape(self.inmem.get_train_check_val()) == (1,10,46):
             self.inmem.get_train_check_result()
         # --------------------------------------------------------------------------------------------------------------
-        if self.inmem.dis_AI['Train'] == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1: # 훈련된 시나리오
-            try:
-                if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
-                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-                else:
-                    self.make_centerCB()
-                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-                    [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-                    [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
-            except:
-                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
-
-        elif self.inmem.dis_AI['Train'] == 1 or self.inmem.ShMem.get_para_val('iFixTrain') == 2: # 훈련되지 않은 시나리오
+        if self.inmem.ShMem.get_para_val('iFixTrain') == 2 or self.inmem.dis_AI['Train'] == 1: # 훈련되지 않은 시나리오
             try:
                 if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
                     [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1,5)]
@@ -301,6 +283,27 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1,5)]
                 [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1, 5)]
                 [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, 5)]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+
+        elif self.inmem.ShMem.get_para_val('iFixTrain') == 1 or self.inmem.dis_AI['Train'] == 0 : # 훈련된 시나리오
+            try:
+                if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
+                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
+                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+                else:
+                    self.make_centerCB()
+                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
+                    [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
+                    [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
+                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
+                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+            except:
+                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
+                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
+                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
+                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
+                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
                 [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
 
         else:
