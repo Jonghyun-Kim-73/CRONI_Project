@@ -10,6 +10,11 @@ from AIDAA_Ver21.Interface_AIDAA_Procedure import *
 from AIDAA_Ver21.Interface_AIDAA_Action_ import *
 from AIDAA_Ver21.Interface_AIDAA_Pretrip import *
 
+<<<<<<< HEAD
+=======
+import Interface_QSS as qss
+from datetime import datetime
+>>>>>>> 70f664082441d7028fabc04215fb46cf1ed7697a
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -17,12 +22,31 @@ class Main(QWidget):
     def __init__(self, ShMem):
         super(Main, self).__init__()
         self.inmem:InterfaceMem = InterfaceMem(ShMem, self)
-        self.setGeometry(200, 200, 1900, 1000)
+        self.setGeometry(0, 0, 1920, 1080)
         
+        self.top = MainTop(self)
+        self.tab = MainTab(self)
         lay = QVBoxLayout(self)
         
-        lay.addWidget(MainTop(self))
-        lay.addWidget(MainTab(self))
+        lay.addWidget(self.top)
+        lay.addWidget(self.tab)
+        
+    # window drag
+    def mousePressEvent(self, event):
+        if (event.button() == Qt.LeftButton) and self.top.underMouse():
+            self.m_flag = True
+            self.m_Position = event.globalPos() - self.pos()
+            event.accept()
+            self.setCursor(QCursor(Qt.OpenHandCursor))
+
+    def mouseMoveEvent(self, QMouseEvent):
+        if Qt.LeftButton and self.m_flag and self.top.underMouse():
+            self.move(QMouseEvent.globalPos() - self.m_Position)  # 윈도우 position 변경
+            QMouseEvent.accept()
+
+    def mouseReleaseEvent(self, QMouseEvent):
+        self.m_flag = False
+        self.setCursor(QCursor(Qt.ArrowCursor))
 
 # ----------------------------------------------------------------------------------------------------------------------
 # MainTop
@@ -37,12 +61,33 @@ class MainTop(ABCWidget):
         lay = QHBoxLayout(self)
         lay.addWidget(MainTopTime(self))
         lay.addWidget(MainTopSystemName(self))
-        lay.addWidget(MainTopCallMain(self))
-        lay.addWidget(MainTopCallIFAP(self))
-        lay.addWidget(MainTopCallAIDAA(self))
-        lay.addWidget(MainTopCallEGIS(self))
-        lay.addWidget(MainTopClose(self))
         
+        self.btnGroup = QButtonGroup()
+        self.btnGroup.setExclusive(False)
+        self.btnGroup.buttonClicked[int].connect(self.btnClicked)
+
+        btn1 = MainTopCallMain(self)
+        btn2 = MainTopCallIFAP(self)
+        btn3 = MainTopCallAIDAA(self)
+        btn4 = MainTopCallEGIS(self)
+
+        self.btnGroup.addButton(MainTopCallMain(self), 0)
+        self.btnGroup.addButton(MainTopCallIFAP(self), 1)
+        self.btnGroup.addButton(MainTopCallAIDAA(self), 2)
+        self.btnGroup.addButton(MainTopCallEGIS(self), 3)
+
+        lay.addWidget(self.btnGroup.button(0))
+        lay.addWidget(self.btnGroup.button(1))
+        lay.addWidget(self.btnGroup.button(2))
+        lay.addWidget(self.btnGroup.button(3))
+        lay.addWidget(MainTopClose(self))
+    
+    def btnClicked(self, id):
+        for button in self.btnGroup.buttons():
+            if button is self.btnGroup.button(id):
+                button.setStyleSheet("QPushButton {background: rgb(0, 176, 218);} QPushButton:hover {background: rgb(0, 176, 218)}")
+            else:
+                button.setStyleSheet("QPushButton {background: rgb(231, 231, 234);} QPushButton:hover {background: rgb(0, 176, 218)}")
         
 class MainTopTime(ABCLabel):
     def __init__(self, parent):

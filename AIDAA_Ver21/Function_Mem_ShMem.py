@@ -54,7 +54,7 @@ class ShMem:
 
     def get_alarmdb(self):
         return self.AlarmDB.alarmdb
-    
+        
     def get_on_alarms(self):
         return self.AlarmDB.get_on_alarms()
 
@@ -153,7 +153,7 @@ class InterfaceMem:
         print('인공지능 모델 로드 완료')
 
         self.dis_AI = {'AI': '', 'Train': ''}
-        self.dis_AI_system = [['CVCS', '03/09', '72%']]
+        self.dis_AI_system = [['CVCS', '5', '72%'], ['RCS', '3', '16%'], ['FWS', '1', '6%'], ['CS', '1', '3%'], ['RHR', '1', '3%']]
 
     # 인공지능 전처리 용 ------------------------------------------------------------------------------------------------------
     def get_diagnosis_val(self):
@@ -213,7 +213,7 @@ class InterfaceMem:
 
     def GetTop(self, raw_list, get_top):
         """ 리스트에서 최대값 랭크와 인덱스 제공 """
-        if self.dis_AI['Train'] == 0:
+        if self.dis_AI['Train'] == 0 or self.ShMem.get_para_val('iFixTrain') == 1:
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
@@ -224,7 +224,7 @@ class InterfaceMem:
                 index_.pop(max_idx)
                 raw_list_.pop(max_idx)
                 result.append((maxv_, maxv_id))
-        elif self.dis_AI['Train'] == 1:
+        elif self.dis_AI['Train'] == 1 or self.ShMem.get_para_val('iFixTrain') == 2:
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
@@ -240,7 +240,7 @@ class InterfaceMem:
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
-            result.append((0, 17))
+            # result.append((0, 17))
             for i in range(get_top):
                 max_idx = np.array(raw_list_).argmax()
                 maxv_ = raw_list_[max_idx]
@@ -264,7 +264,7 @@ class InterfaceMem:
     def show_widget_ids(self):
         return self.widget_ids
 
-    def change_current_system_name(self, system_name:str):
+    def change_current_system_name(self, system_name: str):
         """ 버튼 클릭시 화면 전환
 
         Args:
@@ -275,8 +275,23 @@ class InterfaceMem:
         self.widget_ids['MainTab'].change_system_page(system_name)
 
     def get_time(self):
-        return str(timedelta(seconds=self.ShMem.get_para_val('KCNTOMS')/5))
+        return str(timedelta(seconds=self.ShMem.get_para_val('KCNTOMS') / 5))
+
+    def get_td(self):
+        return timedelta(seconds=self.ShMem.get_para_val('KCNTOMS') / 5)
 
     def get_current_system_name(self):
         return list(self.system_switch.keys())[list(self.system_switch.values()).index(1)]
 
+    def get_ab_procedure_num(self, content):
+        return self.ShMem.get_pro_procedure(
+            self.dis_AI['AI'][self.current_table['Procedure']][0])[
+            self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][
+                self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][content]['Nub']
+
+    def get_ab_procedure_des(self, content):
+        return self.ShMem.get_pro_procedure(
+            self.dis_AI['AI'][self.current_table['Procedure']][0])[
+            self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][
+                self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][
+            content]['Des']

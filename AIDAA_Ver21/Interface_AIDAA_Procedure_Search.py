@@ -53,8 +53,6 @@ class SystemSearchName(ABCLabel, QLabel):
         super(SystemSearchName, self).__init__(parent)
         self.setText('시스템')
 
-# ----------------------------------------------------------------------------------------------------------------------
-
 class XAISearch(ABCWidget, QWidget):
     def __init__(self, parent):
         super(XAISearch, self).__init__(parent)

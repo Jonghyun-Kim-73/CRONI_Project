@@ -13,17 +13,35 @@ class MainTabRight(ABCWidget, QWidget):
 
         self.vl = QVBoxLayout(self)
         self.hl = QHBoxLayout()
-        self.hl.addWidget(MainTabRightTopNormalBtn(self))
-        self.hl.addWidget(MainTabRightTopPreabnormalBtn(self))
-        self.hl.addWidget(MainTabRightTopAbnormalBtn(self))
-        self.hl.addWidget(MainTabRightTopEmergencyBtn(self))
+        # 현재 click된 btn & btn hover color 변경 위함
+        self.btnGroup = QButtonGroup()
+        self.btnGroup.setExclusive(False)
+        self.btnGroup.buttonClicked[int].connect(self.btnClicked)
+
+        self.btnGroup.addButton(MainTabRightTopNormalBtn(self), 0)
+        self.btnGroup.addButton(MainTabRightTopPreabnormalBtn(self), 1)
+        self.btnGroup.addButton(MainTabRightTopAbnormalBtn(self), 2)
+        self.btnGroup.addButton(MainTabRightTopEmergencyBtn(self), 3)
+
+        self.hl.addWidget(self.btnGroup.button(0))
+        self.hl.addWidget(self.btnGroup.button(1))
+        self.hl.addWidget(self.btnGroup.button(2))
+        self.hl.addWidget(self.btnGroup.button(3))
         self.vl.addLayout(self.hl)
         self.vl.addWidget(MainTabRightBottomWid(self))
         
         self.inmem.widget_ids['MainTabRightTopNormalBtn'].dis_update()
-        
+    
+    def btnClicked(self, id):
+        for button in self.btnGroup.buttons():
+            if button is self.btnGroup.button(id):
+                button.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+            else:
+                button.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
+
 # ------------------------------------------------------------------------------------------
-class MainTabRightTopNormalBtn(ABCPushButton, QPushButton):
+class MainTabRightTopNormalBtn(ABCPushButton):
     def __init__(self, parent):
         super(MainTabRightTopNormalBtn, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(230, 184, 100);')
@@ -38,10 +56,10 @@ class MainTabRightTopNormalBtn(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTabRightTopEmergencyBtn'].dis_off()
     
     def dis_on(self):
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
-        
+        self.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
     def dis_off(self):
-        self.setStyleSheet('background-color: rgb(130, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
     
 class MainTabRightTopPreabnormalBtn(ABCPushButton, QPushButton):
     def __init__(self, parent):
@@ -58,10 +76,10 @@ class MainTabRightTopPreabnormalBtn(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTabRightTopEmergencyBtn'].dis_off()
     
     def dis_on(self):
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
-        
+        self.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
     def dis_off(self):
-        self.setStyleSheet('background-color: rgb(130, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
     
 class MainTabRightTopAbnormalBtn(ABCPushButton, QPushButton):
     def __init__(self, parent):
@@ -78,10 +96,10 @@ class MainTabRightTopAbnormalBtn(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTabRightTopEmergencyBtn'].dis_off()
     
     def dis_on(self):
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
-        
+        self.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
     def dis_off(self):
-        self.setStyleSheet('background-color: rgb(130, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
         
 class MainTabRightTopEmergencyBtn(ABCPushButton, QPushButton):
     def __init__(self, parent):
@@ -98,10 +116,10 @@ class MainTabRightTopEmergencyBtn(ABCPushButton, QPushButton):
         self.inmem.widget_ids['MainTabRightTopEmergencyBtn'].dis_on()
     
     def dis_on(self):
-        self.setStyleSheet('background-color: rgb(230, 184, 100);')
-        
+        self.setStyleSheet("QPushButton {background: rgb(255, 255, 255);} QPushButton:hover {background: rgb(0, 178, 218)}")
+
     def dis_off(self):
-        self.setStyleSheet('background-color: rgb(130, 184, 100);')
+        self.setStyleSheet("QPushButton {background: rgb(128, 128, 128);} QPushButton:hover {background: rgb(0, 178, 218)}")
             
 # ------------------------------------------------------------------------------------------
 class MainTabRightBottomWid(ABCStackWidget, QWidget):
@@ -124,19 +142,19 @@ class MainTabRightBottomWid(ABCStackWidget, QWidget):
 class MainTabRightBottomNormalW(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTabRightBottomNormalW, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(176, 224, 230);')
+        self.setStyleSheet('background-color: rgb(231,231,234);')
 
 class MainTabRightBottomPreabnormalW(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTabRightBottomPreabnormalW, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(180, 210, 230);')
+        self.setStyleSheet('background-color: rgb(231,231,234);')
         
 class MainTabRightBottomAbnormalW(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTabRightBottomAbnormalW, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(190, 200, 230);')
+        self.setStyleSheet('background-color: rgb(231,231,234);')
 
 class MainTabRightBottomEmergencyW(ABCWidget, QWidget):
     def __init__(self, parent):
         super(MainTabRightBottomEmergencyW, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(200, 190, 230);')
+        self.setStyleSheet('background-color: rgb(231,231,234);')
