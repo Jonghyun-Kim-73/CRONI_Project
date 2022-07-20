@@ -709,7 +709,8 @@ class ProcedureComplet(ABCPushButton, QPushButton):
     def dis_update(self):
         self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             self.current_state] = 1
-        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] += 1
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] != 5:
+            self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] += 1
 
 class ProcedureParallel(ABCPushButton, QPushButton):
     def __init__(self, parent):
@@ -725,7 +726,8 @@ class ProcedureParallel(ABCPushButton, QPushButton):
             self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
         self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             self.current_state] = 2
-        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] += 1
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] != 5:
+            self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] += 1
 
 class ProcedureReconduct(ABCPushButton, QPushButton):
     def __init__(self, parent):
