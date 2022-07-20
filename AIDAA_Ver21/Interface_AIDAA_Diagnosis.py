@@ -258,8 +258,15 @@ class ProcedureDiagonsisTable(ABCTableWidget):
 
         # AI Diagnosis Calculation -------------------------------------------------------------------------------------
         self.inmem.get_diagnosis_result()
-        if np.shape(self.inmem.get_train_check_val()) == (1,10,46):
-            self.inmem.get_train_check_result()
+        # if np.shape(self.inmem.get_train_check_val()) == (1,10,46):
+        #     self.inmem.get_train_check_result()
+        if self.inmem.ShMem.get_para_val('iFixTrain') == 1:
+            self.inmem.dis_AI['Train'] = 0
+        elif self.inmem.ShMem.get_para_val('iFixTrain') == 2:
+            self.inmem.dis_AI['Train'] = 1
+        else:
+            if np.shape(self.inmem.get_train_check_val()) == (1, 10, 46):
+                self.inmem.get_train_check_result()
         # --------------------------------------------------------------------------------------------------------------
         if self.inmem.ShMem.get_para_val('iFixTrain') == 2 or self.inmem.dis_AI['Train'] == 1: # 훈련되지 않은 시나리오
             try:
@@ -346,6 +353,8 @@ class ProcedureDiagonsisTable(ABCTableWidget):
             #     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, 5)]
         if self.inmem.current_table['current_window'] == 1:
             self.clearselect()
+
+
 
 
     def control_table(self):
