@@ -277,7 +277,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
                 [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
 
-        elif self.inmem.dis_AI['Train'] == 1: # 훈련되지 않은 시나리오
+        elif self.inmem.dis_AI['Train'] == 1 or self.inmem.ShMem.get_para_val('iFixTrain') == 1: # 훈련되지 않은 시나리오
             try:
                 if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
                     [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1,5)]

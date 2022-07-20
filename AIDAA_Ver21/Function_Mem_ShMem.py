@@ -227,7 +227,7 @@ class InterfaceMem:
                 index_.pop(max_idx)
                 raw_list_.pop(max_idx)
                 result.append((maxv_, maxv_id))
-        elif self.dis_AI['Train'] == 1:
+        elif self.dis_AI['Train'] == 1 or self.ShMem.get_para_val('iFixTrain') == 1:
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
@@ -243,7 +243,7 @@ class InterfaceMem:
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
-            result.append((0, 17))
+            # result.append((0, 17)) # 10초전 모델 비활성 상태
             for i in range(get_top):
                 max_idx = np.array(raw_list_).argmax()
                 maxv_ = raw_list_[max_idx]
