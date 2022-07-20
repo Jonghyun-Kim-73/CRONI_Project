@@ -56,7 +56,7 @@ class UrgentBTN(ABCLabel):
         if self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][1] is False:
             self.setStyleSheet('background-color: lightgray;')
         elif self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][1] is True:
-            self.setStyleSheet('background-color: rgb(255,0,0);')
+            self.setStyleSheet('background-color: rgb(192,0,0);')
 
 class RadiationBTN(ABCLabel):
     def __init__(self, parent):
@@ -70,7 +70,7 @@ class RadiationBTN(ABCLabel):
         if self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][2] is False:
             self.setStyleSheet('background-color: lightgray;')
         elif self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][2] is True:
-            self.setStyleSheet('background-color: rgb(255,0,0);')
+            self.setStyleSheet('background-color: rgb(192,0,0);')
 
 class PredictionBTN(ABCPushButton):
     def __init__(self, parent):
@@ -195,17 +195,17 @@ class ProcedureSequenceFirst_2(ABCPushButton):
 
     def dis_update(self):
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 0:
+            '목적'] == 0: # 기본
             self.setStyleSheet('background-color:rgb(255, 255, 255)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 1:
+            '목적'] == 1: # 만족
             self.setStyleSheet('background-color: rgb(0,0,0)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 2:
+            '목적'] == 2: # 병행
             self.setStyleSheet('background-color: yellow')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 3:
-            self.setStyleSheet('background-color: rgb(255,0,0)')
+            '목적'] == 3: # 불만족
+            self.setStyleSheet('background-color: rgb(192,0,0)')
 
 class ProcedureSequenceSecond(ABCWidget):
     def __init__(self, parent):
@@ -258,7 +258,7 @@ class ProcedureSequenceSecond_2(ABCPushButton):
             self.setStyleSheet('background-color: yellow')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '경보 및 증상'] == 3:
-            self.setStyleSheet('background-color: rgb(255,0,0)')
+            self.setStyleSheet('background-color: rgb(192,0,0)')
 
 class ProcedureSequenceThird(ABCWidget):
     def __init__(self, parent):
@@ -312,7 +312,7 @@ class ProcedureSequenceThird_2(ABCPushButton):
             self.setStyleSheet('background-color: yellow')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '자동 동작 사항'] == 3:
-            self.setStyleSheet('background-color: rgb(255,0,0)')
+            self.setStyleSheet('background-color: rgb(192,0,0)')
 
 class ProcedureSequenceFourth(ABCWidget):
     def __init__(self, parent):
@@ -365,7 +365,7 @@ class ProcedureSequenceFourth_2(ABCPushButton):
             self.setStyleSheet('background-color: yellow')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '긴급 조치 사항'] == 3:
-            self.setStyleSheet('background-color: rgb(255,0,0)')
+            self.setStyleSheet('background-color: rgb(192,0,0)')
 
 class ProcedureSequenceFifth(ABCWidget):
     def __init__(self, parent):
@@ -418,7 +418,7 @@ class ProcedureSequenceFifth_2(ABCPushButton):
             self.setStyleSheet('background-color: yellow')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '후속 조치 사항'] == 3:
-            self.setStyleSheet('background-color: rgb(255,0,0)')
+            self.setStyleSheet('background-color: rgb(192,0,0)')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
