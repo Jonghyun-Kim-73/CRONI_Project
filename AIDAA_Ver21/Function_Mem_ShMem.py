@@ -26,7 +26,7 @@ class ShMem:
                         break
                     if temp_[0] == '#':  # Pass this value. We don't require this value.
                         pass  # These values are normally static values in SMABRES Code.
-                    else:
+                    else:   
                         sig = 0 if temp_[1] == 'INTEGER' else 1
                         shared_mem[temp_[0]] = {'Sig': sig, 'Val': 0, 'Num': idx, 'List': deque(maxlen=max_len)}
                         idx += 1
