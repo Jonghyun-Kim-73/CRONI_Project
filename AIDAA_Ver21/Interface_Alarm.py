@@ -91,7 +91,6 @@ class AlarmFixPreTrip(ABCPushButton, QLabel):
         super(AlarmFixPreTrip, self).__init__(parent)
         self.setObjectName("Left")
         self.setFixedSize(474, 35)
-        self.widget_timer(iter_=500, funs=[self.dis_update])
         self.setText('PreTrip')
         self.clicked.connect(self.change_main_display)
         self.blick = False
@@ -125,7 +124,6 @@ class AlarmFixTrip(ABCLabel):
         super(AlarmFixTrip, self).__init__(parent)
         self.setObjectName("Left")
         self.setFixedSize(475, 35)
-        self.widget_timer(iter_=500, funs=[self.dis_update])
         self.setText('Trip')
         self.widget_timer(iter_=500, funs=[self.dis_update])
         self.blick = False
