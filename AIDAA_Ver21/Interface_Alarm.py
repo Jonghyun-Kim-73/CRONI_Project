@@ -94,7 +94,7 @@ class AlarmFixPreTrip(ABCPushButton, QLabel):
         self.setText('PreTrip')
         self.clicked.connect(self.change_main_display)
         self.blick = False
-        self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
+
 
     def dis_update(self):
         """

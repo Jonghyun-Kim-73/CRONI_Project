@@ -60,12 +60,7 @@ class PredictionBTN(ABCPushButton, QPushButton):
     def __init__(self, parent):
         super(PredictionBTN, self).__init__(parent)
         self.setText('Prediction')
-        self.clicked.connect(self.change_main_display)
-        self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
 
-    def change_main_display(self):
-        self.inmem.change_current_system_name('PreTrip')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
 
 class TripBTN(ABCPushButton, QPushButton):
     def __init__(self, parent):
