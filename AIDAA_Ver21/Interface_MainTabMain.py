@@ -12,8 +12,8 @@ class MainTabMain(ABCWidget):
         super(MainTabMain, self).__init__(parent)
         self.setStyleSheet(qss.Main_Tab)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(5, 5, 5, 5)
+        lay.setContentsMargins(10, 15, 10, 15)
         lay.addWidget(MainAlarm(self))
         lay.addWidget(MainTabRight(self))
-        lay.setSpacing(5)
+        lay.setSpacing(15)
 

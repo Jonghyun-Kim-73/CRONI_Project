@@ -1231,7 +1231,7 @@ ab_pro = {
         '긴급조치': False, '방사선': False,
         '경보 및 증상': {
             0: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'ManClick': True, 'AutoClick': False, 'Nub': '2.1',
                 'Des': '제어봉 위치 지시계와 스텝계수기상의 계속적인 제어봉 삽입',
             },
             1: {
@@ -1239,7 +1239,7 @@ ab_pro = {
                 'Des': '원자로 출력 감소',
             },
             2: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
+                'ManClick': True, 'AutoClick': False, 'Nub': '2.3',
                 'Des': '“T REF/AUCT T AVG HIGH” 경보 발생',
             },
             3: {
@@ -1247,7 +1247,7 @@ ab_pro = {
                 'Des': '“ROD BANKS LOW/LO-LO LIMIT” 경보 발생',
             },
             4: {
-                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
+                'ManClick': True, 'AutoClick': False, 'Nub': '2.5',
                 'Des': '“COMPARATOR PWR RANGE DEVIATION” 경보 발생',
             },
             5: {

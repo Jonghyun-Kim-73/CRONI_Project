@@ -16,7 +16,7 @@ class MainAlarm(ABCWidget):
         lay.addWidget(AlarmTable(self))
         lay.addWidget(AlarmSortSystemBtns(self))
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(5)
+        lay.setSpacing(15)
 
 class AIDAAAlarm(ABCWidget):
     def __init__(self, parent):
@@ -30,7 +30,7 @@ class AIDAAAlarm(ABCWidget):
         lay.addWidget(AlarmTable(self))
         lay.addWidget(AlarmSortAIDAABtns(self))
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(5)
+        lay.setSpacing(15)
 
 # ----------------------------------------------------------------------------------------------------------------------
 class AlarmFix(ABCWidget):
@@ -42,7 +42,7 @@ class AlarmFix(ABCWidget):
         # lay.addWidget(AlarmFixUrgentAct(self))
         lay.addWidget(AlarmFixPreTrip(self))
         lay.addWidget(AlarmFixTrip(self))
-        lay.setSpacing(5)
+        lay.setSpacing(10)
 
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
@@ -99,7 +99,7 @@ class AlarmFixPreTrip(ABCPushButton):
     def __init__(self, parent):
         super(AlarmFixPreTrip, self).__init__(parent)
         self.setObjectName("Left")
-        self.setFixedSize(474, 35)
+        self.setFixedSize(615, 55)
         self.setText('PreTrip')
         self.clicked.connect(self.change_main_display)
         self.blick = False
@@ -131,7 +131,7 @@ class AlarmFixTrip(ABCLabel):
     def __init__(self, parent):
         super(AlarmFixTrip, self).__init__(parent)
         self.setObjectName("Left")
-        self.setFixedSize(475, 35)
+        self.setFixedSize(615, 55)
         self.setText('Trip')
         self.blick = False
 
@@ -157,7 +157,7 @@ class AlarmTable(ABCTableWidget):
         self.setStyleSheet('background-color: rgb(238, 238, 238);')
         self.column_labels = ['DESCRIPTION', 'VALUE', 'SETPOINT', 'UNIT', 'DATE', 'TIME']
         self.setColumnCount(len(self.column_labels))
-        self.setFixedWidth(900) # 임시
+        self.setFixedSize(1250, 1190)
         self.setHorizontalHeaderLabels([l for l in self.column_labels])
         self.setContentsMargins(0, 0, 0, 0)
         self.widget_timer(500, [self.dis_update])
@@ -188,27 +188,30 @@ class AlarmSortSystemBtns(ABCWidget):
     def __init__(self, parent):
         super(AlarmSortSystemBtns, self).__init__(parent)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(0, 0, 10, 0)
         lay.addWidget(AlarmSystem_IFAP_SortPress(self))
         lay.addWidget(AlarmSystem_AIDAA_SortPress(self))
         lay.addWidget(AlarmSystem_EGIS_SortPress(self))
-        lay.setSpacing(5)
+        lay.setSpacing(10)
 
 class AlarmSystem_IFAP_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_IFAP_SortPress, self).__init__(parent)
+        self.setFixedSize(410, 60)
         self.setObjectName("Bottom")
         self.setText('Alarm_Pre-abnormal')
 
 class AlarmSystem_AIDAA_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_AIDAA_SortPress, self).__init__(parent)
+        self.setFixedSize(410, 60)
         self.setObjectName("Bottom")
         self.setText('Alarm_Abnormal')
 
 class AlarmSystem_EGIS_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_EGIS_SortPress, self).__init__(parent)
+        self.setFixedSize(410, 60)
         self.setObjectName("Bottom")
         self.setText('Alarm_Emergency')
 

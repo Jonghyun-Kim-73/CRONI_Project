@@ -19,25 +19,25 @@ class Diagnosis(ABCWidget):
         super(Diagnosis, self).__init__(parent)
         self.setStyleSheet(qss.AIDAA_Diagnosis)
         self.setObjectName("BG")
-        self.setContentsMargins(0, 0, 5, 0)
-        self.setFixedWidth(950)
+        self.setContentsMargins(0, 0, 0, 0)
+        #self.setFixedWidth(950)
         lay = QVBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(0, 0, 0, 10)
         lay.addWidget(DiagnosisTop(self))
         lay.addWidget(ProcedureDiagonsisTable(self))
         lay.addWidget(SystemDiagnosisTable(self))
         lay.addWidget(ProcedureCheckTable(self))
-
+        lay.setSpacing(15)
 
 class DiagnosisTop(ABCWidget):
     def __init__(self, parent):
         super(DiagnosisTop, self).__init__(parent)
-        self.setContentsMargins(0, 0, 30, 0)
+        #self.setContentsMargins(0, 0, 0, 0)
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
-        lay.setSpacing(8)
+        lay.setSpacing(10)
 
 class DiagnosisTopCallProcedureSearch(ABCPushButton):
     def __init__(self, parent):
@@ -45,8 +45,8 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton):
         self.setObjectName("Button")
         icon = os.path.join(ROOT_PATH, 'Img', 'search.png')
         self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(25, 25))
-        self.setFixedSize(451, 35)
+        self.setIconSize(QSize(30, 30))
+        self.setFixedSize(635, 55)
         self.setText('비정상 절차서 검색')
         self.clicked.connect(self.dis_update)
         # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
@@ -61,8 +61,8 @@ class DiagnosisTopCallSystemSearch(ABCPushButton):
         self.setObjectName("Button")
         icon = os.path.join(ROOT_PATH, 'Img', 'search.png')
         self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(25, 25))
-        self.setFixedSize(451, 35)
+        self.setIconSize(QSize(30, 30))
+        self.setFixedSize(635, 55)
         self.setText('시스템 검색')
         self.clicked.connect(self.dis_update)
         # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
@@ -144,13 +144,13 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         super(ProcedureDiagonsisTable, self).__init__(parent)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setShowGrid(False)  # Grid 지우기
-        self.setFixedHeight(212)
+        self.setFixedHeight(252)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
-        column_labels = [(' 비정상 절차서 명', 510), ('긴급', 105), ('방사선', 105), ('진입조건', 103), ('AI 정확도', 120)]
+        column_labels = [(' 비정상 절차서 명', 760), ('긴급', 100), ('방사선', 100), ('진입조건', 150), ('AI 정확도', 170)]
         self.setColumnCount(len(column_labels))
-        self.setRowCount(5)
+        self.setRowCount(3)
 
         self.col_names = []
         for i, (l, w) in enumerate(column_labels):
@@ -163,7 +163,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         self.setContentsMargins(0, 0, 0, 0)
 
         self.setSelectionBehavior(QTableView.SelectRows)    # 테이블 row click
-        self.horizontalHeader().setFixedHeight(35)
+        self.horizontalHeader().setFixedHeight(55)
 
         # 테이블 정렬
         delegate = AlignDelegate(self)
@@ -179,7 +179,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
 
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 35)
+            self.setRowHeight(i, 65)
 
         self.doubleClicked.connect(self.dis_procedure)
         self.make_centerCB()    # 체크박스
@@ -196,26 +196,20 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         XAISearch(self).show()
 
     def make_centerCB(self):
-        # urgent checkbox 삽입 (행길이 5; checkbox 5개)
+        # urgent checkbox 삽입 (행길이 3; checkbox 3개)
         self.urgent_chbox1 = QCheckBox()
         self.urgent_chbox2 = QCheckBox()
         self.urgent_chbox3 = QCheckBox()
-        self.urgent_chbox4 = QCheckBox()
-        self.urgent_chbox5 = QCheckBox()
-        self.urgent_chbox = {0: self.urgent_chbox1, 1: self.urgent_chbox2, 2: self.urgent_chbox3, 3: self.urgent_chbox4,
-                             4: self.urgent_chbox5}
-        # radiation checkbox 삽입 (행길이 5; checkbox 5개)
+        self.urgent_chbox = {0: self.urgent_chbox1, 1: self.urgent_chbox2, 2: self.urgent_chbox3}
+        # radiation checkbox 삽입 (행길이 3; checkbox 3개)
         self.radiation_chbox1 = QCheckBox()
         self.radiation_chbox2 = QCheckBox()
         self.radiation_chbox3 = QCheckBox()
-        self.radiation_chbox4 = QCheckBox()
-        self.radiation_chbox5 = QCheckBox()
-        self.radiation_chbox = {0: self.radiation_chbox1, 1: self.radiation_chbox2, 2: self.radiation_chbox3,
-                                3: self.radiation_chbox4, 4: self.radiation_chbox5}
+        self.radiation_chbox = {0: self.radiation_chbox1, 1: self.radiation_chbox2, 2: self.radiation_chbox3}
 
         # urgent checkbox 가운데 정렬
         if self.inmem.dis_AI['Train'] == 1 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:
-            for i in range(1,5):
+            for i in range(1, self.rowCount()):
                 uregent_cellwidget = QWidget()
                 urgent_layCB = QHBoxLayout(uregent_cellwidget)
                 urgent_layCB.addWidget(self.urgent_chbox[i])
@@ -223,7 +217,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 urgent_layCB.setContentsMargins(0, 0, 0, 0)
                 uregent_cellwidget.setLayout(urgent_layCB)
                 self.setCellWidget(i, 1, uregent_cellwidget)
-            for i in range(1,5):
+            for i in range(1, 3):
                 radiation_cellwidget = QWidget()
                 radiation_layCB = QHBoxLayout(radiation_cellwidget)
                 radiation_layCB.addWidget(self.radiation_chbox[i])
@@ -234,7 +228,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
 
         # if self.inmem.dis_AI['Train'] == 0 or self.inmem.dis_AI['Train'] == '' or self.inmem.ShMem.get_para_val('iFixTrain') == 1: # 훈련된 시나리오
         else:
-            for i in range(5):
+            for i in range(self.rowCount()):
                 uregent_cellwidget = QWidget()
                 urgent_layCB = QHBoxLayout(uregent_cellwidget)
                 urgent_layCB.addWidget(self.urgent_chbox[i])
@@ -242,7 +236,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 urgent_layCB.setContentsMargins(0, 0, 0, 0)
                 uregent_cellwidget.setLayout(urgent_layCB)
                 self.setCellWidget(i, 1, uregent_cellwidget)
-            for i in range(5):
+            for i in range(self.rowCount()):
                 radiation_cellwidget = QWidget()
                 radiation_layCB = QHBoxLayout(radiation_cellwidget)
                 radiation_layCB.addWidget(self.radiation_chbox[i])
@@ -271,68 +265,68 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         if self.inmem.ShMem.get_para_val('iFixTrain') == 2 or self.inmem.dis_AI['Train'] == 1: # 훈련되지 않은 시나리오
             try:
                 if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
-                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1,5)]
-                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1,5)]
+                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1, self.rowCount())]
+                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, self.rowCount())]
                 else:
                     self.clear()
                     self.setHorizontalHeaderLabels(self.col_names)
                     self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
                     self.make_centerCB()
-                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-                    [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(1,5)]
-                    [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1,5)]
-                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1,5)]
-                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1,5)]
-                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(self.rowCount())]
+                    [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(1, self.rowCount())]
+                    [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1, self.rowCount())]
+                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1, self.rowCount())]
+                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, self.rowCount())]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.rowCount())]
             except:
-                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(1,5)]
-                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1,5)]
-                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1, 5)]
-                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, 5)]
-                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(self.rowCount())]
+                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(1, self.rowCount())]
+                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1, self.rowCount())]
+                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1, self.rowCount())]
+                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, self.rowCount())]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.rowCount())]
 
         elif self.inmem.ShMem.get_para_val('iFixTrain') == 1 or self.inmem.dis_AI['Train'] == 0 : # 훈련된 시나리오
             try:
                 if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
-                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(self.rowCount())]
+                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(self.rowCount())]
                 else:
                     self.make_centerCB()
-                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-                    [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-                    [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(self.rowCount())]
+                    [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(self.rowCount())]
+                    [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(self.rowCount())]
+                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(self.rowCount())]
+                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(self.rowCount())]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.rowCount())]
             except:
-                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(self.rowCount())]
+                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(self.rowCount())]
+                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(self.rowCount())]
+                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(self.rowCount())]
+                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(self.rowCount())]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.rowCount())]
 
         else:
             try:
                 if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
-                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
+                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(self.rowCount())]
+                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(self.rowCount())]
                 else:
                     self.make_centerCB()
-                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-                    [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-                    [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(self.rowCount())]
+                    [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(self.rowCount())]
+                    [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(self.rowCount())]
+                    [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(self.rowCount())]
+                    [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(self.rowCount())]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.rowCount())]
             except:
-                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(self.rowCount())]
+                [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(self.rowCount())]
+                [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(self.rowCount())]
+                [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(self.rowCount())]
+                [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(self.rowCount())]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.rowCount())]
 
             # try:
             #     if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
@@ -375,15 +369,15 @@ class SystemDiagnosisTable(ABCTableWidget):
         super(SystemDiagnosisTable, self).__init__(parent)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setShowGrid(False)  # Grid 지우기
-        self.setFixedHeight(212)    # 변경하려면 row height 변경 필요
+        self.setFixedHeight(252)    # 변경하려면 row height 변경 필요
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
         self.setSelectionMode(QAbstractItemView.SingleSelection)
 
-        self.column_labels = [(' System', 705), ('관련 경보', 118), ('AI 정확도', 120)]
+        self.column_labels = [(' System', 960), ('관련 경보', 150), ('AI 정확도', 170)]
         self.setColumnCount(len(self.column_labels))
-        self.setRowCount(5)
+        self.setRowCount(3)
         col_names = []
         for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
@@ -393,7 +387,7 @@ class SystemDiagnosisTable(ABCTableWidget):
         self.setContentsMargins(0, 0, 0, 0)
 
         self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
-        self.horizontalHeader().setFixedHeight(35)
+        self.horizontalHeader().setFixedHeight(55)
 
         # 테이블 정렬
         delegate = AlignDelegate(self)
@@ -409,8 +403,7 @@ class SystemDiagnosisTable(ABCTableWidget):
 
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 35)
-
+            self.setRowHeight(i, 65)
         self.widget_timer(iter_=500, funs=[self.dis_update])
         self.doubleClicked.connect(self.dis_system)
         self.clicked.connect(self.control_table)
@@ -430,18 +423,18 @@ class SystemDiagnosisTable(ABCTableWidget):
             self.inmem.current_table['System'] = self.currentRow()
         try:
             if self.item(0, 0).text() == self.inmem.dis_AI_system[0][0] and self.item(1, 0).text() == self.inmem.dis_AI_system[1][0] and self.item(2, 0).text() == self.inmem.dis_AI_system[2][0] and self.item(3, 0).text() == self.inmem.dis_AI_system[3][0] and self.item(4, 0).text() == self.inmem.dis_AI_system[4][0]:
-                [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(5)]
-                [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(5)]
+                [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(self.rowCount())]
+                [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(self.rowCount())]
             else:
-                [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI_system[i][0])) for i in range(5)]
-                [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(5)]
-                [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(5)]
-                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+                [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI_system[i][0])) for i in range(self.rowCount())]
+                [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(self.rowCount())]
+                [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(self.rowCount())]
+                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.rowCount())]
         except:
-            [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI_system[i][0])) for i in range(5)]
-            [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(5)]
-            [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(5)]
-            [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
+            [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI_system[i][0])) for i in range(self.rowCount())]
+            [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI_system[i][1])) for i in range(self.rowCount())]
+            [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI_system[i][2])) for i in range(self.rowCount())]
+            [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.rowCount())]
 
         if self.inmem.current_table['current_window'] == 0:
             self.clearselect()
@@ -463,16 +456,15 @@ class SystemDiagnosisTable(ABCTableWidget):
 class ProcedureCheckTable(ABCTableWidget):
     def __init__(self, parent):
         super(ProcedureCheckTable, self).__init__(parent)
-        # self.setObjectName("tab3")
+        self.setObjectName("Tab3")
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setShowGrid(False)  # Grid 지우기
-        # self.setFixedHeight(211)
+        self.setFixedHeight(721)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
 
-
-        self.column_labels = [(' 비정상 절차서:', 615), ('Value', 105), ('Set-point', 122), ('Unit', 101)]
+        self.column_labels = [(' 비정상 절차서:', 880), ('Value', 100), ('Set-point', 200), ('Unit', 100)]
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(10)
         col_names = []
@@ -482,9 +474,9 @@ class ProcedureCheckTable(ABCTableWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setContentsMargins(0, 0, 0, 0)
-
+        self.symptom_count = 0
         self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
-        self.horizontalHeader().setFixedHeight(35)
+        self.horizontalHeader().setFixedHeight(55)
         # self.setItemDelegate(MyStyledItem(margin=3, radius=5, border_width=3, border_color=QColor(178,178,178)))
         # 테이블 헤더
         self.setHorizontalHeaderLabels(col_names)
@@ -494,7 +486,7 @@ class ProcedureCheckTable(ABCTableWidget):
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 35)
+            self.setRowHeight(i, 65)
 
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
@@ -502,26 +494,46 @@ class ProcedureCheckTable(ABCTableWidget):
         if self.inmem.current_table['current_window'] == 0:
             if self.inmem.current_table['Procedure'] != -1:
                 self.setColumnCount(len(self.column_labels))
+                for i in range(0, self.rowCount()):
+                    self.setRowHeight(i, 65)
                 self.column_labels = [
                     ' 비정상 절차서: %s' % f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}', 'Value',
                     'Set-point', 'Unit']
                 self.setHorizontalHeaderLabels([l for l in self.column_labels])
                 if self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '학습여부를 아직 확인할 수 없습니다.' or self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '해당 시나리오는 학습되지 않은 시나리오입니다.':
                     print('해당 사항은 선택할 수 없습니다.')
-                    [self.setItem(i, 0, QTableWidgetItem('해당 사항은 선택할 수 없습니다.')) for i in range(10)]
+                    [self.setItem(i, 0, QTableWidgetItem('해당 사항은 선택할 수 없습니다.')) for i in range(self.rowCount())]
                 else:
                     symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
                     if self.inmem.current_table['procedure_name'] != self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]:
-                        symptom_count = self.inmem.ShMem.get_pro_symptom_count(
+                        self.symptom_count = self.inmem.ShMem.get_pro_symptom_count(
                             self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
-                        self.setRowCount(symptom_count)
-                        [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(symptom_count)]
-                        [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(symptom_count)]
+                        self.setRowCount(self.symptom_count)
+                        [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(self.symptom_count)]
+                        [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.symptom_count)]
+                        [self.item(i, 0).setSelected(False) for i in range(self.symptom_count)] # 아이쳄 1,2,3 추가시 수정필요
+                        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':
+                            for i in range(0, self.symptom_count):
+                                if symptom[i]['ManClick']:
+                                    self.item(i, 0).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
                     self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
+
+                    # for i in range(self.symptom_count):
+                    #     if self.content + 1 <= self.inmem.ShMem.get_pro_procedure_count(
+                    #             self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
+                    #         if self.inmem.get_ab_procedure_Manual_Check(i):
+                    #             # self.setStyleSheet("""QTableWidget::item {
+                    #             #                     font: 30px;
+                    #             #                     border-bottom: 1px solid rgb(128, 128, 128);
+                    #             #                     background:yellow;
+                    #             # }""")
+                    #             print(i)
 
 
         elif self.inmem.current_table['current_window'] == 1:
             if self.inmem.current_table['System'] != -1:
+                for i in range(0, self.rowCount()):
+                    self.setRowHeight(i, 65)
                 self.column_labels = [' System: %s' % f'{self.inmem.dis_AI_system[self.inmem.current_table["System"]][0]}', 'Value', 'Set-point', 'Unit']
                 self.setColumnCount(len(self.column_labels))
                 self.setHorizontalHeaderLabels([l for l in self.column_labels])
