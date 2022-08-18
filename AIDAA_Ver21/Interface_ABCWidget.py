@@ -58,6 +58,12 @@ class ABCTabWidget(QTabWidget, TOOL):
         self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
 
+class ABCText(QTextEdit, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCText, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+
 
 class ABCTableWidget(QTableWidget, TOOL):
     def __init__(self, parent, widget_name=''):

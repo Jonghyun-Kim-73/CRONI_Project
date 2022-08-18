@@ -5,7 +5,7 @@ from collections import deque
 import numpy as np
 import pandas as pd
 import pickle
-from keras.models import load_model
+# from keras.models import load_model
 
 
 class ShMem:
@@ -125,7 +125,8 @@ class InterfaceMem:
                                                                                      3: '자동 동작 사항', 4: '긴급 조치 사항',
                                                                                      5: '후속 조치 사항'}} for i in range(18)}
         self.current_procedure_log = [0, 0]  # [절차서 화면 전환 용도, 선택 절차서 전환 용도]
-        self.current_table = {'Procedure': 0, 'System': 0, 'current_window': -1, 'procedure_name': ""}
+        self.current_table = {'Procedure': -1, 'System': -1, 'current_window': -1, 'procedure_name': "",
+                              'selected_procedure':"", 'selected_system':""}
 
         self.procedure_progress_state = {
             self.diagnosis_convert_text[i]: {'목적': 0, '경보 및 증상': 0, '자동 동작 사항': 0, '긴급 조치 사항': 0, '후속 조치 사항': 0} for i
@@ -143,17 +144,26 @@ class InterfaceMem:
                                                                            self.pro_procedure_count[i]['후속 조치 사항'])]}
                                       for i in range(16)}
         self.access_procedure = []
+        self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', False, False, '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', True, True, '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸즈 후단누설', True, True, '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', False, False, '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', True, True, '05/15', '0.76%']],
+                      'Train': 0,
+                       'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'], ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
+                       'System': [['화학 및 체적제어계통', '5', '72%'], ['원자로냉각재계통', '3', '16%'], ['급수계통', '1', '6%'], ['제어봉제어계통', '1', '3%'], ['잔열제거계통', '1', '3%']]}# 정지냉각계통
+        self.search_dict = {'Procedure':{'number':[self.diagnosis_convert_text[i][2:7] for i in range(1,16)],
+                                         'name':[self.diagnosis_convert_text[i][9:] for i in range(1,16)]},
+                            'System':['CVCS', 'RCS', 'FWS']}
+        self.current_search = {'Procedure':{'number':'', 'name':''}, # 검색창에 작성한 내용 저장
+                               'System':'', # 검색창에 작성한 내용 저장
+                               'reset_number':-1, 'reset_name':-1,# reset: 0 / search: 1
+                               'system_reset':-1, # reset: 0 / search: 1
+                               'current_procedure': -1}
 
         # AI Part ---------------------------------------------------------------------------------------------------
-        self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
-        self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
-        self.diagnosis_model = pickle.load(open('./AI/Ab_Diagnosis_model.h5', 'rb'))
-        self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5',
-                                            compile=False)
-        print('인공지능 모델 로드 완료')
-
-        self.dis_AI = {'AI': '', 'Train': ''}
-        self.dis_AI_system = [['CVCS', '5', '72%'], ['RCS', '3', '16%'], ['FWS', '1', '6%'], ['CS', '1', '3%'], ['RHR', '1', '3%']]
+        # self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
+        # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
+        # self.diagnosis_model = pickle.load(open('./AI/Ab_Diagnosis_model.h5', 'rb'))
+        # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5',
+        #                                     compile=False)
+        # print('인공지능 모델 로드 완료')
 
     # 인공지능 전처리 용 ------------------------------------------------------------------------------------------------------
     def get_diagnosis_val(self):
@@ -161,7 +171,7 @@ class InterfaceMem:
 
     def get_diagnosis_result(self):  # 상위 5개의 진단 결과만 출력
         self.dis_AI['AI'] = [self.make_raw(max_v, max_i) for (max_v, max_i) in
-                             self.GetTop(self.diagnosis_model.predict([self.get_diagnosis_val()])[0], 5)]
+                             self.GetTop(self.diagnosis_model.predict([self.get_diagnosis_val()])[0], 3)]
 
     def get_train_check_val(self):
         return np.array([np.array([self.ShMem.get_para_list(i) for i in self.train_check_para]).reshape(-1, 46)])
@@ -172,6 +182,13 @@ class InterfaceMem:
             self.dis_AI['Train'] = 0  # 훈련된 시나리오
         else:
             self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오
+
+    # 단축키 설정 --------------------------------------------------------------------------------------------------------
+    def Train_Shortcut_key(self):
+        if self.ShMem.get_para_val('iFixTrain') == 0:
+            self.dis_AI['Train'] = 0
+        elif self.ShMem.get_para_val('iFixTrain') == 1:
+            self.dis_AI['Train'] = 1
 
     def flatten(self, X):
         '''
