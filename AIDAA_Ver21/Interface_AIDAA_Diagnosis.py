@@ -148,12 +148,12 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
-        column_labels = [(' 비정상 절차서 명', 760), ('긴급', 100), ('방사선', 100), ('진입조건', 150), ('AI 정확도', 170)]
-        self.setColumnCount(len(column_labels))
+        self.column_labels = [(' 비정상 절차서 명', 760), ('긴급', 100), ('방사선', 100), ('진입조건', 150), ('AI 정확도', 170)]
+        self.setColumnCount(len(self.column_labels))
         self.setRowCount(3)
 
         self.col_names = []
-        for i, (l, w) in enumerate(column_labels):
+        for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
             self.col_names.append(l)
 
@@ -292,7 +292,11 @@ class ProcedureDiagonsisTable(ABCTableWidget):
 
         elif self.inmem.dis_AI['Train'] == 1: # 학습되지 않은 시나리오의 경우
             self.clear()
-            self.setHorizontalHeaderLabels(self.column_labels)
+            self.col_names = []
+            for i, (l, w) in enumerate(self.column_labels):
+                self.setColumnWidth(i, w)
+                self.col_names.append(l)
+            self.setHorizontalHeaderLabels(self.col_names)
             self.setStyleSheet('background-color: rgb(0, 0, 0);') # 블러 표시
 
         # --------------------------------------------------------------------------------------------------------------
@@ -451,7 +455,11 @@ class SystemDiagnosisTable(ABCTableWidget):
 
         if self.inmem.dis_AI['Train'] == 0: # 학습된 시나리오의 경우
             self.clear()
-            self.setHorizontalHeaderLabels(self.column_labels)
+            col_names = []
+            for i, (l, w) in enumerate(self.column_labels):
+                self.setColumnWidth(i, w)
+                col_names.append(l)
+            self.setHorizontalHeaderLabels(col_names)
             self.setStyleSheet('background-color: rgb(0, 0, 0);') # 블러 표시
 
         elif self.inmem.dis_AI['Train'] == 1: # 학습되지 않은 시나리오의 경우
