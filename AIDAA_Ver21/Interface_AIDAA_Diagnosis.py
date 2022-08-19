@@ -522,6 +522,7 @@ class ProcedureCheckTable(ABCTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.setSelectionMode(QAbstractItemView.NoSelection)
 
         self.column_labels = [(' 비정상 절차서:', 880), ('Value', 100), ('Set-point', 200), ('Unit', 100)]
         self.setColumnCount(len(self.column_labels))
