@@ -569,6 +569,7 @@ class ProcedureCheckTable(ABCTableWidget):
                     'Set-point', 'Unit']
                 self.setHorizontalHeaderLabels([l for l in self.column_labels])
                 self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+                self.horizontalHeaderItem(0).setToolTip(self.column_labels[0])
                 if self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '학습여부를 아직 확인할 수 없습니다.' or self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '해당 시나리오는 학습되지 않은 시나리오입니다.':
                     print('해당 사항은 선택할 수 없습니다.')
                     [self.setItem(i, 0, QTableWidgetItem('해당 사항은 선택할 수 없습니다.')) for i in range(self.rowCount())]
@@ -613,6 +614,7 @@ class ProcedureCheckTable(ABCTableWidget):
                 self.setColumnCount(len(self.column_labels))
                 self.setHorizontalHeaderLabels([l for l in self.column_labels])
                 self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+                self.horizontalHeaderItem(0).setToolTip(self.column_labels[0])
                 system_alarm = int(self.inmem.dis_AI['System'][self.inmem.current_table["System"]][1])
                 self.setRowCount(system_alarm)
                 [self.setItem(i, 0, QTableWidgetItem('추후 업데이트 예정')) for i in range(system_alarm)]
