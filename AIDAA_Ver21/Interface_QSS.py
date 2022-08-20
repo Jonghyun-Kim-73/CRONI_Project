@@ -50,8 +50,8 @@ AIDAA_Diagnosis = """
                 border: 1px solid #808080;
            }
             QCheckBox::indicator { 
-                width: 18px; 
-                height: 18px; 
+                width: 30px; 
+                height: 30px; 
             } 
             QCheckBox::indicator:unchecked {
                 image: url(./img/uncheck.png);
@@ -79,7 +79,10 @@ AIDAA_Diagnosis = """
                 border-top-right-radius : 5px;
                 border-bottom-left-radius : 5px;
                 border-bottom-right-radius : 5px;    
-               
+            }
+            QHeaderView {
+                background: rgb(128, 128, 128);
+                border: 0px;
             }
             QHeaderView::section {
                 background: rgb(128, 128, 128);
@@ -114,6 +117,44 @@ AIDAA_Diagnosis = """
             QTableWidget::item {
                 font: 30px;
                 border-bottom: 1px solid rgb(128, 128, 128);
+            }
+
+            QScrollBar:vertical {
+                border-left: 1px solid rgb(128, 128, 128);
+                background-color: rgb(80, 80, 80);
+                width: 21px;    
+                margin: 0px 0px 0px 0px;
+                border-top-left-radius:0px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:5px;
+            }
+            QScrollBar::handle:vertical {         
+                min-height: 0px;
+                border: 0px;
+                background-color: rgb(255, 255, 255);
+                border-top-left-radius:5px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:5px;
+                border-bottom-right-radius:5px;
+            }
+            QScrollBar::add-line:vertical {       
+                height: 0px;
+                subcontrol-position: bottom;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-line:vertical {
+                height: 0px;
+                subcontrol-position: top;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-page:vertical { 
+                border-top-right-radius:5px;
+                background: rgb(128,128,128);
+            }
+            QScrollBar::add-page:vertical { 
+                border-bottom-right-radius:5px;
+                background: rgb(128,128,128);
             }
             QTableWidget#Tab3::item::selected {
                 margin-top: 5px;
@@ -251,28 +292,31 @@ AIDAA_Diagnosis2 = """
                 border: 1px solid #C00000; 
                 border-radius: 5px;
             }
-            QScrollArea{
-                background: rgb(231, 231, 234);
+            QScrollBar:vertical {
+                border-left: 1px solid rgb(128, 128, 128);
+                background-color: rgb(80, 80, 80);
+                width: 25px;    
+            }
+            QScrollBar::handle:vertical {         
+                min-height: 0px;
                 border: 0px;
+                background-color: rgb(255, 255, 255);
             }
-            QWidget#scroll_bg{
-                background: rgb(231, 231, 234);
-                border: 1px solid #707070; 
-                border-radius:5px;
+            QScrollBar::add-line:vertical {       
+                height: 0px;
+                subcontrol-position: bottom;
+                subcontrol-origin: margin;
             }
-            QScrollBar
-            {
-                background : lightgray;
-                border: 1px solid #707070; 
-                width:25px;
+            QScrollBar::sub-line:vertical {
+                height: 0px;
+                subcontrol-position: top;
+                subcontrol-origin: margin;
             }
-            QScrollBar::handle
-            {
-                background : white;
+            QScrollBar::sub-page:vertical { 
+                background: rgb(128,128,128);
             }
-            QScrollBar::handle::pressed
-            {
-                background : white;
+            QScrollBar::add-page:vertical { 
+                background: rgb(128,128,128);
             }
 """
 

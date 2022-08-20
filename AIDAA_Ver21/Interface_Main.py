@@ -37,6 +37,7 @@ class Main(QWidget):
     # window drag
     def mousePressEvent(self, event):
         if (event.button() == Qt.LeftButton) and self.top.underMouse():
+        # if (event.button() == Qt.LeftButton):  # 화면 움직이기 위함
             self.m_flag = True
             self.m_Position = event.globalPos() - self.pos()
             event.accept()
@@ -44,6 +45,7 @@ class Main(QWidget):
 
     def mouseMoveEvent(self, QMouseEvent):
         if Qt.LeftButton and self.m_flag and self.top.underMouse():
+        # if Qt.LeftButton and self.m_flag:  # 화면 움직이기 위함
             self.move(QMouseEvent.globalPos() - self.m_Position)  # 윈도우 position 변경
             QMouseEvent.accept()
 

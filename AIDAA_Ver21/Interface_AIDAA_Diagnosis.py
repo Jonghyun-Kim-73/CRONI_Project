@@ -158,7 +158,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
             self.col_names.append(l)
 
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # self.setFocusPolicy(Qt.NoFocus)
+        self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
         self.setContentsMargins(0, 0, 0, 0)
 
@@ -258,15 +258,15 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                     [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(3)]
                     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(3)]
                 else:
-                    self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
+                    '''self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
                                                 selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
                                                 color: #202020;
                                                 outline: 0;}
                                                 QTableWidget::item::hover{
                                                 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
                                                 QTableWidget::item::focus
-                                                {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
-                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
+                                                {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
+                    [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
                     [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(3)]
                     [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(3)]
                     [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(3)]
@@ -274,16 +274,16 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(3)]
                     [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(3)]
             except:
-                self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
+                '''self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
                                             selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
                                             color: #202020;
                                             outline: 0;}
                                             QTableWidget::item::hover{
                                             background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
                                             QTableWidget::item::focus
-                                            {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
+                                            {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
                 self.make_centerCB()
-                [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
+                [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
                 [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(3)]
                 [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(3)]
                 [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(3)]
@@ -297,7 +297,8 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 self.setColumnWidth(i, w)
                 self.col_names.append(l)
             self.setHorizontalHeaderLabels(self.col_names)
-            self.setStyleSheet('background-color: rgb(0, 0, 0);') # 블러 표시
+            self.setStyleSheet('QTableWidget{background-color: rgb(0, 0, 0);border-radius: 5px;}') # 블러 표시
+            self.setSelectionMode(QAbstractItemView.NoSelection) # 테이블 클릭 disable
 
         # --------------------------------------------------------------------------------------------------------------
         # 인공지능 모듈 적용 시 구동 코드
@@ -377,10 +378,10 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         #         [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
         #         [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
 
-
+        # 활성화 : 블러처리된 item 클릭시 현재 select 된 item select 해제
         if self.inmem.current_table['current_window'] == 1:
-            self.clearselect()
-
+            # self.clearselect()
+            pass
     def control_table(self):
         self.inmem.current_table['current_window'] = 0
 
@@ -461,7 +462,10 @@ class SystemDiagnosisTable(ABCTableWidget):
                 col_names.append(l)
             self.setHorizontalHeaderLabels(col_names)
             self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
-            self.setStyleSheet('background-color: rgb(0, 0, 0);') # 블러 표시
+            self.setStyleSheet('QTableWidget{background-color: rgb(0, 0, 0);border-radius: 5px;}') # 블러 표시
+
+            self.setSelectionMode(QAbstractItemView.NoSelection) # 테이블 클릭 disable
+
 
         elif self.inmem.dis_AI['Train'] == 1: # 학습되지 않은 시나리오의 경우
             try:
@@ -469,34 +473,36 @@ class SystemDiagnosisTable(ABCTableWidget):
                     [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI['System'][i][1])) for i in range(3)]
                     [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI['System'][i][2])) for i in range(3)]
                 else:
-                    self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
+                    '''self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
                                                 selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
                                                 color: #202020;
                                                 outline: 0;}
                                                 QTableWidget::item::hover{
                                                 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
                                                 QTableWidget::item::focus
-                                                {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
+                                                {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
                     [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['System'][i][0])) for i in range(3)]
                     [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI['System'][i][1])) for i in range(3)]
                     [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI['System'][i][2])) for i in range(3)]
                     [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(3)]
             except:
-                self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
+                '''self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
                                             selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
                                             color: #202020;
                                             outline: 0;}
                                             QTableWidget::item::hover{
                                             background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
                                             QTableWidget::item::focus
-                                            {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
+                                            {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
                 [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['System'][i][0])) for i in range(3)]
                 [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI['System'][i][1])) for i in range(3)]
                 [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI['System'][i][2])) for i in range(3)]
                 [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(3)]
 
+        # 활성화 : 블러처리된 item 클릭시 현재 select 된 item select 해제
         if self.inmem.current_table['current_window'] == 0:
-            self.clearselect()
+            # self.clearselect()
+            pass
 
 
     def control_table(self):
@@ -517,14 +523,21 @@ class ProcedureCheckTable(ABCTableWidget):
         super(ProcedureCheckTable, self).__init__(parent)
         self.setObjectName("Tab3")
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.lay = QVBoxLayout(self)
+        self.lay.setContentsMargins(0, 0, 0, 0)
+
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
         self.setShowGrid(False)  # Grid 지우기
         self.setFixedHeight(721)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        # self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        # self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
         self.setSelectionMode(QAbstractItemView.NoSelection)
 
-        self.column_labels = [(' 비정상 절차서:', 880), ('Value', 100), ('Set-point', 200), ('Unit', 100)]
+        self.column_labels = [(' 비정상 절차서:', 858), ('Value', 100), ('Set-point', 200), ('Unit', 100)]
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(10)
         col_names = []
@@ -538,6 +551,12 @@ class ProcedureCheckTable(ABCTableWidget):
         self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
         self.horizontalHeader().setFixedHeight(55)
         # self.setItemDelegate(MyStyledItem(margin=3, radius=5, border_width=3, border_color=QColor(178,178,178)))
+
+        # 테이블 정렬
+        delegate = AlignDelegate(self)
+        for row in range(1, self.rowCount()):
+            self.setItemDelegateForColumn(row, delegate)
+
         # 테이블 헤더
         self.setHorizontalHeaderLabels(col_names)
         self.horizontalHeader().sectionPressed.disconnect()
@@ -580,12 +599,18 @@ class ProcedureCheckTable(ABCTableWidget):
                             self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
                         self.setRowCount(self.symptom_count)
                         [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(self.symptom_count)]
+                        # 임시 ITEM 열 1, 2, 3
+                        [self.setItem(i, 1, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
+                        [self.setItem(i, 2, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
+                        [self.setItem(i, 3, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
                         [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.symptom_count)]
-                        [self.item(i, 0).setSelected(False) for i in range(self.symptom_count)] # 아이쳄 1,2,3 추가시 수정필요
+                        for j in range(4):
+                            [self.item(i, j).setSelected(False) for i in range(self.symptom_count)] # 아이쳄 1,2,3 추가시 수정필요
                         if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':
                             for i in range(0, self.symptom_count):
                                 if symptom[i]['ManClick']:
-                                    self.item(i, 0).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
+                                    for j in range(4):
+                                        self.item(i, j).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
                     self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
             else:
                 self.clear()

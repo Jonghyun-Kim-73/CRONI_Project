@@ -184,9 +184,6 @@ class ProcedureSequenceFirst_1(ABCPushButton):
                             QPushButton:hover {background: rgb(0, 176, 218);}""")
 
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 2:  # 병행
-            self.setStyleSheet('background-color: rgb(0, 176, 218)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '목적'] == 3:  # 불만족
             self.setStyleSheet('background-color: rgb(0, 176, 218)')
 
@@ -247,10 +244,8 @@ class ProcedureSequenceSecond_1(ABCPushButton):
         else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                                         QPushButton:hover {background: rgb(0, 176, 218);}""")
+
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '경보 및 증상'] == 2:  # 병행
-            self.setStyleSheet('background-color: rgb(0, 176, 218)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             '경보 및 증상'] == 3:  # 불만족
             self.setStyleSheet('background-color: rgb(0, 176, 218)')
     def dis_click_update(self):
@@ -578,9 +573,11 @@ class Procedure_Content(ABCWidget):
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 40, 0)
         lay.addStretch(1)
-        # num label 상단 정렬 위해
+        # label 상단 정렬 위해
         content1_lay = QHBoxLayout(self)
         content1_lay.setAlignment(Qt.AlignTop)
+        content2_lay = QHBoxLayout(self)
+        content2_lay.setAlignment(Qt.AlignTop)
         if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음' or self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '목적':
             pass
         else:
@@ -592,7 +589,8 @@ class Procedure_Content(ABCWidget):
                     content1_lay.addWidget(Procedure_Content1(self, self.content))
                     lay.addLayout(content1_lay)
                     lay.addWidget(Procedure_Content2_2(self, self.content))
-        lay.addWidget(Procedure_Content_Check(self, self.content))
+        content2_lay.addWidget(Procedure_Content_Check(self, self.content))
+        lay.addLayout(content2_lay)
         lay.setSpacing(15)
 
 class Procedure_Content1(ABCLabel):
