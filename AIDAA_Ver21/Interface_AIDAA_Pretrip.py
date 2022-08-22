@@ -9,6 +9,8 @@ from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
 import glob
+import math
+
 # from prediction_model import create_model
 # model0 = create_model()
 
@@ -56,12 +58,10 @@ for i in range(len(test_Y)):
     Y_1 = (test_Y[i]-min_output)/minmax_output
     y_1.append(Y_1)
 output_test = pd.Series(y_1)
-from tqdm.notebook import tqdm
-import math
 
 x_test = []
 test_x = []
-for _ in tqdm(range(len(input_test))):
+for _ in range(len(input_test)):
     numpy_xtest=input_test[_].to_numpy()
 
     for i in range(math.trunc((len(numpy_xtest)-180))):
@@ -80,18 +80,16 @@ x_train_test = []
 x_tttest = []
 y_test = []
 test_y = []
-for _ in tqdm(range(len(output_test))):
+for _ in range(len(output_test)):
     numpy_ytest=output_test[_].to_numpy()
     for i in range(math.trunc((len(numpy_ytest)-360))):
         test_y = numpy_ytest[i::3]
         test_y = test_y[0:120]
         y_test.append(test_y)
-y_tttest = []
-y_train_test = []
-for i in range(len(y_test)):
-    y_tttest = np.array(y_test[i])
-    y_train_test.append(y_tttest)
+
+y_train_test = [np.array(y_test[i]) for i in range(len(y_test))]
 ytest = np.array(y_train_test)
+"""
 # xest_divide = np.reshape(xtest[time], (1, 60, 100))
 #
 # predict0 = []
@@ -310,6 +308,7 @@ ytest = np.array(y_train_test)
 # sg2_level_sta = ((sg2_level_var * forward_pass) / (forward_pass - 1)) ** 0.5
 # sg1_level_sta = ((sg1_level_var * forward_pass) / (forward_pass - 1)) ** 0.5
 #
+"""
 power_mean = ytest[time][:,0]*minmax_output[0]+min_output[0]
 over_delta_T_mean = ytest[time][:,1]*minmax_output[1]+min_output[1]
 prz_pressure_mean = ytest[time][:,2]*minmax_output[2]+min_output[2]
@@ -332,7 +331,6 @@ loop1_flow_mean_past = xtest[time][:,6]*minmax_output[6]+min_output[6]
 sg3_level_mean_past = xtest[time][:,7]*minmax_output[7]+min_output[7]
 sg2_level_mean_past =xtest[time][:,8]*minmax_output[8]+min_output[8]
 sg1_level_mean_past = xtest[time][:,9]*minmax_output[9]+min_output[9]
-
 
 
 

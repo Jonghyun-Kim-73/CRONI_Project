@@ -25,6 +25,7 @@ class Main(QWidget):
         
         lay.addWidget(self.top)
         lay.addWidget(self.tab)
+        self.m_flag = False
         
     # window drag
     def mousePressEvent(self, event):
