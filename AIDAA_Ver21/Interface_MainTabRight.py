@@ -10,11 +10,12 @@ class MainTabRight(ABCWidget):
     def __init__(self, parent):
         super(MainTabRight, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
+        self.setFixedHeight(900)
         self.vl = QVBoxLayout(self)
         self.vl.addWidget(MainTabRightPreAbnormalW(self))
         self.vl.addWidget(MainTabRightAbnormalW(self))
         self.vl.addWidget(MainTabRightEmergencyW(self))
-
+        self.vl.addStretch(1)
         self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(True)
         self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(True)
         self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(True)

@@ -567,6 +567,7 @@ class AlarmDB:
         return alarm_dict
     
     def get_on_alarms(self):
+        # alarms = [k if self.alarmdb[k]['Val'] == 0 else 0 for k in self.alarmdb.keys()] # Alarm Table Test용
         alarms = [k if self.alarmdb[k]['Val'] == 1 else 0 for k in self.alarmdb.keys()]
         return [] if alarms is None else [i for i in alarms if i != 0]
 

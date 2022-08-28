@@ -32,6 +32,88 @@ Top_Bar = """
             }
 """
 
+Alarm_Table = """
+            QTableWidget{
+                background: rgb(231, 231, 234);
+                border: 1px solid rgb(128, 128, 128); 
+                font: 30px;           
+                border-top-left-radius :5px;
+                border-top-right-radius : 5px;
+                border-bottom-left-radius : 5px;
+                border-bottom-right-radius : 5px;    
+            }
+            QHeaderView {
+                background: rgb(128, 128, 128);
+                border: 0px;
+            }
+            QHeaderView::section {
+                background: rgb(128, 128, 128);
+                font: 30px;
+                font-weight: bold;        
+                qproperty-alignment: AlignCenter;
+            }
+            QHeaderView::section:horizontal:first {
+                border: 1px solid rgb(128, 128, 128);
+                border-top-left-radius:5px;
+                border-top-right-radius:0px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:0px;
+            }
+            QHeaderView::section:horizontal:middle {
+                border: 2px solid rgb(128, 128, 128);
+                border-radius:0px;
+            }
+            QHeaderView::section:horizontal:last {
+                border: 1px solid rgb(128, 128, 128);
+                border-top-left-radius:0px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:0px;
+            }
+            QTableWidget::item::selected {
+                background-color: rgb(0, 176, 218);
+                color:black;
+                font: 30px;
+                outline: 0;
+            }
+            QScrollBar:vertical {
+                border-left: 1px solid rgb(128, 128, 128);
+                background-color: rgb(80, 80, 80);
+                width: 30px;    
+                margin: 0px 0px 0px 0px;
+                border-top-left-radius:0px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:5px;
+            }
+            QScrollBar::handle:vertical {         
+                min-height: 0px;
+                border: 0px;
+                background-color: rgb(255, 255, 255);
+                border-top-left-radius:5px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:5px;
+                border-bottom-right-radius:5px;
+            }
+            QScrollBar::add-line:vertical {       
+                height: 0px;
+                subcontrol-position: bottom;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-line:vertical {
+                height: 0px;
+                subcontrol-position: top;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-page:vertical { 
+                border-top-right-radius:5px;
+                background: rgb(128,128,128);
+            }
+            QScrollBar::add-page:vertical { 
+                border-bottom-right-radius:5px;
+                background: rgb(128,128,128);
+            }
+"""
 # AIDAA Tab
 AIDAA = """
             QWidget#BG {
@@ -122,7 +204,7 @@ AIDAA_Diagnosis = """
             QScrollBar:vertical {
                 border-left: 1px solid rgb(128, 128, 128);
                 background-color: rgb(80, 80, 80);
-                width: 21px;    
+                width: 30px;    
                 margin: 0px 0px 0px 0px;
                 border-top-left-radius:0px;
                 border-top-right-radius:5px;
@@ -388,5 +470,249 @@ Main_Tab = """
             }
             QLabel#RightTabcont:disabled{
                 color: rgb(128, 128, 128);
+            }
+            QTableWidget{
+                background: rgb(231, 231, 234);
+                border: 1px solid rgb(128, 128, 128); 
+                font: 30px;           
+                border-top-left-radius :5px;
+                border-top-right-radius : 5px;
+                border-bottom-left-radius : 5px;
+                border-bottom-right-radius : 5px;    
+            }
+            QHeaderView {
+                background: rgb(128, 128, 128);
+                border: 0px;
+            }
+            QHeaderView::section {
+                background: rgb(128, 128, 128);
+                font: 30px;
+                font-weight: bold;        
+                qproperty-alignment: AlignCenter;
+            }
+            QHeaderView::section:horizontal:first {
+                border: 1px solid rgb(128, 128, 128);
+                border-top-left-radius:5px;
+                border-top-right-radius:0px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:0px;
+            }
+            QHeaderView::section:horizontal:middle {
+                border: 2px solid rgb(128, 128, 128);
+                border-radius:0px;
+            }
+            QHeaderView::section:horizontal:last {
+                border: 1px solid rgb(128, 128, 128);
+                border-top-left-radius:0px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:0px;
+            }
+            QTableWidget::item::selected {
+                background-color: rgb(0, 176, 218);
+                color:black;
+                font: 30px;
+                outline: 0;
+            }
+            QScrollBar:vertical {
+                border-left: 1px solid rgb(128, 128, 128);
+                background-color: rgb(80, 80, 80);
+                width: 30px;    
+                margin: 0px 0px 0px 0px;
+                border-top-left-radius:0px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:5px;
+            }
+            QScrollBar::handle:vertical {         
+                min-height: 0px;
+                border: 0px;
+                background-color: rgb(255, 255, 255);
+                border-top-left-radius:5px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:5px;
+                border-bottom-right-radius:5px;
+            }
+            QScrollBar::add-line:vertical {       
+                height: 0px;
+                subcontrol-position: bottom;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-line:vertical {
+                height: 0px;
+                subcontrol-position: top;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-page:vertical { 
+                border-top-right-radius:5px;
+                background: rgb(128,128,128);
+            }
+            QScrollBar::add-page:vertical { 
+                border-bottom-right-radius:5px;
+                background: rgb(128,128,128);
+            }
+"""
+
+Search_Popup = """
+            QWidget#Search{
+                background: rgb(231, 231, 234);
+                border: 0px;
+            }
+            QWidget#SearchTitleBar{
+                background: rgb(128, 128, 128);
+                border: 0px;
+            }            
+            QLabel#SearchTitleBar{
+                background: rgb(128, 128, 128);
+                font: 28px;
+                font-weight: bold;
+                border: 0px;
+                qproperty-alignment: AlignCenter;
+            }
+            QPushButton#SearchTitleBar{
+                background: rgb(0, 176, 86);
+                border-radius: 5px;
+                border:0px;
+                font: 30px;
+                font-weight: bold;
+            }
+            QGroupBox#SearchWindow {
+                background: rgb(231, 231, 234);
+                border: 1px solid rgb(128, 128, 128);
+                border-radius: 10px;
+                margin-top: 10px;
+                font: 20px;
+                font-weight: bold;
+            }
+            QGroupBox::title#SearchWindow {
+                subcontrol-origin: margin;
+                top: -5px;
+                left: 30px;
+                padding: 0px 2px 0px 2px;
+                font: 20px;
+                font-weight: bold;
+            }
+            QLabel#SearchLabel{
+                background: rgb(231, 231, 234);
+                font: 20px;
+                border:0px;
+                font-weight: bold;
+            }
+            QTextEdit#SearchInput{
+                background: rgb(255, 255, 255);
+                font: 13px;
+                border:0px;
+                font-weight: bold;
+            }
+            QPushButton#SearchBTN{
+                background: rgb(255, 255, 255);
+                border-radius: 5px;
+                border:0px;
+                font: 20px;
+                font-weight: bold;
+            }
+            QTableWidget{
+                background: rgb(231, 231, 234);
+                border: 1px solid rgb(128, 128, 128); 
+                font: 20px;           
+                border-top-left-radius :5px;
+                border-top-right-radius : 5px;
+                border-bottom-left-radius : 5px;
+                border-bottom-right-radius : 5px;    
+            }
+            QHeaderView {
+                background: rgb(128, 128, 128);
+                border: 0px;
+            }
+            QHeaderView::section {
+                background: rgb(128, 128, 128);
+                font: 20px;
+                font-weight: bold;        
+                qproperty-alignment: AlignCenter;
+            }
+            QHeaderView::section:horizontal:first {
+                border: 1px solid rgb(128, 128, 128);
+                border-top-left-radius:5px;
+                border-top-right-radius:0px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:0px;
+            }
+            QHeaderView::section:horizontal:middle {
+                border: 2px solid rgb(128, 128, 128);
+                border-radius:0px;
+            }
+            QHeaderView::section:horizontal:last {
+                border: 1px solid rgb(128, 128, 128);
+                border-top-left-radius:0px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:0px;
+            }
+            QHeaderView::down-arrow { 
+                width:30px;
+                subcontrol-origin:padding; 
+                subcontrol-position: center right;
+            }
+            QTableWidget::item::selected {
+                background-color: rgb(0, 176, 218);
+                color:black;
+                font: 20px;
+                outline: 0;
+            }
+            QTableWidget::item {
+                border-bottom: 1px solid rgb(128, 128, 128);
+            }
+            QScrollBar:vertical {
+                border-left: 1px solid rgb(128, 128, 128);
+                background-color: rgb(80, 80, 80);
+                width: 30px;    
+                margin: 0px 0px 0px 0px;
+                border-top-left-radius:0px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:0px;
+                border-bottom-right-radius:5px;
+            }
+            QScrollBar::handle:vertical {         
+                min-height: 0px;
+                border: 0px;
+                background-color: rgb(255, 255, 255);
+                border-top-left-radius:5px;
+                border-top-right-radius:5px;
+                border-bottom-left-radius:5px;
+                border-bottom-right-radius:5px;
+            }
+            QScrollBar::add-line:vertical {       
+                height: 0px;
+                subcontrol-position: bottom;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-line:vertical {
+                height: 0px;
+                subcontrol-position: top;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::sub-page:vertical { 
+                border-top-right-radius:5px;
+                background: rgb(128,128,128);
+            }
+            QScrollBar::add-page:vertical { 
+                border-bottom-right-radius:5px;
+                background: rgb(128,128,128);
+            }
+            QPushButton#Bottom{
+                background: rgb(255, 255, 255);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 20px;
+                font-weight: bold;
+            }
+            QPushButton#Bottom::hover{
+                background: rgb(0, 178, 218);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 20px;
+                font-weight: bold;
             }
 """

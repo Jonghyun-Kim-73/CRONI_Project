@@ -297,7 +297,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                 self.setColumnWidth(i, w)
                 self.col_names.append(l)
             self.setHorizontalHeaderLabels(self.col_names)
-            self.setStyleSheet('QTableWidget{background-color: rgb(0, 0, 0);border-radius: 5px;}') # 블러 표시
+            self.setStyleSheet('QTableWidget{background-color: rgb(178, 178, 178);border-radius: 5px;}') # 블러 표시
             self.setSelectionMode(QAbstractItemView.NoSelection) # 테이블 클릭 disable
 
         # --------------------------------------------------------------------------------------------------------------
@@ -462,7 +462,7 @@ class SystemDiagnosisTable(ABCTableWidget):
                 col_names.append(l)
             self.setHorizontalHeaderLabels(col_names)
             self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
-            self.setStyleSheet('QTableWidget{background-color: rgb(0, 0, 0);border-radius: 5px;}') # 블러 표시
+            self.setStyleSheet('QTableWidget{background-color: rgb(178, 178, 178);border-radius: 5px;}') # 블러 표시
 
             self.setSelectionMode(QAbstractItemView.NoSelection) # 테이블 클릭 disable
 
@@ -537,7 +537,7 @@ class ProcedureCheckTable(ABCTableWidget):
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
         self.setSelectionMode(QAbstractItemView.NoSelection)
 
-        self.column_labels = [(' 비정상 절차서:', 858), ('Value', 100), ('Set-point', 200), ('Unit', 100)]
+        self.column_labels = [(' 비정상 절차서:', 849), ('Value', 100), ('Set-point', 200), ('Unit', 100)]
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(10)
         col_names = []
@@ -611,6 +611,7 @@ class ProcedureCheckTable(ABCTableWidget):
                                 if symptom[i]['ManClick']:
                                     for j in range(4):
                                         self.item(i, j).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
+
                     self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
             else:
                 self.clear()

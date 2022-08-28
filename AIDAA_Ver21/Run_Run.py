@@ -32,7 +32,9 @@ class Run:
 class InterfaceRun(Process):
     def __init__(self, mem):
         super(InterfaceRun, self).__init__()
+
         app = QApplication(sys.argv)
+        app.setStyle('Fusion')
         font = QFont()
         font.setFamily("Malgun Gothic")
         app.setFont(font)

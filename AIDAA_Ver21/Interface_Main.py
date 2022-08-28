@@ -20,6 +20,7 @@ class Main(QWidget):
         super(Main, self).__init__()
         self.inmem:InterfaceMem = InterfaceMem(ShMem, self)
         self.setGeometry(0, 0, 2560, 1440)
+        self.setFixedSize(2560, 1440)
         self.setWindowFlags(Qt.FramelessWindowHint)  # 상단바 제거
         QFontDatabase.addApplicationFont("Arial.ttf")
         QFontDatabase.addApplicationFont("맑은 고딕.ttf")
@@ -36,16 +37,16 @@ class Main(QWidget):
 
     # window drag
     def mousePressEvent(self, event):
-        if (event.button() == Qt.LeftButton) and self.top.underMouse():
-        # if (event.button() == Qt.LeftButton):  # 화면 움직이기 위함
+        # if (event.button() == Qt.LeftButton) and self.top.underMouse():
+        if (event.button() == Qt.LeftButton):  # 화면 움직이기 위함
             self.m_flag = True
             self.m_Position = event.globalPos() - self.pos()
             event.accept()
             self.setCursor(QCursor(Qt.OpenHandCursor))
 
     def mouseMoveEvent(self, QMouseEvent):
-        if Qt.LeftButton and self.m_flag and self.top.underMouse():
-        # if Qt.LeftButton and self.m_flag:  # 화면 움직이기 위함
+        # if Qt.LeftButton and self.m_flag and self.top.underMouse():
+        if Qt.LeftButton and self.m_flag:  # 화면 움직이기 위함
             self.move(QMouseEvent.globalPos() - self.m_Position)  # 윈도우 position 변경
             QMouseEvent.accept()
 
@@ -66,8 +67,11 @@ class MainTop(ABCWidget):
         self.setFixedHeight(75)
         lay = QHBoxLayout(self)
         lay.setContentsMargins(10, 10, 10, 10)
-        lay.addWidget(MainTopTime(self))
-        lay.addWidget(MainTopSystemName(self))
+        self.title_left = QHBoxLayout(self)
+        self.title_left.setContentsMargins(0, 0, 10, 0)
+        self.title_left.addWidget(MainTopTime(self))
+        self.title_left.addWidget(MainTopSystemName(self))
+        lay.addLayout(self.title_left)
         lay.setSpacing(10)
         # 현재 click된 btn & btn hover color 변경 위함
         self.btnGroup = QButtonGroup()
@@ -121,7 +125,8 @@ class MainTopSystemName(ABCLabel):
     def __init__(self, parent):
         super(MainTopSystemName, self).__init__(parent)
         self.setObjectName("Title")
-        self.setFixedSize(796, 55)
+        self.setFixedSize(786, 55)
+        self.setContentsMargins(0, 0, 50, 0)
         # timer section
         timer = QTimer(self)
         timer.setInterval(200)
