@@ -14,10 +14,12 @@ class Procedure(ABCWidget, QWidget):
         super(Procedure, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(212, 245, 211);')
         lay = QVBoxLayout(self)
+        lay.setContentsMargins(10, 15, 10, 15)
         lay.addWidget(ProcedureTop(self))
         lay.addWidget(ProcedureInfo(self))
         lay.addWidget(ProcedureWindow(self))
         lay.addWidget(ProcedureBottom(self))
+        lay.setSpacing(15)
 # ----------------------------------------------------------------------------------------------------------------------
 
 class ProcedureTop(ABCWidget, QWidget):
@@ -25,14 +27,16 @@ class ProcedureTop(ABCWidget, QWidget):
         super(ProcedureTop, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(149, 185, 211);')
         lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 66, 0)
         lay.addWidget(UrgentBTN(self))
         lay.addWidget(RadiationBTN(self))
         lay.addWidget(PredictionBTN(self))
         lay.addWidget(TripBTN(self))
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
+        lay.setSpacing(10)
 
-class UrgentBTN(ABCLabel, QLabel):
+class UrgentBTN(ABCLabel):
     def __init__(self, parent):
         super(UrgentBTN, self).__init__(parent)
         self.setText('긴급 조치')
@@ -42,9 +46,9 @@ class UrgentBTN(ABCLabel, QLabel):
         if self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][1] is False:
             self.setStyleSheet('background-color: lightgray;')
         elif self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][1] is True:
-            self.setStyleSheet('background-color: rgb(255,0,0);')
+            self.setStyleSheet('background-color: rgb(192,0,0);')
 
-class RadiationBTN(ABCLabel, QLabel):
+class RadiationBTN(ABCLabel):
     def __init__(self, parent):
         super(RadiationBTN, self).__init__(parent)
         self.setText('방사선비상')
@@ -54,20 +58,19 @@ class RadiationBTN(ABCLabel, QLabel):
         if self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][2] is False:
             self.setStyleSheet('background-color: lightgray;')
         elif self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][2] is True:
-            self.setStyleSheet('background-color: rgb(255,0,0);')
+            self.setStyleSheet('background-color: rgb(192,0,0);')
 
-class PredictionBTN(ABCPushButton, QPushButton):
+class PredictionBTN(ABCPushButton):
     def __init__(self, parent):
         super(PredictionBTN, self).__init__(parent)
         self.setText('Prediction')
 
-
-class TripBTN(ABCPushButton, QPushButton):
+class TripBTN(ABCPushButton):
     def __init__(self, parent):
         super(TripBTN, self).__init__(parent)
         self.setText('Trip')
 
-class DiagnosisTopCallProcedureSearch(ABCPushButton, QPushButton):
+class DiagnosisTopCallProcedureSearch(ABCPushButton):
     def __init__(self, parent):
         super(DiagnosisTopCallProcedureSearch, self).__init__(parent)
         self.setText('비정상 절차서 검색')
@@ -78,7 +81,7 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton, QPushButton):
         print('비정상 절차서 검색 창으로 이동')
         ProcedureSearch(self).show()
 
-class DiagnosisTopCallSystemSearch(ABCPushButton, QPushButton):
+class DiagnosisTopCallSystemSearch(ABCPushButton):
     def __init__(self, parent):
         super(DiagnosisTopCallSystemSearch, self).__init__(parent)
         self.setText('시스템 검색')
@@ -90,7 +93,7 @@ class DiagnosisTopCallSystemSearch(ABCPushButton, QPushButton):
         SystemSearch(self).show()
 # ----------------------------------------------------------------------------------------------------------------------
 
-class ProcedureInfo(ABCLabel, QLabel):
+class ProcedureInfo(ABCLabel):
     def __init__(self, parent):
         super(ProcedureInfo, self).__init__(parent)
         self.widget_timer(iter_=500, funs=[self.dis_update])
@@ -100,50 +103,51 @@ class ProcedureInfo(ABCLabel, QLabel):
         self.setText(f" 비정상 절차서 이름: {self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]}")
 # ----------------------------------------------------------------------------------------------------------------------
 
-
-
-class ProcedureWindow(ABCWidget, QWidget):
+class ProcedureWindow(ABCWidget):
     def __init__(self, parent):
         super(ProcedureWindow, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(212, 245, 211);')
         lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
         self.PS = ProcedureSequence(self)
         self.PC = Procedurecontents(self)
         lay.addWidget(self.PS)
         lay.addWidget(self.PC)
+        lay.setSpacing(20)
         self.widget_timer(iter_=500, funs=[self.dis_update])
         
     def dis_update(self):
         self.PC.dis_update()
         self.PS.dis_update()
-        
 class ProcedureSequence(ABCWidget):
     def __init__(self, parent):
         super(ProcedureSequence, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(212, 245, 211);')
         lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
         self.w = [ProcedureSequenceWidget(self, '목적', 1),
                   ProcedureSequenceWidget(self, '경보 및 증상', 2),
                   ProcedureSequenceWidget(self, '자동 동작 사항', 3),
                   ProcedureSequenceWidget(self, '긴급 조치 사항', 4),
                   ProcedureSequenceWidget(self, '후속 조치 사항', 5)]
         [lay.addWidget(w) for w in self.w]
+        lay.setSpacing(15)
+        lay.addStretch(1)
         
     def dis_update(self):
         [w.dis_update() for w in self.w]
-
+        
 class ProcedureSequenceWidget(ABCWidget):
     def __init__(self, parent, title, nub):
         super(ProcedureSequenceWidget, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(212, 245, 211);')
         self.lay = QHBoxLayout(self)
-        
+        self.lay.setContentsMargins(0, 0, 0, 0)
         self.PS_title = ProcedureSequenceTitle(self, title, nub)
         self.PS_button = ProcedureSequenceButton(self, title)
-        
         self.lay.addWidget(self.PS_title)
         self.lay.addWidget(self.PS_button)
-    
+        self.lay.setSpacing(15)
+        
     def dis_update(self):
         self.PS_title.dis_update()
         self.PS_button.dis_update()
@@ -166,23 +170,28 @@ class ProcedureSequenceTitle(ABCPushButton):
 
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == self.nub:
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 2:
             self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
+                                                QPushButton:hover {background: rgb(0, 176, 218);}""")
         else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                                         QPushButton:hover {background: rgb(0, 176, 218);}""")
-
+        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            self.title] == 2:  # 병행
+            self.setStyleSheet('background-color: rgb(0, 176, 218)')
+        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
+            self.title] == 3:  # 불만족
+            self.setStyleSheet('background-color: rgb(0, 176, 218)')
     def dis_click_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
         self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = self.nub
-
 class ProcedureSequenceButton(ABCPushButton):
     def __init__(self, parent, title):
         super(ProcedureSequenceButton, self).__init__(parent)
-        self.setFixedSize(35, 35)
+        self.setFixedSize(55, 55)
         self.setObjectName("Check")
         self.title = title
+        self.blink = False
 
     def dis_update(self):
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
@@ -193,11 +202,15 @@ class ProcedureSequenceButton(ABCPushButton):
             self.setStyleSheet('background-color: rgb(0,0,0)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             self.title] == 2: # 병행
-            self.setStyleSheet('background-color: yellow')
+            if not self.blink:
+                self.setStyleSheet('background-color: yellow')
+                self.blink = True
+            else:
+                self.setStyleSheet('background-color: white')
+                self.blink = False
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
             self.title] == 3: # 불만족
             self.setStyleSheet('background-color: rgb(192,0,0)')
-
 # ----------------------------------------------------------------------------------------------------------------------
 
 class Procedurecontents(ABCWidget):
@@ -205,7 +218,7 @@ class Procedurecontents(ABCWidget):
         super(Procedurecontents, self).__init__(parent)
         self.lay = QVBoxLayout(self)
         self.setObjectName("RightPG")
-        self.setFixedWidth(1591)
+        self.setFixedWidth(1915)
         self.lay.setContentsMargins(0, 0, 0, 0)
 
         # scroll 적용
@@ -264,12 +277,13 @@ class ProcedureTitleBar(ABCWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(ProcedureTitleBar_1(self))
         lay.addWidget(ProcedureTitleBar_2(self))
+        lay.setSpacing(15)
 
 class ProcedureTitleBar_1(ABCLabel):
     def __init__(self, parent):
         super(ProcedureTitleBar_1, self).__init__(parent)
         self.setObjectName("TitleBar")
-        self.setFixedSize(105, 35)
+        self.setFixedSize(110, 55)
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
@@ -280,7 +294,8 @@ class ProcedureTitleBar_2(ABCLabel):
     def __init__(self, parent):
         super(ProcedureTitleBar_2, self).__init__(parent)
         self.setObjectName("TitleBar")
-        self.setFixedSize(1491, 35)
+        #self.setFixedSize(1491, 35)
+        self.setFixedHeight(55)
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
@@ -298,9 +313,11 @@ class Procedure_Content(ABCWidget):
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 40, 0)
         lay.addStretch(1)
-        # num label 상단 정렬 위해
+        # label 상단 정렬 위해
         content1_lay = QHBoxLayout(self)
         content1_lay.setAlignment(Qt.AlignTop)
+        content2_lay = QHBoxLayout(self)
+        content2_lay.setAlignment(Qt.AlignTop)
         if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음' or self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '목적':
             pass
         else:
@@ -312,14 +329,15 @@ class Procedure_Content(ABCWidget):
                     content1_lay.addWidget(Procedure_Content1(self, self.content))
                     lay.addLayout(content1_lay)
                     lay.addWidget(Procedure_Content2_2(self, self.content))
-        lay.addWidget(Procedure_Content_Check(self, self.content))
-        lay.setSpacing(5)
+        content2_lay.addWidget(Procedure_Content_Check(self, self.content))
+        lay.addLayout(content2_lay)
+        lay.setSpacing(15)
 
 class Procedure_Content1(ABCLabel):
     def __init__(self, parent, content=None):
         super(Procedure_Content1, self).__init__(parent)
         self.content = content
-        self.setFixedSize(105, 35)
+        self.setFixedSize(110, 55)
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
@@ -380,13 +398,13 @@ class Procedure_Content2_1(ABCLabel):
 
                 num_len = len(self.inmem.ShMem.get_pro_procedure(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]][self.content]['Nub'])
                 if num_len <= 3:
-                    self.setFixedWidth(1364)
+                    self.setFixedWidth(1674)
                 elif num_len <= 5:
-                    self.setFixedWidth(1326)
+                    self.setFixedWidth(1634)
                 elif num_len <= 7:
-                    self.setFixedWidth(1288)
+                    self.setFixedWidth(1498)
                 elif num_len <= 9:
-                    self.setFixedWidth(1250)
+                    self.setFixedWidth(1458)
 
                 if self.inmem.get_ab_procedure_num(self.content)[0] == "0":
                     # self.clearLayout(self.lay)
@@ -417,13 +435,13 @@ class Procedure_Content2_2(ABCLabel):
                     self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
                 num_len = len(self.inmem.ShMem.get_pro_procedure(self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]][self.content]['Nub'])
                 if num_len <= 3:
-                    self.setFixedWidth(1364)
+                    self.setFixedWidth(1674)
                 elif num_len <= 5:
-                    self.setFixedWidth(1326)
+                    self.setFixedWidth(1634)
                 elif num_len <= 7:
-                    self.setFixedWidth(1288)
+                    self.setFixedWidth(1498)
                 elif num_len <= 9:
-                    self.setFixedWidth(1250)
+                    self.setFixedWidth(1458)
                 self.setText(self.inmem.ShMem.get_pro_procedure(
                     self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[
                                     self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]][
@@ -436,13 +454,14 @@ class Procedure_Content_Check(ABCPushButton, QPushButton):
         self.current_state = \
         self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][
             self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']]
-        self.setFixedSize(35, 35)
+        self.setFixedSize(55, 55)
         if self.check_btn_num >= self.inmem.ShMem.get_pro_procedure_count(
                 self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[self.current_state]:
             pass
         else:
             self.widget_timer(iter_=500, funs=[self.dis_update1])
         self.clicked.connect(self.dis_update)
+
 
     def dis_update(self):
         if self.inmem.procedure_click_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][self.current_state][self.check_btn_num] == 2:
@@ -459,7 +478,7 @@ class Procedure_Content_Check(ABCPushButton, QPushButton):
             self.setStyleSheet('background-color: rgb(192,0,0)')
 
 
-class ProcedureBottom(ABCWidget, QWidget):
+class ProcedureBottom(ABCWidget):
     def __init__(self, parent):
         super(ProcedureBottom, self).__init__(parent)
         lay = QHBoxLayout(self)
@@ -468,12 +487,12 @@ class ProcedureBottom(ABCWidget, QWidget):
         lay.addWidget(ProcedureComplet(self))
         lay.addWidget(ProcedureParallel(self))
         lay.addWidget(ProcedureReconduct(self))
-        lay.setSpacing(20)
+        lay.setSpacing(12)
 
-class ProcedureComplet(ABCPushButton, QPushButton):
+class ProcedureComplet(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureComplet, self).__init__(parent)
-        self.setFixedSize(274, 35)
+        self.setFixedSize(403, 60)
         self.setObjectName("Bottom")
         self.setText('완료')
         self.widget_timer(iter_=500, funs=[self.dis_update1])
@@ -506,7 +525,7 @@ class ProcedureComplet(ABCPushButton, QPushButton):
 class ProcedureParallel(ABCPushButton, QPushButton):
     def __init__(self, parent):
         super(ProcedureParallel, self).__init__(parent)
-        self.setFixedSize(274, 35)
+        self.setFixedSize(403, 60)
         self.setObjectName("Bottom")
         self.setText('병행')
         self.clicked.connect(self.dis_update)
@@ -523,7 +542,7 @@ class ProcedureParallel(ABCPushButton, QPushButton):
 class ProcedureReconduct(ABCPushButton, QPushButton):
     def __init__(self, parent):
         super(ProcedureReconduct, self).__init__(parent)
-        self.setFixedSize(274, 35)
+        self.setFixedSize(403, 60)
         self.setObjectName("Bottom")
         self.setText('재수행')
         self.clicked.connect(self.dis_update)
