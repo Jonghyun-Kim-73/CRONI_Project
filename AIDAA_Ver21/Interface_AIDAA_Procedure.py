@@ -165,12 +165,13 @@ class ProcedureSequenceTitle(ABCPushButton):
         title_conv = {'목적':' 1.0 목적', '경보 및 증상':' 2.0 경보 및 증상', 
                       '자동 동작 사항': ' 3.0 자동 동작 사항', '긴급 조치 사항': ' 4.0 긴급 조치 사항', '후속 조치 사항': ' 5.0 후속 조치 사항'}
         self.setText(title_conv[title])
+        self.title = title
         self.nub = nub
         self.clicked.connect(self.dis_click_update)
 
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 2:
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == self.nub:
             self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
                                                 QPushButton:hover {background: rgb(0, 176, 218);}""")
         else:
