@@ -129,273 +129,109 @@ class ProcedureInfo(ABCLabel):
         self.setText(f" 비정상 절차서 이름: {self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]}")
 # ----------------------------------------------------------------------------------------------------------------------
 
-
-
 class ProcedureWindow(ABCWidget):
     def __init__(self, parent):
         super(ProcedureWindow, self).__init__(parent)
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(ProcedureSequence(self))
-        lay.addWidget(Procedurecontents(self))
+        self.PS = ProcedureSequence(self)
+        self.PC = Procedurecontents(self)
+        lay.addWidget(self.PS)
+        lay.addWidget(self.PC)
         lay.setSpacing(20)
-
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+        
+    def dis_update(self):
+        self.PC.dis_update()
+        self.PS.dis_update()
 class ProcedureSequence(ABCWidget):
     def __init__(self, parent):
         super(ProcedureSequence, self).__init__(parent)
         self.setFixedWidth(605)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(ProcedureSequenceFirst(self))
-        lay.addWidget(ProcedureSequenceSecond(self))
-        lay.addWidget(ProcedureSequenceThird(self))
-        lay.addWidget(ProcedureSequenceFourth(self))
-        lay.addWidget(ProcedureSequenceFifth(self))
+        self.w = [ProcedureSequenceWidget(self, '목적', 1),
+                  ProcedureSequenceWidget(self, '경보 및 증상', 2),
+                  ProcedureSequenceWidget(self, '자동 동작 사항', 3),
+                  ProcedureSequenceWidget(self, '긴급 조치 사항', 4),
+                  ProcedureSequenceWidget(self, '후속 조치 사항', 5)]
+        [lay.addWidget(w) for w in self.w]
         lay.setSpacing(15)
         lay.addStretch(1)
-
-class ProcedureSequenceFirst(ABCWidget):
-    def __init__(self, parent):
-        super(ProcedureSequenceFirst, self).__init__(parent)
-        lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(ProcedureSequenceFirst_1(self))
-        lay.addWidget(ProcedureSequenceFirst_2(self))
-        lay.setSpacing(15)
-
-class ProcedureSequenceFirst_1(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceFirst_1, self).__init__(parent)
-        self.setFixedSize(535, 55)
-        self.setText(' 1.0 목적')
+        
+    def dis_update(self):
+        [w.dis_update() for w in self.w]
+        
+class ProcedureSequenceWidget(ABCWidget):
+    def __init__(self, parent, title, nub):
+        super(ProcedureSequenceWidget, self).__init__(parent)
+        self.lay = QHBoxLayout(self)
+        self.lay.setContentsMargins(0, 0, 0, 0)
+        self.PS_title = ProcedureSequenceTitle(self, title, nub)
+        self.PS_button = ProcedureSequenceButton(self, title)
+        self.lay.addWidget(self.PS_title)
+        self.lay.addWidget(self.PS_button)
+        self.lay.setSpacing(15)
+        
+    def dis_update(self):
+        self.PS_title.dis_update()
+        self.PS_button.dis_update()
+        
+class ProcedureSequenceTitle(ABCPushButton):
+    def __init__(self, parent, title, nub):
+        """_summary_
+        
+        Args:
+            parent (_type_): _description_
+            title (_type_): _description_
+            nub (_type_): _description_
+        """
+        super(ProcedureSequenceTitle, self).__init__(parent)
+        title_conv = {'목적':' 1.0 목적', '경보 및 증상':' 2.0 경보 및 증상', 
+                      '자동 동작 사항': ' 3.0 자동 동작 사항', '긴급 조치 사항': ' 4.0 긴급 조치 사항', '후속 조치 사항': ' 5.0 후속 조치 사항'}
+        self.setText(title_conv[title])
+        self.title = title
+        self.nub = nub
         self.setObjectName("Tab")
-        self.setStyleSheet("""QPushButton{color: blue; selection-background-color: red;}
-                            QPushButton:hover {background-color: yellow;}""")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.clicked.connect(self.dis_click_update)
-
-    def dis_update(self):
-        # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 1:
-            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
-        else:
-            self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
-                            QPushButton:hover {background: rgb(0, 176, 218);}""")
-
-        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 3:  # 불만족
-            self.setStyleSheet('background-color: rgb(0, 176, 218)')
-
-    def dis_click_update(self):
-        # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 1
-
-class ProcedureSequenceFirst_2(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceFirst_2, self).__init__(parent)
-        self.setFixedSize(55, 55)
-        self.setObjectName("Check")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.blink = False
-
-    def dis_update(self):
-        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 0: # 기본
-            self.setStyleSheet('background-color:rgb(255, 255, 255)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 1: # 만족
-            self.setStyleSheet('background-color: rgb(0,0,0)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 2: # 병행 - blink
-            if not self.blink:
-                self.setStyleSheet('background-color: yellow')
-                self.blink = True
-            else:
-                self.setStyleSheet('background-color: white')
-                self.blink = False
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '목적'] == 3: # 불만족
-            self.setStyleSheet('background-color: rgb(192,0,0)')
-
-class ProcedureSequenceSecond(ABCWidget):
-    def __init__(self, parent):
-        super(ProcedureSequenceSecond, self).__init__(parent)
-        lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(ProcedureSequenceSecond_1(self))
-        lay.addWidget(ProcedureSequenceSecond_2(self))
-        lay.setSpacing(15)
-
-class ProcedureSequenceSecond_1(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceSecond_1, self).__init__(parent)
-        self.setText(' 2.0 경보 및 증상')
-        self.setObjectName("Tab")
+        # self.setStyleSheet("""QPushButton{color: blue; selection-background-color: red;} 
+        #                    QPushButton:hover {background-color: yellow;}""")
         self.setFixedSize(535, 55)
-        self.widget_timer(iter_=500, funs=[self.dis_update])
         self.clicked.connect(self.dis_click_update)
-
+        
     def dis_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 2:
-            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                                QPushButton:hover {background: rgb(0, 176, 218);}""")
-        else:
-            self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
-                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
-
-        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '경보 및 증상'] == 3:  # 불만족
-            self.setStyleSheet('background-color: rgb(0, 176, 218)')
-    def dis_click_update(self):
-        # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 2
-
-
-class ProcedureSequenceSecond_2(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceSecond_2, self).__init__(parent)
-        self.setFixedSize(55, 55)
-        self.setObjectName("Check")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.blink = False
-    def dis_update(self):
-        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '경보 및 증상'] == 0:
-            self.setStyleSheet('background-color:rgb(255, 255, 255)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '경보 및 증상'] == 1:
-            self.setStyleSheet('background-color: 0,0,0')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '경보 및 증상'] == 2:
-            if not self.blink:
-                self.setStyleSheet('background-color: yellow')
-                self.blink = True
-            else:
-                self.setStyleSheet('background-color: white')
-                self.blink = False
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '경보 및 증상'] == 3:
-            self.setStyleSheet('background-color: rgb(192,0,0)')
-
-class ProcedureSequenceThird(ABCWidget):
-    def __init__(self, parent):
-        super(ProcedureSequenceThird, self).__init__(parent)
-        lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(ProcedureSequenceThird_1(self))
-        lay.addWidget(ProcedureSequenceThird_2(self))
-        lay.setSpacing(15)
-
-
-class ProcedureSequenceThird_1(ABCPushButton, QPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceThird_1, self).__init__(parent)
-        self.setFixedSize(535, 55)
-        self.setText(' 3.0 자동 동작 사항')
-        self.setObjectName("Tab")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.clicked.connect(self.dis_click_update)
-
-    def dis_update(self):
-        # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 3:
-            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
-        else:
-            self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
-                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
-        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '자동 동작 사항'] == 2:  # 병행
-            self.setStyleSheet('background-color: rgb(0, 176, 218)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '자동 동작 사항'] == 3:  # 불만족
-            self.setStyleSheet('background-color: rgb(0, 176, 218)')
-    def dis_click_update(self):
-        # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 3
-
-
-class ProcedureSequenceThird_2(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceThird_2, self).__init__(parent)
-        self.setFixedSize(55, 55)
-        self.setObjectName("Check")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.blink = False
-    def dis_update(self):
-        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '자동 동작 사항'] == 0:
-            self.setStyleSheet('background-color:rgb(255, 255, 255)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '자동 동작 사항'] == 1:
-            self.setStyleSheet('background-color:rgb(0,0,0)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '자동 동작 사항'] == 2:
-            if not self.blink:
-                self.setStyleSheet('background-color: yellow')
-                self.blink = True
-            else:
-                self.setStyleSheet('background-color: white')
-                self.blink = False
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '자동 동작 사항'] == 3:
-            self.setStyleSheet('background-color: rgb(192,0,0)')
-
-class ProcedureSequenceFourth(ABCWidget):
-    def __init__(self, parent):
-        super(ProcedureSequenceFourth, self).__init__(parent)
-        lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(ProcedureSequenceFourth_1(self))
-        lay.addWidget(ProcedureSequenceFourth_2(self))
-        lay.setSpacing(15)
-
-class ProcedureSequenceFourth_1(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceFourth_1, self).__init__(parent)
-        self.setText(' 4.0 긴급 조치 사항')
-        self.setObjectName("Tab")
-        self.setFixedSize(535, 55)
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.clicked.connect(self.dis_click_update)
-
-    def dis_update(self):
-        # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 4:
+        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == self.nub:
             self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
                                                 QPushButton:hover {background: rgb(0, 176, 218);}""")
         else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                                         QPushButton:hover {background: rgb(0, 176, 218);}""")
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '긴급 조치 사항'] == 2:  # 병행
+            self.title] == 2:  # 병행
             self.setStyleSheet('background-color: rgb(0, 176, 218)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '긴급 조치 사항'] == 3:  # 불만족
+            self.title] == 3:  # 불만족
             self.setStyleSheet('background-color: rgb(0, 176, 218)')
     def dis_click_update(self):
         # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 4
-
-
-class ProcedureSequenceFourth_2(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceFourth_2, self).__init__(parent)
+        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = self.nub
+class ProcedureSequenceButton(ABCPushButton):
+    def __init__(self, parent, title):
+        super(ProcedureSequenceButton, self).__init__(parent)
         self.setFixedSize(55, 55)
         self.setObjectName("Check")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
+        self.title = title
         self.blink = False
+
     def dis_update(self):
         if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '긴급 조치 사항'] == 0:
+            self.title] == 0: # 기본
             self.setStyleSheet('background-color:rgb(255, 255, 255)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '긴급 조치 사항'] == 1:
+            self.title] == 1: # 만족
             self.setStyleSheet('background-color: rgb(0,0,0)')
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '긴급 조치 사항'] == 2:
+            self.title] == 2: # 병행
             if not self.blink:
                 self.setStyleSheet('background-color: yellow')
                 self.blink = True
@@ -403,72 +239,8 @@ class ProcedureSequenceFourth_2(ABCPushButton):
                 self.setStyleSheet('background-color: white')
                 self.blink = False
         elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '긴급 조치 사항'] == 3:
+            self.title] == 3: # 불만족
             self.setStyleSheet('background-color: rgb(192,0,0)')
-
-class ProcedureSequenceFifth(ABCWidget):
-    def __init__(self, parent):
-        super(ProcedureSequenceFifth, self).__init__(parent)
-        lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(ProcedureSequenceFifth_1(self))
-        lay.addWidget(ProcedureSequenceFifth_2(self))
-        lay.setSpacing(15)
-
-class ProcedureSequenceFifth_1(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceFifth_1, self).__init__(parent)
-        self.setFixedSize(535, 55)
-        self.setObjectName("Tab")
-        self.setText(' 5.0 후속 조치 사항')
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.clicked.connect(self.dis_click_update)
-
-    def dis_update(self):
-        # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] == 5:
-            self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
-                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
-        else:
-            self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
-                                        QPushButton:hover {background: rgb(0, 176, 218);}""")
-        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '후속 조치 사항'] == 2:  # 병행
-            self.setStyleSheet('background-color: rgb(0, 176, 218)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '후속 조치 사항'] == 3:  # 불만족
-            self.setStyleSheet('background-color: rgb(0, 176, 218)')
-    def dis_click_update(self):
-        # self.inmem.current_procedure['num'] ; global navigation (절차서 전환 스위치) ex) o, 1, 2, 3, 4, 5
-        self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num'] = 5
-
-
-class ProcedureSequenceFifth_2(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSequenceFifth_2, self).__init__(parent)
-        self.setFixedSize(55, 55)
-        self.setObjectName("Check")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-        self.blink = False
-    def dis_update(self):
-        if self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '후속 조치 사항'] == 0:
-            self.setStyleSheet('background-color:rgb(255, 255, 255)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '후속 조치 사항'] == 1:
-            self.setStyleSheet('background-color: rgb(0,0,0)')
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '후속 조치 사항'] == 2:
-            if not self.blink:
-                self.setStyleSheet('background-color: yellow')
-                self.blink = True
-            else:
-                self.setStyleSheet('background-color: white')
-                self.blink = False
-        elif self.inmem.procedure_progress_state[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]][
-            '후속 조치 사항'] == 3:
-            self.setStyleSheet('background-color: rgb(192,0,0)')
-
 # ----------------------------------------------------------------------------------------------------------------------
 
 class Procedurecontents(ABCWidget):
@@ -494,8 +266,6 @@ class Procedurecontents(ABCWidget):
 
         self.vbox.addWidget(self.scroll)
         self.setLayout(self.vbox)
-
-        self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
         '''
