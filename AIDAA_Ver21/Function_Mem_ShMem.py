@@ -1,3 +1,4 @@
+from turtle import st
 from AIDAA_Ver21.DB_AlarmDB import AlarmDB
 from datetime import timedelta
 from AIDAA_Ver21.ab_procedure import ab_pro
@@ -71,6 +72,13 @@ class ShMem:
         return self.mem[para]['Sig']
 
 # ----------------------------------------------------------------------------------------------------------------------
+    def get_pro_all_ab_procedure_names(self):
+        out = []
+        for name_ in ab_pro.keys():
+            if 'Ab' in name_:
+                out.append(name_)
+        return out
+    
     # Urgent action or not
     def get_pro_urgent_act(self, procedure_name):
         return ab_pro[procedure_name]['긴급조치']
@@ -83,8 +91,23 @@ class ShMem:
         return ab_pro[procedure_name]['경보 및 증상']
 
     # Symptom count
+    def get_pro_count(self, procedure_name, title):
+        return len(ab_pro[procedure_name][title].keys())
+    
+    def get_pro_purpose_count(self, procedure_name):
+        return self.get_pro_count(procedure_name, '목적')
+    
     def get_pro_symptom_count(self, procedure_name):
-        return len(ab_pro[procedure_name]['경보 및 증상'].keys())
+        return self.get_pro_count(procedure_name, '경보 및 증상')
+    
+    def get_pro_automatic_count(self, procedure_name):
+        return self.get_pro_count(procedure_name, '자동 동작 사항')
+    
+    def get_pro_urgent_count(self, procedure_name):
+        return self.get_pro_count(procedure_name, '긴급 조치 사항')
+    
+    def get_pro_follow_count(self, procedure_name):
+        return self.get_pro_count(procedure_name, '후속 조치 사항')
 
     def get_pro_symptom_satify(self, procedure_name):
         return 5
@@ -99,6 +122,23 @@ class ShMem:
                 '자동 동작 사항': len(ab_pro[procedure_name]['자동 동작 사항'].keys()),
                 '긴급 조치 사항': len(ab_pro[procedure_name]['긴급 조치 사항'].keys()),
                 '후속 조치 사항': len(ab_pro[procedure_name]['후속 조치 사항'].keys())}
+    
+    def get_pro_procedure_content(self, procedure_name, state, content, type_) -> str:
+        """_summary_
+
+        Args:
+            procedure_name (_type_): 'Ab21_02: 가압기 압력 채널 고장 (저)'
+            state (_type_): '경보 및 증상'
+            content (_type_): 0
+            type (_type_): 'Des'
+
+        Returns:
+            _type_: _description_
+        """
+        return ab_pro[procedure_name][state][content][type_]
+    
+    def get_pro_procedure_contents(self, pro_name, title):
+        return ab_pro[pro_name][title]
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -121,28 +161,22 @@ class InterfaceMem:
                                        12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸즈 후단누설',
                                        14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설',
                                        16: '해당 시나리오는 학습되지 않은 시나리오입니다.', 17: '학습여부를 아직 확인할 수 없습니다.'}
-        self.current_procedure = {self.diagnosis_convert_text[i]: {'num': 0, 'des': {0: '내용 없음', 1: '목적', 2: '경보 및 증상',
-                                                                                     3: '자동 동작 사항', 4: '긴급 조치 사항',
-                                                                                     5: '후속 조치 사항'}} for i in range(18)}
-        self.current_procedure_log = [0, 0]  # [절차서 화면 전환 용도, 선택 절차서 전환 용도]
+        
+        # ------------------------------------------------------------------------------------------------------------------------------------------
+        looptitle = ['목적', '경보 및 증상', '자동 동작 사항', '긴급 조치 사항', '후속 조치 사항']
+        self.ProcedureHis = {pro_name: {
+            'SequenceTitleClickHis': {'목적': True, '경보 및 증상': False, '자동 동작 사항': False, '긴급 조치 사항': False, '후속 조치 사항': False},
+            'SequenceTitleClick': '목적',
+            'SequenceTitleCondHis': {title:0 for title in looptitle},
+            'ContentsClickHis': {title: [0 for i in range(self.ShMem.get_pro_count(pro_name, title))] for title in looptitle},
+            'Contents': {title: self.ShMem.get_pro_procedure_contents(pro_name, title) for title in looptitle},
+            } for pro_name in self.ShMem.get_pro_all_ab_procedure_names()}
+        # ------------------------------------------------------------------------------------------------------------------------------------------
+        
         self.current_table = {'Procedure': -1, 'System': -1, 'current_window': -1, 'procedure_name': "",
                               'selected_procedure':"", 'selected_system':""}
-
-        self.procedure_progress_state = {
-            self.diagnosis_convert_text[i]: {'목적': 0, '경보 및 증상': 0, '자동 동작 사항': 0, '긴급 조치 사항': 0, '후속 조치 사항': 0} for i
-            in range(18)}
         self.pro_procedure_count = [self.ShMem.get_pro_procedure_count(self.diagnosis_convert_text[i]) for i in
                                     range(16)]
-        self.procedure_click_state = {self.diagnosis_convert_text[i]: {'목적': [0 for k in range(20)],
-                                                                       '경보 및 증상': [0 for k in range(
-                                                                           self.pro_procedure_count[i]['경보 및 증상'])],
-                                                                       '자동 동작 사항': [0 for k in range(
-                                                                           self.pro_procedure_count[i]['자동 동작 사항'])],
-                                                                       '긴급 조치 사항': [0 for k in range(
-                                                                           self.pro_procedure_count[i]['긴급 조치 사항'])],
-                                                                       '후속 조치 사항': [0 for k in range(
-                                                                           self.pro_procedure_count[i]['후속 조치 사항'])]}
-                                      for i in range(16)}
         self.access_procedure = []
         self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', False, False, '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', True, True, '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸즈 후단누설', True, True, '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', False, False, '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', True, True, '05/15', '0.76%']],
                       'Train': 0,

@@ -77,7 +77,7 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
                             QTableWidget::item::focus
                             {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")
 
-        self.doubleClicked.connect(self.dis_procedure)
+        self.doubleClicked.connect(lambda i:self.dis_procedure(i))
         self.clicked.connect(self.control_table)
         self.make_centerCB()
         self.setSelectionMode(QAbstractItemView.NoSelection)
@@ -283,9 +283,11 @@ class ProcedureDiagonsisTable(ABCTableWidget, QTableWidget):
         self.clearSelection()
         self.repaint()
 
-    def dis_procedure(self):
+    def dis_procedure(self, i):
+        get_procedure_name = self.item(i.row(), 0).text() # 'Ab63_02: 제어봉의 계속적인 삽입'
         self.inmem.change_current_system_name('Procedure')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
+        self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_name)
 # ----------------------------------------------------------------------------------------------------------------------
 
 
