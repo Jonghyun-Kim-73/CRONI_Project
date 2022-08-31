@@ -181,7 +181,8 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 65)
 
-        self.doubleClicked.connect(self.dis_procedure)
+        # self.doubleClicked.connect(self.dis_procedure) # 실행 후 확인
+        self.doubleClicked.connect(lambda i: self.dis_procedure(i))
         self.make_centerCB()    # 체크박스
         self.clicked.connect(self.control_table)
 
@@ -266,7 +267,8 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                                                 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
                                                 QTableWidget::item::focus
                                                 {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
-                    [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
+                    # [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
+                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
                     [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(3)]
                     [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(3)]
                     [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(3)]
@@ -389,9 +391,12 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         self.clearSelection()
         self.repaint()
 
-    def dis_procedure(self):
+    def dis_procedure(self, i):
+        get_procedure_name = self.item(i.row(), 0).text()  # 'Ab63_02: 제어봉의 계속적인 삽입'
+        print(get_procedure_name)
         self.inmem.change_current_system_name('Procedure')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
+        self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_name)
 # ----------------------------------------------------------------------------------------------------------------------
 
 
@@ -598,7 +603,8 @@ class ProcedureCheckTable(ABCTableWidget):
                         self.symptom_count = self.inmem.ShMem.get_pro_symptom_count(
                             self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
                         self.setRowCount(self.symptom_count)
-                        [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(self.symptom_count)]
+                        # [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(self.symptom_count)]
+                        [self.setItem(i, 0, QTableWidgetItem(symptom[i]['Des'])) for i in range(self.symptom_count)]
                         # 임시 ITEM 열 1, 2, 3
                         [self.setItem(i, 1, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
                         [self.setItem(i, 2, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
@@ -606,11 +612,11 @@ class ProcedureCheckTable(ABCTableWidget):
                         [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.symptom_count)]
                         for j in range(4):
                             [self.item(i, j).setSelected(False) for i in range(self.symptom_count)] # 아이쳄 1,2,3 추가시 수정필요
-                        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':
-                            for i in range(0, self.symptom_count):
-                                if symptom[i]['ManClick']:
-                                    for j in range(4):
-                                        self.item(i, j).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
+                        # if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':
+                        for i in range(0, self.symptom_count):
+                            if symptom[i]['ManClick']:
+                                for j in range(4):
+                                    self.item(i, j).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
 
                     self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
             else:

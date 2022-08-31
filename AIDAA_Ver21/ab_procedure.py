@@ -19,6 +19,12 @@ ab_pro = {
     },
     'Ab15_08: 증기발생기 수위 채널 고장 (고)': {
         '긴급조치': False, '방사선': False,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
@@ -164,6 +170,12 @@ ab_pro = {
     },
     'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
         '긴급조치': True, '방사선': True,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -455,6 +467,12 @@ ab_pro = {
     },
     'Ab21_01: 가압기 압력 채널 고장 (고)': {
         '긴급조치': True, '방사선': False,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
@@ -556,24 +574,30 @@ ab_pro = {
     },
     'Ab21_02: 가압기 압력 채널 고장 (저)': {
         '긴급조치': True, '방사선': False,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
                 'Des': '주의사항 : BB-PT444 고장 ‘저’시 PZR 실제 압력은 증가한다.',
             },
-            0: {
+            1: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
                 'Des': 'PZR ‘저’ 압력 지시(BB-PI444)',
             },
-            1: {
+            2: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.2',
                 'Des': '"PZR PRESS LO/BACKUP HEATERS ON" 경보 발생(155.4㎏/㎠) 및 PZR 보조전열기 모두 켜짐 지시',
             },
-            2: {
+            3: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
                 'Des': '"PZR PRESS HIGH"(BB-PT444B, 445) 경보 발생(162.4㎏/㎠) 및 PZR ‘고’ 압력 지시(BB-PI445, 455, 456, 457)',
             },
-            3: {
+            4: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.4',
                 'Des': 'PZR PORV(BB-PV444B, 445A, 445B) 열림 지시 및 경보 발생(164.2㎏/㎠)'
                        '◦ 경보명 : PZR PORV PV-444B OPENING'
@@ -581,7 +605,7 @@ ab_pro = {
                        'PZR PORV PV-445B OPENING'
                        'PZR PORV ACTUATION PRESS',
             },
-            4: {
+            5: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
                 'Des': '실제 압력 감소로 PZR PORV(BB-PV444B, 445A, 445B) 닫힘',
             }
@@ -633,6 +657,12 @@ ab_pro = {
     },
     'Ab20_04: 가압기 수위 채널 고장 (저)': {
         '긴급조치': True, '방사선': False,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -844,6 +874,12 @@ ab_pro = {
     },
     'Ab15_07: 증기발생기 수위 채널 고장 (저)': {
         '긴급조치': False, '방사선': False,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
@@ -985,6 +1021,12 @@ ab_pro = {
     },
     'Ab63_04: 제어봉 낙하': {
         '긴급조치': False, '방사선': False,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1081,7 +1123,7 @@ ab_pro = {
             }
 
         },
-        '후속 조치 사항': {  # 0부터 시작하도록 수정함.
+        '후속 조치 사항': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
                 'Des': '1시간 내에 “노심-2-2(정지여유도 계산) 절차서”에 따라 정지여유도 계산',
@@ -1229,9 +1271,15 @@ ab_pro = {
     },
     'Ab63_02: 제어봉의 계속적인 삽입': {
         '긴급조치': False, '방사선': False,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
-                'ManClick': True, 'AutoClick': False, 'Nub': '2.1',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
                 'Des': '제어봉 위치 지시계와 스텝계수기상의 계속적인 제어봉 삽입',
             },
             1: {
@@ -1239,7 +1287,7 @@ ab_pro = {
                 'Des': '원자로 출력 감소',
             },
             2: {
-                'ManClick': True, 'AutoClick': False, 'Nub': '2.3',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.3',
                 'Des': '“T REF/AUCT T AVG HIGH” 경보 발생',
             },
             3: {
@@ -1247,7 +1295,7 @@ ab_pro = {
                 'Des': '“ROD BANKS LOW/LO-LO LIMIT” 경보 발생',
             },
             4: {
-                'ManClick': True, 'AutoClick': False, 'Nub': '2.5',
+                'ManClick': False, 'AutoClick': False, 'Nub': '2.5',
                 'Des': '“COMPARATOR PWR RANGE DEVIATION” 경보 발생',
             },
             5: {
@@ -1320,6 +1368,12 @@ ab_pro = {
     },
     'Ab21_12: 가압기 PORV (열림)': {
         '긴급조치': True, '방사선': True,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1414,6 +1468,12 @@ ab_pro = {
     },
     'Ab19_02: 가압기 안전밸브 고장': {
         '긴급조치': True, '방사선': True,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1520,6 +1580,12 @@ ab_pro = {
     },
     'Ab21_11: 가압기 살수밸브 고장 (열림)': {
         '긴급조치': False, '방사선': True,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1668,6 +1734,12 @@ ab_pro = {
     },
     'Ab60_02: 재생열교환기 전단부위 파열': {
         '긴급조치': True, '방사선': True,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1804,8 +1876,14 @@ ab_pro = {
 
         }
     },
-    'Ab59_02: 충전수 유량조절밸즈 후단누설': {
+    'Ab59_02: 충전수 유량조절밸브 후단누설': {
         '긴급조치': True, '방사선': True,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -1998,6 +2076,12 @@ ab_pro = {
     },
     'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설': {
         '긴급조치': False, '방사선': True,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -2167,6 +2251,12 @@ ab_pro = {
     },
     'Ab23_06: 증기발생기 전열관 누설': {
         '긴급조치': True, '방사선': True,
+        '목적': {
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '...',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
@@ -2232,10 +2322,12 @@ ab_pro = {
                 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
                 'Des': '원자로 냉각재가 증기발생기 전열관을 통하여 2차계통으로 누설되고 있으면 정상-76(증기발생기 전열관 누설) 절차서를 수행한다.',
             }
-
         },
         '후속 조치 사항': {
-
+            0: {
+                'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
+                'Des': '...',
+            }
         }
     },
 

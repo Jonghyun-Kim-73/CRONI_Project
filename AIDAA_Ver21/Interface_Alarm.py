@@ -48,8 +48,8 @@ class AlarmFix(ABCWidget):
         self.blick = False
 
     def dis_update(self):
-        self.inmem.widget_ids['AlarmFixPreTrip'].dis_update()
-        self.inmem.widget_ids['AlarmFixTrip'].dis_update()
+        # self.inmem.widget_ids['AlarmFixPreTrip'].dis_update() # 실행 후 확인
+        # self.inmem.widget_ids['AlarmFixTrip'].dis_update()
         self.dis_update_pre_abnormal()
         self.dis_ws_enable()
 
@@ -102,6 +102,8 @@ class AlarmFixPreTrip(ABCPushButton):
         self.setText('PreTrip')
         self.clicked.connect(self.change_main_display)
         self.blick = False
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
 
     def dis_update(self):
         """
@@ -132,6 +134,7 @@ class AlarmFixTrip(ABCLabel):
         self.setObjectName("Left")
         self.setFixedSize(615, 55)
         self.setText('Trip')
+        self.widget_timer(iter_=500, funs=[self.dis_update])
         self.blick = False
 
     def dis_update(self):
