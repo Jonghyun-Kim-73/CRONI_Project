@@ -42,8 +42,6 @@ class AlarmFix(ABCWidget, QWidget):
         self.blick = False
 
     def dis_update(self):
-        self.inmem.widget_ids['AlarmFixPreTrip'].dis_update()
-        self.inmem.widget_ids['AlarmFixTrip'].dis_update()
         self.dis_update_pre_abnormal()
         self.dis_ws_enable()
 
@@ -94,7 +92,7 @@ class AlarmFixPreTrip(ABCPushButton, QLabel):
         self.setText('PreTrip')
         self.clicked.connect(self.change_main_display)
         self.blick = False
-
+        self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
         """
@@ -123,6 +121,7 @@ class AlarmFixTrip(ABCLabel):
     def __init__(self, parent):
         super(AlarmFixTrip, self).__init__(parent)
         self.setText('Trip')
+        self.widget_timer(iter_=500, funs=[self.dis_update])
         self.blick = False
 
     def dis_update(self):

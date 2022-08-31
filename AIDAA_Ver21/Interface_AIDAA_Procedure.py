@@ -23,7 +23,7 @@ class Procedure(ABCWidget):
         
         self.procedure_name = ''
         
-        self.widget_timer(iter_=500, funs=[self.update_procedure_sequence_cond])
+        self.widget_timer(iter_=500, funs=[self.update_procedure_sequence, self.update_procedure_sequence_cond])
     
     def set_procedure_name(self, procedure_name):
         self.procedure_name = procedure_name
@@ -38,12 +38,14 @@ class Procedure(ABCWidget):
         self.update_procedure_contents()
     
     def update_procedure_sequence(self):
-        self.SequenceTitleClickHis = self.inmem.ProcedureHis[self.procedure_name]['SequenceTitleClickHis']
-        self.inmem.widget_ids['ProcedureSequenceTitlePu'].dis_update(self.SequenceTitleClickHis)
-        self.inmem.widget_ids['ProcedureSequenceTitleAl'].dis_update(self.SequenceTitleClickHis)
-        self.inmem.widget_ids['ProcedureSequenceTitleAu'].dis_update(self.SequenceTitleClickHis)
-        self.inmem.widget_ids['ProcedureSequenceTitleUr'].dis_update(self.SequenceTitleClickHis)
-        self.inmem.widget_ids['ProcedureSequenceTitleFo'].dis_update(self.SequenceTitleClickHis)
+        # Blink 로 인해 timer와 연결
+        if self.procedure_name != '': # 초기 소프트웨어 구동 시 절차서 선택되지 않아서 동작 X
+            self.SequenceTitleClickHis = self.inmem.ProcedureHis[self.procedure_name]['SequenceTitleClickHis']
+            self.inmem.widget_ids['ProcedureSequenceTitlePu'].dis_update(self.SequenceTitleClickHis)
+            self.inmem.widget_ids['ProcedureSequenceTitleAl'].dis_update(self.SequenceTitleClickHis)
+            self.inmem.widget_ids['ProcedureSequenceTitleAu'].dis_update(self.SequenceTitleClickHis)
+            self.inmem.widget_ids['ProcedureSequenceTitleUr'].dis_update(self.SequenceTitleClickHis)
+            self.inmem.widget_ids['ProcedureSequenceTitleFo'].dis_update(self.SequenceTitleClickHis)
     
     def update_procedure_sequence_cond(self):
         # Blink 로 인해 timer와 연결
@@ -162,8 +164,8 @@ class ProcedureTop(ABCWidget, QWidget):
         lay.setContentsMargins(0, 0, 66, 0)
         lay.addWidget(TopBTN(self, 'UrgentBTN', '긴급 조치'))
         lay.addWidget(TopBTN(self, 'RadiationBTN', '방사선비상'))
-        lay.addWidget(PredictionBTN(self))
-        lay.addWidget(TripBTN(self))
+        lay.addWidget(AlarmFixPreTrip(self))
+        lay.addWidget(AlarmFixTrip(self))
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
         lay.setSpacing(10)
@@ -177,14 +179,6 @@ class TopBTN(ABCLabel):
             self.setStyleSheet('background-color: rgb(192,0,0);')
         else:
             self.setStyleSheet('background-color: lightgray;')
-class PredictionBTN(ABCPushButton):
-    def __init__(self, parent):
-        super(PredictionBTN, self).__init__(parent)
-        self.setText('Prediction')
-class TripBTN(ABCPushButton):
-    def __init__(self, parent):
-        super(TripBTN, self).__init__(parent)
-        self.setText('Trip')
 class DiagnosisTopCallProcedureSearch(ABCPushButton):
     def __init__(self, parent):
         super(DiagnosisTopCallProcedureSearch, self).__init__(parent)
@@ -247,6 +241,7 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
     def __init__(self, parent, widget_name='', title=''):
         super().__init__(parent, widget_name)
         self.setText(title)
+        self.blink = False
         self.clicked.connect(self.is_clicked)
         
     def dis_update(self, SequenceTitleClickHis:dict):
@@ -255,15 +250,49 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
         Args:
             SequenceTitleClickHis (_dict_): # {'목적': True, '경보 및 증상': False, ...}
         """
+        # 0.
+        self.procedure_name = self.inmem.widget_ids['Procedure'].procedure_name
+        # 1. 현재 title 보다 상위 타이틀이 선택된 경우 동작
+        RankList = ['목적', '경보 및 증상', '자동 동작 사항', '긴급 조치 사항', '후속 조치 사항']
+        if self.text() != '목적':    # 목적은 고려하지 않는다.
+            ThisRank = RankList.index(self.text())
+            CurrentRank = RankList.index(self.inmem.ProcedureHis[self.procedure_name]['SequenceTitleClick'])
+
+            if ThisRank < CurrentRank:
+                if self.step_check(self.text()) and not self.step_all_check(self.text()):
+                    if not self.blink:
+                        self.setStyleSheet('background-color: rgb(255, 255, 255)')
+                        self.blink = True
+                    else:
+                        self.setStyleSheet('background-color: rgb(0, 176, 218)')
+                        self.blink = False
+                else:
+                    self.do_hover(SequenceTitleClickHis)
+                    self.blink = False
+            else:
+                self.do_hover(SequenceTitleClickHis)
+        else:
+            self.do_hover(SequenceTitleClickHis)
+                   
+    def is_clicked(self):
+        self.inmem.widget_ids['Procedure'].change_SequenceTitleClickHis(self.text())
+    
+    def do_hover(self, SequenceTitleClickHis):
         if SequenceTitleClickHis[self.text()]:
             self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
                               QPushButton:hover {background: rgb(0, 176, 218);}""")
         else:
             self.setStyleSheet("""QPushButton{background: rgb(255, 255, 255);}
                                   QPushButton:hover {background: rgb(0, 176, 218);}""")
-       
-    def is_clicked(self):
-        self.inmem.widget_ids['Procedure'].change_SequenceTitleClickHis(self.text())
+    
+    def step_check(self, title):
+        """하나라도 동작 중 이라면"""
+        return any([True if cond >= 1 else False for cond in self.inmem.ProcedureHis[self.procedure_name]['ContentsClickHis'][title]])
+    
+    def step_all_check(self, title):
+        """모두 동작 중 이라면"""
+        return all([True if cond == 1 else False for cond in self.inmem.ProcedureHis[self.procedure_name]['ContentsClickHis'][title]])
+    
 class ProcedureSequenceTitleCond(ABCLabel):
     def __init__(self, parent, widget_name='', title=''):
         super().__init__(parent, widget_name)
