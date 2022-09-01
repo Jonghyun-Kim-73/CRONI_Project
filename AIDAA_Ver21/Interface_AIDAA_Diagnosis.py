@@ -52,7 +52,7 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton):
         # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
 
     def dis_update(self):
-        print('비정상 절차서 검색 창으로 이동')
+        self.inmem.current_search['active_window'] = 1
         ProcedureSearch(self).show()
 
 class DiagnosisTopCallSystemSearch(ABCPushButton):
@@ -571,87 +571,88 @@ class ProcedureCheckTable(ABCTableWidget):
 
     def dis_update(self):
         # iFixTrain 대응을 위한 code
-        if self.inmem.dis_AI['Train'] == 0: # 학습된 시나리오
-            self.inmem.current_table['current_window'] = 0
-            self.inmem.current_table['System'] = -1
-        elif self.inmem.dis_AI['Train'] == 1: # 학습되지 않은 시나리오 시나리오
-            self.inmem.current_table['current_window'] = 1
-            self.inmem.current_table['Procedure'] = -1
+        if self.inmem.current_search['active_window'] == 0:
+            if self.inmem.dis_AI['Train'] == 0: # 학습된 시나리오
+                self.inmem.current_table['current_window'] = 0
+                self.inmem.current_table['System'] = -1
+            elif self.inmem.dis_AI['Train'] == 1: # 학습되지 않은 시나리오 시나리오
+                self.inmem.current_table['current_window'] = 1
+                self.inmem.current_table['Procedure'] = -1
 
-        if self.inmem.current_table['current_window'] == 0: # 학습된 시나리오
-            if self.inmem.current_table['Procedure'] != -1:
-                self.setColumnCount(len(self.column_labels))
-                for i in range(0, self.rowCount()):
-                    self.setRowHeight(i, 65)
-                self.column_labels = [
-                    ' 비정상 절차서: %s' % f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}', 'Value',
-                    'Set-point', 'Unit']
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
-                self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
-                self.horizontalHeaderItem(0).setToolTip(self.column_labels[0])
-                if self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '학습여부를 아직 확인할 수 없습니다.' or self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '해당 시나리오는 학습되지 않은 시나리오입니다.':
-                    print('해당 사항은 선택할 수 없습니다.')
-                    [self.setItem(i, 0, QTableWidgetItem('해당 사항은 선택할 수 없습니다.')) for i in range(self.rowCount())]
+            if self.inmem.current_table['current_window'] == 0: # 학습된 시나리오
+                if self.inmem.current_table['Procedure'] != -1:
+                    self.setColumnCount(len(self.column_labels))
+                    for i in range(0, self.rowCount()):
+                        self.setRowHeight(i, 65)
+                    self.column_labels = [
+                        ' 비정상 절차서: %s' % f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}', 'Value',
+                        'Set-point', 'Unit']
+                    self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                    self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+                    self.horizontalHeaderItem(0).setToolTip(self.column_labels[0])
+                    if self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '학습여부를 아직 확인할 수 없습니다.' or self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '해당 시나리오는 학습되지 않은 시나리오입니다.':
+                        print('해당 사항은 선택할 수 없습니다.')
+                        [self.setItem(i, 0, QTableWidgetItem('해당 사항은 선택할 수 없습니다.')) for i in range(self.rowCount())]
+                    else:
+                        symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
+                        if self.inmem.current_table['procedure_name'] != self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]:
+                            self.symptom_count = self.inmem.ShMem.get_pro_symptom_count(
+                                self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
+                            self.setRowCount(self.symptom_count)
+                            [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(self.symptom_count)]
+                            # 임시 ITEM 열 1, 2, 3
+                            [self.setItem(i, 1, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
+                            [self.setItem(i, 2, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
+                            [self.setItem(i, 3, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
+                            [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.symptom_count)]
+                            for j in range(4):
+                                [self.item(i, j).setSelected(False) for i in range(self.symptom_count)] # 아이쳄 1,2,3 추가시 수정필요
+                            if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':
+                                for i in range(0, self.symptom_count):
+                                    if symptom[i]['ManClick']:
+                                        for j in range(4):
+                                            self.item(i, j).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
+
+                        self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
                 else:
-                    symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
-                    if self.inmem.current_table['procedure_name'] != self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]:
-                        self.symptom_count = self.inmem.ShMem.get_pro_symptom_count(
-                            self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
-                        self.setRowCount(self.symptom_count)
-                        [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(self.symptom_count)]
-                        # 임시 ITEM 열 1, 2, 3
-                        [self.setItem(i, 1, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
-                        [self.setItem(i, 2, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
-                        [self.setItem(i, 3, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
-                        [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.symptom_count)]
-                        for j in range(4):
-                            [self.item(i, j).setSelected(False) for i in range(self.symptom_count)] # 아이쳄 1,2,3 추가시 수정필요
-                        if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':
-                            for i in range(0, self.symptom_count):
-                                if symptom[i]['ManClick']:
-                                    for j in range(4):
-                                        self.item(i, j).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
+                    self.clear()
+                    self.column_labels = ['비정상 절차서:', 'Value', 'Set-point', 'Unit']
+                    self.setColumnCount(len(self.column_labels))
+                    self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                    self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
 
-                    self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
-            else:
-                self.clear()
-                self.column_labels = ['비정상 절차서:', 'Value', 'Set-point', 'Unit']
-                self.setColumnCount(len(self.column_labels))
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
-                self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
-
-                    # for i in range(self.symptom_count):
-                    #     if self.content + 1 <= self.inmem.ShMem.get_pro_procedure_count(
-                    #             self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
-                    #         if self.inmem.get_ab_procedure_Manual_Check(i):
-                    #             # self.setStyleSheet("""QTableWidget::item {
-                    #             #                     font: 30px;
-                    #             #                     border-bottom: 1px solid rgb(128, 128, 128);
-                    #             #                     background:yellow;
-                    #             # }""")
-                    #             print(i)
+                        # for i in range(self.symptom_count):
+                        #     if self.content + 1 <= self.inmem.ShMem.get_pro_procedure_count(
+                        #             self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0])[current_state]:
+                        #         if self.inmem.get_ab_procedure_Manual_Check(i):
+                        #             # self.setStyleSheet("""QTableWidget::item {
+                        #             #                     font: 30px;
+                        #             #                     border-bottom: 1px solid rgb(128, 128, 128);
+                        #             #                     background:yellow;
+                        #             # }""")
+                        #             print(i)
 
 
-        elif self.inmem.current_table['current_window'] == 1: # 학습되지 않은 시나리오
-            if self.inmem.current_table['System'] != -1:
-                for i in range(0, self.rowCount()):
-                    self.setRowHeight(i, 65)
-                self.column_labels = [' System: %s' % f'{self.inmem.dis_AI["System"][self.inmem.current_table["System"]][0]}', 'Value', 'Set-point', 'Unit']
-                self.setColumnCount(len(self.column_labels))
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
-                self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
-                self.horizontalHeaderItem(0).setToolTip(self.column_labels[0])
-                system_alarm = int(self.inmem.dis_AI['System'][self.inmem.current_table["System"]][1])
-                self.setRowCount(system_alarm)
-                [self.setItem(i, 0, QTableWidgetItem('추후 업데이트 예정')) for i in range(system_alarm)]
-                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(system_alarm)]
+            elif self.inmem.current_table['current_window'] == 1: # 학습되지 않은 시나리오
+                if self.inmem.current_table['System'] != -1:
+                    for i in range(0, self.rowCount()):
+                        self.setRowHeight(i, 65)
+                    self.column_labels = [' System: %s' % f'{self.inmem.dis_AI["System"][self.inmem.current_table["System"]][0]}', 'Value', 'Set-point', 'Unit']
+                    self.setColumnCount(len(self.column_labels))
+                    self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                    self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+                    self.horizontalHeaderItem(0).setToolTip(self.column_labels[0])
+                    system_alarm = int(self.inmem.dis_AI['System'][self.inmem.current_table["System"]][1])
+                    self.setRowCount(system_alarm)
+                    [self.setItem(i, 0, QTableWidgetItem('추후 업데이트 예정')) for i in range(system_alarm)]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(system_alarm)]
 
-            else:
-                self.clear()
-                self.column_labels = [' System:', 'Value', 'Set-point', 'Unit']
-                self.setColumnCount(len(self.column_labels))
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
-                self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+                else:
+                    self.clear()
+                    self.column_labels = [' System:', 'Value', 'Set-point', 'Unit']
+                    self.setColumnCount(len(self.column_labels))
+                    self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                    self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
