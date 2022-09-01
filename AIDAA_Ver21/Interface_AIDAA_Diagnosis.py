@@ -41,7 +41,7 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton, QPushButton):
         self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
 
     def dis_update(self):
-        print('비정상 절차서 검색 창으로 이동')
+        self.inmem.current_search['active_window'] = 1
         ProcedureSearch(self).show()
 
 class DiagnosisTopCallSystemSearch(ABCPushButton, QPushButton):
@@ -401,54 +401,55 @@ class ProcedureCheckTable(ABCTableWidget, QTableWidget):
 
     def dis_update(self):
         # iFixTrain 대응을 위한 code
-        if self.inmem.dis_AI['Train'] == 0: # 학습된 시나리오
-            self.inmem.current_table['current_window'] = 0
-            self.inmem.current_table['System'] = -1
-        elif self.inmem.dis_AI['Train'] == 1: # 학습되지 않은 시나리오 시나리오
-            self.inmem.current_table['current_window'] = 1
-            self.inmem.current_table['Procedure'] = -1
+        if self.inmem.current_search['active_window'] == 0:
+            if self.inmem.dis_AI['Train'] == 0: # 학습된 시나리오
+                self.inmem.current_table['current_window'] = 0
+                self.inmem.current_table['System'] = -1
+            elif self.inmem.dis_AI['Train'] == 1: # 학습되지 않은 시나리오 시나리오
+                self.inmem.current_table['current_window'] = 1
+                self.inmem.current_table['Procedure'] = -1
 
-        if self.inmem.current_table['current_window'] == 0: # 학습된 시나리오
-            if self.inmem.current_table['Procedure'] != -1:
-                self.setColumnCount(len(self.column_labels))
-                self.column_labels = [
-                    ' 비정상 절차서: %s' % f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}', 'Value',
-                    'Set-point', 'Unit']
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
-                if self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '학습여부를 아직 확인할 수 없습니다.' or self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '해당 시나리오는 학습되지 않은 시나리오입니다.':
-                    print('해당 사항은 선택할 수 없습니다.')
-                    [self.setItem(i, 0, QTableWidgetItem('해당 사항은 선택할 수 없습니다.')) for i in range(10)]
+            if self.inmem.current_table['current_window'] == 0: # 학습된 시나리오
+                if self.inmem.current_table['Procedure'] != -1:
+                    self.setColumnCount(len(self.column_labels))
+                    self.column_labels = [
+                        ' 비정상 절차서: %s' % f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}', 'Value',
+                        'Set-point', 'Unit']
+                    self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                    if self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '학습여부를 아직 확인할 수 없습니다.' or self.inmem.dis_AI['AI'][self.inmem.current_table["Procedure"]][0] == '해당 시나리오는 학습되지 않은 시나리오입니다.':
+                        print('해당 사항은 선택할 수 없습니다.')
+                        [self.setItem(i, 0, QTableWidgetItem('해당 사항은 선택할 수 없습니다.')) for i in range(10)]
+                    else:
+                        symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
+                        if self.inmem.current_table['procedure_name'] != self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]:
+                            symptom_count = self.inmem.ShMem.get_pro_symptom_count(
+                                self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
+                            self.setRowCount(symptom_count)
+                            [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(symptom_count)]
+                            [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(symptom_count)]
+                        self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
                 else:
-                    symptom = self.inmem.ShMem.get_pro_symptom(self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
-                    if self.inmem.current_table['procedure_name'] != self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]:
-                        symptom_count = self.inmem.ShMem.get_pro_symptom_count(
-                            self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
-                        self.setRowCount(symptom_count)
-                        [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(symptom_count)]
-                        [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(symptom_count)]
-                    self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
-            else:
-                self.clear()
-                self.column_labels = ['비정상 절차서:', 'Value', 'Set-point', 'Unit']
-                self.setColumnCount(len(self.column_labels))
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                    self.clear()
+                    self.column_labels = ['비정상 절차서:', 'Value', 'Set-point', 'Unit']
+                    self.setColumnCount(len(self.column_labels))
+                    self.setHorizontalHeaderLabels([l for l in self.column_labels])
 
 
-        elif self.inmem.current_table['current_window'] == 1: # 학습되지 않은 시나리오
-            if self.inmem.current_table['System'] != -1:
-                self.column_labels = [' System: %s' % f'{self.inmem.dis_AI["System"][self.inmem.current_table["System"]][0]}', 'Value', 'Set-point', 'Unit']
-                self.setColumnCount(len(self.column_labels))
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
-                system_alarm = int(self.inmem.dis_AI['System'][self.inmem.current_table["System"]][1])
-                self.setRowCount(system_alarm)
-                [self.setItem(i, 0, QTableWidgetItem('추후 업데이트 예정')) for i in range(system_alarm)]
-                [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(system_alarm)]
+            elif self.inmem.current_table['current_window'] == 1: # 학습되지 않은 시나리오
+                if self.inmem.current_table['System'] != -1:
+                    self.column_labels = [' System: %s' % f'{self.inmem.dis_AI["System"][self.inmem.current_table["System"]][0]}', 'Value', 'Set-point', 'Unit']
+                    self.setColumnCount(len(self.column_labels))
+                    self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                    system_alarm = int(self.inmem.dis_AI['System'][self.inmem.current_table["System"]][1])
+                    self.setRowCount(system_alarm)
+                    [self.setItem(i, 0, QTableWidgetItem('추후 업데이트 예정')) for i in range(system_alarm)]
+                    [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(system_alarm)]
 
-            else:
-                self.clear()
-                self.column_labels = [' System:', 'Value', 'Set-point', 'Unit']
-                self.setColumnCount(len(self.column_labels))
-                self.setHorizontalHeaderLabels([l for l in self.column_labels])
+                else:
+                    self.clear()
+                    self.column_labels = [' System:', 'Value', 'Set-point', 'Unit']
+                    self.setColumnCount(len(self.column_labels))
+                    self.setHorizontalHeaderLabels([l for l in self.column_labels])
 
 
 
