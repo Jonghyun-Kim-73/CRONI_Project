@@ -214,7 +214,7 @@ class ProcedureSearchTable(ABCTableWidget, QTableWidget):
         self.inmem.change_current_system_name('Procedure')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
         self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_info)
-        # ProcedureSearch(self).close() # 절차서 전환 후 종료 -> 더블클릭시 종료 이벤트 삽입할 경우, 충돌로 인해 종료되는 문제 발견
+        self.parent().close()  # 더블클릭 시 팝업 종료
 
 # --------------------------------------------------------------------------------
 
@@ -380,6 +380,7 @@ class SystemSearchTable(ABCTableWidget, QTableWidget):
     def dis_system(self): # 미믹 창 활성화 이후 닫기 기능 추가해야 함.
         self.inmem.change_current_system_name('Action')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
+        self.parent().close()  # 더블클릭 시 팝업 종료
 
 # --------------------------------------------------------------------------------
 
