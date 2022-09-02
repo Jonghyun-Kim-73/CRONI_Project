@@ -9,6 +9,17 @@ from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd
 import glob
+import math
+
+# from prediction_model import create_model
+# model0 = create_model()
+
+
+# model0.load_weights("Context_variable_0.h5")
+# model1 = model0
+# model2=model0
+# model3=model0
+# model4=model0
 
 sel_colums = pd.read_csv('abnormal_all_para_95.csv')
 min_input = pd.read_csv('min_all.csv')
@@ -47,12 +58,10 @@ for i in range(len(test_Y)):
     Y_1 = (test_Y[i]-min_output)/minmax_output
     y_1.append(Y_1)
 output_test = pd.Series(y_1)
-from tqdm.notebook import tqdm
-import math
 
 x_test = []
 test_x = []
-for _ in tqdm(range(len(input_test))):
+for _ in range(len(input_test)):
     numpy_xtest=input_test[_].to_numpy()
 
     for i in range(math.trunc((len(numpy_xtest)-180))):
@@ -71,19 +80,235 @@ x_train_test = []
 x_tttest = []
 y_test = []
 test_y = []
-for _ in tqdm(range(len(output_test))):
+for _ in range(len(output_test)):
     numpy_ytest=output_test[_].to_numpy()
     for i in range(math.trunc((len(numpy_ytest)-360))):
         test_y = numpy_ytest[i::3]
         test_y = test_y[0:120]
         y_test.append(test_y)
-y_tttest = []
-y_train_test = []
-for i in range(len(y_test)):
-    y_tttest = np.array(y_test[i])
-    y_train_test.append(y_tttest)
-ytest = np.array(y_train_test)
 
+y_train_test = [np.array(y_test[i]) for i in range(len(y_test))]
+ytest = np.array(y_train_test)
+"""
+# xest_divide = np.reshape(xtest[time], (1, 60, 100))
+#
+# predict0 = []
+# predict1 = []
+# predict2 = []
+# predict3 = []
+# predict4 = []
+#
+# power = []
+# over_delta_T = []
+# prz_pressure = []
+# prz_level = []
+# loop3_flow = []
+# loop2_flow = []
+# loop1_flow = []
+# sg3_level = []
+# sg2_level = []
+# sg1_level = []
+#
+# power_mean = []
+# over_delta_T_mean = []
+# prz_pressure_mean = []
+# prz_level_mean = []
+# loop3_flow_mean = []
+# loop2_flow_mean = []
+# loop1_flow_mean = []
+# sg3_level_mean = []
+# sg2_level_mean = []
+# sg1_level_mean = []
+#
+# power_var = []
+# over_delta_T_var = []
+# prz_pressure_var = []
+# prz_level_var = []
+# loop3_flow_var = []
+# loop2_flow_var = []
+# loop1_flow_var = []
+# sg3_level_var = []
+# sg2_level_var = []
+# sg1_level_var = []
+#
+# power_sta = []
+# over_delta_T_sta = []
+# prz_pressure_sta = []
+# prz_level_sta = []
+# loop3_flow_sta = []
+# loop2_flow_sta = []
+# loop1_flow_sta = []
+# sg3_level_sta = []
+# sg2_level_sta = []
+# sg1_level_sta = []
+#
+# i = 0
+# forward_pass = 100
+# while i < 20:
+#     xest_divide_re0 = []
+#     xest_divide_re1 = []
+#     xest_divide_re2 = []
+#     xest_divide_re3 = []
+#     xest_divide_re4 = []
+#     xest_divide_noise0 = np.random.normal(1, 0.019, xest_divide.shape)
+#     xest_divide_re0 = xest_divide * xest_divide_noise0
+#     xest_divide_noise1 = np.random.normal(1, 0.019, xest_divide.shape)
+#     xest_divide_re1 = xest_divide * xest_divide_noise1
+#     xest_divide_noise2 = np.random.normal(1, 0.019, xest_divide.shape)
+#     xest_divide_re2 = xest_divide * xest_divide_noise2
+#     xest_divide_noise3 = np.random.normal(1, 0.019, xest_divide.shape)
+#     xest_divide_re3 = xest_divide * xest_divide_noise3
+#     xest_divide_noise4 = np.random.normal(1, 0.019, xest_divide.shape)
+#     xest_divide_re4 = xest_divide * xest_divide_noise4
+#     predict0 = np.reshape(model0.predict(xest_divide_re0), (120, 10))
+#     predict1 = np.reshape(model1.predict(xest_divide_re1), (120, 10))
+#     predict2 = np.reshape(model2.predict(xest_divide_re2), (120, 10))
+#     predict3 = np.reshape(model3.predict(xest_divide_re3), (120, 10))
+#     predict4 = np.reshape(model4.predict(xest_divide_re4), (120, 10))
+#
+#     power.append(predict0.T[0].flatten())
+#     power.append(predict1.T[0].flatten())
+#     power.append(predict2.T[0].flatten())
+#     power.append(predict3.T[0].flatten())
+#     power.append(predict4.T[0].flatten())
+#
+#     over_delta_T.append(predict0.T[1].flatten())
+#     over_delta_T.append(predict1.T[1].flatten())
+#     over_delta_T.append(predict2.T[1].flatten())
+#     over_delta_T.append(predict3.T[1].flatten())
+#     over_delta_T.append(predict4.T[1].flatten())
+#
+#     prz_pressure.append(predict0.T[2].flatten())
+#     prz_pressure.append(predict1.T[2].flatten())
+#     prz_pressure.append(predict2.T[2].flatten())
+#     prz_pressure.append(predict3.T[2].flatten())
+#     prz_pressure.append(predict4.T[2].flatten())
+#
+#     prz_level.append(predict0.T[3].flatten())
+#     prz_level.append(predict1.T[3].flatten())
+#     prz_level.append(predict2.T[3].flatten())
+#     prz_level.append(predict3.T[3].flatten())
+#     prz_level.append(predict4.T[3].flatten())
+#
+#     loop3_flow.append(predict0.T[4].flatten())
+#     loop3_flow.append(predict1.T[4].flatten())
+#     loop3_flow.append(predict2.T[4].flatten())
+#     loop3_flow.append(predict3.T[4].flatten())
+#     loop3_flow.append(predict4.T[4].flatten())
+#
+#     loop2_flow.append(predict0.T[5].flatten())
+#     loop2_flow.append(predict1.T[5].flatten())
+#     loop2_flow.append(predict2.T[5].flatten())
+#     loop2_flow.append(predict3.T[5].flatten())
+#     loop2_flow.append(predict4.T[5].flatten())
+#
+#     loop1_flow.append(predict0.T[6].flatten())
+#     loop1_flow.append(predict1.T[6].flatten())
+#     loop1_flow.append(predict2.T[6].flatten())
+#     loop1_flow.append(predict3.T[6].flatten())
+#     loop1_flow.append(predict4.T[6].flatten())
+#
+#     sg3_level.append(predict0.T[7].flatten())
+#     sg3_level.append(predict1.T[7].flatten())
+#     sg3_level.append(predict2.T[7].flatten())
+#     sg3_level.append(predict3.T[7].flatten())
+#     sg3_level.append(predict4.T[7].flatten())
+#
+#     sg2_level.append(predict0.T[8].flatten())
+#     sg2_level.append(predict1.T[8].flatten())
+#     sg2_level.append(predict2.T[8].flatten())
+#     sg2_level.append(predict3.T[8].flatten())
+#     sg2_level.append(predict4.T[8].flatten())
+#
+#     sg1_level.append(predict0.T[9].flatten())
+#     sg1_level.append(predict1.T[9].flatten())
+#     sg1_level.append(predict2.T[9].flatten())
+#     sg1_level.append(predict3.T[9].flatten())
+#     sg1_level.append(predict4.T[9].flatten())
+#
+#     i += 1
+#
+# power_data = pd.DataFrame(power)
+# over_delta_T_data = pd.DataFrame(over_delta_T)
+# prz_pressure_data = pd.DataFrame(prz_pressure)
+# prz_level_data = pd.DataFrame(prz_level)
+# loop3_flow_data = pd.DataFrame(loop3_flow)
+# loop2_flow_data = pd.DataFrame(loop2_flow)
+# loop1_flow_data = pd.DataFrame(loop1_flow)
+# sg3_level_data = pd.DataFrame(sg3_level)
+# sg2_level_data = pd.DataFrame(sg2_level)
+# sg1_level_data = pd.DataFrame(sg1_level)
+#
+# for j in range(len(power_data.T)):
+#     power_mean.append(power_data[j].mean())
+#     over_delta_T_mean.append(over_delta_T_data[j].mean())
+#     prz_pressure_mean.append(prz_pressure_data[j].mean())
+#     prz_level_mean.append(prz_level_data[j].mean())
+#     loop3_flow_mean.append(loop3_flow_data[j].mean())
+#     loop2_flow_mean.append(loop2_flow_data[j].mean())
+#     loop1_flow_mean.append(loop1_flow_data[j].mean())
+#     sg3_level_mean.append(sg3_level_data[j].mean())
+#     sg2_level_mean.append(sg2_level_data[j].mean())
+#     sg1_level_mean.append(sg1_level_data[j].mean())
+#
+#     power_var.append(power_data[j].var())
+#     over_delta_T_var.append(over_delta_T_data[j].var())
+#     prz_pressure_var.append(prz_pressure_data[j].var())
+#     prz_level_var.append(prz_level_data[j].var())
+#     loop3_flow_var.append(loop3_flow_data[j].var())
+#     loop2_flow_var.append(loop2_flow_data[j].var())
+#     loop1_flow_var.append(loop1_flow_data[j].var())
+#     sg3_level_var.append(sg3_level_data[j].var())
+#     sg2_level_var.append(sg2_level_data[j].var())
+#     sg1_level_var.append(sg1_level_data[j].var())
+#
+# power_mean = pd.Series(power_mean)
+# over_delta_T_mean = pd.Series(over_delta_T_mean)
+# prz_pressure_mean = pd.Series(prz_pressure_mean)
+# prz_level_mean = pd.Series(prz_level_mean)
+# loop3_flow_mean = pd.Series(loop3_flow_mean)
+# loop2_flow_mean = pd.Series(loop2_flow_mean)
+# loop1_flow_mean = pd.Series(loop1_flow_mean)
+# sg3_level_mean = pd.Series(sg3_level_mean)
+# sg2_level_mean = pd.Series(sg2_level_mean)
+# sg1_level_mean = pd.Series(sg1_level_mean)
+#
+# power_mean = power_mean*minmax_output[0]+min_output[0]
+# over_delta_T_mean = over_delta_T_mean*minmax_output[1]+min_output[1]
+# prz_pressure_mean = prz_pressure_mean*minmax_output[2]+min_output[2]
+# prz_level_mean = prz_level_mean*minmax_output[3]+min_output[3]
+# loop3_flow_mean = loop3_flow_mean*minmax_output[4]+min_output[4]
+# loop2_flow_mean = loop2_flow_mean*minmax_output[5]+min_output[5]
+# loop1_flow_mean = loop1_flow_mean*minmax_output[6]+min_output[6]
+# sg3_level_mean = sg3_level_mean*minmax_output[7]+min_output[7]
+# sg2_level_mean =sg2_level_mean*minmax_output[8]+min_output[8]
+# sg1_level_mean = sg1_level_mean*minmax_output[9]+min_output[9]
+# # result_mean = []
+# # result_mean.append()
+#
+# power_var = pd.Series(power_var)
+# over_delta_T_var = pd.Series(over_delta_T_var)
+# prz_pressure_var = pd.Series(prz_pressure_var)
+# prz_level_var = pd.Series(prz_level_var)
+# loop3_flow_var = pd.Series(loop3_flow_var)
+# loop2_flow_var = pd.Series(loop2_flow_var)
+# loop1_flow_var = pd.Series(loop1_flow_var)
+# sg3_level_var = pd.Series(sg3_level_var)
+# sg2_level_var = pd.Series(sg2_level_var)
+# sg1_level_var = pd.Series(sg1_level_var)
+#
+# power_sta = ((power_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# over_delta_T_sta = ((over_delta_T_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# prz_pressure_sta = ((prz_pressure_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# prz_level_sta = ((prz_level_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# loop3_flow_sta = ((loop3_flow_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# loop2_flow_sta = ((loop2_flow_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# loop1_flow_sta = ((loop1_flow_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# sg3_level_sta = ((sg3_level_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# sg2_level_sta = ((sg2_level_var * forward_pass) / (forward_pass - 1)) ** 0.5
+# sg1_level_sta = ((sg1_level_var * forward_pass) / (forward_pass - 1)) ** 0.5
+#
+"""
 power_mean = ytest[time][:,0]*minmax_output[0]+min_output[0]
 over_delta_T_mean = ytest[time][:,1]*minmax_output[1]+min_output[1]
 prz_pressure_mean = ytest[time][:,2]*minmax_output[2]+min_output[2]
@@ -107,7 +332,10 @@ sg3_level_mean_past = xtest[time][:,7]*minmax_output[7]+min_output[7]
 sg2_level_mean_past =xtest[time][:,8]*minmax_output[8]+min_output[8]
 sg1_level_mean_past = xtest[time][:,9]*minmax_output[9]+min_output[9]
 
-class PreTrip(ABCWidget, QWidget):
+
+
+
+class PreTrip(ABCWidget):
     def __init__(self, parent):
         super(PreTrip, self).__init__(parent)
         self.setStyleSheet('background-color: rgb(212, 245, 211);')
