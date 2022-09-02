@@ -1,5 +1,9 @@
 import os
-
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Function_Simulator_CNS import *
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -117,10 +121,16 @@ class ProcedureSearchInput1(ABCText):
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
-        self.inmem.current_search['Procedure']['number'] = self.toPlainText()
         if self.inmem.current_search['reset_number'] == 0:
             self.clear()
             self.inmem.current_search['reset_number'] = -1
+
+        if self.inmem.current_search['Procedure']['name'] != '':
+            self.setReadOnly(True)
+        else:
+            self.setReadOnly(False)
+
+        self.inmem.current_search['Procedure']['number'] = self.toPlainText()
 
 class ProcedureSearchBTN(ABCPushButton):
     def __init__(self, parent):
@@ -128,6 +138,20 @@ class ProcedureSearchBTN(ABCPushButton):
         self.setFixedSize(160, 30)
         self.setObjectName("SearchBTN")
         self.setText('검색')
+        self.clicked.connect(self.search)
+        self.procedure_search_input = ''
+        self.search_area = ''
+
+    def search(self) -> str:
+        self.inmem.current_search['reset_number'] = 1
+        self.inmem.current_search['reset_name'] = 1
+        if self.inmem.current_search['Procedure']['number'] != '':
+            self.procedure_search_input = self.inmem.current_search['Procedure']['number']
+            self.search_area = 0 # 0: 절차서 번호, 1: 절차서 이름
+        elif self.inmem.current_search['Procedure']['name'] != '':
+            self.procedure_search_input = self.inmem.current_search['Procedure']['name']
+            self.search_area = 1  # 0: 절차서 번호, 1: 절차서 이름
+        return self.procedure_search_input, self.search_area
 
 class ProcedureSearch2(ABCWidget):
     def __init__(self, parent):
@@ -156,10 +180,16 @@ class ProcedureSearchInput2(ABCText):
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
-        self.inmem.current_search['Procedure']['name'] = self.toPlainText()
         if self.inmem.current_search['reset_name'] == 0:
             self.clear()
             self.inmem.current_search['reset_name'] = -1
+
+        if self.inmem.current_search['Procedure']['number'] != '':
+            self.setReadOnly(True)
+        else:
+            self.setReadOnly(False)
+
+        self.inmem.current_search['Procedure']['name'] = self.toPlainText()
 
 class ProcedureSearchReset(ABCPushButton):
     def __init__(self, parent):
@@ -170,10 +200,10 @@ class ProcedureSearchReset(ABCPushButton):
         self.clicked.connect(self.search_reset)
 
     def search_reset(self):
-        self.inmem.current_search['Procedure']['number'] = ''
-        self.inmem.current_search['Procedure']['name'] = ''
         self.inmem.current_search['reset_number'] = 0
         self.inmem.current_search['reset_name'] = 0
+        self.inmem.current_search['Procedure']['number'] = ''
+        self.inmem.current_search['Procedure']['name'] = ''
 
 # --------------------------------------------------------------------------------
 
@@ -188,7 +218,7 @@ class ProcedureSearchTable(ABCTableWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.column_labels = [(' 절차서 번호', 200), (' 절차서 명', 940)]
         self.setColumnCount(len(self.column_labels))
-        self.setRowCount(15)
+        self.setRowCount(len(self.inmem.search_dict['Procedure']))
         self.col_names = []
         for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
@@ -214,20 +244,40 @@ class ProcedureSearchTable(ABCTableWidget):
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
     def dis_update(self):
-        '''
-        절차서 접속 부분 이중화 -> 1) 진단 부분, 2) 절차서 검색 부분
-        문제점: 진단 부분에서 클릭 시, 클릭된 절차서 정보 업데이트로 인해 절차서 검색 부분과 충돌
-        -> 절차서 접속 부분을 단일화로 구성: 팝업창 활성화 시 팝업창으로만 절차서 부분 제어 가능하도록 개선
-        '''
+        search_result = []
+        if self.inmem.current_search['reset_number'] == 1 and self.inmem.current_search['reset_name'] == 1:
+            procedure_search_input, search_area = self.inmem.widget_ids['ProcedureSearchBTN'].search()
+            if search_area == 0: # 0: 절차서 번호, 1: 절차서 이름
+                for i in self.inmem.search_dict['Procedure']:
+                    if procedure_search_input in i[0]:
+                        search_result.append(i)
+                self.setRowCount(len(search_result))
+                [self.setItem(i, 0, QTableWidgetItem(search_result[i][0])) for i in range(len(search_result))]
+                [self.setItem(i, 1, QTableWidgetItem(search_result[i][1])) for i in range(len(search_result))]
+            elif search_area == 1: # 0: 절차서 번호, 1: 절차서 이름
+                for i in self.inmem.search_dict['Procedure']:
+                    if procedure_search_input in i[1]:
+                        search_result.append(i)
+                self.setRowCount(len(search_result))
+                [self.setItem(i, 0, QTableWidgetItem(search_result[i][0])) for i in range(len(search_result))]
+                [self.setItem(i, 1, QTableWidgetItem(search_result[i][1])) for i in range(len(search_result))]
+        else:
+            self.setRowCount(len(self.inmem.search_dict['Procedure']))
+            [self.setItem(i, 0, QTableWidgetItem(self.inmem.search_dict['Procedure'][i][0])) for i in range(len(self.inmem.search_dict['Procedure']))]
+            [self.setItem(i, 1, QTableWidgetItem(self.inmem.search_dict['Procedure'][i][1])) for i in range(len(self.inmem.search_dict['Procedure']))]
+
         if self.currentRow() != -1:
-            # self.inmem.current_search['current_procedure'] = self.currentRow()
             self.inmem.current_table['Procedure'] = self.currentRow()
 
-        if self.inmem.current_search['reset_number'] == -1 and self.inmem.current_search['reset_name'] == -1:
-            [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.search_dict['Procedure']['number'][i])) for i in range(15)]
-            [self.setItem(i, 1, QTableWidgetItem(" " + self.inmem.search_dict['Procedure']['name'][i])) for i in range(15)]
-
     def dis_procedure(self):
+        # 주석 부분은 Procedure 부분 업데이트 완료 후 활성화할 예정
+        # get_procedure_number = self.item(self.inmem.current_table['Procedure'], 0).text()
+        # get_procedure_name = self.item(self.inmem.current_table['Procedure'], 1).text()
+        # get_procedure_info = 'Ab'+get_procedure_number+': '+get_procedure_name
+        # self.inmem.change_current_system_name('Procedure')
+        # self.inmem.widget_ids['MainTopSystemName'].dis_update()
+        # self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_info)
+        # self.parent().close()  # 더블클릭 시 팝업 종료
         self.inmem.change_current_system_name('Procedure')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
         self.parent().close()   # 더블클릭 시 팝업 종료
@@ -266,6 +316,7 @@ class ProcedureSearchCancel(ABCPushButton):
         self.clicked.connect(self.close_ProcedureSearch)
 
     def close_ProcedureSearch(self):
+        self.inmem.current_search['active_window'] = 0
         ProcedureSearch(self).close()
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -386,6 +437,14 @@ class SystemSearchBTN(ABCPushButton):
         self.setFixedSize(160, 30)
         self.setObjectName("SearchBTN")
         self.setText('검색')
+        self.clicked.connect(self.search)
+        self.system_search_input = ''
+
+    def search(self) -> str:
+        self.inmem.current_search['system_reset'] = 1
+        search_keyword = self.inmem.current_search['System']
+        self.system_search_input = search_keyword
+        return self.system_search_input
 
 class SystemSearchReset(ABCPushButton):
     def __init__(self, parent):
@@ -411,7 +470,7 @@ class SystemSearchTable(ABCTableWidget):
             self.setColumnWidth(i, w)
             self.col_names.append(l)
         self.setHorizontalHeaderLabels(self.col_names)
-        self.setRowCount(10)
+        self.setRowCount(len(self.inmem.search_dict['System']))
         self.setSelectionBehavior(QTableView.SelectRows)
         self.setFixedSize(1170, 584)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -432,6 +491,26 @@ class SystemSearchTable(ABCTableWidget):
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 65)
+
+        self.doubleClicked.connect(self.dis_system)
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        search_result = []
+        if self.inmem.current_search['system_reset'] == 1:
+            for i in self.inmem.search_dict['System']:
+                if self.inmem.widget_ids['SystemSearchBTN'].search() in i:
+                    search_result.append(i)
+            self.setRowCount(len(search_result))
+            [self.setItem(j, 0, QTableWidgetItem(search_result[j])) for j in range(len(search_result))]
+        else:
+            self.setRowCount(len(self.inmem.search_dict['System']))
+            [self.setItem(i, 0, QTableWidgetItem(self.inmem.search_dict['System'][i])) for i in range(len(self.inmem.search_dict['System']))]
+
+    def dis_system(self): # 미믹 창 활성화 이후 닫기 기능 추가해야 함.
+        self.inmem.change_current_system_name('Action')
+        self.inmem.widget_ids['MainTopSystemName'].dis_update()
+        self.parent().close()  # 더블클릭 시 팝업 종료
 
 # --------------------------------------------------------------------------------
 

@@ -187,14 +187,14 @@ class InterfaceMem:
                       'Train': 0,
                        'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'], ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
                        'System': [['화학 및 체적제어계통', '5', '72%'], ['원자로냉각재계통', '3', '16%'], ['급수계통', '1', '6%'], ['제어봉제어계통', '1', '3%'], ['잔열제거계통', '1', '3%']]}# 정지냉각계통
-        self.search_dict = {'Procedure':{'number':[self.diagnosis_convert_text[i][2:7] for i in range(1,16)],
-                                         'name':[self.diagnosis_convert_text[i][9:] for i in range(1,16)]},
-                            'System':['CVCS', 'RCS', 'FWS']}
+        self.search_dict = {'Procedure': [[self.diagnosis_convert_text[i][2:7], self.diagnosis_convert_text[i][9:]] for i in range(1, 16)],
+                            'System': ['화학 및 체적 제어계통', '원자로 냉각재 계통', '주급수 계통', '보조 급수 계통', '제어봉 제어 계통', '잔열 제거 계통', '주증기 계통']}
         self.current_search = {'Procedure':{'number':'', 'name':''}, # 검색창에 작성한 내용 저장
                                'System':'', # 검색창에 작성한 내용 저장
                                'reset_number':-1, 'reset_name':-1,# reset: 0 / search: 1
                                'system_reset':-1, # reset: 0 / search: 1
-                               'current_procedure': -1}
+                               'current_procedure': -1,
+                               'active_window': 0} # seach 비활성: 0, search 활성: 1
 
         # AI Part ---------------------------------------------------------------------------------------------------
         # self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
