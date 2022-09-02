@@ -613,11 +613,11 @@ class ProcedureCheckTable(ABCTableWidget):
                             [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.symptom_count)]
                             for j in range(4):
                                 [self.item(i, j).setSelected(False) for i in range(self.symptom_count)] # 아이쳄 1,2,3 추가시 수정필요
-                            if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':
-                                for i in range(0, self.symptom_count):
-                                    if symptom[i]['ManClick']:
-                                        for j in range(4):
-                                            self.item(i, j).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
+                            # if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':
+                            for i in range(0, self.symptom_count):
+                                if symptom[i]['ManClick']:
+                                    for j in range(4):
+                                        self.item(i, j).setSelected(True)  # 아이쳄 1,2,3 추가시 수정필요
 
                         self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
                 else:
