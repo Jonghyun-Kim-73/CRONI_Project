@@ -240,6 +240,8 @@ class ProcedureSearchTable(ABCTableWidget):
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 65)
 
+        self.selected_procedure_name =''
+
         self.doubleClicked.connect(self.dis_procedure)
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
@@ -268,19 +270,21 @@ class ProcedureSearchTable(ABCTableWidget):
 
         if self.currentRow() != -1:
             self.inmem.current_table['Procedure'] = self.currentRow()
+            get_procedure_number = self.item(self.inmem.current_table['Procedure'], 0).text()
+            get_procedure_name = self.item(self.inmem.current_table['Procedure'], 1).text()
+            get_procedure_info = 'Ab'+get_procedure_number+': '+get_procedure_name
+            self.inmem.current_table['procedure_name'] = get_procedure_info
 
     def dis_procedure(self):
         # 주석 부분은 Procedure 부분 업데이트 완료 후 활성화할 예정
-        # get_procedure_number = self.item(self.inmem.current_table['Procedure'], 0).text()
-        # get_procedure_name = self.item(self.inmem.current_table['Procedure'], 1).text()
-        # get_procedure_info = 'Ab'+get_procedure_number+': '+get_procedure_name
-        # self.inmem.change_current_system_name('Procedure')
-        # self.inmem.widget_ids['MainTopSystemName'].dis_update()
-        # self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_info)
-        # self.parent().close()  # 더블클릭 시 팝업 종료
+        get_procedure_number = self.item(self.inmem.current_table['Procedure'], 0).text()
+        get_procedure_name = self.item(self.inmem.current_table['Procedure'], 1).text()
+        get_procedure_info = 'Ab'+get_procedure_number+': '+get_procedure_name
         self.inmem.change_current_system_name('Procedure')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
-        self.parent().close()   # 더블클릭 시 팝업 종료
+        self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_info)
+        self.parent().close()  # 더블클릭 시 팝업 종료
+
 
 # --------------------------------------------------------------------------------
 
@@ -303,8 +307,13 @@ class ProcedureSearchOpen(ABCPushButton):
         self.clicked.connect(self.dis_procedure)
 
     def dis_procedure(self):
+        get_procedure_info = self.inmem.current_table['procedure_name']
         self.inmem.change_current_system_name('Procedure')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
+        self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_info)
+        # self.parent().close()  # 더블클릭 시 팝업 종료
+        # self.inmem.change_current_system_name('Procedure')
+        # self.inmem.widget_ids['MainTopSystemName'].dis_update()
         ProcedureSearch(self).close() # 절차서 전환 후 종료
 
 class ProcedureSearchCancel(ABCPushButton):
