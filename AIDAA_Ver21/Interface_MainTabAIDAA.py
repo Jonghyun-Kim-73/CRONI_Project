@@ -14,8 +14,8 @@ class MainTabAIDAA(ABCWidget):
         self.setObjectName("BG")
 
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(10, 15, 10, 15)
+        lay.setContentsMargins(10, 15, 10, 10)
         lay.addWidget(AIDAAAlarm(self))
         lay.addWidget(Diagnosis(self))
-        lay.setSpacing(20)
+        lay.setSpacing(15)
 

@@ -22,11 +22,11 @@ class Diagnosis(ABCWidget):
         self.setContentsMargins(0, 0, 0, 0)
         #self.setFixedWidth(950)
         lay = QVBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 10)
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(DiagnosisTop(self))
         lay.addWidget(ProcedureDiagonsisTable(self))
         lay.addWidget(SystemDiagnosisTable(self))
-        lay.addWidget(ProcedureCheckTable(self))
+        lay.addWidget(ProcedureScrollArea(self))
         lay.setSpacing(15)
 
 class DiagnosisTop(ABCWidget):
@@ -45,11 +45,10 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton):
         self.setObjectName("Button")
         icon = os.path.join(ROOT_PATH, 'Img', 'search.png')
         self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(30, 30))
-        self.setFixedSize(635, 55)
+        self.setIconSize(QSize(23, 23))
+        self.setFixedSize(467, 40)
         self.setText('비정상 절차서 검색')
         self.clicked.connect(self.dis_update)
-        # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
 
     def dis_update(self):
         self.inmem.current_search['active_window'] = 1
@@ -61,11 +60,10 @@ class DiagnosisTopCallSystemSearch(ABCPushButton):
         self.setObjectName("Button")
         icon = os.path.join(ROOT_PATH, 'Img', 'search.png')
         self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(30, 30))
-        self.setFixedSize(635, 55)
+        self.setIconSize(QSize(23, 23))
+        self.setFixedSize(468, 40)
         self.setText('시스템 검색')
         self.clicked.connect(self.dis_update)
-        # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")
 
     def dis_update(self):
         print('시스템 검색 창으로 이동')
@@ -144,11 +142,11 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         super(ProcedureDiagonsisTable, self).__init__(parent)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setShowGrid(False)  # Grid 지우기
-        self.setFixedHeight(252)
+        self.setFixedHeight(162)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
-        self.column_labels = [(' 비정상 절차서 명', 760), ('긴급', 100), ('방사선', 100), ('진입조건', 150), ('AI 정확도', 170)]
+        self.column_labels = [(' 비정상 절차서 명', 556), ('긴급', 80), ('방사선', 90), ('진입조건', 100), ('AI 정확도', 120)]
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(3)
 
@@ -160,10 +158,10 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 4)
 
         self.setSelectionBehavior(QTableView.SelectRows)    # 테이블 row click
-        self.horizontalHeader().setFixedHeight(55)
+        self.horizontalHeader().setFixedHeight(40)
 
         # 테이블 정렬
         delegate = AlignDelegate(self)
@@ -179,7 +177,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
 
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 65)
+            self.setRowHeight(i, 40)
 
         # self.doubleClicked.connect(self.dis_procedure) # 실행 후 확인
         self.doubleClicked.connect(lambda i: self.dis_procedure(i))
@@ -254,21 +252,15 @@ class ProcedureDiagonsisTable(ABCTableWidget):
 
         if self.inmem.dis_AI['Train'] == 0: # 학습된 시나리오의 경우
             try:
+                self.setSelectionMode(QAbstractItemView.SingleSelection)  # 테이블 클릭 활성화
+                self.setStyleSheet('QTableWidget{background-color: rgb(231, 231, 234);border-radius: 5px;}')  # 블러 해제
                 if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0]:
                     # 비정상 절차서 명이 변경될 경우에만, 표 내용 업데이트
                     [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(3)]
                     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(3)]
                 else:
-                    '''self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
-                                                selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
-                                                color: #202020;
-                                                outline: 0;}
-                                                QTableWidget::item::hover{
-                                                background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
-                                                QTableWidget::item::focus
-                                                {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
                     # [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
-                    [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
+                    [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
                     [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(3)]
                     [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(3)]
                     [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(3)]
@@ -276,14 +268,6 @@ class ProcedureDiagonsisTable(ABCTableWidget):
                     [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(3)]
                     [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(3)]
             except:
-                '''self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
-                                            selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
-                                            color: #202020;
-                                            outline: 0;}
-                                            QTableWidget::item::hover{
-                                            background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
-                                            QTableWidget::item::focus
-                                            {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
                 self.make_centerCB()
                 [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['AI'][i][0])) for i in range(3)]
                 [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(3)]
@@ -392,7 +376,7 @@ class ProcedureDiagonsisTable(ABCTableWidget):
         self.repaint()
 
     def dis_procedure(self, i):
-        get_procedure_name = self.item(i.row(), 0).text()  # 'Ab63_02: 제어봉의 계속적인 삽입'
+        get_procedure_name = self.item(i.row(), 0).text()[1:]  # '" "Ab63_02: 제어봉의 계속적인 삽입' # 앞에 들여쓰기 효과로 2번째 배열부터 시작
         print(get_procedure_name)
         self.inmem.change_current_system_name('Procedure')
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
@@ -405,13 +389,13 @@ class SystemDiagnosisTable(ABCTableWidget):
         super(SystemDiagnosisTable, self).__init__(parent)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setShowGrid(False)  # Grid 지우기
-        self.setFixedHeight(252)    # 변경하려면 row height 변경 필요
+        self.setFixedHeight(162)    # 변경하려면 row height 변경 필요
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
         self.setSelectionMode(QAbstractItemView.SingleSelection)
 
-        self.column_labels = [(' System', 960), ('관련 경보', 150), ('AI 정확도', 170)]
+        self.column_labels = [(' System', 696), ('관련 경보', 120), ('AI 정확도', 120)]
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(3)
         col_names = []
@@ -420,10 +404,10 @@ class SystemDiagnosisTable(ABCTableWidget):
             col_names.append(l)
 
         # self.setFocusPolicy(Qt.NoFocus)
-        self.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 5)
 
         self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
-        self.horizontalHeader().setFixedHeight(55)
+        self.horizontalHeader().setFixedHeight(40)
 
         # 테이블 정렬
         delegate = AlignDelegate(self)
@@ -439,7 +423,7 @@ class SystemDiagnosisTable(ABCTableWidget):
 
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 65)
+            self.setRowHeight(i, 40)
         self.widget_timer(iter_=500, funs=[self.dis_update])
         self.doubleClicked.connect(self.dis_system)
         self.clicked.connect(self.control_table)
@@ -474,31 +458,17 @@ class SystemDiagnosisTable(ABCTableWidget):
 
         elif self.inmem.dis_AI['Train'] == 1: # 학습되지 않은 시나리오의 경우
             try:
+                self.setSelectionMode(QAbstractItemView.SingleSelection)  # 테이블 클릭 활성화
+                self.setStyleSheet('QTableWidget{background-color: rgb(231, 231, 234);border-radius: 5px;}')  # 블러 해제
                 if self.item(0, 0).text() == self.inmem.dis_AI['System'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['System'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['System'][2][0] :
                     [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI['System'][i][1])) for i in range(3)]
                     [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI['System'][i][2])) for i in range(3)]
                 else:
-                    '''self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
-                                                selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
-                                                color: #202020;
-                                                outline: 0;}
-                                                QTableWidget::item::hover{
-                                                background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
-                                                QTableWidget::item::focus
-                                                {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
                     [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['System'][i][0])) for i in range(3)]
                     [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI['System'][i][1])) for i in range(3)]
                     [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI['System'][i][2])) for i in range(3)]
                     [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(3)]
             except:
-                '''self.setStyleSheet("""QTableWidget{background: #e9e9e9;selection-color: white;border: 1px solid lightgrey;
-                                            selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);
-                                            color: #202020;
-                                            outline: 0;}
-                                            QTableWidget::item::hover{
-                                            background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #babdb6, stop: 0.5 #d3d7cf, stop: 1 #babdb6);}
-                                            QTableWidget::item::focus
-                                            {background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #8ae234, stop: 1  #4e9a06);border: 0px;}""")'''
                 [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['System'][i][0])) for i in range(3)]
                 [self.setItem(i, 1, QTableWidgetItem(self.inmem.dis_AI['System'][i][1])) for i in range(3)]
                 [self.setItem(i, 2, QTableWidgetItem(self.inmem.dis_AI['System'][i][2])) for i in range(3)]
@@ -522,6 +492,73 @@ class SystemDiagnosisTable(ABCTableWidget):
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
 
 # ----------------------------------------------------------------------------------------------------------------------
+class ProcedureScrollArea(ABCScrollArea):
+    def __init__(self, parent):
+        super(ProcedureScrollArea, self).__init__(parent)
+        self.margins = QMargins(0, 40, 0, 0)  # header height
+        self.setViewportMargins(self.margins)
+        self.setFixedWidth(946)
+
+        self.headings_widget = QWidget(self)
+        self.headings_layout = QHBoxLayout()
+        self.headings_widget.setLayout(self.headings_layout)
+        self.headings_layout.setContentsMargins(0, 0, 10, 0)
+
+        # header item
+        self.heading_label = [0, 0, 0, 0]
+        self.heading_label[0] = QLabel("비정상절차서:")
+        self.heading_label[1] = QLabel("VALUE")
+        self.heading_label[2] = QLabel("SETPOINT")
+        self.heading_label[3] = QLabel("UNIT")
+
+        # size
+        self.heading_label[0].setFixedWidth(634)
+        self.heading_label[1].setFixedWidth(93)
+        self.heading_label[2].setFixedWidth(142)
+        self.heading_label[3].setFixedWidth(77)
+
+        for label in range(4):
+            self.headings_layout.addWidget(self.heading_label[label])
+            self.heading_label[label].setObjectName("Alarm_Header_M")
+            self.heading_label[label].setAlignment(Qt.AlignCenter)
+
+        self.heading_label[0].setAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+        self.heading_label[0].setContentsMargins(5, 0, 0, 0)
+        self.heading_label[0].setObjectName("Alarm_Header_F")
+        self.heading_label[3].setObjectName("Alarm_Header_L")
+        # self.headings_layout.addStretch(1)
+        self.headings_layout.setSpacing(0)
+
+        self.scrollwidget = QWidget()
+        self.scrollwidget.setObjectName("scroll")
+        self.grid = QGridLayout(self.scrollwidget)
+        self.grid.addWidget(ProcedureCheckTable(self))
+        self.grid.setContentsMargins(0, 0, 10, 0)
+        self.setWidget(self.scrollwidget)
+        self.setWidgetResizable(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+
+    def dis_update(self):
+        if self.inmem.current_table['current_window'] == 0:  # 학습된 시나리오
+            if self.inmem.current_table['Procedure'] != -1:
+                self.heading_label[0].setText(' 비정상 절차서: %s' % f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}')
+            else:
+                self.heading_label[0].clear()
+                self.heading_label[0].setText(' 비정상 절차서:')
+        elif self.inmem.current_table['current_window'] == 1:  # 학습되지 않은 시나리오
+            if self.inmem.current_table['System'] != -1:
+                self.heading_label[0].setText(' System: %s' % f'{self.inmem.dis_AI["System"][self.inmem.current_table["System"]][0]}')
+            else:
+                self.heading_label[0].clear()
+                self.heading_label[0].setText(' System:')
+
+    def resizeEvent(self, event):
+        rect = self.viewport().geometry()
+        self.headings_widget.setGeometry(0, 0, rect.width() - 1, self.margins.top())
+        QScrollArea.resizeEvent(self, event)
 
 class ProcedureCheckTable(ABCTableWidget):
     def __init__(self, parent):
@@ -531,20 +568,19 @@ class ProcedureCheckTable(ABCTableWidget):
         self.lay = QVBoxLayout(self)
         self.lay.setContentsMargins(0, 0, 0, 0)
 
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.setShowGrid(False)  # Grid 지우기
-        self.setFixedHeight(721)
-        # self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        # self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
+        self.setFixedSize(915, 675)  # 초기 테이블 크기
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.horizontalHeader().setVisible(False)  # Col header 숨기기
         self.setSelectionMode(QAbstractItemView.NoSelection)
 
-        self.column_labels = [(' 비정상 절차서:', 849), ('Value', 100), ('Set-point', 200), ('Unit', 100)]
+        self.column_labels = [(' 비정상 절차서:', 604), ('Value', 93), ('Set-point', 142), ('Unit', 77)]
         self.setColumnCount(len(self.column_labels))
-        self.setRowCount(10)
+        # self.setRowCount(10) # Table 3 초기 아이템 select 제거
         col_names = []
         for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
@@ -554,13 +590,13 @@ class ProcedureCheckTable(ABCTableWidget):
         self.setContentsMargins(0, 0, 0, 0)
         self.symptom_count = 0
         self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
-        self.horizontalHeader().setFixedHeight(55)
+        self.horizontalHeader().setFixedHeight(40)
         # self.setItemDelegate(MyStyledItem(margin=3, radius=5, border_width=3, border_color=QColor(178,178,178)))
 
         # 테이블 정렬
-        delegate = AlignDelegate(self)
+        self.delegate = AlignDelegate(self)
         for row in range(1, self.rowCount()):
-            self.setItemDelegateForColumn(row, delegate)
+            self.setItemDelegateForColumn(row, self.delegate)
 
         # 테이블 헤더
         self.setHorizontalHeaderLabels(col_names)
@@ -570,7 +606,7 @@ class ProcedureCheckTable(ABCTableWidget):
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 65)
+            self.setRowHeight(i, 40)
 
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
@@ -588,7 +624,12 @@ class ProcedureCheckTable(ABCTableWidget):
                 if self.inmem.current_table['Procedure'] != -1:
                     self.setColumnCount(len(self.column_labels))
                     for i in range(0, self.rowCount()):
-                        self.setRowHeight(i, 65)
+                        self.setRowHeight(i, 40)
+                        if i != 0:
+                            self.setItemDelegateForColumn(i, self.delegate)
+
+                    if 675 < 40 * self.rowCount():  # Scroll 위함
+                        self.setFixedSize(915, 40 * self.rowCount())
                     self.column_labels = [
                         ' 비정상 절차서: %s' % f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0]}', 'Value',
                         'Set-point', 'Unit']
@@ -605,7 +646,7 @@ class ProcedureCheckTable(ABCTableWidget):
                                 self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0])
                             self.setRowCount(self.symptom_count)
                             # [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(self.symptom_count)]
-                            [self.setItem(i, 0, QTableWidgetItem(symptom[i]['Des'])) for i in range(self.symptom_count)]
+                            [self.setItem(i, 0, QTableWidgetItem(" " + symptom[i]['Des'])) for i in range(self.symptom_count)]
                             # 임시 ITEM 열 1, 2, 3
                             [self.setItem(i, 1, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
                             [self.setItem(i, 2, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
@@ -622,7 +663,8 @@ class ProcedureCheckTable(ABCTableWidget):
                         self.inmem.current_table['procedure_name'] = self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]
                 else:
                     self.clear()
-                    self.column_labels = ['비정상 절차서:', 'Value', 'Set-point', 'Unit']
+                    self.column_labels = [' 비정상 절차서:', 'Value', 'Set-point', 'Unit']
+                    self.setRowCount(0)
                     self.setColumnCount(len(self.column_labels))
                     self.setHorizontalHeaderLabels([l for l in self.column_labels])
                     self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
@@ -642,7 +684,12 @@ class ProcedureCheckTable(ABCTableWidget):
             elif self.inmem.current_table['current_window'] == 1: # 학습되지 않은 시나리오
                 if self.inmem.current_table['System'] != -1:
                     for i in range(0, self.rowCount()):
-                        self.setRowHeight(i, 65)
+                        self.setRowHeight(i, 40)
+                        if i != 0:
+                            self.setItemDelegateForColumn(i, self.delegate)
+
+                    if 675 < 40 * self.rowCount():
+                        self.setFixedSize(915, 40 * self.rowCount())
                     self.column_labels = [' System: %s' % f'{self.inmem.dis_AI["System"][self.inmem.current_table["System"]][0]}', 'Value', 'Set-point', 'Unit']
                     self.setColumnCount(len(self.column_labels))
                     self.setHorizontalHeaderLabels([l for l in self.column_labels])
@@ -656,6 +703,7 @@ class ProcedureCheckTable(ABCTableWidget):
                 else:
                     self.clear()
                     self.column_labels = [' System:', 'Value', 'Set-point', 'Unit']
+                    self.setRowCount(0)
                     self.setColumnCount(len(self.column_labels))
                     self.setHorizontalHeaderLabels([l for l in self.column_labels])
                     self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)

@@ -13,14 +13,14 @@ import Interface_QSS as qss
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
-class Procedure(ABCWidget, QWidget):
+class Procedure(ABCWidget):
     def __init__(self, parent):
         super(Procedure, self).__init__(parent)
         self.setStyleSheet(qss.AIDAA_Diagnosis2)
         self.setObjectName("BG")
-        font = self.font()
-        font.setFamily("맑은 고딕")
-        self.setFont(font)
+        # font = self.font()
+        # font.setFamily("맑은 고딕")
+        # self.setFont(font)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(10, 15, 10, 15)
         lay.addWidget(ProcedureTop(self))
@@ -454,7 +454,7 @@ class ProcedureTitleBar_1(ABCLabel):
     def __init__(self, parent, title_conv):
         super(ProcedureTitleBar_1, self).__init__(parent)
         self.setObjectName("TitleBar")
-        self.setFixedSize(110, 55)
+        self.setFixedSize(140, 55)
         self.setText(title_conv)
 
 class ProcedureTitleBar_2(ABCLabel):
@@ -473,6 +473,7 @@ class Procedure_Content(ABCWidget):
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 40, 0) # 실행 후 확인
         lay.addStretch(1) # 실행 후 확인
+        Max_FixedWidth = 0
         # label 상단 정렬 위해
         content1_lay = QHBoxLayout()
         content2_lay = QHBoxLayout()
@@ -481,25 +482,25 @@ class Procedure_Content(ABCWidget):
 
         Des = Contents_inTitle['Des']
         Nub = Contents_inTitle['Nub']
-
+        Nub_count = Nub.count('.')
         Nub_len = len(Nub)
-        if Nub_len <= 3:
+        if Nub_count == 1:
             Max_FixedWidth = 1674
-        elif Nub_len <= 5:
+        elif Nub_count == 2:
             Max_FixedWidth = 1634
-        elif Nub_len <= 7:
-            Max_FixedWidth = 1498
-        elif Nub_len <= 9:
-            Max_FixedWidth = 1458
+        elif Nub_count == 3:
+            Max_FixedWidth = 1598
+        elif Nub_count == 4:
+            Max_FixedWidth = 1558
 
         if Nub[0] == '0': # '0.0.0' 에서 첫번째가 '0' 인 경우 주의사항 또는 참고사항
             # 주의 사항 및 참고 사항
-            lay.addWidget(Procedure_Content_EM(self, Des, Nub_len))
+            lay.addWidget(Procedure_Content_EM(self, Des, Max_FixedWidth))
         else:
             # 일반적 내용
             content1_lay.addWidget(Procedure_Content_Nub(self, Nub))
             lay.addLayout(content1_lay)
-            lay.addWidget(Procedure_Content_Basic(self, Des, Nub_len))
+            lay.addWidget(Procedure_Content_Basic(self, Des, Max_FixedWidth))
 
         content2_lay.addWidget(Procedure_Content_Check(self, ContentsClickHis_inTitle, ContentsClickHis_inTitle_index))
         lay.addLayout(content2_lay)
@@ -509,7 +510,7 @@ class Procedure_Content(ABCWidget):
 class Procedure_Content_Nub(ABCLabel):
     def __init__(self, parent, Nub):
         super(Procedure_Content_Nub, self).__init__(parent)
-        self.setFixedSize(110, 55)
+        self.setFixedSize(140, 55)
         self.setText(Nub)
 
 # 참고사항 / 주의사항 label

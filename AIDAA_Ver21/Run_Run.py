@@ -35,9 +35,9 @@ class InterfaceRun(Process):
 
         app = QApplication(sys.argv)
         app.setStyle('Fusion')
-        font = QFont()
-        font.setFamily("Malgun Gothic")
-        app.setFont(font)
+        # font = QFont()
+        # font.setFamily("Malgun Gothic")
+        # app.setFont(font)
         cns = CNS(mem)
         cns.show()
         w = Main(mem)

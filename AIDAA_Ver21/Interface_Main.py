@@ -19,8 +19,8 @@ class Main(QWidget):
     def __init__(self, ShMem):
         super(Main, self).__init__()
         self.inmem:InterfaceMem = InterfaceMem(ShMem, self)
-        self.setGeometry(0, 0, 2560, 1440)
-        self.setFixedSize(2560, 1440)
+        self.setGeometry(0, 0, 1920, 1200)
+        self.setFixedSize(1920, 1200)
         self.setWindowFlags(Qt.FramelessWindowHint)  # 상단바 제거
         QFontDatabase.addApplicationFont("Arial.ttf")
         QFontDatabase.addApplicationFont("맑은 고딕.ttf")
@@ -64,13 +64,14 @@ class MainTop(ABCWidget):
         super(MainTop, self).__init__(parent)
         self.setStyleSheet(qss.Top_Bar)
         self.setObjectName("BG")
-        self.setFixedHeight(75)
+        self.setFixedHeight(50)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(10, 10, 10, 10)
+        lay.setContentsMargins(10, 7, 8, 7)
         self.title_left = QHBoxLayout(self)
-        self.title_left.setContentsMargins(0, 0, 10, 0)
+        self.title_left.setContentsMargins(0, 0, 5, 0)
         self.title_left.addWidget(MainTopTime(self))
         self.title_left.addWidget(MainTopSystemName(self))
+        self.title_left.setSpacing(10)
         lay.addLayout(self.title_left)
         lay.setSpacing(10)
         # 현재 click된 btn & btn hover color 변경 위함
@@ -107,7 +108,7 @@ class MainTopTime(ABCLabel):
     def __init__(self, parent):
         super(MainTopTime, self).__init__(parent)
         self.setObjectName("Title")
-        self.setFixedSize(444, 55)
+        self.setFixedSize(465, 36)
         # timer section
         timer = QTimer(self)
         timer.setInterval(200)
@@ -125,8 +126,8 @@ class MainTopSystemName(ABCLabel):
     def __init__(self, parent):
         super(MainTopSystemName, self).__init__(parent)
         self.setObjectName("Title")
-        self.setFixedSize(786, 55)
-        self.setContentsMargins(0, 0, 50, 0)
+        self.setFixedSize(465, 36)
+        self.setContentsMargins(0, 0, 0, 0)
         # timer section
         timer = QTimer(self)
         timer.setInterval(200)
@@ -149,7 +150,7 @@ class MainTopCallMain(ABCPushButton):
         super(MainTopCallMain, self).__init__(parent)
         self.setText('Main')
         self.setObjectName("Tab")
-        self.setFixedSize(296, 55)
+        self.setFixedSize(218, 36)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -162,7 +163,7 @@ class MainTopCallIFAP(ABCPushButton):
         super(MainTopCallIFAP, self).__init__(parent)
         self.setText('Pre-abnormal')
         self.setObjectName("Tab")
-        self.setFixedSize(296, 55)
+        self.setFixedSize(218, 36)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -175,7 +176,7 @@ class MainTopCallAIDAA(ABCPushButton):
         super(MainTopCallAIDAA, self).__init__(parent)
         self.setText('Abnormal')
         self.setObjectName("Tab")
-        self.setFixedSize(296, 55)
+        self.setFixedSize(218, 36)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -188,7 +189,7 @@ class MainTopCallEGIS(ABCPushButton):
         super(MainTopCallEGIS, self).__init__(parent)
         self.setText('Emergency')
         self.setObjectName("Tab")
-        self.setFixedSize(296, 55)
+        self.setFixedSize(218, 36)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -201,9 +202,9 @@ class MainTopClose(ABCPushButton):
         super(MainTopClose, self).__init__(parent)
         icon = os.path.join(ROOT_PATH, '../AIDAA_Ver21/Img/close.png')
         self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(55, 55))  # 아이콘 크기
-        self.setFixedSize(QSize(55, 55))
-        self.setContentsMargins(1, 0, 0, 0)
+        self.setIconSize(QSize(35, 35))  # 아이콘 크기
+        self.setFixedSize(QSize(35, 35))
+        self.setContentsMargins(0, 0, 0, 0)
         self.clicked.connect(self.close_main)
 
     def close_main(self):

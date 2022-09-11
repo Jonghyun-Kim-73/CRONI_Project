@@ -15,9 +15,9 @@ class MainAlarm(ABCWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet(qss.Alarm_Table)
         # lay.addWidget(AlarmFix(self))
-        lay.addWidget(AlarmTable(self, Alarm_Table.Main))  # Alarm Table Height 구분 위함
+        lay.addWidget(AlarmScrollArea(self, Alarm_Table.Main))  # Alarm Table Height 구분 위함
         lay.addWidget(AlarmSortSystemBtns(self))
-        lay.setSpacing(15)
+        lay.setSpacing(10)
 
 class AIDAAAlarm(ABCWidget):
     def __init__(self, parent):
@@ -26,17 +26,17 @@ class AIDAAAlarm(ABCWidget):
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(AlarmFix(self))
-        lay.addWidget(AlarmTable(self, Alarm_Table.AIDAA))
+        lay.addWidget(AlarmScrollArea(self, Alarm_Table.AIDAA))
         lay.addWidget(AlarmSortAIDAABtns(self))
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(15)
+        lay.setSpacing(10)
 
 # ----------------------------------------------------------------------------------------------------------------------
 class AlarmFix(ABCWidget):
     def __init__(self, parent):
         super(AlarmFix, self).__init__(parent)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(0, 0, 0, 5)
 
         # lay.addWidget(AlarmFixUrgentAct(self))
         lay.addWidget(AlarmFixPreTrip(self))
@@ -98,7 +98,7 @@ class AlarmFixPreTrip(ABCPushButton):
     def __init__(self, parent):
         super(AlarmFixPreTrip, self).__init__(parent)
         self.setObjectName("Left")
-        self.setFixedSize(615, 55)
+        self.setFixedSize(465, 40)
         self.setText('PreTrip')
         self.clicked.connect(self.change_main_display)
         self.blick = False
@@ -132,7 +132,7 @@ class AlarmFixTrip(ABCLabel):
     def __init__(self, parent):
         super(AlarmFixTrip, self).__init__(parent)
         self.setObjectName("Left")
-        self.setFixedSize(615, 55)
+        self.setFixedSize(465, 40)
         self.setText('Trip')
         self.widget_timer(iter_=500, funs=[self.dis_update])
         self.blick = False
@@ -158,24 +158,82 @@ class AlignDelegate(QStyledItemDelegate):
         super(AlignDelegate, self).initStyleOption(option, index)
         option.displayAlignment = Qt.AlignCenter
 
+# Scroll Bar 적용
+class AlarmScrollArea(ABCScrollArea):
+    def __init__(self, parent, table):
+        super(AlarmScrollArea, self).__init__(parent)
+        self.margins = QMargins(0, 40, 0, 0)    # header height
+        self.setViewportMargins(self.margins)
+        self.setFixedWidth(940)
+
+        self.headings_widget = QWidget(self)
+        self.headings_layout = QHBoxLayout()
+        self.headings_widget.setLayout(self.headings_layout)
+        self.headings_layout.setContentsMargins(0, 0, 10, 0)
+
+        # header item
+        self.heading_label = [0, 0, 0, 0, 0, 0]
+        self.heading_label[0] = QLabel("DESCRIPTION")
+        self.heading_label[1] = QLabel("VALUE")
+        self.heading_label[2] = QLabel("SETPOINT")
+        self.heading_label[3] = QLabel("UNIT")
+        self.heading_label[4] = QLabel("DATE")
+        self.heading_label[5] = QLabel("TIME")
+
+        # size
+        self.heading_label[0].setFixedWidth(442)
+        self.heading_label[1].setFixedWidth(93)
+        self.heading_label[2].setFixedWidth(142)
+        self.heading_label[3].setFixedWidth(77)
+        self.heading_label[4].setFixedWidth(78)
+        self.heading_label[5].setFixedWidth(108)
+
+        for label in range(6):
+            self.headings_layout.addWidget(self.heading_label[label])
+            self.heading_label[label].setObjectName("Alarm_Header_M")
+            self.heading_label[label].setAlignment(Qt.AlignCenter)
+
+        self.heading_label[0].setAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+        self.heading_label[0].setContentsMargins(5, 0, 0, 0)
+        self.heading_label[0].setObjectName("Alarm_Header_F")
+        self.heading_label[5].setObjectName("Alarm_Header_L")
+        # self.headings_layout.addStretch(1)
+        self.headings_layout.setSpacing(0)
+
+        self.scrollwidget = QWidget()
+        self.scrollwidget.setObjectName("scroll")
+        self.grid = QGridLayout(self.scrollwidget)
+        self.grid.addWidget(AlarmTable(self, table))
+        self.grid.setContentsMargins(0, 0, 10, 0)
+        self.setWidget(self.scrollwidget)
+        self.setWidgetResizable(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def resizeEvent(self, event):
+        rect = self.viewport().geometry()
+        self.headings_widget.setGeometry(0, 0, rect.width() - 1, self.margins.top())
+        QScrollArea.resizeEvent(self, event)
+
 class AlarmTable(ABCTableWidget):
     def __init__(self, parent, table):
         super(AlarmTable, self).__init__(parent)
+
         if table == Alarm_Table.Main:
-            self.setFixedSize(1240, 1260)
-            self.hheader = 58
-            self.hcell = 60
+            # self.setFixedWidth(910)
+            self.hcell = 40
         else:
-            self.setFixedSize(1240, 1190)
-            self.hheader = 54
-            self.hcell = 63
+            # self.setFixedSize(1240, 1190)
+            self.hcell = 40
 
         self.setShowGrid(False)  # Grid 지우기
+        self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)  # Scroll Bar 설정
+        self.horizontalHeader().setVisible(False)  # Table Header 숨기기
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  # Scroll Bar 설정
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setRowCount(50)
-        self.column_labels = [(' DESCRIPTION:', 588), ('VALUE', 120), ('SETPOINT', 170), ('UNIT', 90), ('TIME', 90), ('DATE', 150)]
+        # self.setRowCount(50)
+        self.column_labels = [(' DESCRIPTION:', 410), ('VALUE', 93), ('SETPOINT', 141), ('UNIT', 77), ('DATE', 77), ('TIME', 109)]
         self.setColumnCount(len(self.column_labels))
         self.col_names = []
         for i, (l, w) in enumerate(self.column_labels):
@@ -188,7 +246,6 @@ class AlarmTable(ABCTableWidget):
         self.setContentsMargins(0, 0, 0, 0)
 
         self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
-        self.horizontalHeader().setFixedHeight(self.hheader)
 
         # 테이블 정렬
         delegate = AlignDelegate(self)
@@ -201,7 +258,7 @@ class AlarmTable(ABCTableWidget):
         self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
-
+        self.horizontalHeader().setFixedHeight(40)
         # scroll 설정
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerItem)
         self.verticalScrollBar().valueChanged.connect(self.verticalScrollBar().setValue)
@@ -233,9 +290,17 @@ class AlarmTable(ABCTableWidget):
     def dis_update(self):
         new_alarm_list = self.update_dis_alarm_list()
         self.setRowCount(len(self.dis_alarm_list))
+
+        self.setFixedSize(909, self.hcell * self.rowCount())
+
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, self.hcell)
+
+        # 테이블 정렬
+        delegate = AlignDelegate(self)
+        for row in range(1, self.rowCount()):
+            self.setItemDelegateForColumn(row, delegate)
 
         for alarm_name in new_alarm_list:
             self.insertRow(0)
@@ -258,32 +323,32 @@ class AlarmTable(ABCTableWidget):
 class AlarmSortSystemBtns(ABCWidget):
     def __init__(self, parent):
         super(AlarmSortSystemBtns, self).__init__(parent)
-        self.setFixedWidth(1240)
+        self.setFixedWidth(945)
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(AlarmSystem_IFAP_SortPress(self))
         lay.addWidget(AlarmSystem_AIDAA_SortPress(self))
         lay.addWidget(AlarmSystem_EGIS_SortPress(self))
-        lay.setSpacing(15)
+        lay.setSpacing(10)
 
 class AlarmSystem_IFAP_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_IFAP_SortPress, self).__init__(parent)
-        self.setFixedSize(403, 60)
+        self.setFixedSize(306, 40)
         self.setObjectName("Bottom")
         self.setText('Alarm_Pre-abnormal')
 
 class AlarmSystem_AIDAA_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_AIDAA_SortPress, self).__init__(parent)
-        self.setFixedSize(403, 60)
+        self.setFixedSize(307, 40)
         self.setObjectName("Bottom")
         self.setText('Alarm_Abnormal')
 
 class AlarmSystem_EGIS_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_EGIS_SortPress, self).__init__(parent)
-        self.setFixedSize(404, 60)
+        self.setFixedSize(307, 40)
         self.setObjectName("Bottom")
         self.setText('Alarm_Emergency')
 
@@ -293,7 +358,7 @@ class AlarmSortAIDAABtns(ABCWidget):
     def __init__(self, parent):
         super(AlarmSortAIDAABtns, self).__init__(parent)
         lay = QHBoxLayout(self)
-        self.setFixedWidth(1240)
+        self.setFixedWidth(940)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(AlarmAIDAA_Suppress_SortPress(self))
         lay.addWidget(AlarmSystem_Sortsystem_SortPress(self))
@@ -302,13 +367,13 @@ class AlarmSortAIDAABtns(ABCWidget):
 class AlarmAIDAA_Suppress_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmAIDAA_Suppress_SortPress, self).__init__(parent)
-        self.setFixedSize(615, 60)
+        self.setFixedSize(465, 40)
         self.setObjectName("Bottom")
         self.setText('Sort Press')
 
 class AlarmSystem_Sortsystem_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_Sortsystem_SortPress, self).__init__(parent)
-        self.setFixedSize(615, 60)
+        self.setFixedSize(465, 40)
         self.setObjectName("Bottom")
         self.setText('Sort System')
