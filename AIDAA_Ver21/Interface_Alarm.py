@@ -39,8 +39,8 @@ class AlarmFix(ABCWidget):
         lay.setContentsMargins(0, 0, 0, 5)
 
         # lay.addWidget(AlarmFixUrgentAct(self))
-        lay.addWidget(AlarmFixPreTrip(self))
-        lay.addWidget(AlarmFixTrip(self))
+        lay.addWidget(AlarmFixPreTrip(self, 465))
+        lay.addWidget(AlarmFixTrip(self, 465))
         lay.setSpacing(10)
 
         self.widget_timer(iter_=500, funs=[self.dis_update])
@@ -95,10 +95,10 @@ class AlarmFix(ABCWidget):
 
 
 class AlarmFixPreTrip(ABCPushButton):
-    def __init__(self, parent):
+    def __init__(self, parent, width):
         super(AlarmFixPreTrip, self).__init__(parent)
         self.setObjectName("Left")
-        self.setFixedSize(465, 40)
+        self.setFixedSize(width, 40)
         self.setText('PreTrip')
         self.clicked.connect(self.change_main_display)
         self.blick = False
@@ -129,10 +129,10 @@ class AlarmFixPreTrip(ABCPushButton):
         self.inmem.widget_ids['MainTopSystemName'].dis_update()
 
 class AlarmFixTrip(ABCLabel):
-    def __init__(self, parent):
+    def __init__(self, parent, width):
         super(AlarmFixTrip, self).__init__(parent)
         self.setObjectName("Left")
-        self.setFixedSize(465, 40)
+        self.setFixedSize(width, 40)
         self.setText('Trip')
         self.widget_timer(iter_=500, funs=[self.dis_update])
         self.blick = False

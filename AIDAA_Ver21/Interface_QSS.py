@@ -271,7 +271,7 @@ AIDAA_Diagnosis2 = """
             QLabel#Title{
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
-                font: 25px;
+                font: 25px 맑은 고딕;
                 font-weight: bold;
                 border:0px;
             }
@@ -301,7 +301,7 @@ AIDAA_Diagnosis2 = """
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
                 border:0px;
-                font: 25px;
+                font: 25px 맑은 고딕;
                 font-weight: bold;
                 text-align: left;
             }
@@ -309,7 +309,7 @@ AIDAA_Diagnosis2 = """
                 background: rgb(0, 176, 218);
                 border-radius: 5px;
                 border:0px;
-                font: 25px;
+                font: 25px 맑은 고딕;
                 font-weight: bold;
                 text-align: left;
             }
@@ -321,14 +321,14 @@ AIDAA_Diagnosis2 = """
             QPushButton#Bottom{
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
-                font: 25px;
+                font: 25px 맑은 고딕;
                 font-weight: bold;
             }
             QLabel{
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
                 padding-left:5px;
-                font: 25px;
+                font: 25px 맑은 고딕;
                 font-weight: bold;
                 border:0px;
             }
@@ -336,7 +336,7 @@ AIDAA_Diagnosis2 = """
                 background: rgb(112, 112, 112);
                 border-radius: 5px;
                 padding-left:5px;
-                font: 25px;
+                font: 25px 맑은 고딕;
                 font-weight: bold;
                 border:0px;
             }
@@ -350,7 +350,7 @@ AIDAA_Diagnosis2 = """
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
                 border: 1px solid #C00000;
-                font: 25px;
+                font: 25px 맑은 고딕;
                 font-weight: bold;
             }
             QLabel#label_title{
@@ -368,31 +368,30 @@ AIDAA_Diagnosis2 = """
                 border: 1px solid #C00000; 
                 border-radius: 5px;
             }
-            QScrollBar:vertical {
-                border-left: 1px solid rgb(128, 128, 128);
-                background-color: rgb(80, 80, 80);
-                width: 25px;    
+            QWidget#scroll {
+                background: rgb(231,231,234);
             }
-            QScrollBar::handle:vertical {         
-                min-height: 0px;
-                border: 0px;
-                background-color: rgb(255, 255, 255);
-            }
-            QScrollBar::add-line:vertical {       
-                height: 0px;
-                subcontrol-position: bottom;
-                subcontrol-origin: margin;
-            }
-            QScrollBar::sub-line:vertical {
-                height: 0px;
-                subcontrol-position: top;
-                subcontrol-origin: margin;
+            QScrollArea {
+                border: None;
+                background: rgb(231,231,234);
             }
             QScrollBar::sub-page:vertical { 
-                background: rgb(128,128,128);
+                background: rgb(231,231,234);
+                border: 1px solid rgb(128,128,128);
             }
             QScrollBar::add-page:vertical { 
+                background: rgb(231,231,234);
+                border: 1px solid rgb(128,128,128);
+            }
+            QScrollBar:vertical {
+                width: 20px;
                 background: rgb(128,128,128);
+            }
+            QScrollBar::up-arrow::vertical {
+                image: url(./img/Arrow_U.png);
+            }
+            QScrollBar::down-arrow::vertical {
+                image: url(./img/Arrow_D.png);
             }
 """
 
@@ -413,6 +412,14 @@ Main_Tab = """
                 color: rgb(0, 0, 0);
                 font: 25px Arial;
                 font-weight: bold;
+                qproperty-alignment: AlignCenter;
+            }
+            QLabel#Label{
+                background: rgb(192, 0, 0);
+                border-radius: 5px;
+                font: 25px 맑은 고딕;
+                font-weight: bold;
+                border:0px;
                 qproperty-alignment: AlignCenter;
             }
             QPushButton#Bottom{
@@ -444,6 +451,20 @@ Main_Tab = """
                 border:0px;
                 color: rgb(0, 0, 0);
                 font: 23px;
+            }
+            QPushButton#Search{
+                background: rgb(255, 255, 255);
+                border-radius: 5px;
+                border:0px;
+                font: 25px 맑은 고딕;
+                font-weight: bold;
+            }
+            QPushButton#Search::hover{
+                background: rgb(0, 176, 218);
+                border-radius: 5px;
+                border:0px;
+                font: 25px 맑은 고딕;
+                font-weight: bold;
             }
             QLabel#RightTabTitle{
                 background-color: rgb(128, 128, 128);
@@ -726,3 +747,22 @@ Search_Popup = """
                 border-bottom-right-radius:5px;
                 background: rgb(128,128,128);
             }"""
+
+PreTrip = """
+            QWidget#BG {
+                background: rgb(231, 231, 234);
+            }
+            QWidget#Graph {
+                border-radius: 10px;
+                border: 1px solid #4E4E4E;
+            }
+            QLabel#TripLabel {
+                border-top-left-radius:10px;
+                border-top-right-radius:10px;
+                background: rgb(178, 178, 178);
+                font: 20px 맑은 고딕;
+                font-weight: bold;
+                qproperty-alignment: AlignCenter;
+            }
+
+"""

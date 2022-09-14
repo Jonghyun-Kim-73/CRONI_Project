@@ -18,11 +18,8 @@ class Procedure(ABCWidget):
         super(Procedure, self).__init__(parent)
         self.setStyleSheet(qss.AIDAA_Diagnosis2)
         self.setObjectName("BG")
-        # font = self.font()
-        # font.setFamily("맑은 고딕")
-        # self.setFont(font)
         lay = QVBoxLayout(self)
-        lay.setContentsMargins(10, 15, 10, 15)
+        lay.setContentsMargins(10, 15, 9, 15)
         lay.addWidget(ProcedureTop(self))
         lay.addWidget(ProcedureInfo(self))
         lay.addWidget(ProcedureWindow(self))
@@ -172,15 +169,15 @@ class ProcedureTop(ABCWidget):
     def __init__(self, parent):
         super(ProcedureTop, self).__init__(parent)
         # qss확인 후 주석 해제
-        # self.setStyleSheet('background-color: rgb(149, 185, 211);')
         self.setStyleSheet(qss.Main_Tab)
-        self.setFixedHeight(55)
+        self.setFixedHeight(40)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 66, 0)
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(TopBTN(self, 'UrgentBTN', '긴급 조치'))
         lay.addWidget(TopBTN(self, 'RadiationBTN', '방사선비상'))
-        lay.addWidget(AlarmFixPreTrip(self))
-        lay.addWidget(AlarmFixTrip(self))
+        lay.addWidget(AlarmFixPreTrip(self, 227))
+        lay.addWidget(AlarmFixTrip(self, 228))
+        lay.addSpacing(5)
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
         lay.setSpacing(10)
@@ -191,9 +188,7 @@ class TopBTN(ABCLabel):
     def __init__(self, parent, widget_name, title):
         super(TopBTN, self).__init__(parent, widget_name)
         self.setObjectName("Label") # 실행 후 확인
-        self.setFixedSize(217, 55)
-        # self.setObjectName("Button")
-        # self.setFixedSize(393, 55)
+        self.setFixedSize(227, 40)
         self.setText(title)
 
     def dis_update(self, trigger):
@@ -223,9 +218,10 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton):
         icon = os.path.join(ROOT_PATH, 'Img', 'search.png')
         self.setObjectName("Search")
         self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(33, 33))
-        self.setFixedSize(602, 55)
+        self.setIconSize(QSize(25, 25))
+        self.setFixedSize(468, 40)
         self.setText('비정상 절차서 검색')
+        self.setContentsMargins(5, 0, 0, 0)
         # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")  # 실행 후 호버 확인
         self.clicked.connect(self.dis_update)
 
@@ -241,8 +237,8 @@ class DiagnosisTopCallSystemSearch(ABCPushButton):
         self.setText('시스템 검색')
         # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")  # 실행 후 호버 확인
         self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(33, 33))
-        self.setFixedSize(602, 55)
+        self.setIconSize(QSize(25, 25))
+        self.setFixedSize(468, 40)
         self.clicked.connect(self.dis_update)
 
     def dis_update(self):
@@ -254,7 +250,7 @@ class ProcedureInfo(ABCLabel):
     def __init__(self, parent):
         super(ProcedureInfo, self).__init__(parent)
         self.setObjectName("Title")
-        self.setFixedHeight(55)
+        self.setFixedHeight(40)
 
     def dis_update(self, procedure_name):
         self.setText(f" 비정상 절차서 이름: {procedure_name}")
@@ -267,14 +263,14 @@ class ProcedureWindow(ABCWidget):
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(ProcedureSequence(self))
-        lay.addWidget(ProcedureContents(self))
-        lay.setSpacing(20)
+        lay.addWidget(ProcedureScrollArea(self))
+        lay.setSpacing(15)
 
 class ProcedureSequence(ABCWidget):
     def __init__(self, parent):
         super(ProcedureSequence, self).__init__(parent)
         # self.setStyleSheet('background-color: rgb(212, 245, 211);') # 실행 후 확인
-        self.setFixedWidth(605)
+        self.setFixedWidth(319)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(ProcedureSequenceWidget(self, 'ProcedureSequenceTitlePu', 'ProcedureSequenceTitleCondPu', '목적'))
@@ -302,7 +298,7 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
     def __init__(self, parent, widget_name='', title=''):
         super().__init__(parent, widget_name)
         self.setObjectName("Tab")
-        self.setFixedSize(535, 55)
+        self.setFixedSize(264, 40)
         self.setText(title)
         self.blink = False
         self.clicked.connect(self.is_clicked)
@@ -362,7 +358,7 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
 class ProcedureSequenceTitleCond(ABCLabel):
     def __init__(self, parent, widget_name='', title=''):
         super().__init__(parent, widget_name)
-        self.setFixedSize(55, 55)
+        self.setFixedSize(40, 40)
         self.setObjectName("Check")
         self.blink = False
         self.title = title
@@ -387,30 +383,36 @@ class ProcedureSequenceTitleCond(ABCLabel):
         elif SequenceTitleCondHis[self.title] == 3:
             self.setStyleSheet('background-color: rgb(192,0,0)')
 # ----------------------------------------------------------------------------------------------------------------------
+# Scroll Bar 적용
+class ProcedureScrollArea(ABCScrollArea):
+    def __init__(self, parent):
+        super(ProcedureScrollArea, self).__init__(parent)
+        self.margins = QMargins(0, 0, 0, 0)    # header height
+        self.setViewportMargins(self.margins)
+        self.setFixedWidth(1562)
+
+        self.scrollwidget = QWidget()
+        self.scrollwidget.setObjectName("scroll")
+        self.grid = QHBoxLayout(self.scrollwidget)
+        self.grid.addWidget(ProcedureContents(self))
+        self.grid.setContentsMargins(0, 0, 0, 0)
+        self.grid.addStretch(1)
+        self.setWidget(self.scrollwidget)
+        self.setWidgetResizable(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def resizeEvent(self, event):
+        rect = self.viewport().geometry()
+        QScrollArea.resizeEvent(self, event)
 
 class ProcedureContents(ABCWidget):
     def __init__(self, parent):
         super(ProcedureContents, self).__init__(parent)
         self.lay = QVBoxLayout(self)
         self.setObjectName("RightPG")
-        self.setFixedWidth(1915)
+        self.setFixedWidth(1532)
         self.lay.setContentsMargins(0, 0, 0, 0)
-
-        # scroll 적용
-        self.scroll = QScrollArea()
-        self.widget = QWidget()
-        self.widget.setObjectName("scroll_bg")
-        self.vbox = QVBoxLayout()
-        self.vbox.setContentsMargins(0, 0, 0, 0)
-        self.widget.setLayout(self.lay)
-
-        self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scroll.setWidgetResizable(True)
-        self.scroll.setWidget(self.widget)
-
-        self.vbox.addWidget(self.scroll)
-        self.setLayout(self.vbox)
 
     def dis_update(self, SequenceTitleClick:str, ContentsClickHis:dict, Contents:dict):
         """_summary_
@@ -448,21 +450,20 @@ class ProcedureTitleBar(ABCWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         title_conv = {'목적': ' 1.0', '경보 및 증상': '2.0', '자동 동작 사항': '3.0', '긴급 조치 사항': '4.0', '후속 조치 사항': '5.0'}
         [lay.addWidget(w) for w in [ProcedureTitleBar_1(self, title_conv[title]), ProcedureTitleBar_2(self, title)]]
-        lay.setSpacing(15)
+        lay.setSpacing(10)
 
 class ProcedureTitleBar_1(ABCLabel):
     def __init__(self, parent, title_conv):
         super(ProcedureTitleBar_1, self).__init__(parent)
         self.setObjectName("TitleBar")
-        self.setFixedSize(140, 55)
+        self.setFixedSize(120, 40)
         self.setText(title_conv)
 
 class ProcedureTitleBar_2(ABCLabel):
     def __init__(self, parent, title):
         super(ProcedureTitleBar_2, self).__init__(parent)
         self.setObjectName("TitleBar")
-        #self.setFixedSize(1491, 35)
-        self.setFixedHeight(55)
+        self.setFixedHeight(40)
         self.setText(title)
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -471,27 +472,28 @@ class Procedure_Content(ABCWidget):
     def __init__(self, parent, Contents_inTitle:dict, ContentsClickHis_inTitle:int, ContentsClickHis_inTitle_index:int):
         super(Procedure_Content, self).__init__(parent)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 40, 0) # 실행 후 확인
-        lay.addStretch(1) # 실행 후 확인
+        lay.setContentsMargins(0, 0, 10, 0) # 실행 후 확인
+        lay.setAlignment(Qt.AlignRight)
         Max_FixedWidth = 0
         # label 상단 정렬 위해
         content1_lay = QHBoxLayout()
         content2_lay = QHBoxLayout()
         content1_lay.setAlignment(Qt.AlignTop)  # 실행 후 확인
         content2_lay.setAlignment(Qt.AlignTop)  # 실행 후 확인
-
+        content1_lay.setContentsMargins(0, 0, 0, 0)
+        content2_lay.setContentsMargins(0, 0, 0, 0)
         Des = Contents_inTitle['Des']
         Nub = Contents_inTitle['Nub']
         Nub_count = Nub.count('.')
         Nub_len = len(Nub)
         if Nub_count == 1:
-            Max_FixedWidth = 1674
+            Max_FixedWidth = 1342
         elif Nub_count == 2:
-            Max_FixedWidth = 1634
+            Max_FixedWidth = 1292
         elif Nub_count == 3:
-            Max_FixedWidth = 1598
+            Max_FixedWidth = 1242
         elif Nub_count == 4:
-            Max_FixedWidth = 1558
+            Max_FixedWidth = 1192
 
         if Nub[0] == '0': # '0.0.0' 에서 첫번째가 '0' 인 경우 주의사항 또는 참고사항
             # 주의 사항 및 참고 사항
@@ -504,13 +506,14 @@ class Procedure_Content(ABCWidget):
 
         content2_lay.addWidget(Procedure_Content_Check(self, ContentsClickHis_inTitle, ContentsClickHis_inTitle_index))
         lay.addLayout(content2_lay)
-        lay.setSpacing(15)
+
+        lay.setSpacing(10)
 
 
 class Procedure_Content_Nub(ABCLabel):
     def __init__(self, parent, Nub):
         super(Procedure_Content_Nub, self).__init__(parent)
-        self.setFixedSize(140, 55)
+        self.setFixedSize(120, 40)
         self.setText(Nub)
 
 # 참고사항 / 주의사항 label
@@ -547,7 +550,7 @@ class Procedure_Content_Check(ABCPushButton):
         super(Procedure_Content_Check, self).__init__(parent)
         self.ContentsClickHis_inTitle = ContentsClickHis_inTitle
         self.ContentsClickHis_inTitle_index = ContentsClickHis_inTitle_index
-        self.setFixedSize(55, 55)
+        self.setFixedSize(40, 40)
         self.dis_update()
         self.clicked.connect(self.is_clicked)
 
@@ -572,12 +575,12 @@ class ProcedureBottom(ABCWidget):
         lay.addWidget(ProcedureComplete(self))
         lay.addWidget(ProcedureParallel(self))
         lay.addWidget(ProcedureReconduct(self))
-        lay.setSpacing(12)
+        lay.setSpacing(10)
 
 class ProcedureComplete(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureComplete, self).__init__(parent)
-        self.setFixedSize(403, 60)
+        self.setFixedSize(227, 40)
         self.setObjectName("Bottom")
         self.setText('완료')
         self.clicked.connect(self.is_clicked)
@@ -588,7 +591,7 @@ class ProcedureComplete(ABCPushButton):
 class ProcedureParallel(ABCPushButton, QPushButton):
     def __init__(self, parent):
         super(ProcedureParallel, self).__init__(parent)
-        self.setFixedSize(403, 60)
+        self.setFixedSize(227, 40)
         self.setObjectName("Bottom")
         self.setText('병행')
         self.clicked.connect(self.is_clicked)
@@ -599,7 +602,7 @@ class ProcedureParallel(ABCPushButton, QPushButton):
 class ProcedureReconduct(ABCPushButton, QPushButton):
     def __init__(self, parent):
         super(ProcedureReconduct, self).__init__(parent)
-        self.setFixedSize(403, 60)
+        self.setFixedSize(227, 40)
         self.setObjectName("Bottom")
         self.setText('재수행')
         self.clicked.connect(self.is_clicked)

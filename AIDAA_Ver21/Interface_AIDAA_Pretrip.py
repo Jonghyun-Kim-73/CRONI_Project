@@ -338,7 +338,8 @@ sg1_level_mean_past = xtest[time][:,9]*minmax_output[9]+min_output[9]
 class PreTrip(ABCWidget):
     def __init__(self, parent):
         super(PreTrip, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(212, 245, 211);')
+        self.setStyleSheet(qss.PreTrip)
+        self.setObjectName("BG")
         lay = QHBoxLayout(self)
         lay.addWidget(LeftPrediction(self))
         lay.addWidget(RightPrediction(self))
@@ -368,12 +369,17 @@ class Parameter(ABCWidget): # 그래프 포함
         super(Parameter, self).__init__(parent)
         self.id = id
         lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+
         lay.addWidget(Parameter_Info(self, id=self.id))
         lay.addWidget(Parameter_Graph(self, id=self.id))
+        lay.setSpacing(0)
 
 class Parameter_Graph(ABCWidget):
     def __init__(self, parent, id=None):
         super(Parameter_Graph, self).__init__(parent)
+        self.setObjectName("Graph")
+        # self.setFixedHeight(150)
         self.id = id
         past_data = {1: power_mean_past, 2: over_delta_T_mean_past, 3: prz_pressure_mean_past, 4:prz_level_mean_past, 5:loop3_flow_mean_past, 6:loop2_flow_mean_past, 7: loop1_flow_mean_past, 8:sg3_level_mean_past, 9:sg2_level_mean_past, 10:sg1_level_mean_past}
         grap = {1: power_mean, 2: over_delta_T_mean, 3: prz_pressure_mean, 4:prz_level_mean, 5:loop3_flow_mean, 6:loop2_flow_mean, 7: loop1_flow_mean, 8:sg3_level_mean, 9:sg2_level_mean, 10:sg1_level_mean}
@@ -382,6 +388,7 @@ class Parameter_Graph(ABCWidget):
         lay = QHBoxLayout(self)
         #Shortterm prediction
         canvas = FigureCanvas(Figure())
+
         lay.addWidget(canvas)
         self.ax = canvas.figure.subplots()
         x = np.arange(0, 120, 1)
@@ -415,8 +422,8 @@ asdf = 120
 class Parameter_Info(ABCWidget):
     def __init__(self, parent, id=None):
         super(Parameter_Info, self).__init__(parent)
+        # self.setFixedHeight(30)
         self.id = id
-
         name = {1: 'POWER RANGE PERCENT POWER', 2: 'OVERTEMPERATURE DELTA-T', 3: 'PRZ PRESSURE', 4:'PRZ LEVEL', 5:'LOOP 3 FLOW', 6: 'LOOP 2 FLOW', 7: 'LOOP 1 FLOW', 8: 'SG#3 Narrow Range Level', 9: 'SG#2 Narrow Range Level', 10: 'SG#1 Narrow Range Level'}
         Trip_time = {1: '{}'.format(asdf), 2: '2', 3: '3', 4:'4', 5:'5', 6: '6', 7: '7', 8: '8', 9: '9', 10: '10'}
 
@@ -428,15 +435,21 @@ class Parameter_Info(ABCWidget):
 class TripTimeLabel(ABCLabel):
     def __init__(self, parent):
         super(TripTimeLabel, self).__init__(parent)
+        self.setFixedSize(180, 30)
+        self.setObjectName("TripLabel")
         self.setText('Trip 도달 시간')
 
 class Parameter_name(ABCLabel):
     def __init__(self, parent, name=None):
         super(Parameter_name, self).__init__(parent)
+        self.setFixedSize(180, 30)
+        self.setObjectName("TripLabel")
         self.setText(name)
 
 class Parameter_TripTime(ABCLabel):
     def __init__(self, parent, time=None):
         super(Parameter_TripTime, self).__init__(parent)
+        self.setFixedSize(180, 30)
+        self.setObjectName("TripLabel")
         self.setText(time)
 
