@@ -229,18 +229,17 @@ AIDAA_Diagnosis = """
                 border-bottom-right-radius : 5px;    
             }
             QTableWidget#Tab3::item::selected {
-                margin-top: 5px;
                 background-color: rgb(0, 176, 218);
                 color:black;
+                border:0px;
+                border-bottom: 1px solid rgb(128, 128, 128);
                 font: 25px 맑은 고딕;
-                border: 0px;
                 outline: 0;
             }
             QTableWidget#Tab3::item {
                 font: 25px 맑은 고딕;
-                margin-top: 5px;
                 border: 0px;
-                background-color: rgb(178, 178, 178);
+                border-bottom: 1px solid rgb(128, 128, 128);
             }
             QTableView{
                 outline: 0;
@@ -249,7 +248,12 @@ AIDAA_Diagnosis = """
                 border:0px;
             }
 """
-
+# QTableWidget#Tab3::item {
+#                 font: 25px 맑은 고딕;
+#                 #margin-top: 5px;
+#                 border: 0px;
+#                 border-bottom: 1px solid rgb(128, 128, 128);
+#             }
 AIDAA_Diagnosis2 = """
             QWidget#BG{
                 background: rgb(231, 231, 234);
@@ -551,12 +555,20 @@ Search_Popup = """
                 border: 0px;
             }
             QWidget#SearchTitleBar{
+                font: 28px 맑은 고딕;
                 background: rgb(128, 128, 128);
                 border: 0px;
             }            
             QLabel#SearchTitleBar{
                 background: rgb(128, 128, 128);
-                font: 28px;
+                font: 28px Arial;
+                font-weight: bold;
+                border: 0px;
+                qproperty-alignment: AlignCenter;
+            }
+            QLabel#SearchTitleBar3{
+                background: rgb(128, 128, 128);
+                font: 28px 맑은 고딕;
                 font-weight: bold;
                 border: 0px;
                 qproperty-alignment: AlignCenter;
@@ -565,7 +577,7 @@ Search_Popup = """
                 background: rgb(0, 176, 86);
                 border-radius: 5px;
                 border:0px;
-                font: 30px;
+                font: 30px 맑은 고딕;
                 font-weight: bold;
             }
             QGroupBox#SearchWindow {
@@ -573,7 +585,7 @@ Search_Popup = """
                 border: 1px solid rgb(128, 128, 128);
                 border-radius: 10px;
                 margin-top: 10px;
-                font: 20px;
+                font: 20px 맑은 고딕;
                 font-weight: bold;
             }
             QGroupBox::title#SearchWindow {
@@ -581,18 +593,18 @@ Search_Popup = """
                 top: -5px;
                 left: 30px;
                 padding: 0px 2px 0px 2px;
-                font: 20px;
+                font: 20px 맑은 고딕;
                 font-weight: bold;
             }
             QLabel#SearchLabel{
                 background: rgb(231, 231, 234);
-                font: 20px;
+                font: 20px 맑은 고딕;
                 border:0px;
                 font-weight: bold;
             }
             QTextEdit#SearchInput{
                 background: rgb(255, 255, 255);
-                font: 13px;
+                font: 13px 맑은 고딕;
                 border:0px;
                 font-weight: bold;
             }
@@ -600,17 +612,90 @@ Search_Popup = """
                 background: rgb(255, 255, 255);
                 border-radius: 5px;
                 border:0px;
-                font: 20px;
+                font: 20px 맑은 고딕;
                 font-weight: bold;
             }
             QTableWidget{
                 background: rgb(231, 231, 234);
                 border: 1px solid rgb(128, 128, 128); 
-                font: 20px;           
-                border-top-left-radius :5px;
-                border-top-right-radius : 5px;
+                font: 20px 맑은 고딕;           
                 border-bottom-left-radius : 5px;
                 border-bottom-right-radius : 5px;    
+            }
+            QTableWidget::item::selected {
+                background-color: rgb(0, 176, 218);
+                color:black;
+                font: 20px 맑은 고딕;
+                outline: 0;
+            }
+            QTableWidget::item {
+                border-bottom: 1px solid rgb(128, 128, 128);
+            }
+            QWidget {
+                background: rgb(231,231,234);
+            }
+            QScrollArea {
+                border: None;
+                background: rgb(231,231,234);
+            }
+            QScrollBar::sub-page:vertical { 
+                background: rgb(231,231,234);
+                border: 1px solid rgb(128,128,128);
+            }
+            QScrollBar::add-page:vertical { 
+                background: rgb(231,231,234);
+                border: 1px solid rgb(128,128,128);
+            }
+            QScrollBar:vertical {
+                width: 20px;
+                background: rgb(128,128,128);
+                border: 0px;
+            }
+            QScrollBar::up-arrow::vertical {
+                image: url(./img/Arrow_U.png);
+            }
+            QScrollBar::down-arrow::vertical {
+                image: url(./img/Arrow_D.png);
+            }
+            QPushButton#Bottom{
+                background: rgb(255, 255, 255);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 20px 맑은 고딕;
+                font-weight: bold;
+            }
+            QPushButton#Bottom::hover{
+                background: rgb(0, 178, 218);
+                border-radius: 5px;
+                border:0px;
+                color: rgb(0, 0, 0);
+                font: 20px 맑은 고딕;
+                font-weight: bold;
+            }
+            QLabel#Alarm_Header_F{
+                background-color: rgb(128, 128, 128);
+                font: 20px 맑은 고딕;
+                border-top-left-radius:5px;
+                font-weight: bold;
+            }
+            QLabel#Alarm_Header_M{
+                background-color: rgb(128, 128, 128);
+                font: 20px 맑은 고딕;
+                font-weight: bold;
+            }
+            QLabel#Alarm_Header_L{
+                background-color: rgb(128, 128, 128);
+                font: 20px 맑은 고딕;
+                border-top-right-radius:5px;
+                font-weight: bold;
+            }
+            QLabel#Alarm_Header{
+                background-color: rgb(128, 128, 128);
+                font: 20px 맑은 고딕;
+                border-top-left-radius:5px;
+                border-top-right-radius:5px;
+                font-weight: bold;
             }
             QHeaderView {
                 background: rgb(128, 128, 128);
@@ -618,7 +703,7 @@ Search_Popup = """
             }
             QHeaderView::section {
                 background: rgb(128, 128, 128);
-                font: 20px;
+                font: 20px 맑은 고딕;
                 font-weight: bold;        
                 qproperty-alignment: AlignCenter;
             }
@@ -639,73 +724,6 @@ Search_Popup = """
                 border-top-right-radius:5px;
                 border-bottom-left-radius:0px;
                 border-bottom-right-radius:0px;
-            }
-            QHeaderView::down-arrow { 
-                width:30px;
-                subcontrol-origin:padding; 
-                subcontrol-position: center right;
-            }
-            QTableWidget::item::selected {
-                background-color: rgb(0, 176, 218);
-                color:black;
-                font: 20px;
-                outline: 0;
-            }
-            QTableWidget::item {
-                border-bottom: 1px solid rgb(128, 128, 128);
-            }
-            QScrollBar:vertical {
-                border-left: 1px solid rgb(128, 128, 128);
-                background-color: rgb(80, 80, 80);
-                width: 30px;    
-                margin: 0px 0px 0px 0px;
-                border-top-left-radius:0px;
-                border-top-right-radius:5px;
-                border-bottom-left-radius:0px;
-                border-bottom-right-radius:5px;
-            }
-            QScrollBar::handle:vertical {         
-                min-height: 0px;
-                border: 0px;
-                background-color: rgb(255, 255, 255);
-                border-top-left-radius:5px;
-                border-top-right-radius:5px;
-                border-bottom-left-radius:5px;
-                border-bottom-right-radius:5px;
-            }
-            QScrollBar::add-line:vertical {       
-                height: 0px;
-                subcontrol-position: bottom;
-                subcontrol-origin: margin;
-            }
-            QScrollBar::sub-line:vertical {
-                height: 0px;
-                subcontrol-position: top;
-                subcontrol-origin: margin;
-            }
-            QScrollBar::sub-page:vertical { 
-                border-top-right-radius:5px;
-                background: rgb(128,128,128);
-            }
-            QScrollBar::add-page:vertical { 
-                border-bottom-right-radius:5px;
-                background: rgb(128,128,128);
-            }
-            QPushButton#Bottom{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 20px;
-                font-weight: bold;
-            }
-            QPushButton#Bottom::hover{
-                background: rgb(0, 178, 218);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 20px;
-                font-weight: bold;
             }
 """
 
@@ -756,13 +774,27 @@ PreTrip = """
                 border-radius: 10px;
                 border: 1px solid #4E4E4E;
             }
+            QWidget#Graph_sub {
+                background : white;
+                border-radius: 10px;
+                border: 1px solid #4E4E4E;
+            }
             QLabel#TripLabel {
                 border-top-left-radius:10px;
                 border-top-right-radius:10px;
                 background: rgb(178, 178, 178);
                 font: 20px 맑은 고딕;
                 font-weight: bold;
+                margin:0px;
                 qproperty-alignment: AlignCenter;
             }
+            QLabel#title {
+                border-radius: 5px;
+                background: rgb(0, 176, 86);
+                font: 25px 맑은 고딕;
+                font-weight: bold;
+                qproperty-alignment: AlignCenter;
+            }
+            
 
 """

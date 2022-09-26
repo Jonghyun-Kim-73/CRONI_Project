@@ -22,9 +22,10 @@ class ProcedureSearch(ABCWidget):
         self.TitleBar = ProcedureSearchTitleBar(self)
         lay.addWidget(self.TitleBar)
         lay_content.addWidget(ProcedureSearchWindow(self))
-        lay_content.addWidget(ProcedureSearchTable(self))
+        lay_content.addWidget(ProcedureSearchScrollArea(self))
         lay_content.addWidget(ProcedureSearchBottom(self))
         lay_content.setContentsMargins(10, 0, 10, 0)
+
         lay.addLayout(lay_content)
 
     # window drag
@@ -206,15 +207,65 @@ class ProcedureSearchReset(ABCPushButton):
         self.inmem.current_search['Procedure']['name'] = ''
 
 # --------------------------------------------------------------------------------
+class ProcedureSearchScrollArea(ABCScrollArea):
+    def __init__(self, parent):
+        super(ProcedureSearchScrollArea, self).__init__(parent)
+        self.margins = QMargins(0, 40, 0, 0)  # header height
+        self.setViewportMargins(self.margins)
+        # self.setFixedWidth(1170)
+        self.setFixedSize(1170, 600)  # 초기 테이블 크기
+
+        self.headings_widget = QWidget(self)
+        self.headings_layout = QHBoxLayout()
+        self.headings_widget.setLayout(self.headings_layout)
+        self.headings_layout.setContentsMargins(0, 0, 10, 0)
+
+        # header item
+        self.heading_label = [0, 0]
+        self.heading_label[0] = QLabel(" 절차서 번호")
+        self.heading_label[1] = QLabel(" 절차서명")
+
+        # size
+        self.heading_label[0].setFixedWidth(200)
+        self.heading_label[1].setFixedWidth(940)
+
+        for label in range(2):
+            self.headings_layout.addWidget(self.heading_label[label])
+            self.heading_label[label].setObjectName("Alarm_Header_M")
+            self.heading_label[label].setAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+
+        self.heading_label[0].setContentsMargins(5, 0, 0, 0)
+        self.heading_label[0].setObjectName("Alarm_Header_F")
+        self.heading_label[1].setObjectName("Alarm_Header_L")
+        # self.headings_layout.addStretch(1)
+        self.headings_layout.setSpacing(0)
+
+
+        self.scrollwidget = QWidget()
+        # self.scrollwidget.setObjectName("scroll")
+        self.grid = QGridLayout(self.scrollwidget)
+        self.grid.addWidget(ProcedureSearchTable(self))
+        self.grid.setContentsMargins(0, 0, 10, 0)
+        self.setWidget(self.scrollwidget)
+        self.setWidgetResizable(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def resizeEvent(self, event):
+        rect = self.viewport().geometry()
+        self.headings_widget.setGeometry(0, 0, rect.width() - 1, self.margins.top())
+        QScrollArea.resizeEvent(self, event)
 
 class ProcedureSearchTable(ABCTableWidget):
     def __init__(self, parent):
         super(ProcedureSearchTable, self).__init__(parent)
-        self.setFixedSize(1170, 584)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setFixedSize(1140, 640) # 초기 테이블 크기
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setShowGrid(False)  # Grid 지우기
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.horizontalHeader().setVisible(False)  # Col header 숨기기
+        self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.column_labels = [(' 절차서 번호', 200), (' 절차서 명', 940)]
         self.setColumnCount(len(self.column_labels))
@@ -227,9 +278,9 @@ class ProcedureSearchTable(ABCTableWidget):
         self.setHorizontalHeaderLabels(self.col_names)
         self.setSortingEnabled(True)  # 테이블 sorting
 
-        header = self.horizontalHeader()
-        header.setSortIndicatorShown(True)
-        header.sortIndicatorChanged.connect(self.sortItems)
+        # header = self.horizontalHeader()
+        # header.setSortIndicatorShown(True)
+        # header.sortIndicatorChanged.connect(self.sortItems)
         self.horizontalHeader().setFixedHeight(40)
         self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeaderItem(1).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
@@ -254,18 +305,18 @@ class ProcedureSearchTable(ABCTableWidget):
                     if procedure_search_input in i[0]:
                         search_result.append(i)
                 self.setRowCount(len(search_result))
-                [self.setItem(i, 0, QTableWidgetItem(search_result[i][0])) for i in range(len(search_result))]
+                [self.setItem(i, 0, QTableWidgetItem(" " + search_result[i][0])) for i in range(len(search_result))]
                 [self.setItem(i, 1, QTableWidgetItem(search_result[i][1])) for i in range(len(search_result))]
             elif search_area == 1: # 0: 절차서 번호, 1: 절차서 이름
                 for i in self.inmem.search_dict['Procedure']:
                     if procedure_search_input in i[1]:
                         search_result.append(i)
                 self.setRowCount(len(search_result))
-                [self.setItem(i, 0, QTableWidgetItem(search_result[i][0])) for i in range(len(search_result))]
+                [self.setItem(i, 0, QTableWidgetItem(" " + search_result[i][0])) for i in range(len(search_result))]
                 [self.setItem(i, 1, QTableWidgetItem(search_result[i][1])) for i in range(len(search_result))]
         else:
             self.setRowCount(len(self.inmem.search_dict['Procedure']))
-            [self.setItem(i, 0, QTableWidgetItem(self.inmem.search_dict['Procedure'][i][0])) for i in range(len(self.inmem.search_dict['Procedure']))]
+            [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.search_dict['Procedure'][i][0])) for i in range(len(self.inmem.search_dict['Procedure']))]
             [self.setItem(i, 1, QTableWidgetItem(self.inmem.search_dict['Procedure'][i][1])) for i in range(len(self.inmem.search_dict['Procedure']))]
 
         if self.currentRow() != -1:
@@ -343,7 +394,7 @@ class SystemSearch(ABCWidget):
         self.TitleBar = SystemSearchTitleBar(self)
         lay.addWidget(self.TitleBar)
         lay_content.addWidget(SystemSearchWindow(self))
-        lay_content.addWidget(SystemSearchTable(self))
+        lay_content.addWidget(SystemSearchScrollArea(self))
         lay_content.addWidget(SystemSearchBottom(self))
         lay_content.setContentsMargins(10, 0, 10, 0)
         lay.addLayout(lay_content)
@@ -468,6 +519,45 @@ class SystemSearchReset(ABCPushButton):
         self.inmem.current_search['system_reset'] = 0
 
 # --------------------------------------------------------------------------------
+class SystemSearchScrollArea(ABCScrollArea):
+    def __init__(self, parent):
+        super(SystemSearchScrollArea, self).__init__(parent)
+        self.margins = QMargins(0, 40, 0, 0)  # header height
+        self.setViewportMargins(self.margins)
+        self.setFixedWidth(1170)
+        # self.setFixedSize(1170, 600)  # 초기 테이블 크기
+
+        self.headings_widget = QWidget(self)
+        self.headings_layout = QHBoxLayout()
+        self.headings_widget.setLayout(self.headings_layout)
+        self.headings_layout.setContentsMargins(0, 0, 10, 0)
+
+        # header item
+        self.heading_label = QLabel(" System 명")
+        self.heading_label.setFixedWidth(1140)
+
+        self.headings_layout.addWidget(self.heading_label)
+        self.heading_label.setObjectName("Alarm_Header")
+        self.heading_label.setAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+
+        self.heading_label.setContentsMargins(5, 0, 0, 0)
+        # self.headings_layout.addStretch(1)
+        # self.headings_layout.setSpacing(0)
+
+
+        self.scrollwidget = QWidget()
+        self.grid = QGridLayout(self.scrollwidget)
+        self.grid.addWidget(SystemSearchTable(self))
+        self.grid.setContentsMargins(0, 0, 10, 0)
+        self.setWidget(self.scrollwidget)
+        self.setWidgetResizable(True)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def resizeEvent(self, event):
+        rect = self.viewport().geometry()
+        self.headings_widget.setGeometry(0, 0, rect.width() - 1, self.margins.top())
+        QScrollArea.resizeEvent(self, event)
 
 class SystemSearchTable(ABCTableWidget):
     def __init__(self, parent):
@@ -475,17 +565,19 @@ class SystemSearchTable(ABCTableWidget):
         self.column_labels = [(' System 명', 1140)]
         self.setColumnCount(len(self.column_labels))
         self.col_names = []
+        self.setFixedSize(1140, 556)
+
         for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
             self.col_names.append(l)
         self.setHorizontalHeaderLabels(self.col_names)
         self.setRowCount(len(self.inmem.search_dict['System']))
         self.setSelectionBehavior(QTableView.SelectRows)
-        self.setFixedSize(1170, 584)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setShowGrid(False)  # Grid 지우기
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.horizontalHeader().setVisible(False)  # Row 넘버 숨기기
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setSortingEnabled(True)  # 테이블 sorting
 
@@ -500,7 +592,6 @@ class SystemSearchTable(ABCTableWidget):
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):
             self.setRowHeight(i, 65)
-
         self.doubleClicked.connect(self.dis_system)
         self.widget_timer(iter_=500, funs=[self.dis_update])
 
@@ -607,7 +698,7 @@ class XAISearchTitleBar(ABCWidget):
 class XAISearchTitleName(ABCLabel):
     def __init__(self, parent):
         super(XAISearchTitleName, self).__init__(parent)
-        self.setObjectName("SearchTitleBar")
+        self.setObjectName("SearchTitleBar3")
         self.setText('AI 기여도')
 
 class XAISearchClose(ABCPushButton):

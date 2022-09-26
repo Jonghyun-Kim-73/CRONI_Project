@@ -576,7 +576,6 @@ class ProcedureCheckTable(ABCTableWidget):
         self.setFixedSize(915, 675)  # 초기 테이블 크기
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
         self.horizontalHeader().setVisible(False)  # Col header 숨기기
-        self.setSelectionMode(QAbstractItemView.NoSelection)
 
         self.column_labels = [(' 비정상 절차서:', 604), ('Value', 93), ('Set-point', 142), ('Unit', 77)]
         self.setColumnCount(len(self.column_labels))
@@ -586,12 +585,13 @@ class ProcedureCheckTable(ABCTableWidget):
             self.setColumnWidth(i, w)
             col_names.append(l)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.setSelectionBehavior(QAbstractItemView.SelectRows)
+        # self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setContentsMargins(0, 0, 0, 0)
         self.symptom_count = 0
-        self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
+        # self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
         self.horizontalHeader().setFixedHeight(40)
         # self.setItemDelegate(MyStyledItem(margin=3, radius=5, border_width=3, border_color=QColor(178,178,178)))
+        self.setSelectionMode(QAbstractItemView.NoSelection)  # 테이블 클릭 disable
 
         # 테이블 정렬
         self.delegate = AlignDelegate(self)
@@ -652,6 +652,7 @@ class ProcedureCheckTable(ABCTableWidget):
                             [self.setItem(i, 2, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
                             [self.setItem(i, 3, QTableWidgetItem("Test")) for i in range(self.symptom_count)]
                             [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(self.symptom_count)]
+
                             for j in range(4):
                                 [self.item(i, j).setSelected(False) for i in range(self.symptom_count)] # 아이쳄 1,2,3 추가시 수정필요
                             # if self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['des'][self.inmem.current_procedure[self.inmem.dis_AI['AI'][self.inmem.current_table['Procedure']][0]]['num']] == '내용 없음':

@@ -273,35 +273,36 @@ class ProcedureSequence(ABCWidget):
         self.setFixedWidth(319)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(ProcedureSequenceWidget(self, 'ProcedureSequenceTitlePu', 'ProcedureSequenceTitleCondPu', '목적'))
+        lay.addWidget(ProcedureSequenceWidget(self, 'ProcedureSequenceTitlePu', 'ProcedureSequenceTitleCondPu', ' 1.0 ', '목적'))
         lay.addWidget(
-            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleAl', 'ProcedureSequenceTitleCondAl', '경보 및 증상'))
+            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleAl', 'ProcedureSequenceTitleCondAl', ' 2.0 ', '경보 및 증상'))
         lay.addWidget(
-            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleAu', 'ProcedureSequenceTitleCondAu', '자동 동작 사항'))
+            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleAu', 'ProcedureSequenceTitleCondAu', ' 3.0 ', '자동 동작 사항'))
         lay.addWidget(
-            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleUr', 'ProcedureSequenceTitleCondUr', '긴급 조치 사항'))
+            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleUr', 'ProcedureSequenceTitleCondUr', ' 4.0 ', '긴급 조치 사항'))
         lay.addWidget(
-            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleFo', 'ProcedureSequenceTitleCondFo', '후속 조치 사항'))
+            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleFo', 'ProcedureSequenceTitleCondFo', ' 5.0 ', '후속 조치 사항'))
         lay.setSpacing(15)
         lay.addStretch(1)
 
 class ProcedureSequenceWidget(ABCWidget):
-    def __init__(self, parent, title_w_name, title_cond_w_name, title):
+    def __init__(self, parent, title_w_name, title_cond_w_name, title_num, title):
         super(ProcedureSequenceWidget, self).__init__(parent)
         self.lay = QHBoxLayout(self)
         self.lay.setContentsMargins(0, 0, 0, 0)
-        self.lay.addWidget(ProcedureSequenceTitleBTN(self, title_w_name, title))
+        self.lay.addWidget(ProcedureSequenceTitleBTN(self, title_w_name, title_num, title))
         self.lay.addWidget(ProcedureSequenceTitleCond(self, title_cond_w_name, title))
         self.lay.setSpacing(15)
 
 class ProcedureSequenceTitleBTN(ABCPushButton):
-    def __init__(self, parent, widget_name='', title=''):
+    def __init__(self, parent, widget_name='', title_num='', title=''):
         super().__init__(parent, widget_name)
         self.setObjectName("Tab")
         self.setFixedSize(264, 40)
-        self.setText(title)
+        self.setText(title_num + title)
         self.blink = False
         self.clicked.connect(self.is_clicked)
+        self.title = title
 
     def dis_update(self, SequenceTitleClickHis: dict):
         """상태 업데이트
@@ -313,12 +314,12 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
         self.procedure_name = self.inmem.widget_ids['Procedure'].procedure_name
         # 1. 현재 title 보다 상위 타이틀이 선택된 경우 동작
         RankList = ['목적', '경보 및 증상', '자동 동작 사항', '긴급 조치 사항', '후속 조치 사항']
-        if self.text() != '목적':  # 목적은 고려하지 않는다.
-            ThisRank = RankList.index(self.text())
+        if self.title != '목적':  # 목적은 고려하지 않는다.
+            ThisRank = RankList.index(self.title)
             CurrentRank = RankList.index(self.inmem.ProcedureHis[self.procedure_name]['SequenceTitleClick'])
 
             if ThisRank < CurrentRank:
-                if self.step_check(self.text()) and not self.step_all_check(self.text()):
+                if self.step_check(self.title) and not self.step_all_check(self.title):
                     if not self.blink:
                         self.setStyleSheet('background-color: rgb(255, 255, 255)')
                         self.blink = True
@@ -334,10 +335,10 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
             self.do_hover(SequenceTitleClickHis)
 
     def is_clicked(self):
-        self.inmem.widget_ids['Procedure'].change_SequenceTitleClickHis(self.text())
+        self.inmem.widget_ids['Procedure'].change_SequenceTitleClickHis(self.title)
 
     def do_hover(self, SequenceTitleClickHis):
-        if SequenceTitleClickHis[self.text()]:
+        if SequenceTitleClickHis[self.title]:
             self.setStyleSheet("""QPushButton{background: rgb(0, 176, 218);}
                               QPushButton:hover {background: rgb(0, 176, 218);}""")
         else:
@@ -448,7 +449,7 @@ class ProcedureTitleBar(ABCWidget):
         super(ProcedureTitleBar, self).__init__(parent)
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-        title_conv = {'목적': ' 1.0', '경보 및 증상': '2.0', '자동 동작 사항': '3.0', '긴급 조치 사항': '4.0', '후속 조치 사항': '5.0'}
+        title_conv = {'목적': '1.0', '경보 및 증상': '2.0', '자동 동작 사항': '3.0', '긴급 조치 사항': '4.0', '후속 조치 사항': '5.0'}
         [lay.addWidget(w) for w in [ProcedureTitleBar_1(self, title_conv[title]), ProcedureTitleBar_2(self, title)]]
         lay.setSpacing(10)
 

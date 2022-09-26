@@ -340,29 +340,47 @@ class PreTrip(ABCWidget):
         super(PreTrip, self).__init__(parent)
         self.setStyleSheet(qss.PreTrip)
         self.setObjectName("BG")
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(10, 10, 10, 0)
+        title = QLabel("Trip")
+        title.setObjectName("title")
+        title.setFixedSize(227, 40)
         lay = QHBoxLayout(self)
         lay.addWidget(LeftPrediction(self))
         lay.addWidget(RightPrediction(self))
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(18)
+        layout.addWidget(title)
+        layout.addLayout(lay)
+        layout.setSpacing(15)
+        self.setLayout(layout)
+
 
 class LeftPrediction(ABCWidget):
     def __init__(self, parent):
         super(LeftPrediction, self).__init__(parent)
+        self.setFixedWidth(941)
         lay = QVBoxLayout(self)
         lay.addWidget(Parameter(self, id=1))
         lay.addWidget(Parameter(self, id=2))
         lay.addWidget(Parameter(self, id=3))
         lay.addWidget(Parameter(self, id=4))
         lay.addWidget(Parameter(self, id=5))
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(10)
 
 class RightPrediction(ABCWidget):
     def __init__(self, parent):
         super(RightPrediction, self).__init__(parent)
+        self.setFixedWidth(941)
         lay = QVBoxLayout(self)
         lay.addWidget(Parameter(self, id=6))
         lay.addWidget(Parameter(self, id=7))
         lay.addWidget(Parameter(self, id=8))
         lay.addWidget(Parameter(self, id=9))
         lay.addWidget(Parameter(self, id=10))
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(10)
 
 class Parameter(ABCWidget): # 그래프 포함
     def __init__(self, parent, id=None):
@@ -370,27 +388,44 @@ class Parameter(ABCWidget): # 그래프 포함
         self.id = id
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-
         lay.addWidget(Parameter_Info(self, id=self.id))
         lay.addWidget(Parameter_Graph(self, id=self.id))
         lay.setSpacing(0)
+        lay.addStretch(1)
 
 class Parameter_Graph(ABCWidget):
     def __init__(self, parent, id=None):
         super(Parameter_Graph, self).__init__(parent)
         self.setObjectName("Graph")
-        # self.setFixedHeight(150)
+        self.setFixedSize(941, 173)
+        self.setContentsMargins(0, 0, 0, 0)
         self.id = id
         past_data = {1: power_mean_past, 2: over_delta_T_mean_past, 3: prz_pressure_mean_past, 4:prz_level_mean_past, 5:loop3_flow_mean_past, 6:loop2_flow_mean_past, 7: loop1_flow_mean_past, 8:sg3_level_mean_past, 9:sg2_level_mean_past, 10:sg1_level_mean_past}
         grap = {1: power_mean, 2: over_delta_T_mean, 3: prz_pressure_mean, 4:prz_level_mean, 5:loop3_flow_mean, 6:loop2_flow_mean, 7: loop1_flow_mean, 8:sg3_level_mean, 9:sg2_level_mean, 10:sg1_level_mean}
         y_label = {1:'%',2:'%',3:'$Kg/cm^2$', 4:'%',5:'%',6:'%',7:'%',8:'%',9:'%',10:'%'}
         trip_setpoint = {1:[25, 109], 2:[1.3, 1.3],3:[136.78, 167.72],4:[92, 92],5:[90, 90],6:[90, 90],7:[90, 90],8:[17, 17],9:[17, 17],10:[17, 17]}
         lay = QHBoxLayout(self)
+
+        # stylesheet 적용 위함
+        layout_widget1 = QWidget(self)
+        lay_1 = QHBoxLayout(self)
+        layout_widget1.setLayout(lay_1)
+        layout_widget2 = QWidget(self)
+        lay_2 = QHBoxLayout(self)
+        layout_widget2.setLayout(lay_2)
+        lay.addWidget(layout_widget1)
+        lay.addWidget(layout_widget2)
+        lay.setSpacing(17)
+        layout_widget1.setObjectName("Graph_sub")
+        layout_widget2.setObjectName("Graph_sub")
+        lay_1.setContentsMargins(10, 10, 10, 10)
+        lay_2.setContentsMargins(10, 10, 10, 10)
+
         #Shortterm prediction
         canvas = FigureCanvas(Figure())
-
-        lay.addWidget(canvas)
+        lay_1.addWidget(canvas)
         self.ax = canvas.figure.subplots()
+
         x = np.arange(0, 120, 1)
         x_real = np.arange(-59, 1, 1)
 
@@ -405,7 +440,7 @@ class Parameter_Graph(ABCWidget):
 
         # Longterm prediction
         canvas1 = FigureCanvas(Figure())
-        lay.addWidget(canvas1)
+        lay_2.addWidget(canvas1)
         self.ax1 = canvas1.figure.subplots()
         self.ax1.plot(x_real, past_data[self.id],c='blue',linewidth = '2.5',label = 'Past values')
         self.ax1.plot(x, grap[self.id],c='red',linewidth = '2.5',label = 'Prediction results')
@@ -422,12 +457,13 @@ asdf = 120
 class Parameter_Info(ABCWidget):
     def __init__(self, parent, id=None):
         super(Parameter_Info, self).__init__(parent)
-        # self.setFixedHeight(30)
+        self.setFixedHeight(30)
         self.id = id
         name = {1: 'POWER RANGE PERCENT POWER', 2: 'OVERTEMPERATURE DELTA-T', 3: 'PRZ PRESSURE', 4:'PRZ LEVEL', 5:'LOOP 3 FLOW', 6: 'LOOP 2 FLOW', 7: 'LOOP 1 FLOW', 8: 'SG#3 Narrow Range Level', 9: 'SG#2 Narrow Range Level', 10: 'SG#1 Narrow Range Level'}
         Trip_time = {1: '{}'.format(asdf), 2: '2', 3: '3', 4:'4', 5:'5', 6: '6', 7: '7', 8: '8', 9: '9', 10: '10'}
 
         lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(Parameter_name(self, name[self.id]))
         lay.addWidget(TripTimeLabel(self))
         lay.addWidget(Parameter_TripTime(self, Trip_time[self.id]))
