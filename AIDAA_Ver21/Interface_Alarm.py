@@ -218,14 +218,13 @@ class AlarmScrollArea(ABCScrollArea):
 class AlarmTable(ABCTableWidget):
     def __init__(self, parent, table):
         super(AlarmTable, self).__init__(parent)
-
+        self.table = table
+        self.rowset = 0
         if table == Alarm_Table.Main:
-            # self.setFixedWidth(910)
             self.hcell = 40
         else:
             # self.setFixedSize(1240, 1190)
             self.hcell = 40
-
         self.setShowGrid(False)  # Grid 지우기
         self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
@@ -282,7 +281,9 @@ class AlarmTable(ABCTableWidget):
         qp.restore()
 
     def draw_row_line(self, qp):
-        for i in range(len(self.dis_alarm_list) + 1):
+        self.rowset = len(self.dis_alarm_list) + 1
+
+        for i in range(self.rowset):
             if i % 5 == 0:
                 qp.setPen(QPen(QColor(128, 128, 128), 3))
                 qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
@@ -290,8 +291,13 @@ class AlarmTable(ABCTableWidget):
     def dis_update(self):
         new_alarm_list = self.update_dis_alarm_list()
         self.setRowCount(len(self.dis_alarm_list))
-
         self.setFixedSize(909, self.hcell * self.rowCount())
+        if self.table == Alarm_Table.Main:
+            self.setRowCount(26)
+            self.setFixedSize(909, 1035)
+        else:
+            self.setRowCount(25)
+            self.setFixedSize(909, 980)
 
         # 테이블 행 높이 조절
         for i in range(0, self.rowCount()):

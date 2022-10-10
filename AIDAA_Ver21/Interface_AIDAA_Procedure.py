@@ -413,7 +413,7 @@ class ProcedureContents(ABCWidget):
         self.lay = QVBoxLayout(self)
         self.setObjectName("RightPG")
         self.setFixedWidth(1532)
-        self.lay.setContentsMargins(0, 0, 0, 0)
+        self.lay.setContentsMargins(0, 0, 0, 15)
 
     def dis_update(self, SequenceTitleClick:str, ContentsClickHis:dict, Contents:dict):
         """_summary_
@@ -448,7 +448,7 @@ class ProcedureTitleBar(ABCWidget):
     def __init__(self, parent, title):
         super(ProcedureTitleBar, self).__init__(parent)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(1, 0, 0, 0)
         title_conv = {'목적': '1.0', '경보 및 증상': '2.0', '자동 동작 사항': '3.0', '긴급 조치 사항': '4.0', '후속 조치 사항': '5.0'}
         [lay.addWidget(w) for w in [ProcedureTitleBar_1(self, title_conv[title]), ProcedureTitleBar_2(self, title)]]
         lay.setSpacing(10)
@@ -473,7 +473,7 @@ class Procedure_Content(ABCWidget):
     def __init__(self, parent, Contents_inTitle:dict, ContentsClickHis_inTitle:int, ContentsClickHis_inTitle_index:int):
         super(Procedure_Content, self).__init__(parent)
         lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 10, 0) # 실행 후 확인
+        lay.setContentsMargins(1, 0, 10, 0) # 실행 후 확인
         lay.setAlignment(Qt.AlignRight)
         Max_FixedWidth = 0
         # label 상단 정렬 위해
