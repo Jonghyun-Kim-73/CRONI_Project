@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import Interface_QSS as qss
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
-
 
 def make_shmem(parent, child, widget_name):
     result = parent.inmem
@@ -33,6 +33,11 @@ class ABCWidget(QWidget, TOOL):
         self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
 
+class ABCScrollArea(QScrollArea, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCScrollArea, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.setAttribute(Qt.WA_StyledBackground, True)
 
 class ABCPushButton(QPushButton, TOOL):
     def __init__(self, parent, widget_name=''):

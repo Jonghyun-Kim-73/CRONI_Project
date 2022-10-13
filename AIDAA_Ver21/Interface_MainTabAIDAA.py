@@ -5,12 +5,17 @@ from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_Alarm import *
 from AIDAA_Ver21.Interface_AIDAA_Diagnosis import *
+import Interface_QSS as qss
 
 class MainTabAIDAA(ABCWidget):
     def __init__(self, parent):
         super(MainTabAIDAA, self).__init__(parent)
+        self.setStyleSheet(qss.AIDAA)
+        self.setObjectName("BG")
+
         lay = QHBoxLayout(self)
+        lay.setContentsMargins(10, 15, 10, 10)
         lay.addWidget(AIDAAAlarm(self))
         lay.addWidget(Diagnosis(self))
-        lay.setSpacing(5)
+        lay.setSpacing(15)
 

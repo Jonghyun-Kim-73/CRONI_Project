@@ -18,6 +18,7 @@ class CNS(QWidget):
         lay = QVBoxLayout(self)
         one_step_btn = QPushButton('OneStep', self)
         one_step_btn.clicked.connect(self.one_step)
+        # one_step_btn.clicked.connect(self.ex)
 
         lay2 = QHBoxLayout()
         change_val_btn = QPushButton('ChangeVal', self)
