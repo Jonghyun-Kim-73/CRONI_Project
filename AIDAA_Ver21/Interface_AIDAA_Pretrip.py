@@ -332,8 +332,16 @@ sg3_level_mean_past = xtest[time][:,7]*minmax_output[7]+min_output[7]
 sg2_level_mean_past =xtest[time][:,8]*minmax_output[8]+min_output[8]
 sg1_level_mean_past = xtest[time][:,9]*minmax_output[9]+min_output[9]
 
-
-
+power_mean=power_mean.astype(np.float32)
+over_delta_T_mean=over_delta_T_mean.astype(np.float32)
+prz_pressure_mean=prz_pressure_mean.astype(np.float32)
+prz_level_mean=prz_level_mean.astype(np.float32)
+loop3_flow_mean=loop3_flow_mean.astype(np.float32)
+loop2_flow_mean=loop2_flow_mean.astype(np.float32)
+loop1_flow_mean=loop1_flow_mean.astype(np.float32)
+sg3_level_mean=sg3_level_mean.astype(np.float32)
+sg2_level_mean=sg2_level_mean.astype(np.float32)
+sg1_level_mean=sg1_level_mean.astype(np.float32)
 
 class PreTrip(ABCWidget):
     def __init__(self, parent):
@@ -453,20 +461,85 @@ class Parameter_Graph(ABCWidget):
         # self.ax1.grid()
         #
         # lay.addWidget(Parameter_ShortTerm(self, id))
-asdf = 120
+
+if len(np.where(np.logical_or(power_mean<25,power_mean>109))[0])==0:
+    power_triptime = 'None'
+else:
+    power_triptime =np.where(np.logical_or(power_mean<25,power_mean>109))[0][0]
+
+if len(np.where(over_delta_T_mean>1.3)[0])==0:
+    over_delta_T_triptime = 'None'
+else:
+    over_delta_T_triptime =np.where(over_delta_T_mean>1.3)[0][0]
+
+if len(np.where(np.logical_or(prz_pressure_mean<136.78,prz_pressure_mean>167.72))[0])==0:
+    prz_pressure_triptime = 'None'
+else:
+    prz_pressure_triptime = np.where(np.logical_or(prz_pressure_mean<136.78,prz_pressure_mean>167.72))[0][0]
+
+if len(np.where(prz_level_mean>92)[0])==0:
+    prz_level_triptime = 'None'
+else:
+    prz_level_triptime =np.where(prz_level_mean>92)[0][0]
+
+if len(np.where(loop3_flow_mean<90)[0])==0:
+    loop3_flow_triptime = 'None'
+else:
+    loop3_flow_triptime =np.where(loop3_flow_mean<90)[0][0]
+
+if len(np.where(loop2_flow_mean<90)[0])==0:
+    loop2_flow_triptime = 'None'
+else:
+    loop2_flow_triptime =np.where(loop2_flow_mean<90)[0][0]
+
+if len(np.where(loop1_flow_mean<90)[0])==0:
+    loop1_flow_triptime = 'None'
+else:
+    loop1_flow_triptime =np.where(loop1_flow_mean<90)[0][0]
+
+if len(np.where(sg3_level_mean<17)[0])==0:
+    sg3_level_triptime = 'None'
+else:
+    sg3_level_triptime =np.where(sg3_level_mean<17)[0][0]
+
+if len(np.where(sg2_level_mean<17)[0])==0:
+    sg2_level_triptime = 'None'
+else:
+    sg2_level_triptime =np.where(sg2_level_mean<17)[0][0]
+
+if len(np.where(sg1_level_mean<17)[0])==0:
+    sg1_level_triptime = 'None'
+else:
+    sg1_level_triptime =np.where(sg1_level_mean<17)[0][0]
+
+
 class Parameter_Info(ABCWidget):
     def __init__(self, parent, id=None):
         super(Parameter_Info, self).__init__(parent)
         self.setFixedHeight(30)
         self.id = id
         name = {1: 'POWER RANGE PERCENT POWER', 2: 'OVERTEMPERATURE DELTA-T', 3: 'PRZ PRESSURE', 4:'PRZ LEVEL', 5:'LOOP 3 FLOW', 6: 'LOOP 2 FLOW', 7: 'LOOP 1 FLOW', 8: 'SG#3 Narrow Range Level', 9: 'SG#2 Narrow Range Level', 10: 'SG#1 Narrow Range Level'}
-        Trip_time = {1: '{}'.format(asdf), 2: '2', 3: '3', 4:'4', 5:'5', 6: '6', 7: '7', 8: '8', 9: '9', 10: '10'}
+        self.Trip_time = {1: '{}'.format(power_triptime), 2: '{}'.format(over_delta_T_triptime), 3: '{}'.format(prz_pressure_triptime), 4:'{}'.format(prz_level_triptime),
+                     5:'{}'.format(loop3_flow_triptime), 6: '{}'.format(loop2_flow_triptime), 7: '{}'.format(loop1_flow_triptime), 8: '{}'.format(sg3_level_triptime), 9: '{}'.format(sg2_level_triptime), 10: '{}'.format(sg1_level_triptime)}
+        self.blink = False
+        self.lay = QHBoxLayout(self)
+        self.lay.setContentsMargins(0, 0, 0, 0)
+        self.lay.addWidget(Parameter_name(self, name[self.id]))
+        self.lay.addWidget(TripTimeLabel(self))
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+        self.lay.addWidget(Parameter_TripTime(self, self.Trip_time[self.id]))
+    def dis_update(self):
+        if self.Trip_time[self.id] =='None':
+            pass
 
-        lay = QHBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(Parameter_name(self, name[self.id]))
-        lay.addWidget(TripTimeLabel(self))
-        lay.addWidget(Parameter_TripTime(self, Trip_time[self.id]))
+        else:
+            # self.lay.addWidget(Parameter_TripTime(self, self.Trip_time[self.id]))
+            if not self.blink:
+                self.setStyleSheet('background-color: rgb(255, 255, 255)')
+                self.blink = True
+            else:
+                self.setStyleSheet('background-color: rgb(0, 176, 218)')
+                self.blink = False
 
 class TripTimeLabel(ABCLabel):
     def __init__(self, parent):
