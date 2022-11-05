@@ -546,7 +546,49 @@ Main_Tab = """
             QScrollBar::down-arrow::vertical {
                 image: url(./img/Arrow_D.png);
             }
-
+            QWidget#BG{
+                background:rgb(231, 231, 234);
+                border:1px solid #707070;
+                border-radius: 20px;
+            }
+            QWidget#RightTabTitleBG1{
+                background: white;
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+                border:1px solid white;
+            }
+            QWidget#RightTabTitleBG2{
+                background: rgb(255, 204, 0);
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+                border:1px solid rgb(255, 204, 0);
+            }
+            QWidget#RightTabTitleBG3{
+                background: rgb(192, 0, 0);
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+                border:1px solid rgb(192, 0, 0);
+            }
+            QLabel#RightTabTitle1{
+                background: None;
+                border:0px;
+                font: 45px Arial;
+            }
+            QPushButton#RightTabBtn1{
+                background: rgb(231, 231, 234);
+                border-radius: 20px;
+                font: 45px Arial;
+            }
+            QPushButton#RightTabBtn1:hover{
+                background: rgb(0, 176, 218);
+                border-radius: 20px;
+                font: 45px Arial;
+            }
+            QLabel#RightTabContent{
+                background: None;
+                border:0px;
+                font: 45px Arial;
+            }
 """
 
 Search_Popup = """
