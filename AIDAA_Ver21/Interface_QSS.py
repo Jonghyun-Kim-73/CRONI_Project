@@ -817,7 +817,7 @@ PreTrip = """
                 border: 1px solid #4E4E4E;
             }
             QWidget#Graph_sub {
-                background : white;
+                background : #E7E7EA;
                 border-radius: 10px;
                 border: 1px solid #4E4E4E;
             }
