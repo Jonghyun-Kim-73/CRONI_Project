@@ -418,38 +418,51 @@ class Parameter_Graph(ABCWidget):
         lay.setSpacing(17)
         layout_widget1.setObjectName("Graph_sub")
         layout_widget2.setObjectName("Graph_sub")
-        lay_1.setContentsMargins(10, 10, 10, 10)
-        lay_2.setContentsMargins(10, 10, 10, 10)
+        lay_1.setContentsMargins(5, 5, 5, 5)
+        lay_2.setContentsMargins(5, 5, 5, 5)
 
+        plt.rcParams['axes.facecolor'] = '#E7E7EA'
         #Shortterm prediction
-        canvas = FigureCanvas(Figure())
+        canvas = FigureCanvas(Figure(facecolor='#E7E7EA'))
         lay_1.addWidget(canvas)
         self.ax = canvas.figure.subplots()
 
         x = np.arange(0, 120, 1)
         x_real = np.arange(-59, 1, 1)
 
-        self.ax.plot(x_real, past_data[self.id],c='blue',linewidth = '2.5',label = 'Past values')
-        self.ax.plot(x, grap[self.id],c='red',linewidth = '2.5',label = 'Prediction results')
+        self.ax.plot(x_real, past_data[self.id],c='#707070',linewidth = '1',label = 'Past values')
+        self.ax.plot(x, grap[self.id],c='#403D98',linewidth = '1',label = 'Prediction results')
         self.ax.set_xlim(-10, 10)
-        self.ax.axvline(x=0, linestyle='--', c='black')
-        self.ax.set_ylabel(y_label[self.id])
-        self.ax.set_title('Short Term Prediction')
-        self.ax.axhline(y=trip_setpoint[self.id][0])
-        self.ax.axhline(y=trip_setpoint[self.id][1])
+        self.ax.axvline(x=0, linestyle='--', c='#707070', linewidth = '1')
+        self.ax.set_xticks([-10, 0, 10])
+        self.ax.set_xticklabels(['-10min', '0', '10min'])
+        self.ax.tick_params(axis='x', direction='in', which='major', labelsize=7, bottom=False)
+        self.ax.tick_params(axis='y', direction='in', which='major', labelsize=7, bottom= False)
+        self.ax.set_ylabel(y_label[self.id], fontsize='7')
+        self.ax.axhline(y=trip_setpoint[self.id][0], c='#C00000', linewidth = '1')
+        self.ax.axhline(y=trip_setpoint[self.id][1], c='#C00000', linewidth = '1')
+        self.ax.spines['top'].set_visible(False)
+        self.ax.spines['right'].set_visible(False)
+        self.ax.spines['left'].set_visible(False)
 
         # Longterm prediction
-        canvas1 = FigureCanvas(Figure())
+        canvas1 = FigureCanvas(Figure(facecolor='#E7E7EA'))
         lay_2.addWidget(canvas1)
         self.ax1 = canvas1.figure.subplots()
-        self.ax1.plot(x_real, past_data[self.id],c='blue',linewidth = '2.5',label = 'Past values')
-        self.ax1.plot(x, grap[self.id],c='red',linewidth = '2.5',label = 'Prediction results')
+        self.ax1.plot(x_real, past_data[self.id],c='#707070',linewidth = '1',label = 'Past values')
+        self.ax1.plot(x, grap[self.id],c='#403D98',linewidth = '1',label = 'Prediction results')
         self.ax1.set_xlim(-60, 120)
-        self.ax1.axvline(x=0, linestyle='--', c='black')
-        self.ax1.set_ylabel(y_label[self.id])
-        self.ax1.axhline(y=trip_setpoint[self.id][0])
-        self.ax1.axhline(y=trip_setpoint[self.id][1])
-        self.ax1.set_title('Long Term Prediction')
+        self.ax1.axvline(x=0, linestyle='--', c='#707070', linewidth = '1')
+        self.ax1.set_xticks([-60, 0, 120])
+        self.ax1.set_xticklabels(['-60min', '0', '120min'])
+        self.ax1.tick_params(axis='x', direction='in', which='major', labelsize=7)
+        self.ax1.tick_params(axis='y', direction='in', which='major', labelsize=7)
+        self.ax1.set_ylabel(y_label[self.id], fontsize='7')
+        self.ax1.axhline(y=trip_setpoint[self.id][0], c='#C00000', linewidth = '1')
+        self.ax1.axhline(y=trip_setpoint[self.id][1], c='#C00000', linewidth = '1')
+        self.ax1.spines['top'].set_visible(False)
+        self.ax1.spines['right'].set_visible(False)
+        self.ax1.spines['left'].set_visible(False)
         # self.ax1.grid()
         #
         # lay.addWidget(Parameter_ShortTerm(self, id))
@@ -460,7 +473,21 @@ class Parameter_Info(ABCWidget):
         self.setFixedHeight(30)
         self.id = id
         name = {1: 'POWER RANGE PERCENT POWER', 2: 'OVERTEMPERATURE DELTA-T', 3: 'PRZ PRESSURE', 4:'PRZ LEVEL', 5:'LOOP 3 FLOW', 6: 'LOOP 2 FLOW', 7: 'LOOP 1 FLOW', 8: 'SG#3 Narrow Range Level', 9: 'SG#2 Narrow Range Level', 10: 'SG#1 Narrow Range Level'}
-        Trip_time = {1: '{}'.format(asdf), 2: '2', 3: '3', 4:'4', 5:'5', 6: '6', 7: '7', 8: '8', 9: '9', 10: '10'}
+        self.Trip_time = {1: '{}'.format(power_triptime), 2: '{}'.format(over_delta_T_triptime), 3: '{}'.format(prz_pressure_triptime), 4:'{}'.format(prz_level_triptime),
+                     5:'{}'.format(loop3_flow_triptime), 6: '{}'.format(loop2_flow_triptime), 7: '{}'.format(loop1_flow_triptime), 8: '{}'.format(sg3_level_triptime), 9: '{}'.format(sg2_level_triptime), 10: '{}'.format(sg1_level_triptime)}
+        self.blink = False
+        self.lay = QHBoxLayout(self)
+        self.lay.setContentsMargins(15, 0, 0, 0)
+        self.lay.addWidget(Parameter_name(self, name[self.id]))
+        self.lay.addWidget(TripTimeLabel(self))
+        self.lay.addWidget(Parameter_TripTime(self, self.Trip_time[self.id]))
+
+        self.widget_timer(iter_=500, funs=[self.dis_update])
+        self.lay.setSpacing(30)
+        self.lay.addStretch(1)
+    def dis_update(self):
+        if self.Trip_time[self.id] =='None':
+            pass
 
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -478,7 +505,7 @@ class TripTimeLabel(ABCLabel):
 class Parameter_name(ABCLabel):
     def __init__(self, parent, name=None):
         super(Parameter_name, self).__init__(parent)
-        self.setFixedSize(180, 30)
+        self.setFixedSize(339, 30)
         self.setObjectName("TripLabel")
         self.setText(name)
 
