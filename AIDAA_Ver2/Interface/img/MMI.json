@@ -260,23 +260,12 @@
 			"type": "pump",
 			"direction": "L",
 			"textxpos": "-15.0",
-			"textypos": "-18.0",
-			"xpos": "313.0",
-			"ypos": "368.0",
-			"comp_val": 0
-		},
-		"24": {
-			"id": "KLAMPO198",
-			"name": "Make-Up",
-			"type": "pump",
-			"direction": "L",
-			"textxpos": "-15.0",
 			"textypos": "-19.0",
 			"xpos": "311.0",
 			"ypos": "430.0",
 			"comp_val": 0
 		},
-		"25": {
+		"24": {
 			"id": "KFV611",
 			"name": "FV611",
 			"type": "valve",
@@ -287,7 +276,7 @@
 			"ypos": "426.0",
 			"comp_val": 0
 		},
-		"26": {
+		"25": {
 			"id": "KFV612",
 			"name": "FV612",
 			"type": "valve",
@@ -298,7 +287,7 @@
 			"ypos": "272.0",
 			"comp_val": 0
 		},
-		"27": {
+		"26": {
 			"id": "",
 			"name": "BORIC ACID\nTANK",
 			"type": "PZR",
@@ -309,7 +298,7 @@
 			"ypos": "214.0",
 			"comp_val": 0
 		},
-		"28": {
+		"27": {
 			"id": "",
 			"name": "MAKE-UP\nWATER TANK",
 			"type": "PZR",
@@ -320,7 +309,7 @@
 			"ypos": "214.0",
 			"comp_val": 0
 		},
-		"29": {
+		"28": {
 			"id": "BPSV5",
 			"name": "PSV5",
 			"type": "valve",
@@ -331,7 +320,7 @@
 			"ypos": "101.0",
 			"comp_val": 0
 		},
-		"30": {
+		"29": {
 			"id": "BHV142",
 			"name": "HV142",
 			"type": "valve",
@@ -342,7 +331,7 @@
 			"ypos": "45.0",
 			"comp_val": 0
 		},
-		"31": {
+		"30": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -352,11 +341,11 @@
 			"textypos": "84.0",
 			"xpos": "652.0",
 			"ypos": "672.0",
-			"flow_from": "34",
+			"flow_from": "33",
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"32": {
+		"31": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -370,7 +359,7 @@
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"33": {
+		"32": {
 			"id": "BLV459",
 			"name": "LV459",
 			"type": "valve",
@@ -381,7 +370,7 @@
 			"ypos": "444.0",
 			"comp_val": 0
 		},
-		"34": {
+		"33": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -391,11 +380,11 @@
 			"textypos": "34.0",
 			"xpos": "724.0",
 			"ypos": "740.0",
-			"flow_from": "32",
+			"flow_from": "31",
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"35": {
+		"34": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -405,11 +394,11 @@
 			"textypos": "34.0",
 			"xpos": "659.0",
 			"ypos": "245.0",
-			"flow_from": "63",
+			"flow_from": "62",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"36": {
+		"35": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -419,11 +408,11 @@
 			"textypos": "34.0",
 			"xpos": "659.0",
 			"ypos": "133.0",
-			"flow_from": "67,68,69",
+			"flow_from": "66,67,68",
 			"comp_val": 0,
 			"gate": "OR"
 		},
-		"37": {
+		"36": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -437,7 +426,7 @@
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"38": {
+		"37": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -447,11 +436,11 @@
 			"textypos": "34.0",
 			"xpos": "104.0",
 			"ypos": "279.0",
-			"flow_from": "26,87",
+			"flow_from": "25,86",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"39": {
+		"38": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -461,7 +450,21 @@
 			"textypos": "34.0",
 			"xpos": "163.0",
 			"ypos": "600.0",
-			"flow_from": "91",
+			"flow_from": "90",
+			"comp_val": 0,
+			"gate": "N"
+		},
+		"39": {
+			"name": "",
+			"type": "arrow",
+			"thickness": "3",
+			"length": 70.0,
+			"direction": "L",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "162.0",
+			"ypos": "670.0",
+			"flow_from": "90",
 			"comp_val": 0,
 			"gate": "N"
 		},
@@ -473,27 +476,13 @@
 			"direction": "L",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "162.0",
-			"ypos": "670.0",
-			"flow_from": "91",
+			"xpos": "163.0",
+			"ypos": "734.0",
+			"flow_from": "90",
 			"comp_val": 0,
 			"gate": "N"
 		},
 		"41": {
-			"name": "",
-			"type": "arrow",
-			"thickness": "3",
-			"length": 70.0,
-			"direction": "L",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "163.0",
-			"ypos": "734.0",
-			"flow_from": "91",
-			"comp_val": 0,
-			"gate": "N"
-		},
-		"42": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -503,11 +492,11 @@
 			"textypos": "34.0",
 			"xpos": "100.0",
 			"ypos": "433.0",
-			"flow_from": "88,25",
+			"flow_from": "87,24",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"43": {
+		"42": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -517,11 +506,11 @@
 			"textypos": "34.0",
 			"xpos": "204.0",
 			"ypos": "430.0",
-			"flow_from": "46",
+			"flow_from": "45",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"44": {
+		"43": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -531,7 +520,21 @@
 			"textypos": "34.0",
 			"xpos": "259.0",
 			"ypos": "372.0",
-			"flow_from": "23,86",
+			"flow_from": "85",
+			"comp_val": 0,
+			"gate": "AND"
+		},
+		"44": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": "50",
+			"direction": "R",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "258.0",
+			"ypos": "435.0",
+			"flow_from": "23,47",
 			"comp_val": 0,
 			"gate": "AND"
 		},
@@ -543,27 +546,13 @@
 			"direction": "R",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "258.0",
-			"ypos": "435.0",
-			"flow_from": "24,48",
-			"comp_val": 0,
-			"gate": "AND"
-		},
-		"46": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "50",
-			"direction": "R",
-			"textxpos": "38.5",
-			"textypos": "34.0",
 			"xpos": "205.0",
 			"ypos": "406.0",
-			"flow_from": "47",
+			"flow_from": "46",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"47": {
+		"46": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -573,11 +562,11 @@
 			"textypos": "34.0",
 			"xpos": "258.0",
 			"ypos": "433.0",
-			"flow_from": "44,45",
+			"flow_from": "43,44",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"48": {
+		"47": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -587,11 +576,11 @@
 			"textypos": "34.0",
 			"xpos": "349.0",
 			"ypos": "453.0",
-			"flow_from": "85",
+			"flow_from": "84",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"49": {
+		"48": {
 			"id": "KFV610",
 			"name": "",
 			"type": "valve",
@@ -602,7 +591,7 @@
 			"ypos": "311.0",
 			"comp_val": 0
 		},
-		"50": {
+		"49": {
 			"id": "KFV613",
 			"name": "",
 			"type": "valve",
@@ -613,7 +602,7 @@
 			"ypos": "311.0",
 			"comp_val": 0
 		},
-		"51": {
+		"50": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -623,11 +612,11 @@
 			"textypos": "34.0",
 			"xpos": "197.0",
 			"ypos": "584.0",
-			"flow_from": "39,17",
+			"flow_from": "38,17",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"52": {
+		"51": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -637,11 +626,11 @@
 			"textypos": "34.0",
 			"xpos": "196.0",
 			"ypos": "717.0",
-			"flow_from": "19,41",
+			"flow_from": "19,40",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"53": {
+		"52": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -651,11 +640,11 @@
 			"textypos": "34.0",
 			"xpos": "788.0",
 			"ypos": "371.0",
-			"flow_from": "98",
+			"flow_from": "97",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"54": {
+		"53": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -665,11 +654,11 @@
 			"textypos": "34.0",
 			"xpos": "94.0",
 			"ypos": "518.0",
-			"flow_from": "91,55",
+			"flow_from": "90,54",
 			"comp_val": 0,
 			"gate": "OR"
 		},
-		"55": {
+		"54": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -679,11 +668,11 @@
 			"textypos": "34.0",
 			"xpos": "357.0",
 			"ypos": "587.0",
-			"flow_from": "21,93",
+			"flow_from": "21,92",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"56": {
+		"55": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -693,11 +682,11 @@
 			"textypos": "34.0",
 			"xpos": "441.0",
 			"ypos": "705.0",
-			"flow_from": "93",
+			"flow_from": "92",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"57": {
+		"56": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -707,11 +696,11 @@
 			"textypos": "34.0",
 			"xpos": "794.0",
 			"ypos": "634.0",
-			"flow_from": "62",
+			"flow_from": "61",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"58": {
+		"57": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -721,11 +710,11 @@
 			"textypos": "34.0",
 			"xpos": "724.0",
 			"ypos": "478.0",
-			"flow_from": "34",
+			"flow_from": "33",
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"59": {
+		"58": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -735,11 +724,11 @@
 			"textypos": "34.0",
 			"xpos": "650.0",
 			"ypos": "631.0",
-			"flow_from": "31",
+			"flow_from": "30",
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"60": {
+		"59": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -749,11 +738,11 @@
 			"textypos": "34.0",
 			"xpos": "651.0",
 			"ypos": "517.0",
-			"flow_from": "2,59",
+			"flow_from": "2,58",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"61": {
+		"60": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -763,11 +752,11 @@
 			"textypos": "34.0",
 			"xpos": "724.0",
 			"ypos": "382.0",
-			"flow_from": "33",
+			"flow_from": "32",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"62": {
+		"61": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -777,11 +766,11 @@
 			"textypos": "34.0",
 			"xpos": "779.0",
 			"ypos": "374.0",
-			"flow_from": "53",
+			"flow_from": "52",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"63": {
+		"62": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -791,7 +780,21 @@
 			"textypos": "34.0",
 			"xpos": "724.0",
 			"ypos": "249.0",
-			"flow_from": "61",
+			"flow_from": "60",
+			"comp_val": 0,
+			"gate": "N"
+		},
+		"63": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": 25.0,
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "789.0",
+			"ypos": "217.0",
+			"flow_from": "34",
 			"comp_val": 0,
 			"gate": "N"
 		},
@@ -803,9 +806,9 @@
 			"direction": "D",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "789.0",
-			"ypos": "217.0",
-			"flow_from": "35",
+			"xpos": "724.0",
+			"ypos": "216.0",
+			"flow_from": "34",
 			"comp_val": 0,
 			"gate": "N"
 		},
@@ -817,27 +820,13 @@
 			"direction": "D",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "724.0",
-			"ypos": "216.0",
-			"flow_from": "35",
+			"xpos": "659.0",
+			"ypos": "219.0",
+			"flow_from": "34",
 			"comp_val": 0,
 			"gate": "N"
 		},
 		"66": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": 25.0,
-			"direction": "D",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "659.0",
-			"ypos": "219.0",
-			"flow_from": "35",
-			"comp_val": 0,
-			"gate": "N"
-		},
-		"67": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -847,7 +836,21 @@
 			"textypos": "34.0",
 			"xpos": "658.0",
 			"ypos": "133.0",
-			"flow_from": "6,66",
+			"flow_from": "6,65",
+			"comp_val": 0,
+			"gate": "AND"
+		},
+		"67": {
+			"name": "",
+			"type": "line",
+			"thickness": "3",
+			"length": "50",
+			"direction": "D",
+			"textxpos": "38.5",
+			"textypos": "34.0",
+			"xpos": "724.0",
+			"ypos": "134.0",
+			"flow_from": "7,64",
 			"comp_val": 0,
 			"gate": "AND"
 		},
@@ -859,27 +862,13 @@
 			"direction": "D",
 			"textxpos": "38.5",
 			"textypos": "34.0",
-			"xpos": "724.0",
+			"xpos": "788.0",
 			"ypos": "134.0",
-			"flow_from": "7,65",
+			"flow_from": "8,63",
 			"comp_val": 0,
 			"gate": "AND"
 		},
 		"69": {
-			"name": "",
-			"type": "line",
-			"thickness": "3",
-			"length": "50",
-			"direction": "D",
-			"textxpos": "38.5",
-			"textypos": "34.0",
-			"xpos": "788.0",
-			"ypos": "134.0",
-			"flow_from": "8,64",
-			"comp_val": 0,
-			"gate": "AND"
-		},
-		"70": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -889,11 +878,11 @@
 			"textypos": "34.0",
 			"xpos": "724.0",
 			"ypos": "111.0",
-			"flow_from": "36",
+			"flow_from": "35",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"71": {
+		"70": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -903,11 +892,11 @@
 			"textypos": "34.0",
 			"xpos": "725.0",
 			"ypos": "108.0",
-			"flow_from": "70,72",
+			"flow_from": "69,71",
 			"comp_val": 0,
 			"gate": "OR"
 		},
-		"72": {
+		"71": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -917,11 +906,11 @@
 			"textypos": "34.0",
 			"xpos": "771.0",
 			"ypos": "78.0",
-			"flow_from": "30",
+			"flow_from": "29",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"73": {
+		"72": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -935,7 +924,7 @@
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"74": {
+		"73": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -945,11 +934,11 @@
 			"textypos": "34.0",
 			"xpos": "322.0",
 			"ypos": "108.0",
-			"flow_from": "70,71",
+			"flow_from": "69,70",
 			"comp_val": 0,
 			"gate": "OR"
 		},
-		"75": {
+		"74": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -959,11 +948,11 @@
 			"textypos": "34.0",
 			"xpos": "861.0",
 			"ypos": "108.0",
-			"flow_from": "29,71",
+			"flow_from": "28,70",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"76": {
+		"75": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -973,11 +962,11 @@
 			"textypos": "34.0",
 			"xpos": "116.0",
 			"ypos": "108.0",
-			"flow_from": "10,74",
+			"flow_from": "10,73",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"77": {
+		"76": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -987,11 +976,11 @@
 			"textypos": "34.0",
 			"xpos": "93.0",
 			"ypos": "138.0",
-			"flow_from": "76",
+			"flow_from": "75",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"78": {
+		"77": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1001,11 +990,11 @@
 			"textypos": "34.0",
 			"xpos": "93.0",
 			"ypos": "232.0",
-			"flow_from": "77",
+			"flow_from": "76",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"79": {
+		"78": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1015,11 +1004,11 @@
 			"textypos": "34.0",
 			"xpos": "93.0",
 			"ypos": "281.0",
-			"flow_from": "78,38",
+			"flow_from": "77,37",
 			"comp_val": 0,
 			"gate": "OR"
 		},
-		"80": {
+		"79": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -1033,7 +1022,7 @@
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"81": {
+		"80": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -1047,7 +1036,7 @@
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"82": {
+		"81": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1057,11 +1046,11 @@
 			"textypos": "34.0",
 			"xpos": "391.0",
 			"ypos": "364.0",
-			"flow_from": "84,83",
+			"flow_from": "83,82",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"83": {
+		"82": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1071,11 +1060,11 @@
 			"textypos": "34.0",
 			"xpos": "461.0",
 			"ypos": "344.0",
-			"flow_from": "81,50",
+			"flow_from": "80,49",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"84": {
+		"83": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1085,11 +1074,11 @@
 			"textypos": "34.0",
 			"xpos": "391.0",
 			"ypos": "344.0",
-			"flow_from": "49,80",
+			"flow_from": "48,79",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"85": {
+		"84": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1099,11 +1088,11 @@
 			"textypos": "34.0",
 			"xpos": "409.0",
 			"ypos": "365.0",
-			"flow_from": "83",
+			"flow_from": "82",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"86": {
+		"85": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -1113,11 +1102,11 @@
 			"textypos": "34.0",
 			"xpos": "356.0",
 			"ypos": "391.0",
-			"flow_from": "85",
+			"flow_from": "84",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"87": {
+		"86": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1127,11 +1116,11 @@
 			"textypos": "34.0",
 			"xpos": "183.0",
 			"ypos": "279.0",
-			"flow_from": "43",
+			"flow_from": "42",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"88": {
+		"87": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1141,11 +1130,11 @@
 			"textypos": "34.0",
 			"xpos": "178.0",
 			"ypos": "433.0",
-			"flow_from": "43",
+			"flow_from": "42",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"89": {
+		"88": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1159,7 +1148,7 @@
 			"comp_val": 1,
 			"gate": "N"
 		},
-		"90": {
+		"89": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1169,11 +1158,11 @@
 			"textypos": "34.0",
 			"xpos": "91.0",
 			"ypos": "435.0",
-			"flow_from": "42,89",
+			"flow_from": "41,88",
 			"comp_val": 1,
 			"gate": "OR"
 		},
-		"91": {
+		"90": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1183,11 +1172,11 @@
 			"textypos": "34.0",
 			"xpos": "90.0",
 			"ypos": "494.0",
-			"flow_from": "16,90",
+			"flow_from": "16,89",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"92": {
+		"91": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1197,11 +1186,11 @@
 			"textypos": "34.0",
 			"xpos": "196.0",
 			"ypos": "654.0",
-			"flow_from": "40,18",
+			"flow_from": "39,18",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"93": {
+		"92": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1211,11 +1200,11 @@
 			"textypos": "34.0",
 			"xpos": "247.0",
 			"ypos": "654.0",
-			"flow_from": "103,92,104",
+			"flow_from": "102,91,103",
 			"comp_val": 0,
 			"gate": "OR"
 		},
-		"94": {
+		"93": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1225,11 +1214,11 @@
 			"textypos": "34.0",
 			"xpos": "357.0",
 			"ypos": "623.0",
-			"flow_from": "93",
+			"flow_from": "92",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"95": {
+		"94": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -1243,7 +1232,7 @@
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"96": {
+		"95": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1257,7 +1246,7 @@
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"97": {
+		"96": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -1271,7 +1260,7 @@
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"98": {
+		"97": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1281,11 +1270,11 @@
 			"textypos": "34.0",
 			"xpos": "548.0",
 			"ypos": "520.0",
-			"flow_from": "22,93",
+			"flow_from": "22,92",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"99": {
+		"98": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -1295,11 +1284,11 @@
 			"textypos": "34.0",
 			"xpos": "491.0",
 			"ypos": "707.0",
-			"flow_from": "56",
+			"flow_from": "55",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"100": {
+		"99": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1309,11 +1298,11 @@
 			"textypos": "34.0",
 			"xpos": "776.0",
 			"ypos": "707.0",
-			"flow_from": "20,99",
+			"flow_from": "20,98",
 			"comp_val": 0,
 			"gate": "AND"
 		},
-		"101": {
+		"100": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1323,11 +1312,11 @@
 			"textypos": "34.0",
 			"xpos": "779.0",
 			"ypos": "637.0",
-			"flow_from": "100",
+			"flow_from": "99",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"102": {
+		"101": {
 			"name": "",
 			"type": "arrow",
 			"thickness": "3",
@@ -1337,11 +1326,11 @@
 			"textypos": "34.0",
 			"xpos": "547.0",
 			"ypos": "653.0",
-			"flow_from": "93",
+			"flow_from": "92",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"103": {
+		"102": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1351,11 +1340,11 @@
 			"textypos": "34.0",
 			"xpos": "247.0",
 			"ypos": "584.0",
-			"flow_from": "51",
+			"flow_from": "50",
 			"comp_val": 0,
 			"gate": "N"
 		},
-		"104": {
+		"103": {
 			"name": "",
 			"type": "line",
 			"thickness": "3",
@@ -1365,7 +1354,7 @@
 			"textypos": "34.0",
 			"xpos": "247.0",
 			"ypos": "657.0",
-			"flow_from": "52",
+			"flow_from": "51",
 			"comp_val": 0,
 			"gate": "N"
 		}
