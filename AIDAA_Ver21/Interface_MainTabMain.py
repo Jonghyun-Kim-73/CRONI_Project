@@ -15,5 +15,5 @@ class MainTabMain(ABCWidget):
         lay.setContentsMargins(10, 15, 10, 10)
         lay.addWidget(MainAlarm(self))
         lay.addWidget(MainTabRight(self))
-        lay.setSpacing(15)
+        lay.setSpacing(10)
 
