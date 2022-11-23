@@ -148,10 +148,7 @@ class InterfaceMem:
         self.widget_ids = {}
         # Top_widget 정보 등록
         self.add_widget_id(top_widget)
-        # Current system
-        self.system_switch = {'Main': 1, 'IFAP': 0, 'AIDAA': 0, 'EGIS': 0, 'Procedure': 0, 'Action': 0, 'PreTrip': 0}
-        self.system_state_switch = {'Normal': 1, 'Pre-abnormal': 0, 'Abnormal': 0, 'Emergency': 0}
-
+                
         self.diagnosis_convert_text = {0: 'Normal: 정상', 1: 'Ab21_01: 가압기 압력 채널 고장 (고)', 2: 'Ab21_02: 가압기 압력 채널 고장 (저)',
                                        3: 'Ab20_04: 가압기 수위 채널 고장 (저)', 4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)',
                                        5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
@@ -161,7 +158,20 @@ class InterfaceMem:
                                        12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸브 후단누설',
                                        14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설',
                                        16: '해당 시나리오는 학습되지 않은 시나리오입니다.', 17: '학습여부를 아직 확인할 수 없습니다.'}
+        self.abnormal_procedure_list = set([key if 'Ab' in key else '' for key in  ab_pro.keys()])  # ab_pro에서 'Ab' 가진 key 만 추출 ['Ab63_04: 제어봉 낙하', 'Ab... ']
+        self.abnormal_procedure_list.remove('')
+        self.abnormal_system_list = ['화학 및 체적 제어계통', '원자로 냉각재 계통', '주급수 계통', '보조 급수 계통', '제어봉 제어 계통', '잔열 제거 계통', '주증기 계통']
+        self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸브 후단누설', '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', '05/15', '0.76%']],
+                      'Train': 0,
+                       'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'], ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
+                       'System': [['화학 및 체적제어계통', '5', '72%'], ['원자로냉각재계통', '3', '16%'], ['급수계통', '1', '6%'], ['제어봉제어계통', '1', '3%'], ['잔열제거계통', '1', '3%']]}# 정지냉각계통
+        
 
+
+
+        
+        
+        
         #---------------------------------------------------------------------------------------------------------------------------------------
         looptitle = ['목적', '경보 및 증상', '자동 동작 사항', '긴급 조치 사항', '후속 조치 사항']
         self.ProcedureHis = {pro_name: {
@@ -183,18 +193,16 @@ class InterfaceMem:
                                     range(16)]
 
         self.access_procedure = []
-        self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', False, False, '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', True, True, '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸브 후단누설', True, True, '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', False, False, '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', True, True, '05/15', '0.76%']],
-                      'Train': 0,
-                       'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'], ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
-                       'System': [['화학 및 체적제어계통', '5', '72%'], ['원자로냉각재계통', '3', '16%'], ['급수계통', '1', '6%'], ['제어봉제어계통', '1', '3%'], ['잔열제거계통', '1', '3%']]}# 정지냉각계통
-        self.search_dict = {'Procedure': [[self.diagnosis_convert_text[i][2:7], self.diagnosis_convert_text[i][9:]] for i in range(1, 16)],
-                            'System': ['화학 및 체적 제어계통', '원자로 냉각재 계통', '주급수 계통', '보조 급수 계통', '제어봉 제어 계통', '잔열 제거 계통', '주증기 계통']}
-        self.current_search = {'Procedure':{'number':'', 'name':''}, # 검색창에 작성한 내용 저장
-                               'System':'', # 검색창에 작성한 내용 저장
-                               'reset_number':-1, 'reset_name':-1,# reset: 0 / search: 1
-                               'system_reset':-1, # reset: 0 / search: 1
-                               'current_procedure': -1,
-                               'active_window': 0} # seach 비활성: 0, search 활성: 1
+        
+
+
+
+        # self.current_search = {'Procedure':{'number':'', 'name':''}, # 검색창에 작성한 내용 저장
+        #                        'System':'', # 검색창에 작성한 내용 저장
+        #                        'reset_number':-1, 'reset_name':-1,# reset: 0 / search: 1
+        #                        'system_reset':-1, # reset: 0 / search: 1
+        #                        'current_procedure': -1,
+        #                        'active_window': 0} # seach 비활성: 0, search 활성: 1
 
         # AI Part ---------------------------------------------------------------------------------------------------
         # self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
@@ -223,11 +231,11 @@ class InterfaceMem:
             self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오
 
     # 단축키 설정 --------------------------------------------------------------------------------------------------------
-    def Train_Shortcut_key(self):
-        if self.ShMem.get_para_val('iFixTrain') == 0:
-            self.dis_AI['Train'] = 0
-        elif self.ShMem.get_para_val('iFixTrain') == 1:
-            self.dis_AI['Train'] = 1
+    # def Train_Shortcut_key(self):
+    #     if self.ShMem.get_para_val('iFixTrain') == 0:
+    #         self.dis_AI['Train'] = 0
+    #     elif self.ShMem.get_para_val('iFixTrain') == 1:
+    #         self.dis_AI['Train'] = 1
 
     def flatten(self, X):
         '''
@@ -306,7 +314,57 @@ class InterfaceMem:
                 result.append((maxv_, maxv_id))
 
         return result
+    # Procedure_Search.py ----------------------------------------------------------------------------------------------
+    def is_procedure_name_in_db(self, procedure_name:str) -> tuple[list, bool]:
+        """ abnormal_procedure_list 에 procedure_name이 있으면 true
 
+        Args:
+            procedure_name (str): 절차서명
+
+        Returns:
+            tuple[str, bool]: [절차서 명, [1 존재, 0 없음]]
+        """
+        procedure_list = list(self.abnormal_procedure_list)
+        if procedure_name == '':
+            return procedure_list, False
+        else:
+            bool_list, set_list = [], []
+            for name in procedure_list:
+                if procedure_name in name:
+                    bool_list.append(True)
+                    set_list.append(name)
+                else:
+                    bool_list.append(False)
+            if any(bool_list):
+                return set_list, True
+            else:
+                return procedure_list, False
+            
+    def is_system_name_in_db(self, system_name:str) -> tuple[list, bool]:
+        """ abnormal_system_list 에 system_name이 있으면 true
+
+        Args:
+            system_name (str): 시스템 명
+
+        Returns:
+            tuple[str, bool]: [시스템 명, [1 존재, 0 없음]]
+        """
+        system_list = self.abnormal_system_list
+        if system_name == '':
+            return system_list, False
+        else:
+            bool_list, set_list = [], []
+            for name in system_list:
+                if system_name in name:
+                    bool_list.append(True)
+                    set_list.append(name)
+                else:
+                    bool_list.append(False)
+            if any(bool_list):
+                return set_list, True
+            else:
+                return system_list, False
+    
     # Widget 링크 용 ----------------------------------------------------------------------------------------------------
     def add_widget_id(self, widget, widget_name=''):
         """새롭게 생성된 위젯의 정보를 self.widget_ids:dict 에 저장하는 함수
@@ -320,24 +378,11 @@ class InterfaceMem:
     def show_widget_ids(self):
         return self.widget_ids
 
-    def change_current_system_name(self, system_name: str):
-        """ 버튼 클릭시 화면 전환
-
-        Args:
-            system_name (str): Main, IFAP 등 self.system_switch에 작성된 값중 하나여야 함.
-        """
-        for name in self.system_switch.keys():
-            self.system_switch[name] = 1 if system_name == name else 0
-        self.widget_ids['MainTab'].change_system_page(system_name)
-
     def get_time(self):
         return str(timedelta(seconds=self.ShMem.get_para_val('KCNTOMS') / 5))
 
     def get_td(self):
         return timedelta(seconds=self.ShMem.get_para_val('KCNTOMS') / 5)
-
-    def get_current_system_name(self):
-        return list(self.system_switch.keys())[list(self.system_switch.values()).index(1)]
 
     def get_ab_procedure_num(self, content):
         return self.ShMem.get_pro_procedure(

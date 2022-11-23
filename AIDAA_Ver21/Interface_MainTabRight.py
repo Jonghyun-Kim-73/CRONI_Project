@@ -5,7 +5,6 @@ from matplotlib.pyplot import cla
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 
-
 class MainTabRight(ABCWidget):
     def __init__(self, parent):
         super(MainTabRight, self).__init__(parent)
@@ -15,10 +14,6 @@ class MainTabRight(ABCWidget):
         self.PreAbnormalW = MainTabRightPreAbnormalW(self)
         self.AbnormalW = MainTabRightAbnormalW(self)
         self.EmergencyW = MainTabRightEmergencyW(self)
-        self.PreAbnormalW.setObjectName("BG")
-        self.AbnormalW.setObjectName("BG")
-        self.EmergencyW.setObjectName("BG")
-
         self.vl.addWidget(self.PreAbnormalW)
         self.vl.addWidget(self.AbnormalW)
         self.vl.addWidget(self.EmergencyW)
@@ -27,26 +22,21 @@ class MainTabRight(ABCWidget):
         self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(True)
         self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(True)
         self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(True)
-
 class MainTabRightPreAbnormalW(ABCWidget):
-    def __init__(self, parent):
-        super(MainTabRightPreAbnormalW, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setContentsMargins(0, 0, 0, 0)
         self.setFixedSize(945, 365)
         self.w_title_layout = QWidget(self)
-        self.w_title_layout.setObjectName('RightTabTitleBG1')
         self.w_title_layout.setFixedSize(945, 70)
 
-        self.w_title = QLabel('Pre-abnormal')
-        self.w_title.setObjectName('RightTabTitle1')
+        self.w_title = MainTabRightPreAbnormalWTitle(self, 'Pre-abnormal')
 
-        self.gotobtn = QPushButton('IFAP')
-        self.gotobtn.setObjectName("RightTabBtn1")
+        self.gotobtn = MainTabRightPreAbnormalWBTN(self, 'IFAP')
         self.gotobtn.setFixedSize(254, 51)
         self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallIFAP'].dis_update)
 
-        self.w_contents = QLabel('...')
-        self.w_contents.setObjectName('RightTabContent')
+        self.w_contents = MainTabRightPreAbnormalWContent(self, '...')
         self.w_contents.setContentsMargins(10, 0, 0, 0)
 
         self.hl = QHBoxLayout()
@@ -66,28 +56,33 @@ class MainTabRightPreAbnormalW(ABCWidget):
         self.w_title.setDisabled(bool_)
         self.w_contents.setDisabled(bool_)
         self.gotobtn.setDisabled(bool_)
-
-    
+class MainTabRightPreAbnormalWTitle(ABCLabel):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+class MainTabRightPreAbnormalWBTN(ABCPushButton):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+class MainTabRightPreAbnormalWContent(ABCLabel):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
 class MainTabRightAbnormalW(ABCWidget):
     def __init__(self, parent):
         super(MainTabRightAbnormalW, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
         self.setFixedSize(945, 365)
-
         self.w_title_layout = QWidget(self)
-        self.w_title_layout.setObjectName('RightTabTitleBG2')
         self.w_title_layout.setFixedSize(945, 70)
 
-        self.w_title = QLabel('Abnormal')
-        self.w_title.setObjectName('RightTabTitle1')
+        self.w_title = MainTabRightAbnormalWTitle(self, 'Abnormal')
 
-        self.gotobtn = QPushButton('AIDAA')
-        self.gotobtn.setObjectName("RightTabBtn1")
+        self.gotobtn = MainTabRightAbnormalWBTN(self, 'AIDAA')
         self.gotobtn.setFixedSize(254, 51)
         self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallAIDAA'].dis_update)
 
-        self.w_contents = QLabel('...')
-        self.w_contents.setObjectName('RightTabContent')
+        self.w_contents = MainTabRightAbnormalWContent(self, '...')
         self.w_contents.setContentsMargins(10, 0, 0, 0)
 
         self.hl = QHBoxLayout()
@@ -107,27 +102,33 @@ class MainTabRightAbnormalW(ABCWidget):
         self.w_title.setDisabled(bool_)
         self.w_contents.setDisabled(bool_)
         self.gotobtn.setDisabled(bool_)
-
-class MainTabRightEmergencyW(ABCWidget, QWidget):
+class MainTabRightAbnormalWTitle(ABCLabel):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+class MainTabRightAbnormalWBTN(ABCPushButton):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+class MainTabRightAbnormalWContent(ABCLabel):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+class MainTabRightEmergencyW(ABCWidget):
     def __init__(self, parent):
         super(MainTabRightEmergencyW, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
         self.setFixedSize(945, 365)
-
         self.w_title_layout = QWidget(self)
-        self.w_title_layout.setObjectName('RightTabTitleBG3')
         self.w_title_layout.setFixedSize(945, 70)
 
-        self.w_title = QLabel('Emergency')
-        self.w_title.setObjectName('RightTabTitle1')
+        self.w_title = MainTabRightEmergencyWTitle(self, 'Emergency')
 
-        self.gotobtn = QPushButton('EGIS')
-        self.gotobtn.setObjectName("RightTabBtn1")
+        self.gotobtn = MainTabRightEmergencyWBTN(self, 'EGIS')
         self.gotobtn.setFixedSize(254, 51)
         self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallEGIS'].dis_update)
 
-        self.w_contents = QLabel('...')
-        self.w_contents.setObjectName('RightTabContent')
+        self.w_contents = MainTabRightAbnormalWContent(self, '...')
         self.w_contents.setContentsMargins(10, 0, 0, 0)
 
         self.hl = QHBoxLayout()
@@ -147,4 +148,15 @@ class MainTabRightEmergencyW(ABCWidget, QWidget):
         self.w_title.setDisabled(bool_)
         self.w_contents.setDisabled(bool_)
         self.gotobtn.setDisabled(bool_)
-
+class MainTabRightEmergencyWTitle(ABCLabel):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+class MainTabRightEmergencyWBTN(ABCPushButton):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+class MainTabRightEmergencyWContent(ABCLabel):
+    def __init__(self, parent, text, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)

@@ -16,8 +16,8 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 class Procedure(ABCWidget):
     def __init__(self, parent):
         super(Procedure, self).__init__(parent)
-        self.setStyleSheet(qss.AIDAA_Diagnosis2)
-        self.setObjectName("BG")
+        # self.setStyleSheet(qss.AIDAA_Diagnosis2)
+        # self.setObjectName("BG")
         lay = QVBoxLayout(self)
         lay.setContentsMargins(10, 15, 9, 15)
         lay.addWidget(ProcedureTop(self))
@@ -169,7 +169,7 @@ class ProcedureTop(ABCWidget):
     def __init__(self, parent):
         super(ProcedureTop, self).__init__(parent)
         # qss확인 후 주석 해제
-        self.setStyleSheet(qss.Main_Tab)
+        # self.setStyleSheet(qss.Main_Tab)
         self.setFixedHeight(40)
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -181,8 +181,6 @@ class ProcedureTop(ABCWidget):
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
         lay.setSpacing(10)
-
-
 
 class TopBTN(ABCLabel):
     def __init__(self, parent, widget_name, title):

@@ -12,7 +12,6 @@ from AIDAA_Ver21.Interface_AIDAA_Action_alarm_area import *
 class Action(ABCWidget):
     def __init__(self, parent):
         super(Action, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(100, 185, 211);')
         lay = QHBoxLayout(self)
         llay = QVBoxLayout()
         llay.addWidget(Action_alarm_area(self))
@@ -25,4 +24,3 @@ class Action(ABCWidget):
 class Action_suggestion_area(ABCWidget):
     def __init__(self, parent):
         super(Action_suggestion_area, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(149, 100, 211);')

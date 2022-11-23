@@ -5,29 +5,31 @@ from PyQt5.QtGui import *
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Function_Simulator_CNS import *
+from Interface_QSS import qss
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 # ----------------------------------------------------------------------------------------------------------------------
-
 class ProcedureSearch(ABCWidget):
-    def __init__(self, parent):
-        super(ProcedureSearch, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setStyleSheet(qss)
         self.setWindowFlags(Qt.FramelessWindowHint)  # 상단바 제거
-        self.setStyleSheet(qss.Search_Popup)
-        self.setObjectName("Search")
         self.setGeometry(454, 215, 1190, 840)
+
         lay = QVBoxLayout(self)
-        lay_content = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         self.TitleBar = ProcedureSearchTitleBar(self)
         lay.addWidget(self.TitleBar)
+
+        lay_content = QVBoxLayout()
         lay_content.addWidget(ProcedureSearchWindow(self))
         lay_content.addWidget(ProcedureSearchScrollArea(self))
         lay_content.addWidget(ProcedureSearchBottom(self))
         lay_content.setContentsMargins(10, 0, 10, 0)
 
         lay.addLayout(lay_content)
-
+        
+        self.m_flag = False
     # window drag
     def mousePressEvent(self, event):
         if (event.button() == Qt.LeftButton) and self.TitleBar.underMouse():
@@ -45,56 +47,45 @@ class ProcedureSearch(ABCWidget):
         self.m_flag = False
         self.setCursor(QCursor(Qt.ArrowCursor))
 # --------------------------------------------------------------------------------
-
 class ProcedureSearchTitleBar(ABCWidget):
-    def __init__(self, parent):
-        super(ProcedureSearchTitleBar, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setFixedHeight(50)
-        self.setObjectName("SearchTitleBar")
         lay = QHBoxLayout(self)
         lay.addWidget(ProcedureSearchTitleName(self))
         lay.addWidget(ProcedureSearchClose(self))
-
 class ProcedureSearchTitleName(ABCLabel):
-    def __init__(self, parent):
-        super(ProcedureSearchTitleName, self).__init__(parent)
-        self.setObjectName("SearchTitleBar")
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setText('Procedure Directory')
-
 class ProcedureSearchClose(ABCPushButton):
-    def __init__(self, parent):
-        super(ProcedureSearchClose, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         icon = os.path.join(ROOT_PATH, '../AIDAA_Ver21/Img/close.png')
-        self.setObjectName("SearchTitleBar")
         self.setIcon(QIcon(icon))
         self.setIconSize(QSize(33, 33))  # 아이콘 크기
         self.setFixedSize(QSize(33, 33))
         self.setContentsMargins(1, 0, 0, 0)
-        self.clicked.connect(self.close_ProcedureSearch)
-
-    def close_ProcedureSearch(self):
-        ProcedureSearch(self).close()
-
+        self.clicked.connect(self.inmem.widget_ids['ProcedureSearch'].close)
 # --------------------------------------------------------------------------------
-
 class ProcedureSearchWindow(ABCWidget):
-    def __init__(self, parent):
-        super(ProcedureSearchWindow, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        search_lay = QHBoxLayout(self)
+        search_lay.setContentsMargins(0, 0, 0, 0)
+        search_lay.addWidget(ProcedureSearchWindowGroupBox(self))
+class ProcedureSearchWindowGroupBox(ABCGroupBox):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setTitle('절차서 검색')
+        self.setContentsMargins(0, 0, 0, 0)
+        self.setFixedHeight(126)
+
         lay = QVBoxLayout(self)
         lay.addWidget(ProcedureSearch1(self))
         lay.addWidget(ProcedureSearch2(self))
         lay.setContentsMargins(0, 10, 200, 10)
         lay.setSpacing(5)
-        gb = QGroupBox('절차서 검색')
-        gb.setObjectName("SearchWindow")
-        gb.setContentsMargins(0, 0, 0, 0)
-        gb.setFixedHeight(126)
-        gb.setLayout(lay)
-
-        search_lay = QHBoxLayout(self)
-        search_lay.setContentsMargins(0, 0, 0, 0)
-        search_lay.addWidget(gb)
-
 class ProcedureSearch1(ABCWidget):
     def __init__(self, parent):
         super(ProcedureSearch1, self).__init__(parent)
@@ -106,54 +97,21 @@ class ProcedureSearch1(ABCWidget):
         lay.addWidget(ProcedureSearchInput1(self))
         lay.addWidget(ProcedureSearchBTN(self))
         lay.setSpacing(20)
-
 class ProcedureSearchLabel1(ABCLabel):
     def __init__(self, parent):
         super(ProcedureSearchLabel1, self).__init__(parent)
         self.setFixedHeight(30)
-        self.setObjectName("SearchLabel")
         self.setText('절차서 번호')
-
-class ProcedureSearchInput1(ABCText):
+class ProcedureSearchInput1(ABCPlainTextEdit):
     def __init__(self, parent):
         super(ProcedureSearchInput1, self).__init__(parent)
         self.setFixedSize(456, 30)
-        self.setObjectName("SearchInput")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-
-    def dis_update(self):
-        if self.inmem.current_search['reset_number'] == 0:
-            self.clear()
-            self.inmem.current_search['reset_number'] = -1
-
-        if self.inmem.current_search['Procedure']['name'] != '':
-            self.setReadOnly(True)
-        else:
-            self.setReadOnly(False)
-
-        self.inmem.current_search['Procedure']['number'] = self.toPlainText()
-
 class ProcedureSearchBTN(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSearchBTN, self).__init__(parent)
         self.setFixedSize(160, 30)
-        self.setObjectName("SearchBTN")
         self.setText('검색')
-        self.clicked.connect(self.search)
-        self.procedure_search_input = ''
-        self.search_area = ''
-
-    def search(self) -> str:
-        self.inmem.current_search['reset_number'] = 1
-        self.inmem.current_search['reset_name'] = 1
-        if self.inmem.current_search['Procedure']['number'] != '':
-            self.procedure_search_input = self.inmem.current_search['Procedure']['number']
-            self.search_area = 0 # 0: 절차서 번호, 1: 절차서 이름
-        elif self.inmem.current_search['Procedure']['name'] != '':
-            self.procedure_search_input = self.inmem.current_search['Procedure']['name']
-            self.search_area = 1  # 0: 절차서 번호, 1: 절차서 이름
-        return self.procedure_search_input, self.search_area
-
+        self.clicked.connect(lambda :self.inmem.widget_ids['ProcedureSearchTable'].show_procedure_list_in_table())
 class ProcedureSearch2(ABCWidget):
     def __init__(self, parent):
         super(ProcedureSearch2, self).__init__(parent)
@@ -165,47 +123,25 @@ class ProcedureSearch2(ABCWidget):
         lay.addWidget(ProcedureSearchInput2(self))
         lay.addWidget(ProcedureSearchReset(self))
         lay.setSpacing(20)
-
 class ProcedureSearchLabel2(ABCLabel):
     def __init__(self, parent):
         super(ProcedureSearchLabel2, self).__init__(parent)
         self.setFixedHeight(30)
-        self.setObjectName("SearchLabel")
         self.setText('절차서 명')
-
-class ProcedureSearchInput2(ABCText):
+class ProcedureSearchInput2(ABCPlainTextEdit):
     def __init__(self, parent):
         super(ProcedureSearchInput2, self).__init__(parent)
         self.setFixedSize(456, 30)
-        self.setObjectName("SearchInput")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-
-    def dis_update(self):
-        if self.inmem.current_search['reset_name'] == 0:
-            self.clear()
-            self.inmem.current_search['reset_name'] = -1
-
-        if self.inmem.current_search['Procedure']['number'] != '':
-            self.setReadOnly(True)
-        else:
-            self.setReadOnly(False)
-
-        self.inmem.current_search['Procedure']['name'] = self.toPlainText()
-
 class ProcedureSearchReset(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSearchReset, self).__init__(parent)
-        self.setObjectName("SearchBTN")
         self.setFixedSize(160, 30)
-        self.setText('리셋')
+        self.setText('초기화')
         self.clicked.connect(self.search_reset)
 
     def search_reset(self):
-        self.inmem.current_search['reset_number'] = 0
-        self.inmem.current_search['reset_name'] = 0
-        self.inmem.current_search['Procedure']['number'] = ''
-        self.inmem.current_search['Procedure']['name'] = ''
-
+        self.inmem.widget_ids['ProcedureSearchInput1'].clear()
+        self.inmem.widget_ids['ProcedureSearchInput2'].clear()
 # --------------------------------------------------------------------------------
 class ProcedureSearchScrollArea(ABCScrollArea):
     def __init__(self, parent):
@@ -221,32 +157,20 @@ class ProcedureSearchScrollArea(ABCScrollArea):
         self.headings_layout.setContentsMargins(0, 0, 10, 0)
 
         # header item
-        self.heading_label = [0, 0]
-        self.heading_label[0] = QLabel(" 절차서 번호")
-        self.heading_label[1] = QLabel(" 절차서명")
-
-        # size
-        self.heading_label[0].setFixedWidth(200)
-        self.heading_label[1].setFixedWidth(940)
-
-        for label in range(2):
-            self.headings_layout.addWidget(self.heading_label[label])
-            self.heading_label[label].setObjectName("Alarm_Header_M")
-            self.heading_label[label].setAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+        self.heading_label = [
+            ProcedureHeadingLabel(self, " 절차서 번호", 200, 'F'),
+            ProcedureHeadingLabel(self, " 절차서명", 940, 'L'),
+        ]
+        for label in self.heading_label:
+            self.headings_layout.addWidget(label)
+            label.setAlignment(Qt.AlignLeft and Qt.AlignVCenter)
 
         self.heading_label[0].setContentsMargins(5, 0, 0, 0)
-        self.heading_label[0].setObjectName("Alarm_Header_F")
-        self.heading_label[1].setObjectName("Alarm_Header_L")
+        
         # self.headings_layout.addStretch(1)
         self.headings_layout.setSpacing(0)
-
-
-        self.scrollwidget = QWidget()
-        # self.scrollwidget.setObjectName("scroll")
-        self.grid = QGridLayout(self.scrollwidget)
-        self.grid.addWidget(ProcedureSearchTable(self))
-        self.grid.setContentsMargins(0, 0, 10, 0)
-        self.setWidget(self.scrollwidget)
+        
+        self.setWidget(ProcedureSearchTableWidget(self))
         self.setWidgetResizable(True)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -255,90 +179,99 @@ class ProcedureSearchScrollArea(ABCScrollArea):
         rect = self.viewport().geometry()
         self.headings_widget.setGeometry(0, 0, rect.width() - 1, self.margins.top())
         QScrollArea.resizeEvent(self, event)
-
 class ProcedureSearchTable(ABCTableWidget):
     def __init__(self, parent):
         super(ProcedureSearchTable, self).__init__(parent)
         self.setFixedSize(1140, 640) # 초기 테이블 크기
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        
         self.setShowGrid(False)  # Grid 지우기
+        self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
         self.horizontalHeader().setVisible(False)  # Col header 숨기기
-        self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
+        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        
         self.column_labels = [(' 절차서 번호', 200), (' 절차서 명', 940)]
         self.setColumnCount(len(self.column_labels))
-        self.setRowCount(len(self.inmem.search_dict['Procedure']))
+        self.setRowCount(len(list(self.inmem.abnormal_procedure_list)))
         self.col_names = []
         for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
             self.col_names.append(l)
-        self.setSelectionBehavior(QTableView.SelectRows)
+        
+        # 테이블 헤더
         self.setHorizontalHeaderLabels(self.col_names)
         self.setSortingEnabled(True)  # 테이블 sorting
-
-        # header = self.horizontalHeader()
-        # header.setSortIndicatorShown(True)
-        # header.sortIndicatorChanged.connect(self.sortItems)
         self.horizontalHeader().setFixedHeight(40)
         self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeaderItem(1).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
+        
+        [self.setRowHeight(i, 65) for i in range(self.rowCount())] # 테이블 행 높이 조절
+        
+        self.itemDoubleClicked.connect(self.open_clicked_item_procedure)
+        self.show_procedure_list_in_table()
 
-        # 테이블 행 높이 조절
-        for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 65)
-
-        self.selected_procedure_name =''
-
-        self.doubleClicked.connect(self.dis_procedure)
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-
-    def dis_update(self):
-        search_result = []
-        if self.inmem.current_search['reset_number'] == 1 and self.inmem.current_search['reset_name'] == 1:
-            procedure_search_input, search_area = self.inmem.widget_ids['ProcedureSearchBTN'].search()
-            if search_area == 0: # 0: 절차서 번호, 1: 절차서 이름
-                for i in self.inmem.search_dict['Procedure']:
-                    if procedure_search_input in i[0]:
-                        search_result.append(i)
-                self.setRowCount(len(search_result))
-                [self.setItem(i, 0, QTableWidgetItem(" " + search_result[i][0])) for i in range(len(search_result))]
-                [self.setItem(i, 1, QTableWidgetItem(search_result[i][1])) for i in range(len(search_result))]
-            elif search_area == 1: # 0: 절차서 번호, 1: 절차서 이름
-                for i in self.inmem.search_dict['Procedure']:
-                    if procedure_search_input in i[1]:
-                        search_result.append(i)
-                self.setRowCount(len(search_result))
-                [self.setItem(i, 0, QTableWidgetItem(" " + search_result[i][0])) for i in range(len(search_result))]
-                [self.setItem(i, 1, QTableWidgetItem(search_result[i][1])) for i in range(len(search_result))]
+    def show_procedure_list_in_table(self):
+        [self.removeRow(0) for _ in range(self.rowCount())]
+        
+        selected_procedure_name = self.inmem.widget_ids['ProcedureSearchInput2'].toPlainText()
+        selected_procedure_num = self.inmem.widget_ids['ProcedureSearchInput1'].toPlainText()
+        
+        find_procedure_names, is_procedure_name_in_db = self.inmem.is_procedure_name_in_db(selected_procedure_name)
+        find_procedure_nubs, is_procedure_nub_in_db = self.inmem.is_procedure_name_in_db(selected_procedure_num)
+        
+        if is_procedure_name_in_db and not is_procedure_nub_in_db:
+            final_procedure_list = find_procedure_names
+        elif is_procedure_nub_in_db and not is_procedure_name_in_db:
+            final_procedure_list = find_procedure_nubs
+        elif is_procedure_nub_in_db and is_procedure_name_in_db:
+            final_procedure_list = list(set(find_procedure_nubs) - set(find_procedure_names))
         else:
-            self.setRowCount(len(self.inmem.search_dict['Procedure']))
-            [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.search_dict['Procedure'][i][0])) for i in range(len(self.inmem.search_dict['Procedure']))]
-            [self.setItem(i, 1, QTableWidgetItem(self.inmem.search_dict['Procedure'][i][1])) for i in range(len(self.inmem.search_dict['Procedure']))]
-
-        if self.currentRow() != -1:
-            self.inmem.current_table['Procedure'] = self.currentRow()
-            get_procedure_number = self.item(self.inmem.current_table['Procedure'], 0).text()
-            get_procedure_name = self.item(self.inmem.current_table['Procedure'], 1).text()
-            get_procedure_info = 'Ab'+get_procedure_number+': '+get_procedure_name
-            self.inmem.current_table['procedure_name'] = get_procedure_info
-
-    def dis_procedure(self):
-        # 주석 부분은 Procedure 부분 업데이트 완료 후 활성화할 예정
-        get_procedure_number = self.item(self.inmem.current_table['Procedure'], 0).text()
-        get_procedure_name = self.item(self.inmem.current_table['Procedure'], 1).text()
-        get_procedure_info = 'Ab'+get_procedure_number+': '+get_procedure_name
-        self.inmem.change_current_system_name('Procedure')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
-        self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_info)
-        self.parent().close()  # 더블클릭 시 팝업 종료
-
-
-# --------------------------------------------------------------------------------
-
+            final_procedure_list = list(self.inmem.abnormal_procedure_list)
+        
+        self.setRowCount(len(final_procedure_list))
+        [self.setItem(i, 0, ProcedureSearchItem(self, f' {pro_name.split(":")[0]}', pro_name)) for i, pro_name in enumerate(final_procedure_list)]
+        [self.setItem(i, 1, ProcedureSearchItem(self, f' {pro_name.split(":")[1]}', pro_name)) for i, pro_name in enumerate(final_procedure_list)]
+        [self.setRowHeight(i, 65) for i in range(self.rowCount())]
+    
+    def open_clicked_item_procedure(self):
+        if not len(self.selectedItems()) == 0:
+            pro_name = self.selectedItems()[0].pro_name
+            self.inmem.widget_ids['Procedure'].set_procedure_name(pro_name)
+            self.inmem.widget_ids['MainTab'].change_system_page('Procedure')
+            self.inmem.widget_ids['ProcedureSearch'].close()
+        else:
+            pass
+# ----------------------------------------------------------------------------------------------------------------------        
+class ProcedureSearchItem(ABCTabWidgetItem):
+    def __init__(self, parent, text, pro_name, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.pro_name = pro_name
+        self.setText(text)
+class ProcedureSearchTableWidget(ABCWidget):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        
+        self.proceduresearchtable = ProcedureSearchTable(self)
+        self.setFixedWidth(self.proceduresearchtable.width())
+        
+        vl = QVBoxLayout(self)
+        vl.addWidget(self.proceduresearchtable)
+        vl.addStretch(1)
+        vl.setContentsMargins(0, 0, 10, 0)
+class ProcedureHeadingLabel(ABCLabel):
+    def __init__(self, parent, text, fix_width, pos, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setFixedWidth(fix_width)
+        self.setText(text)
+        self.setProperty('Pos', pos)
+        self.style().polish(self)
+# ----------------------------------------------------------------------------------------------------------------------
 class ProcedureSearchBottom(ABCWidget):
     def __init__(self, parent):
         super(ProcedureSearchBottom, self).__init__(parent)
@@ -348,57 +281,40 @@ class ProcedureSearchBottom(ABCWidget):
         lay.addWidget(ProcedureSearchOpen(self))
         lay.addWidget(ProcedureSearchCancel(self))
         lay.setSpacing(15)
-
 class ProcedureSearchOpen(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSearchOpen, self).__init__(parent)
-        self.setObjectName("Bottom")
         self.setFixedSize(160, 30)
         self.setText('열기')
-        self.clicked.connect(self.dis_procedure)
-
-    def dis_procedure(self):
-        get_procedure_info = self.inmem.current_table['procedure_name']
-        self.inmem.change_current_system_name('Procedure')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
-        self.inmem.widget_ids['Procedure'].set_procedure_name(get_procedure_info)
-        # self.parent().close()  # 더블클릭 시 팝업 종료
-        # self.inmem.change_current_system_name('Procedure')
-        # self.inmem.widget_ids['MainTopSystemName'].dis_update()
-        ProcedureSearch(self).close() # 절차서 전환 후 종료
-
+        self.clicked.connect(self.inmem.widget_ids['ProcedureSearchTable'].open_clicked_item_procedure)
 class ProcedureSearchCancel(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureSearchCancel, self).__init__(parent)
-        self.setObjectName("Bottom")
         self.setFixedSize(160, 30)
         self.setText('취소')
-        self.clicked.connect(self.close_ProcedureSearch)
-
-    def close_ProcedureSearch(self):
-        self.inmem.current_search['active_window'] = 0
-        ProcedureSearch(self).close()
-
-# ----------------------------------------------------------------------------------------------------------------------
+        self.clicked.connect(self.inmem.widget_ids['ProcedureSearch'].close)
 # ----------------------------------------------------------------------------------------------------------------------
 class SystemSearch(ABCWidget):
-    def __init__(self, parent):
-        super(SystemSearch, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setStyleSheet(qss)
         self.setWindowFlags(Qt.FramelessWindowHint)  # 상단바 제거
-        self.setStyleSheet(qss.Search_Popup)
-        self.setObjectName("Search")
         self.setGeometry(454, 215, 1190, 840)
+
         lay = QVBoxLayout(self)
         lay_content = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         self.TitleBar = SystemSearchTitleBar(self)
         lay.addWidget(self.TitleBar)
+        
         lay_content.addWidget(SystemSearchWindow(self))
         lay_content.addWidget(SystemSearchScrollArea(self))
         lay_content.addWidget(SystemSearchBottom(self))
         lay_content.setContentsMargins(10, 0, 10, 0)
+        
         lay.addLayout(lay_content)
 
+        self.m_flag = False
     # window drag
     def mousePressEvent(self, event):
         if (event.button() == Qt.LeftButton) and self.TitleBar.underMouse():
@@ -416,42 +332,41 @@ class SystemSearch(ABCWidget):
         self.m_flag = False
         self.setCursor(QCursor(Qt.ArrowCursor))
 # --------------------------------------------------------------------------------
-
 class SystemSearchTitleBar(ABCWidget):
     def __init__(self, parent):
         super(SystemSearchTitleBar, self).__init__(parent)
         self.setFixedHeight(50)
-        self.setObjectName("SearchTitleBar")
         lay = QHBoxLayout(self)
         lay.addWidget(SystemSearchTitleName(self))
         lay.addWidget(SystemSearchClose(self))
-
 class SystemSearchTitleName(ABCLabel):
     def __init__(self, parent):
         super(SystemSearchTitleName, self).__init__(parent)
-        self.setObjectName("SearchTitleBar")
         self.setText('System Directory')
-
 class SystemSearchClose(ABCPushButton):
     def __init__(self, parent):
         super(SystemSearchClose, self).__init__(parent)
         icon = os.path.join(ROOT_PATH, '../AIDAA_Ver21/Img/close.png')
-        self.setObjectName("SearchTitleBar")
         self.setIcon(QIcon(icon))
         self.setIconSize(QSize(33, 33))  # 아이콘 크기
         self.setFixedSize(QSize(33, 33))
         self.setContentsMargins(1, 0, 0, 0)
-        self.clicked.connect(self.close_SystemSearch)
-
-    def close_SystemSearch(self):
-        SystemSearch(self).close()
-
+        self.clicked.connect(self.inmem.widget_ids['SystemSearch'].close)
 # --------------------------------------------------------------------------------
-
 class SystemSearchWindow(ABCWidget):
-    def __init__(self, parent):
-        super(SystemSearchWindow, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setFixedHeight(130)
+        search_lay = QHBoxLayout(self)
+        search_lay.setContentsMargins(0, 0, 0, 0)
+        search_lay.addWidget(SystemSearchWindowGroupBox(self))
+class SystemSearchWindowGroupBox(ABCGroupBox):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setTitle('System 검색')
+        self.setContentsMargins(0, 0, 0, 0)
+        self.setFixedHeight(80)
+
         lay = QHBoxLayout(self)
         lay.addStretch(1)
         lay.addWidget(SystemSearchLabel(self))
@@ -460,64 +375,27 @@ class SystemSearchWindow(ABCWidget):
         lay.addWidget(SystemSearchReset(self))
         lay.setContentsMargins(0, 10, 80, 10)
         lay.setSpacing(10)
-
-        gb = QGroupBox('System 검색')
-        gb.setObjectName("SearchWindow")
-        gb.setContentsMargins(0, 0, 0, 0)
-        gb.setFixedHeight(80)
-        gb.setLayout(lay)
-
-        search_lay = QHBoxLayout(self)
-        search_lay.setContentsMargins(0, 0, 0, 0)
-        search_lay.addWidget(gb)
-
 class SystemSearchLabel(ABCLabel):
     def __init__(self, parent):
         super(SystemSearchLabel, self).__init__(parent)
         self.setFixedHeight(30)
-        self.setObjectName("SearchLabel")
         self.setText('System 명')
-
-class SystemSearchInput(ABCText):
-    def __init__(self, parent):
-        super(SystemSearchInput, self).__init__(parent)
+class SystemSearchInput(ABCPlainTextEdit):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setFixedSize(456, 30)
-        self.setObjectName("SearchInput")
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-
-    def dis_update(self):
-        self.inmem.current_search['System'] = self.toPlainText()
-        if self.inmem.current_search['system_reset'] == 0:
-            self.clear()
-            self.inmem.current_search['system_reset'] = -1
-
 class SystemSearchBTN(ABCPushButton):
     def __init__(self, parent):
         super(SystemSearchBTN, self).__init__(parent)
         self.setFixedSize(160, 30)
-        self.setObjectName("SearchBTN")
         self.setText('검색')
-        self.clicked.connect(self.search)
-        self.system_search_input = ''
-
-    def search(self) -> str:
-        self.inmem.current_search['system_reset'] = 1
-        search_keyword = self.inmem.current_search['System']
-        self.system_search_input = search_keyword
-        return self.system_search_input
-
+        self.clicked.connect(lambda :self.inmem.widget_ids['SystemSearchTable'].show_system_list_in_table())
 class SystemSearchReset(ABCPushButton):
     def __init__(self, parent):
         super(SystemSearchReset, self).__init__(parent)
         self.setFixedSize(160, 30)
-        self.setObjectName("SearchBTN")
-        self.setText('리셋')
-        self.clicked.connect(self.search_reset)
-
-    def search_reset(self):
-        self.inmem.current_search['system'] = ''
-        self.inmem.current_search['system_reset'] = 0
-
+        self.setText('초기화')
+        self.clicked.connect(self.inmem.widget_ids['SystemSearchInput'].clear)
 # --------------------------------------------------------------------------------
 class SystemSearchScrollArea(ABCScrollArea):
     def __init__(self, parent):
@@ -533,23 +411,13 @@ class SystemSearchScrollArea(ABCScrollArea):
         self.headings_layout.setContentsMargins(0, 0, 10, 0)
 
         # header item
-        self.heading_label = QLabel(" System 명")
-        self.heading_label.setFixedWidth(1140)
-
+        self.heading_label = SystemSearchHeadingLabel(self, " System 명", 1140, 'F')
         self.headings_layout.addWidget(self.heading_label)
-        self.heading_label.setObjectName("Alarm_Header")
         self.heading_label.setAlignment(Qt.AlignLeft and Qt.AlignVCenter)
 
         self.heading_label.setContentsMargins(5, 0, 0, 0)
-        # self.headings_layout.addStretch(1)
-        # self.headings_layout.setSpacing(0)
 
-
-        self.scrollwidget = QWidget()
-        self.grid = QGridLayout(self.scrollwidget)
-        self.grid.addWidget(SystemSearchTable(self))
-        self.grid.setContentsMargins(0, 0, 10, 0)
-        self.setWidget(self.scrollwidget)
+        self.setWidget(SystemSearchTableWidget(self))
         self.setWidgetResizable(True)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -558,62 +426,93 @@ class SystemSearchScrollArea(ABCScrollArea):
         rect = self.viewport().geometry()
         self.headings_widget.setGeometry(0, 0, rect.width() - 1, self.margins.top())
         QScrollArea.resizeEvent(self, event)
-
 class SystemSearchTable(ABCTableWidget):
     def __init__(self, parent):
         super(SystemSearchTable, self).__init__(parent)
+        self.setFixedSize(1140, 556)
+        
+        self.setShowGrid(False)  # Grid 지우기
+        # self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.horizontalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionBehavior(QTableView.SelectRows)  # 테이블 row click
+        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        
         self.column_labels = [(' System 명', 1140)]
         self.setColumnCount(len(self.column_labels))
+        self.setRowCount(len(self.inmem.abnormal_system_list))
         self.col_names = []
-        self.setFixedSize(1140, 556)
-
         for i, (l, w) in enumerate(self.column_labels):
             self.setColumnWidth(i, w)
             self.col_names.append(l)
+        
+        # 테이블 헤더
         self.setHorizontalHeaderLabels(self.col_names)
-        self.setRowCount(len(self.inmem.search_dict['System']))
-        self.setSelectionBehavior(QTableView.SelectRows)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setShowGrid(False)  # Grid 지우기
-        self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
-        self.horizontalHeader().setVisible(False)  # Row 넘버 숨기기
-        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # header = self.horizontalHeader()
+        # header.setSortIndicatorShown(True)
+        # header.sortIndicatorChanged.connect(self.sortItems)
         self.setSortingEnabled(True)  # 테이블 sorting
-
-        header = self.horizontalHeader()
-        header.setSortIndicatorShown(True)
-        header.sortIndicatorChanged.connect(self.sortItems)
         self.horizontalHeader().setFixedHeight(40)
         self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
 
-        # 테이블 행 높이 조절
-        for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 65)
-        self.doubleClicked.connect(self.dis_system)
-        self.widget_timer(iter_=500, funs=[self.dis_update])
+        [self.setRowHeight(i, 65) for i in range(self.rowCount())] # 테이블 행 높이 조절
+        
+        self.itemDoubleClicked.connect(self.open_clicked_item_system)
+        self.show_system_list_in_table()
 
-    def dis_update(self):
-        search_result = []
-        if self.inmem.current_search['system_reset'] == 1:
-            for i in self.inmem.search_dict['System']:
-                if self.inmem.widget_ids['SystemSearchBTN'].search() in i:
-                    search_result.append(i)
-            self.setRowCount(len(search_result))
-            [self.setItem(j, 0, QTableWidgetItem(search_result[j])) for j in range(len(search_result))]
+    def show_system_list_in_table(self):
+        [self.removeRow(0) for _ in range(self.rowCount())]
+        
+        selected_system_name = self.inmem.widget_ids['SystemSearchInput'].toPlainText()
+        
+        find_system_names, is_system_name_in_db = self.inmem.is_system_name_in_db(selected_system_name)
+        
+        if is_system_name_in_db:
+            final_system_list = find_system_names
         else:
-            self.setRowCount(len(self.inmem.search_dict['System']))
-            [self.setItem(i, 0, QTableWidgetItem(self.inmem.search_dict['System'][i])) for i in range(len(self.inmem.search_dict['System']))]
+            final_system_list = self.inmem.abnormal_system_list
+        
+        self.setRowCount(len(final_system_list))
+        [self.setItem(i, 0, SystemSearchItem(self, f' {sys_name}', sys_name)) for i, sys_name in enumerate(final_system_list)]
+        [self.setRowHeight(i, 65) for i in range(self.rowCount())]
 
-    def dis_system(self): # 미믹 창 활성화 이후 닫기 기능 추가해야 함.
-        self.inmem.change_current_system_name('Action')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
-        self.parent().close()  # 더블클릭 시 팝업 종료
-
+    def open_clicked_item_system(self):
+        if not len(self.selectedItems()) == 0:
+            sys_name = self.selectedItems()[0].sys_name
+            self.inmem.widget_ids['MainTab'].change_system_page('Action')
+            self.inmem.widget_ids['SystemSearch'].close()
+        else:
+            pass
 # --------------------------------------------------------------------------------
-
+class SystemSearchItem(ABCTabWidgetItem):
+    def __init__(self, parent, text, sys_name, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.sys_name = sys_name
+        self.setText(text)
+class SystemSearchTableWidget(ABCWidget):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        
+        self.SystemSearchtable = SystemSearchTable(self)
+        self.setFixedWidth(self.SystemSearchtable.width())
+        
+        vl = QVBoxLayout(self)
+        vl.addWidget(self.SystemSearchtable)
+        vl.addStretch(1)
+        vl.setContentsMargins(0, 0, 10, 0)
+class SystemSearchHeadingLabel(ABCLabel):
+    def __init__(self, parent, text, fix_width, pos, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setFixedWidth(fix_width)
+        self.setText(text)
+        self.setProperty('Pos', pos)
+        self.style().polish(self)
+# --------------------------------------------------------------------------------
 class SystemSearchBottom(ABCWidget):
     def __init__(self, parent):
         super(SystemSearchBottom, self).__init__(parent)
@@ -621,33 +520,20 @@ class SystemSearchBottom(ABCWidget):
         lay.setContentsMargins(0, 5, 0, 10)
         lay.addStretch(1)
         lay.addWidget(SystemSearchOpen(self))
-        lay.addWidget(SystemSearchCancle(self))
+        lay.addWidget(SystemSearchCancel(self))
         lay.setSpacing(15)
-
 class SystemSearchOpen(ABCPushButton):
     def __init__(self, parent):
         super(SystemSearchOpen, self).__init__(parent)
-        self.setObjectName("Bottom")
         self.setFixedSize(160, 30)
         self.setText('열기')
-        self.clicked.connect(self.dis_system)
-
-    def dis_system(self): # CVCS만 구현되어 있기에, 무엇을 눌러도 CVCS 미믹창으로 전환됨.
-        self.inmem.change_current_system_name('Action')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
-        SystemSearch(self).close()
-
-class SystemSearchCancle(ABCPushButton):
+        self.clicked.connect(self.inmem.widget_ids['SystemSearchTable'].open_clicked_item_system)
+class SystemSearchCancel(ABCPushButton):
     def __init__(self, parent):
-        super(SystemSearchCancle, self).__init__(parent)
-        self.setObjectName("Bottom")
+        super(SystemSearchCancel, self).__init__(parent)
         self.setFixedSize(160, 30)
         self.setText('취소')
-        self.clicked.connect(self.close_SystemSearch)
-
-    def close_SystemSearch(self):
-        SystemSearch(self).close()
-# ----------------------------------------------------------------------------------------------------------------------
+        self.clicked.connect(self.inmem.widget_ids['SystemSearch'].close)
 # ----------------------------------------------------------------------------------------------------------------------
 
 class XAISearch(ABCWidget):

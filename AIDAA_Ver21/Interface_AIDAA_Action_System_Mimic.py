@@ -66,7 +66,6 @@ class Action_system_mimic_area(ABCWidget):
                     if self.CVCS.mem['SimTime']['V'] == self.mal_info[mal_name]['Time']:
                         self.CVCS.mem[mal_name]['V'] = self.mal_info[mal_name]['Opti']
             self.CVCS.step()
-            self.inmem.widget_ids['Action_system_scene'].update_scene()
             print(self.CVCS.mem['SimTime']['V'])
     
     def cvcs_call_run(self):
@@ -80,7 +79,6 @@ class Action_system_mimic_area(ABCWidget):
 # =============================================================
 # Mimic 화면 - CVCS 시뮬레이터 컨트롤러
 # =============================================================
-
 class Action_system_controller(ABCWidget):
     def __init__(self, parent):
         super(Action_system_controller, self).__init__(parent)
@@ -148,7 +146,6 @@ class Action_system_controller(ABCWidget):
                     print('Error')
             else:
                 print('Error No Mal')
-        
 class Malfun(QDialog):
     def __init__(self):
         super(Malfun, self).__init__()
@@ -183,11 +180,9 @@ class Malfun(QDialog):
         v1_layout.addLayout(h2_layout)
         v1_layout.addLayout(h3_layout)
         self.setLayout(v1_layout)
-
 # =============================================================
 # Mimic 화면 - CVCS 화면
 # =============================================================
-
 class Action_system_scene(ABCGraphicsScene):
     def __init__(self, parent):
         super(Action_system_scene, self).__init__(parent)

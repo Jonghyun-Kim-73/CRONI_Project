@@ -10,7 +10,6 @@ import Interface_QSS as qss
 class MainTabMain(ABCWidget):
     def __init__(self, parent):
         super(MainTabMain, self).__init__(parent)
-        self.setStyleSheet(qss.Main_Tab)
         lay = QHBoxLayout(self)
         lay.setContentsMargins(10, 15, 10, 10)
         lay.addWidget(MainAlarm(self))

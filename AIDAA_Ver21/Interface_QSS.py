@@ -1,842 +1,358 @@
-#-* encoding: UTF-8 -*-
-# Top Bar
-Top_Bar = """
-            QWidget#BG {
-                background: rgb(128, 128, 128);
-                border:0px;
-            }
-            QLabel#Title {
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 25px Arial;
-                font-weight: bold;
-                qproperty-alignment: AlignCenter;
-            }
-            QPushButton#Tab {
-                background: rgb(231, 231, 234);
-                border-radius: 5px;
-                border:0px;
-                font: 25px Arial;
-                font-weight: bold;
-                color: rgb(0, 0, 0);
-            }
-            QPushButton#Tab:hover {
-                background: rgb(0, 176, 218);
-                border-radius: 5px;
-                border:0px;
-                font: 25px Arial;
-                font-weight: bold;
-                color: rgb(0, 0, 0);
-            }
-"""
+# ref : https://het.as.utexas.edu/HET/Software/html/stylesheet-reference.html
+# ref : https://doc.qt.io/archives/qt-4.8/stylesheet-examples.html#customizing-qgroupbox
+# ref : https://wikidocs.net/book/2957
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+# Qss builder -------------------------------------------------
+def builder(objecttype:str, objectname:str, contents:list):
+    qss_info = f'{objecttype}#{objectname}' + '{'
+    
+    for content in contents:
+        qss_info += f'{content};'
+    
+    qss_info += '}'
+    
+    return qss_info
+def rgb_to_qCOLOR(color_code:str):
+    color_code = color_code.replace('rgb(', '').replace(')', '').replace(' ', '').split(',')
+    return QColor(int(color_code[0]), int(color_code[1]), int(color_code[2]))
 
-Alarm_Table = """
-            QTableWidget{
-                background: rgb(231, 231, 234);
-                border: 1px solid rgb(128, 128, 128); 
-                border-top: 0px;
-                font: 25px Arial;           
-                border-bottom-left-radius : 5px;
-                border-bottom-right-radius : 5px;    
-            }
-            QTableWidget::item::selected {
-                background-color: rgb(0, 176, 218);
-                color:black;
-                font: 25px;
-                outline: 0;
-            }
-            QLabel#Alarm_Header_F{
-                background-color: rgb(128, 128, 128);
-                font: 25px Arial;
-                border-top-left-radius:5px;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_M{
-                background-color: rgb(128, 128, 128);
-                font: 25px Arial;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_L{
-                background-color: rgb(128, 128, 128);
-                font: 25px Arial;
-                border-top-right-radius:5px;
-                font-weight: bold;
-            }
-            QWidget#scroll {
-                background: rgb(231,231,234);
-            }
-            QScrollArea {
-                border: None;
-                background: rgb(231,231,234);
-            }
-            QScrollBar::sub-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar::add-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar:vertical {
-                width: 20px;
-                background: rgb(128,128,128);
-            }
-            QScrollBar::up-arrow::vertical {
-                image: url(./img/Arrow_U.png);
-            }
-            QScrollBar::down-arrow::vertical {
-                image: url(./img/Arrow_D.png);
-            }
-            QPushButton#Bottom{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                font: 25px Arial;
-                font-weight: bold;   
-            }
-            QPushButton#Bottom:hover {
-                background: rgb(0, 176, 218);
-                border-radius: 5px;
-                font: 25px Arial;
-                font-weight: bold;   
-            }
-   
-"""
+# Color Table -------------------------------------------------
+DarkGray = 'rgb(80, 80, 80)' # old 128, 128, 128
+Gray = 'rgb(181, 181, 181)'
+LightGray = 'rgb(231, 231, 234)'
+LightWhite = 'rgb(255, 255, 255)'
+LightBlue = 'rgb(0, 178, 216)'
+DarkRed = 'rgb(192, 0, 0)'
+Yellow = 'rgb(249, 249, 0)'
+DarkYellow = 'rgb(255, 192, 0)'
+Black = 'rgb(0, 0, 0)'
+Green = 'rgb(0, 170, 0)'
+LightGreen = 'rgb(0, 176, 86)'
+Orange = 'rgb(255, 192, 0)'
+# Font Table --------------------------------------------------
+Global_font_size_nub = 20
+Content_font_size_nub = 12
+Mimic_font_size_nub = 12
+Global_font_size = f'{Global_font_size_nub}pt'
+Content_font_size = f'{Content_font_size_nub}pt'
+Global_font = 'Arial'
+Global_font2 = '맑은 고딕'
+# Qss ---------------------------------------------------------
+QssMain = ''.join([
+    builder('QWidget', 'Main', [
+        f'background-color: {LightGray};',
+        ]),
+    builder('QWidget', 'MainTop', [
+        f'background-color: {DarkGray};',
+        'border:0px;',
+        ]),
+    builder('QLabel', 'MainTopTime', [
+        f'background-color: {LightWhite};',
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        "qproperty-alignment: 'AlignCenter';",
+        'font-weight: bold;',
+        ]),
+    builder('QLabel', 'MainTopSystemName', [
+        f'background-color: {LightWhite};',
+        'border:0px;',
+        'border-radius: 5px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        "qproperty-alignment: 'AlignCenter';",
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'MainTopCallMain', [
+        f'background-color: {LightWhite};',
+        'border:0px;',
+        'border-radius: 5px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'MainTopCallMain:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'MainTopCallMain:checked', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'MainTopCallIFAP', [
+        f'background-color: {LightWhite};',
+        'border:0px;',
+        'border-radius: 5px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'MainTopCallIFAP:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'MainTopCallIFAP:checked', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'MainTopCallAIDAA', [
+        f'background-color: {LightWhite};',
+        'border:0px;',
+        'border-radius: 5px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'MainTopCallAIDAA:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'MainTopCallAIDAA:checked', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'MainTopCallEGIS', [
+        f'background-color: {LightWhite};',
+        'border:0px;',
+        'border-radius: 5px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'MainTopCallEGIS:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'MainTopCallEGIS:checked', [f'background-color: {LightBlue};']),
+    builder('QWidget', 'MainTabIFAP', [f'background-color: {Gray};']),
+    builder('QWidget', 'MainTabEGIS', [f'background-color: {Gray};']),
+    # Interface_Alarm.py ------------------------------------------------------------------------------------------
+    builder('QWidget', 'MainAlarm', [
+        f'background-color: {LightGray};', 
+        'border-radius: 5px;',
+        ]),
+    builder('QWidget', 'AIDAAAlarm', [f'background-color: {LightGray};']),
+    builder('QWidget', 'AlarmFix', [f'background-color: {LightGray};']),
+    builder('QPushButton', 'AlarmFixPreTrip', [
+        f'background-color: {LightGreen};', 'border-radius: 5px;','border:0px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QLabel', 'AlarmFixTrip', [
+        f'background-color: {LightGreen};', 'border-radius: 5px;','border:0px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        "qproperty-alignment: 'AlignCenter';",
+        'font-weight: bold;',
+        ]),
+    builder('QScrollArea', 'AlarmScrollArea', [f'background-color: {LightGray};', 'border: 0px;']),
+    builder('QScrollArea', 'AlarmScrollArea,QScrollBar::sub-page:vertical', [f'background: {LightGray};', f'border: 1px solid {DarkGray}']),
+    builder('QScrollArea', 'AlarmScrollArea,QScrollBar::add-page:vertical', [f'background: {LightGray};', f'border: 1px solid {DarkGray}']),
+    builder('QScrollArea', 'AlarmScrollArea,QScrollBar::vertical', [f'background: {LightGray};', 'border: None;', 'width: 20px;']),
+    builder('QScrollArea', 'AlarmScrollArea,QScrollBar::up-arrow::vertical', ['image: url(./img/Arrow_U.png);']),
+    builder('QScrollArea', 'AlarmScrollArea,QScrollBar::down-arrow::vertical', ['image: url(./img/Arrow_D.png);']),
+    builder('QTableWidget', 'AlarmTable', [f'background-color: {LightGray};', 
+                                           f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QTableWidget', 'AlarmTable::item', [f'border-bottom: 1px solid {DarkGray};']),
+    builder('QTableWidget', 'AlarmTable::item:selected', [
+        f'background-color: {LightBlue};', f'color:{Black};', 'outline: 0;', 
+        ]),
+    builder('QWidget', 'AlarmTableWidget', [f'background-color: {LightGray};', f'border: 1px solid {DarkGray};',]),
+    builder('QLabel', 'AlarmHeadingLabel', [
+        f'background-color: {DarkGray};',
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        "qproperty-alignment: 'AlignCenter';",
+        'font-weight: bold;',
+        ]),
+    builder('QLabel', 'AlarmHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
+    builder('QLabel', 'AlarmHeadingLabel[Pos="M"]', ['']),
+    builder('QLabel', 'AlarmHeadingLabel[Pos="L"]', ['border-top-right-radius:10px;']),
+    builder('QPushButton', 'AlarmSystem_IFAP_SortPress', [
+        f'background-color: {LightWhite};', 
+        'border-radius: 5px;',
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'AlarmSystem_IFAP_SortPress:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'AlarmSystem_AIDAA_SortPress', [
+        f'background-color: {LightWhite};', 
+        'border-radius: 5px;',
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'AlarmSystem_AIDAA_SortPress:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'AlarmSystem_EGIS_SortPress', [
+        f'background-color: {LightWhite};', 
+        'border-radius: 5px;', 
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'AlarmSystem_EGIS_SortPress:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'AlarmSystem_Sortsystem_SortPress', [
+        f'background-color: {LightWhite};', 
+        'border-radius: 5px;', 
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'AlarmSystem_Sortsystem_SortPress:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'AlarmAIDAA_Suppress_SortPress', [
+        f'background-color: {LightWhite};', 
+        'border-radius: 5px;', 
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'AlarmAIDAA_Suppress_SortPress:hover', [f'background-color: {LightBlue};']),
+    # Interface_MainTabRight.py -------------------------------------------------------------------------------------
+    builder('QWidget', 'MainTabRightPreAbnormalW', [
+        f'background-color: {LightWhite};', 
+        'border-radius: 20px;', f'border:1px solid {DarkGray};'
+    ]),
+    builder('QLabel', 'MainTabRightPreAbnormalWTitle', [
+        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 45px;',
+    ]),
+    builder('QPushButton', 'MainTabRightPreAbnormalWBTN', [f'background-color: {Gray};', 'border-radius: 20px;', f'font-family: {Global_font};', 'font-size: 45px;']),
+    builder('QPushButton', 'MainTabRightPreAbnormalWBTN:hover', [f'background-color: {LightBlue};']),
+    builder('QLabel', 'MainTabRightPreAbnormalWContent', [
+        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 45px;',
+        'border-bottom-right-radius: 20px;', 'border-bottom-left-radius: 20px;'
+    ]),
+    builder('QWidget', 'MainTabRightAbnormalW', [
+        f'background-color: {Yellow};', 
+        'border-radius: 20px;', f'border:1px solid {DarkGray};'
+    ]),
+    builder('QLabel', 'MainTabRightAbnormalWTitle', [
+        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 45px;',
+    ]),
+    builder('QPushButton', 'MainTabRightAbnormalWBTN', [f'background-color: {Gray};', 'border-radius: 20px;', f'font-family: {Global_font};', 'font-size: 45px;']),
+    builder('QPushButton', 'MainTabRightAbnormalWBTN:hover', [f'background-color: {LightBlue};']),
+    builder('QLabel', 'MainTabRightAbnormalWContent', [
+        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 45px;',
+        'border-bottom-right-radius: 20px;', 'border-bottom-left-radius: 20px;'
+    ]),
+    builder('QWidget', 'MainTabRightEmergencyW', [
+        f'background-color: {DarkRed};', 
+        'border-radius: 20px;', f'border:1px solid {DarkGray};'
+    ]),
+    builder('QLabel', 'MainTabRightEmergencyWTitle', [
+        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 45px;',
+    ]),
+    builder('QPushButton', 'MainTabRightEmergencyWBTN', [f'background-color: {Gray};', 'border-radius: 20px;', f'font-family: {Global_font};', 'font-size: 45px;']),
+    builder('QPushButton', 'MainTabRightEmergencyWBTN:hover', [f'background-color: {LightBlue};']),
+    builder('QLabel', 'MainTabRightEmergencyWContent', [
+        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 45px;',
+        'border-bottom-right-radius: 20px;', 'border-bottom-left-radius: 20px;'
+    ]),
+    # Interface_MainTabAIDAA.py -------------------------------------------------------------------------------------
+    builder('QWidget', 'MainTabAIDAA', [f'background-color: {LightGray};']),
+    # Interface_AIDAA_Diagnosis.py ----------------------------------------------------------------------------------
+    builder('QWidget', 'Diagnosis', [f'background-color: {LightGray};', 'border:0px;']),
+    builder('QPushButton', 'DiagnosisTopCallProcedureSearch', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'DiagnosisTopCallProcedureSearch:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'DiagnosisTopCallSystemSearch', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'DiagnosisTopCallSystemSearch:hover', [f'background-color: {LightBlue};']),
+    # --
+    builder('QScrollArea', 'DiagnosisProcedureTableScrollArea', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QTableWidget', 'DiagnosisProcedureTable', [f'background-color: {LightGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QTableWidget', 'DiagnosisProcedureTable::item', [f'border-bottom: 1px solid {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisProcedureTable[Block="On"]::item:selected', [f'background-color: {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisProcedureTable[Block="Off"]::item:selected', [f'background-color: {LightBlue};', f'color:{Black};', 'outline: 0;']),
+    builder('QTableWidget', 'DiagnosisProcedureTable[Block="On"]', [f'background-color: {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisProcedureTable[Block="Off"]', [f'background-color: {LightGray};']),
+    # --
+    builder('QLabel', 'DiagnosisProcedureItem', ['border:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QLabel', 'DiagnosisProcedureItem[Block="On"]', [f'background-color: {DarkGray};', f'color:{DarkGray}']),
+    builder('QLabel', 'DiagnosisProcedureItem[Block="Off"]', [f'color:{Black}']),
+    builder('QCheckBox', 'DiagnosisProcedureCheckBox', ['margin-left:40%;', 'margin-right:60%;']),
+    builder('QCheckBox', 'DiagnosisProcedureCheckBox[Block="Off"]::indicator', ['width: 25px;', 'height: 25px;']),
+    builder('QCheckBox', 'DiagnosisProcedureCheckBox[Block="On"]::indicator', ['width: 0px;', 'height: 0px;']),
+    builder('QCheckBox', 'DiagnosisProcedureCheckBox::indicator:checked', ['image: url(./Img/uncheck.png);']),
+    builder('QCheckBox', 'DiagnosisProcedureCheckBox::indicator:unchecked', ['image: url(./Img/check.png);']),
+    builder('QCheckBox', 'DiagnosisProcedureCheckBox::indicator', ['width: 0px;', 'height: 0px;']),
+    builder('QWidget', 'DiagnosisProcedureTableWidget', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QLabel', 'DiagnosisProcedureHeadingLabel', [
+        f'background-color: {DarkGray};',
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QLabel', 'DiagnosisProcedureHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
+    builder('QLabel', 'DiagnosisProcedureHeadingLabel[Pos="M"]', ['']),
+    builder('QLabel', 'DiagnosisProcedureHeadingLabel[Pos="L"]', ['border-top-right-radius:10px;']),
+    # --
+    builder('QScrollArea', 'DiagnosisSystemScrollArea', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QTableWidget', 'DiagnosisSystemTable', [f'background-color: {LightGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QTableWidget', 'DiagnosisSystemTable::item', [f'border-bottom: 1px solid {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisSystemTable[Block="On"]::item:selected', [f'background-color: {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisSystemTable[Block="Off"]::item:selected', [f'background-color: {LightBlue};', f'color:{Black};', 'outline: 0;']),
+    builder('QTableWidget', 'DiagnosisSystemTable[Block="On"]', [f'background-color: {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisSystemTable[Block="Off"]', [f'background-color: {LightGray};']),
+    builder('QLabel', 'DiagnosisSystemItem', ['border:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QLabel', 'DiagnosisSystemItem[Block="On"]', [f'background-color: {DarkGray};', f'color:{DarkGray}']),
+    builder('QLabel', 'DiagnosisSystemItem[Block="Off"]', [f'color:{Black}']),
+    builder('QWidget', 'DiagnosisSystemTableWidget', ['border:0px;', f'background-color: {LightGray};']),
+    # --
+    builder('QScrollArea', 'ProcedureCheckTableScrollArea', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QTableWidget', 'ProcedureCheckTable', [f'background-color: {LightGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QTableWidget', 'ProcedureCheckTable::item', [f'border-bottom: 1px solid {DarkGray};']),
+    builder('QTableWidget', 'ProcedureCheckTable::item:selected', [f'background-color: {DarkGray};']),
+    builder('QLabel', 'ProcedureCheckTableItem', ['border:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QWidget', 'DiagnosisSystemTableWidget', ['border:0px;', f'background-color: {LightGray};']),
+    
+    # Interface_AIDAA_Procedure_Search.py ---------------------------------------------------------------------------
+    builder('QWidget', 'ProcedureSearch', [f'background-color: {LightGray};']),
+    builder('QWidget', 'ProcedureSearchTitleBar', [f'background-color: {DarkGray};', 'border: 0px;']),
+    builder('QLabel', 'ProcedureSearchTitleName', [f'background-color: {LightGray};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'qproperty-alignment: AlignCenter;', 'font-weight: bold;']),
+    builder('QWidget', 'ProcedureSearchWindow', [f'background-color: {LightGray};', 'border: 0px;']),
+    builder('QGroupBox', 'ProcedureSearchWindowGroupBox', [f'background-color: {LightGray};', f'border: 1px solid {DarkGray};', 'border-radius: 10px;', 'margin-top: 10px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};']),
+    builder('QGroupBox', 'ProcedureSearchWindowGroupBox::title', ['subcontrol-origin: margin;', 'top: -5px;', 'left: 30px;', 'padding: 0px 2px 0px 2px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};']),
+    builder('QLabel', 'ProcedureSearchLabel1', [f'background-color: {LightGray};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'qproperty-alignment: AlignCenter;', 'font-weight: bold;']),
+    builder('QPlainTextEdit', 'ProcedureSearchInput1', [f'background-color: {LightWhite};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureSearchBTN', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'ProcedureSearchLabel2', [f'background-color: {LightGray};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'qproperty-alignment: AlignCenter;', 'font-weight: bold;']),
+    builder('QPlainTextEdit', 'ProcedureSearchInput2', [f'background-color: {LightWhite};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureSearchReset', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+    builder('QTableWidget', 'ProcedureSearchTable', [f'background-color: {LightGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QTableWidget', 'ProcedureSearchTable::item', [f'border-bottom: 1px solid {DarkGray};']),
+    builder('QTableWidget', 'ProcedureSearchTable::item:selected', [
+        f'background-color: {LightBlue};', f'color:{Black};', 'outline: 0;', 
+        ]),
+    builder('QWidget', 'ProcedureSearchTableWidget', [f'background-color: {LightGray};', f'border: 1px solid {DarkGray};',]),
+    builder('QLabel', 'ProcedureHeadingLabel', [
+        f'background-color: {DarkGray};',
+        f'font-family: {Global_font};',
+        f'font-size: {Content_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QLabel', 'ProcedureHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
+    builder('QLabel', 'ProcedureHeadingLabel[Pos="M"]', ['']),
+    builder('QLabel', 'ProcedureHeadingLabel[Pos="L"]', ['border-top-right-radius:10px;']),
+    builder('QWidget', 'ProcedureSearchBottom', [f'background-color: {LightGray};']),
+    builder('QPushButton', 'ProcedureSearchOpen', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureSearchCancel', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
 
-
-# AIDAA Tab
-AIDAA = """
-            QWidget#BG {
-                background: rgb(231, 231, 234);
-                border:0px;
-            }
-"""
-
-AIDAA_Diagnosis = """
-            QWidget#BG {
-                background: rgb(231, 231, 234);
-                border:0px;
-            }
-            QWidget#Tab3 {
-                border:1px solid rgb(128, 128, 128);
-            }
-            QToolTip { 
-                background: white;
-                border: 1px solid #808080;
-           }
-            QCheckBox::indicator { 
-                width: 25px; 
-                height: 25px; 
-            } 
-            QCheckBox::indicator:unchecked {
-                image: url(./img/uncheck.png);
-            }
-            QCheckBox::indicator:checked {
-                image: url(./img/check.png);
-            }
-            QPushButton#Button{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;   
-            }
-            QPushButton#Button:hover {
-                background: rgb(0, 176, 218);
-                border-radius: 5px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;   
-            }
-            QTableWidget{
-                background: rgb(231, 231, 234);
-                border: 1px solid rgb(128, 128, 128); 
-                font: 25px 맑은 고딕;           
-                border-top-left-radius :5px;
-                border-top-right-radius : 5px;
-                border-bottom-left-radius : 5px;
-                border-bottom-right-radius : 5px;    
-            }
-            QHeaderView {
-                background: rgb(128, 128, 128);
-                border: 0px;
-            }
-            QHeaderView::section {
-                background: rgb(128, 128, 128);
-                border: 0px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;        
-                qproperty-alignment: AlignCenter;
-            }
-            QTableWidget::item::selected {
-                background-color: rgb(0, 176, 218);
-                color:black;
-                font: 25px 맑은 고딕;
-                border-top: 1px solid rgb(128, 128, 128);
-            }
-            QTableWidget::item {
-                font: 25px 맑은 고딕;
-                border-top: 1px solid rgb(128, 128, 128);
-            }
-            QLabel#Alarm_Header_F{
-                background-color: rgb(128, 128, 128);
-                font: 25px 맑은 고딕;
-                border-top-left-radius:5px;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_M{
-                background-color: rgb(128, 128, 128);
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_L{
-                background-color: rgb(128, 128, 128);
-                font: 25px 맑은 고딕;
-                border-top-right-radius:5px;
-                font-weight: bold;
-            }
-            QWidget#scroll {
-                background: rgb(231,231,234);
-            }
-            QScrollArea {
-                border: None;
-                background: rgb(231,231,234);
-            }
-            QScrollBar::sub-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar::add-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar:vertical {
-                width: 20px;
-                background: rgb(128,128,128);
-            }
-            QScrollBar::up-arrow::vertical {
-                image: url(./img/Arrow_U.png);
-            }
-            QScrollBar::down-arrow::vertical {
-                image: url(./img/Arrow_D.png);
-            }
-            QTableWidget#Tab3{
-                background: rgb(231, 231, 234);
-                border: 1px solid rgb(128, 128, 128); 
-                font: 25px 맑은 고딕;           
-                border-top-left-radius : 0px; 
-                border-top-right-radius : 0px;
-                border-bottom-left-radius : 5px;
-                border-bottom-right-radius : 5px;    
-            }
-            QTableWidget#Tab3::item::selected {
-                background-color: rgb(0, 176, 218);
-                color:black;
-                border:0px;
-                border-bottom: 1px solid rgb(128, 128, 128);
-                font: 25px 맑은 고딕;
-                outline: 0;
-            }
-            QTableWidget#Tab3::item {
-                font: 25px 맑은 고딕;
-                border: 0px;
-                border-bottom: 1px solid rgb(128, 128, 128);
-            }
-            QTableView{
-                outline: 0;
-            }
-            QScrollArea{
-                border:0px;
-            }
-"""
-# QTableWidget#Tab3::item {
-#                 font: 25px 맑은 고딕;
-#                 #margin-top: 5px;
-#                 border: 0px;
-#                 border-bottom: 1px solid rgb(128, 128, 128);
-#             }
-AIDAA_Diagnosis2 = """
-            QWidget#BG{
-                background: rgb(231, 231, 234);
-                border: 0px;
-            }
-            QWidget#RightPG{
-                background: rgb(231, 231, 234);
-                border-radius: 5px;
-                border: 1px solid #808080;
-            }
-            QLabel#Label{
-                background: rgb(192, 0, 0);
-                border-radius: 5px;
-                font: 25px;
-                font-weight: bold;
-                border:0px;
-                qproperty-alignment: AlignCenter;
-            }
-            QLabel#Title{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-                border:0px;
-            }
-            QPushButton#Button{
-                background: rgb(0, 176, 86);
-                border-radius: 5px;
-                border:0px;
-                font: 25px;
-                font-weight: bold;
-            }
-            QPushButton#Search{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border:0px;
-                font: 25px;
-                font-weight: bold;
-                
-            }
-            QPushButton#Search::hover{
-                background: rgb(0, 176, 218);
-                border-radius: 5px;
-                border:0px;
-                font: 25px;
-                font-weight: bold;
-            }
-            QPushButton#Tab{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border:0px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-                text-align: left;
-            }
-            QPushButton#Tab::hover{
-                background: rgb(0, 176, 218);
-                border-radius: 5px;
-                border:0px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-                text-align: left;
-            }
-            QPushButton#Check{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border: 1px solid #707070;
-            }
-            QPushButton#Bottom{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-            }
-            QLabel{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                padding-left:5px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-                border:0px;
-            }
-            QLabel#TitleBar{
-                background: rgb(112, 112, 112);
-                border-radius: 5px;
-                padding-left:5px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-                border:0px;
-            }
-            QPushButton{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border: 1px solid #707070;
-                border:0px;
-            }
-            QLabel#Notice{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border: 1px solid #C00000;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-            }
-            QLabel#label_title{
-                color: #C00000;
-                font: 25px;
-                font-weight: bold;
-            }
-            QLabel#label_content{
-                color: rgb(0, 0, 0);
-                font: 25px;
-                font-weight: bold;
-            }
-            QLabel#Notice{
-                background: rgb(255, 255, 255);
-                border: 1px solid #C00000; 
-                border-radius: 5px;
-            }
-            QWidget#scroll {
-                background: rgb(231,231,234);
-            }
-            QScrollArea {
-                border: None;
-                background: rgb(231,231,234);
-            }
-            QScrollBar::sub-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar::add-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar:vertical {
-                width: 20px;
-                background: rgb(128,128,128);
-            }
-            QScrollBar::up-arrow::vertical {
-                image: url(./img/Arrow_U.png);
-            }
-            QScrollBar::down-arrow::vertical {
-                image: url(./img/Arrow_D.png);
-            }
-"""
-
-Main_Tab = """
-            QPushButton#Left{
-                background: rgb(0, 176, 86);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 25px Arial;
-                font-weight: bold;
-                qproperty-alignment: AlignCenter;
-            }
-            QLabel#Left{
-                background: rgb(0, 176, 86);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 25px Arial;
-                font-weight: bold;
-                qproperty-alignment: AlignCenter;
-            }
-            QLabel#Label{
-                background: rgb(192, 0, 0);
-                border-radius: 5px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-                border:0px;
-                qproperty-alignment: AlignCenter;
-            }
-            QPushButton#Bottom{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border:0px;
-                font: 25px Arial;
-                font-weight: bold;
-                color: rgb(0, 0, 0);
-            }
-            QPushButton#Bottom::hover{
-                background: rgb(0, 178, 218);
-                border-radius: 5px;
-                border:0px;
-                font: 25px Arial;
-                font-weight: bold;
-                color: rgb(0, 0, 0);
-            }
-            QPushButton#Right{
-                background: rgb(128, 128, 128);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 23px;
-            }
-            QPushButton#Right::hover{
-                background: rgb(0, 178, 128);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 23px;
-            }
-            QPushButton#Search{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border:0px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-            }
-            QPushButton#Search::hover{
-                background: rgb(0, 176, 218);
-                border-radius: 5px;
-                border:0px;
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-            }
-            QLabel#RightTabTitle{
-                background-color: rgb(128, 128, 128);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 23px;
-            }
-            QLabel#RightTabTitle:disabled{
-                color: rgb(231, 231, 231);
-            }
-            QLabel#RightTabcont{
-                background-color: rgb(128, 128, 128);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 23px;
-            }
-            QLabel#RightTabcont:disabled{
-                color: rgb(128, 128, 128);
-            }
-            QTableWidget{
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128, 128, 128); 
-                font: 25px;           
-                border-bottom-left-radius : 5px;
-                border-bottom-right-radius : 5px;    
-            }
-            QTableWidget::item::selected {
-                background-color: rgb(0, 176, 218);
-                color:black;
-                font: 25px;
-                outline: 0;
-            }
-            QLabel#Alarm_Header_F{
-                background-color: rgb(128, 128, 128);
-                font: 25px Arial;
-                border-top-left-radius:5px;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_M{
-                background-color: rgb(128, 128, 128);
-                font: 25px Arial;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_L{
-                background-color: rgb(128, 128, 128);
-                font: 25px Arial;
-                border-top-right-radius:5px;
-                font-weight: bold;
-            }
-            QWidget {
-                background: rgb(231,231,234);
-            }
-            QScrollArea {
-                border: None;
-                background: rgb(231,231,234);
-            }
-            QScrollBar::sub-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar::add-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar:vertical {
-                width: 20px;
-                background: rgb(128,128,128);
-                border: 0px;
-            }
-            QScrollBar::up-arrow::vertical {
-                image: url(./img/Arrow_U.png);
-            }
-            QScrollBar::down-arrow::vertical {
-                image: url(./img/Arrow_D.png);
-            }
-            QWidget#BG{
-                background:rgb(231, 231, 234);
-                border:1px solid #707070;
-                border-radius: 20px;
-            }
-            QWidget#RightTabTitleBG1{
-                background: white;
-                border-top-left-radius: 20px;
-                border-top-right-radius: 20px;
-                border:1px solid white;
-            }
-            QWidget#RightTabTitleBG2{
-                background: rgb(255, 204, 0);
-                border-top-left-radius: 20px;
-                border-top-right-radius: 20px;
-                border:1px solid rgb(255, 204, 0);
-            }
-            QWidget#RightTabTitleBG3{
-                background: rgb(192, 0, 0);
-                border-top-left-radius: 20px;
-                border-top-right-radius: 20px;
-                border:1px solid rgb(192, 0, 0);
-            }
-            QLabel#RightTabTitle1{
-                background: None;
-                border:0px;
-                font: 45px Arial;
-            }
-            QPushButton#RightTabBtn1{
-                background: rgb(231, 231, 234);
-                border-radius: 20px;
-                font: 45px Arial;
-            }
-            QPushButton#RightTabBtn1:hover{
-                background: rgb(0, 176, 218);
-                border-radius: 20px;
-                font: 45px Arial;
-            }
-            QLabel#RightTabContent{
-                background: None;
-                border:0px;
-                font: 45px Arial;
-            }
-"""
-
-Search_Popup = """
-            QWidget#Search{
-                background: rgb(231, 231, 234);
-                border: 0px;
-            }
-            QWidget#SearchTitleBar{
-                font: 28px 맑은 고딕;
-                background: rgb(128, 128, 128);
-                border: 0px;
-            }            
-            QLabel#SearchTitleBar{
-                background: rgb(128, 128, 128);
-                font: 28px Arial;
-                font-weight: bold;
-                border: 0px;
-                qproperty-alignment: AlignCenter;
-            }
-            QLabel#SearchTitleBar3{
-                background: rgb(128, 128, 128);
-                font: 28px 맑은 고딕;
-                font-weight: bold;
-                border: 0px;
-                qproperty-alignment: AlignCenter;
-            }
-            QPushButton#SearchTitleBar{
-                background: rgb(0, 176, 86);
-                border-radius: 5px;
-                border:0px;
-                font: 30px 맑은 고딕;
-                font-weight: bold;
-            }
-            QGroupBox#SearchWindow {
-                background: rgb(231, 231, 234);
-                border: 1px solid rgb(128, 128, 128);
-                border-radius: 10px;
-                margin-top: 10px;
-                font: 20px 맑은 고딕;
-                font-weight: bold;
-            }
-            QGroupBox::title#SearchWindow {
-                subcontrol-origin: margin;
-                top: -5px;
-                left: 30px;
-                padding: 0px 2px 0px 2px;
-                font: 20px 맑은 고딕;
-                font-weight: bold;
-            }
-            QLabel#SearchLabel{
-                background: rgb(231, 231, 234);
-                font: 20px 맑은 고딕;
-                border:0px;
-                font-weight: bold;
-            }
-            QTextEdit#SearchInput{
-                background: rgb(255, 255, 255);
-                font: 13px 맑은 고딕;
-                border:0px;
-                font-weight: bold;
-            }
-            QPushButton#SearchBTN{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border:0px;
-                font: 20px 맑은 고딕;
-                font-weight: bold;
-            }
-            QTableWidget{
-                background: rgb(231, 231, 234);
-                border: 1px solid rgb(128, 128, 128); 
-                font: 20px 맑은 고딕;           
-                border-bottom-left-radius : 5px;
-                border-bottom-right-radius : 5px;    
-            }
-            QTableWidget::item::selected {
-                background-color: rgb(0, 176, 218);
-                color:black;
-                font: 20px 맑은 고딕;
-                outline: 0;
-            }
-            QTableWidget::item {
-                border-bottom: 1px solid rgb(128, 128, 128);
-            }
-            QWidget {
-                background: rgb(231,231,234);
-            }
-            QScrollArea {
-                border: None;
-                background: rgb(231,231,234);
-            }
-            QScrollBar::sub-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar::add-page:vertical { 
-                background: rgb(231,231,234);
-                border: 1px solid rgb(128,128,128);
-            }
-            QScrollBar:vertical {
-                width: 20px;
-                background: rgb(128,128,128);
-                border: 0px;
-            }
-            QScrollBar::up-arrow::vertical {
-                image: url(./img/Arrow_U.png);
-            }
-            QScrollBar::down-arrow::vertical {
-                image: url(./img/Arrow_D.png);
-            }
-            QPushButton#Bottom{
-                background: rgb(255, 255, 255);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 20px 맑은 고딕;
-                font-weight: bold;
-            }
-            QPushButton#Bottom::hover{
-                background: rgb(0, 178, 218);
-                border-radius: 5px;
-                border:0px;
-                color: rgb(0, 0, 0);
-                font: 20px 맑은 고딕;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_F{
-                background-color: rgb(128, 128, 128);
-                font: 20px 맑은 고딕;
-                border-top-left-radius:5px;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_M{
-                background-color: rgb(128, 128, 128);
-                font: 20px 맑은 고딕;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header_L{
-                background-color: rgb(128, 128, 128);
-                font: 20px 맑은 고딕;
-                border-top-right-radius:5px;
-                font-weight: bold;
-            }
-            QLabel#Alarm_Header{
-                background-color: rgb(128, 128, 128);
-                font: 20px 맑은 고딕;
-                border-top-left-radius:5px;
-                border-top-right-radius:5px;
-                font-weight: bold;
-            }
-            QHeaderView {
-                background: rgb(128, 128, 128);
-                border: 0px;
-            }
-            QHeaderView::section {
-                background: rgb(128, 128, 128);
-                font: 20px 맑은 고딕;
-                font-weight: bold;        
-                qproperty-alignment: AlignCenter;
-            }
-            QHeaderView::section:horizontal:first {
-                border: 1px solid rgb(128, 128, 128);
-                border-top-left-radius:5px;
-                border-top-right-radius:0px;
-                border-bottom-left-radius:0px;
-                border-bottom-right-radius:0px;
-            }
-            QHeaderView::section:horizontal:middle {
-                border: 2px solid rgb(128, 128, 128);
-                border-radius:0px;
-            }
-            QHeaderView::section:horizontal:last {
-                border: 1px solid rgb(128, 128, 128);
-                border-top-left-radius:0px;
-                border-top-right-radius:5px;
-                border-bottom-left-radius:0px;
-                border-bottom-right-radius:0px;
-            }
-"""
-
-
-"""            QScrollBar:vertical {
-                border-left: 1px solid rgb(128, 128, 128);
-                background-color: rgb(80, 80, 80);
-                width: 30px;    
-                margin: 0px 0px 0px 0px;
-                border-top-left-radius:0px;
-                border-top-right-radius:5px;
-                border-bottom-left-radius:0px;
-                border-bottom-right-radius:5px;
-            }
-            QScrollBar::handle:vertical {         
-                min-height: 0px;
-                border: 0px;
-                background-color: rgb(255, 255, 255);
-                border-top-left-radius:5px;
-                border-top-right-radius:5px;
-                border-bottom-left-radius:5px;
-                border-bottom-right-radius:5px;
-            }
-            QScrollBar::add-line:vertical {       
-                height: 0px;
-                subcontrol-position: bottom;
-                subcontrol-origin: margin;
-            }
-            QScrollBar::sub-line:vertical {
-                height: 0px;
-                subcontrol-position: top;
-                subcontrol-origin: margin;
-            }
-            QScrollBar::sub-page:vertical { 
-                border-top-right-radius:5px;
-                background: rgb(128,128,128);
-            }
-            QScrollBar::add-page:vertical { 
-                border-bottom-right-radius:5px;
-                background: rgb(128,128,128);
-            }"""
-
-PreTrip = """
-            QWidget#BG {
-                background: rgb(231, 231, 234);
-            }
-            QWidget#Graph {
-                border-radius: 10px;
-                border: 1px solid #4E4E4E;
-            }
-            QWidget#Graph_sub {
-                background : #E7E7EA;
-                border-radius: 10px;
-                border: 1px solid #4E4E4E;
-            }
-            QLabel#TripLabel {
-                border-top-left-radius:10px;
-                border-top-right-radius:10px;
-                background: rgb(178, 178, 178);
-                font: 20px 맑은 고딕;
-                font-weight: bold;
-                margin:0px;
-                qproperty-alignment: AlignCenter;
-            }
-            QLabel#title {
-                border-radius: 5px;
-                background: rgb(0, 176, 86);
-                font: 25px 맑은 고딕;
-                font-weight: bold;
-                qproperty-alignment: AlignCenter;
-            }
-            
-
-"""
+    builder('QWidget', 'SystemSearch', [f'background-color: {LightGray};']),
+    builder('QWidget', 'SystemSearchTitleBar', [f'background-color: {DarkGray};', 'border: 0px;']),
+    builder('QLabel', 'SystemSearchTitleName', [f'background-color: {LightGray};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'qproperty-alignment: AlignCenter;', 'font-weight: bold;']),
+    builder('QWidget', 'SystemSearchWindow', [f'background-color: {LightGray};', 'border: 0px;']),
+    builder('QGroupBox', 'SystemSearchWindowGroupBox', [f'background-color: {LightGray};', f'border: 1px solid {DarkGray};', 'border-radius: 10px;', 'margin-top: 10px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};']),
+    builder('QGroupBox', 'SystemSearchWindowGroupBox::title', ['subcontrol-origin: margin;', 'top: -5px;', 'left: 30px;', 'padding: 0px 2px 0px 2px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};']),
+    builder('QLabel', 'SystemSearchLabel', [f'background-color: {LightGray};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'qproperty-alignment: AlignCenter;', 'font-weight: bold;']),
+    builder('QPlainTextEdit', 'SystemSearchInput', [f'background-color: {LightWhite};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'font-weight: bold;']),    
+    builder('QPushButton', 'SystemSearchInput', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'SystemSearchBTN', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'SystemSearchReset', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+    builder('QTableWidget', 'SystemSearchTable', [f'background-color: {LightGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QTableWidget', 'SystemSearchTable::item', [f'border-bottom: 1px solid {DarkGray};']),
+    builder('QTableWidget', 'SystemSearchTable::item:selected', [
+        f'background-color: {LightBlue};', f'color:{Black};', 'outline: 0;', 
+        ]),
+    builder('QWidget', 'SystemSearchTableWidget', [f'background-color: {LightGray};', f'border: 1px solid {DarkGray};',]),
+    builder('QLabel', 'SystemSearchHeadingLabel', [
+        f'background-color: {DarkGray};',
+        f'font-family: {Global_font};',
+        f'font-size: {Content_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QLabel', 'SystemSearchHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;']),
+    builder('QWidget', 'SystemSearchBottom', [f'background-color: {LightGray};']),
+    builder('QPushButton', 'SystemSearchOpen', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'SystemSearchCancel', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+])
+# final qss !! 
+qss = ''.join(
+    [QssMain]
+)

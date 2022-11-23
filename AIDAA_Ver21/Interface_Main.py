@@ -10,7 +10,7 @@ from AIDAA_Ver21.Interface_AIDAA_Procedure import *
 from AIDAA_Ver21.Interface_AIDAA_Action_ import *
 from AIDAA_Ver21.Interface_AIDAA_Pretrip import *
 
-import Interface_QSS as qss
+from Interface_QSS import qss
 from datetime import datetime
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -22,9 +22,10 @@ class Main(QWidget):
         self.setGeometry(0, 0, 1920, 1200)
         self.setFixedSize(1920, 1200)
         self.setWindowFlags(Qt.FramelessWindowHint)  # 상단바 제거
-        QFontDatabase.addApplicationFont("Arial.ttf")
-        QFontDatabase.addApplicationFont("맑은 고딕.ttf")
-
+        self.setObjectName('Main')
+        self.setStyleSheet(qss)
+        self.m_flag = False
+        # Frame ------------------------------------------------------
         self.top = MainTop(self)
         self.tab = MainTab(self)
         lay = QVBoxLayout(self)
@@ -32,21 +33,20 @@ class Main(QWidget):
         lay.addWidget(self.top)
         lay.addWidget(self.tab)
         lay.setSpacing(0)   # margin 제거
-        
-        self.m_flag = False
+        # End frame --------------------------------------------------
 
     # window drag
     def mousePressEvent(self, event):
-        # if (event.button() == Qt.LeftButton) and self.top.underMouse():
-        if (event.button() == Qt.LeftButton):  # 화면 움직이기 위함
+        if (event.button() == Qt.LeftButton) and self.top.underMouse():
+        # if (event.button() == Qt.LeftButton):  # 화면 움직이기 위함
             self.m_flag = True
             self.m_Position = event.globalPos() - self.pos()
             event.accept()
             self.setCursor(QCursor(Qt.OpenHandCursor))
 
     def mouseMoveEvent(self, QMouseEvent):
-        # if Qt.LeftButton and self.m_flag and self.top.underMouse():
-        if Qt.LeftButton and self.m_flag:  # 화면 움직이기 위함
+        if Qt.LeftButton and self.m_flag and self.top.underMouse():
+        # if Qt.LeftButton and self.m_flag:  # 화면 움직이기 위함
             self.move(QMouseEvent.globalPos() - self.m_Position)  # 윈도우 position 변경
             QMouseEvent.accept()
 
@@ -54,30 +54,28 @@ class Main(QWidget):
         self.m_flag = False
         self.setCursor(QCursor(Qt.ArrowCursor))
 
+    def close(self) -> bool:
+        QApplication.closeAllWindows()
+        return super().close()        
 # ----------------------------------------------------------------------------------------------------------------------
 # MainTop
 # ----------------------------------------------------------------------------------------------------------------------
-
-
 class MainTop(ABCWidget):
-    def __init__(self, parent):
-        super(MainTop, self).__init__(parent)
-        self.setStyleSheet(qss.Top_Bar)
-        self.setObjectName("BG")
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setFixedHeight(50)
+        
         lay = QHBoxLayout(self)
         lay.setContentsMargins(10, 7, 8, 7)
-        self.title_left = QHBoxLayout(self)
-        self.title_left.setContentsMargins(0, 0, 5, 0)
-        self.title_left.addWidget(MainTopTime(self))
-        self.title_left.addWidget(MainTopSystemName(self))
-        self.title_left.setSpacing(10)
-        lay.addLayout(self.title_left)
+        title_left = QHBoxLayout()
+        title_left.setContentsMargins(0, 0, 5, 0)
+        title_left.addWidget(MainTopTime(self))
+        title_left.addWidget(MainTopSystemName(self))
+        title_left.setSpacing(10)
+        lay.addLayout(title_left)
         lay.setSpacing(10)
         # 현재 click된 btn & btn hover color 변경 위함
         self.btnGroup = QButtonGroup()
-        self.btnGroup.setExclusive(False)
-        self.btnGroup.buttonClicked[int].connect(self.btnClicked)
 
         btn1 = MainTopCallMain(self)
         btn2 = MainTopCallIFAP(self)
@@ -88,118 +86,83 @@ class MainTop(ABCWidget):
         self.btnGroup.addButton(btn2, 1)
         self.btnGroup.addButton(btn3, 2)
         self.btnGroup.addButton(btn4, 3)
+        btn1.setChecked(True)
 
         lay.addWidget(btn1)
         lay.addWidget(btn2)
         lay.addWidget(btn3)
         lay.addWidget(btn4)
         lay.addWidget(MainTopClose(self))
-
-    def btnClicked(self, id):
-        for button in self.btnGroup.buttons():
-            if button is self.btnGroup.button(id):
-                button.setStyleSheet("QPushButton {background: rgb(0, 176, 218);} QPushButton:hover {background: rgb(0, 176, 218)}")
-            else:
-                button.setStyleSheet("QPushButton {background: rgb(231, 231, 234);} QPushButton:hover {background: rgb(0, 176, 218)}")
-
-
-
 class MainTopTime(ABCLabel):
-    def __init__(self, parent):
-        super(MainTopTime, self).__init__(parent)
-        self.setObjectName("Title")
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setFixedSize(465, 36)
-        # timer section
-        timer = QTimer(self)
-        timer.setInterval(200)
-        timer.timeout.connect(self.dis_update)
-        timer.start()
-
-    def dis_update(self):
+        self.startTimer(200)
+        
+    def timerEvent(self, a0: 'QTimerEvent') -> None:
         """ 타이머 디스플레이 업데이트 """
         current_time = datetime.now() + self.inmem.get_td() # 현재시간 + time_delta()
         real_time = current_time.strftime('%Y.%m.%d')
         real_time2 = current_time.strftime("%H:%M:%S")
         self.setText(real_time + " / " + real_time2)
-
+        return super().timerEvent(a0)
 class MainTopSystemName(ABCLabel):
-    def __init__(self, parent):
-        super(MainTopSystemName, self).__init__(parent)
-        self.setObjectName("Title")
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setFixedSize(465, 36)
         self.setContentsMargins(0, 0, 0, 0)
-        # timer section
-        timer = QTimer(self)
-        timer.setInterval(200)
-        timer.timeout.connect(self.dis_update)
-        timer.start()
-
-    def dis_update(self):
-        if self.inmem.get_current_system_name() == 'Procedure':
-            self.setText('AIDAA')
-        elif self.inmem.get_current_system_name() == 'Action':
-            self.setText('AIDAA')
-        elif self.inmem.get_current_system_name() == 'PreTrip':
-            self.setText('AIDAA')
-        else:
-            self.setText(self.inmem.get_current_system_name())
-
-
-class MainTopCallMain(ABCPushButton):
-    def __init__(self, parent):
-        super(MainTopCallMain, self).__init__(parent)
         self.setText('Main')
-        self.setObjectName("Tab")
+class MainTopCallMain(ABCPushButton):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText('Main')
         self.setFixedSize(218, 36)
         self.clicked.connect(self.dis_update)
+        self.setCheckable(True)
+        self.setChecked(False)
 
     def dis_update(self):
-        self.inmem.change_current_system_name('Main')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
-
-
+        self.inmem.widget_ids['MainTopSystemName'].setText('Main')
+        self.inmem.widget_ids['MainTab'].change_system_page('Main')
 class MainTopCallIFAP(ABCPushButton):
-    def __init__(self, parent):
-        super(MainTopCallIFAP, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setText('Pre-abnormal')
-        self.setObjectName("Tab")
         self.setFixedSize(218, 36)
         self.clicked.connect(self.dis_update)
+        self.setCheckable(True)
+        self.setChecked(False)
 
     def dis_update(self):
-        self.inmem.change_current_system_name('IFAP')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
-
-
+        self.inmem.widget_ids['MainTopSystemName'].setText('IFAP')
+        self.inmem.widget_ids['MainTab'].change_system_page('IFAP')
 class MainTopCallAIDAA(ABCPushButton):
-    def __init__(self, parent):
-        super(MainTopCallAIDAA, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setText('Abnormal')
-        self.setObjectName("Tab")
         self.setFixedSize(218, 36)
         self.clicked.connect(self.dis_update)
+        self.setCheckable(True)
+        self.setChecked(False)
 
     def dis_update(self):
-        self.inmem.change_current_system_name('AIDAA')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
-
-
+        self.inmem.widget_ids['MainTopSystemName'].setText('AIDAA')
+        self.inmem.widget_ids['MainTab'].change_system_page('AIDAA')
 class MainTopCallEGIS(ABCPushButton):
-    def __init__(self, parent):
-        super(MainTopCallEGIS, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setText('Emergency')
-        self.setObjectName("Tab")
         self.setFixedSize(218, 36)
         self.clicked.connect(self.dis_update)
+        self.setCheckable(True)
+        self.setChecked(False)
 
     def dis_update(self):
-        self.inmem.change_current_system_name('EGIS')
-        self.inmem.widget_ids['MainTopSystemName'].dis_update()
-
-
+        self.inmem.widget_ids['MainTopSystemName'].setText('EGIS')
+        self.inmem.widget_ids['MainTab'].change_system_page('EGIS')
 class MainTopClose(ABCPushButton):
-    def __init__(self, parent):
-        super(MainTopClose, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         icon = os.path.join(ROOT_PATH, '../AIDAA_Ver21/Img/close.png')
         self.setIcon(QIcon(icon))
         self.setIconSize(QSize(35, 35))  # 아이콘 크기
@@ -209,17 +172,14 @@ class MainTopClose(ABCPushButton):
 
     def close_main(self):
         self.inmem.widget_ids['Main'].close()
-
 # ----------------------------------------------------------------------------------------------------------------------
 # MainTab
 # ----------------------------------------------------------------------------------------------------------------------
-
-
 class MainTab(ABCStackWidget):
     def __init__(self, parent):
         super(MainTab, self).__init__(parent)
-        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self),
-                                     Procedure(self), Action(self), PreTrip(self)]]
+        [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self), Procedure(self), 
+                                     Action(self), PreTrip(self)]]
 
     def change_system_page(self, system_name: str):
         """요청한 index 페이지로 전환
@@ -232,9 +192,7 @@ class MainTab(ABCStackWidget):
 class MainTabIFAP(ABCWidget):
     def __init__(self, parent):
         super(MainTabIFAP, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(213, 242, 211);')
 
 class MainTabEGIS(ABCWidget):
     def __init__(self, parent):
         super(MainTabEGIS, self).__init__(parent)
-        self.setStyleSheet('background-color: rgb(244, 242, 211);')
