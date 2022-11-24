@@ -302,11 +302,11 @@ class SystemSearch(ABCWidget):
         self.setGeometry(454, 215, 1190, 840)
 
         lay = QVBoxLayout(self)
-        lay_content = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         self.TitleBar = SystemSearchTitleBar(self)
         lay.addWidget(self.TitleBar)
         
+        lay_content = QVBoxLayout()
         lay_content.addWidget(SystemSearchWindow(self))
         lay_content.addWidget(SystemSearchScrollArea(self))
         lay_content.addWidget(SystemSearchBottom(self))

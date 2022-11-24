@@ -1,13 +1,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-# from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
-# from AIDAA_Ver21.Function_Simulator_CNS import *
 from AIDAA_Ver21.Interface_AIDAA_Procedure_Search import ProcedureSearch, SystemSearch
-# from AIDAA_Ver21.Interface_AIDAA_Procedure import *
-# from AIDAA_Ver21.Interface_Main import *
-# from AIDAA_Ver21.Function_AIDAA_Procedure_symptom_check import *
+
 import numpy as np
 import os
 
@@ -26,6 +22,14 @@ class Diagnosis(ABCWidget):
         lay.addWidget(DiagnosisSystemScrollArea(self))
         lay.addWidget(ProcedureCheckTableScrollArea(self))
         lay.setSpacing(15)
+        self.ProSearchWidget = ProcedureSearch(self)
+        self.SysSearchWidget = SystemSearch(self)
+        
+    def show_ProSearchWidget(self):
+        self.ProSearchWidget.show()
+    
+    def show_SysSearchWidget(self):
+        self.SysSearchWidget.show()
 class DiagnosisTop(ABCWidget):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
@@ -43,8 +47,7 @@ class DiagnosisTopCallProcedureSearch(ABCPushButton):
         self.setFixedSize(467, 40)
         self.setText('비정상 절차서 검색')
 
-        self.SearchWidget = ProcedureSearch(self)
-        self.clicked.connect(self.SearchWidget.show)
+        self.clicked.connect(self.inmem.widget_ids['Diagnosis'].show_ProSearchWidget)
 class DiagnosisTopCallSystemSearch(ABCPushButton):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
@@ -54,8 +57,7 @@ class DiagnosisTopCallSystemSearch(ABCPushButton):
         self.setFixedSize(467, 40)
         self.setText('시스템 검색')
         
-        self.SearchWidget = SystemSearch(self)
-        self.clicked.connect(self.SearchWidget.show)
+        self.clicked.connect(self.inmem.widget_ids['Diagnosis'].show_SysSearchWidget)
 # ----------------------------------------------------------------------------------------------------------------------
 class DiagnosisProcedureTableScrollArea(ABCScrollArea):
     def __init__(self, parent, widget_name=''):
@@ -284,7 +286,7 @@ class DiagnosisProcedureCheckBox(ABCCheckBox):
         self.block = block
         self.pro_name = pro_name
         self.toggle = self.inmem.ShMem.get_pro_radiation(pro_name) if self.type_ == 'Rad' else self.inmem.ShMem.get_pro_urgent_act(pro_name)
-        self.toggled.connect(lambda : self.setCheckState(Qt.Checked if self.toggle else Qt.Unchecked))
+        self.setCheckState(Qt.Checked if self.toggle else Qt.Unchecked)
         self.style().polish(self) # 반영이 안되서 직접 수행
 class DiagnosisProcedureTableWidget(ABCWidget):
     def __init__(self, parent, widget_name=''):

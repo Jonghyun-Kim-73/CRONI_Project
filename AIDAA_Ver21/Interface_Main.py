@@ -122,6 +122,7 @@ class MainTopCallMain(ABCPushButton):
         self.setChecked(False)
 
     def dis_update(self):
+        self.setChecked(True)
         self.inmem.widget_ids['MainTopSystemName'].setText('Main')
         self.inmem.widget_ids['MainTab'].change_system_page('Main')
 class MainTopCallIFAP(ABCPushButton):
@@ -134,6 +135,7 @@ class MainTopCallIFAP(ABCPushButton):
         self.setChecked(False)
 
     def dis_update(self):
+        self.setChecked(True)
         self.inmem.widget_ids['MainTopSystemName'].setText('IFAP')
         self.inmem.widget_ids['MainTab'].change_system_page('IFAP')
 class MainTopCallAIDAA(ABCPushButton):
@@ -146,6 +148,7 @@ class MainTopCallAIDAA(ABCPushButton):
         self.setChecked(False)
 
     def dis_update(self):
+        self.setChecked(True)
         self.inmem.widget_ids['MainTopSystemName'].setText('AIDAA')
         self.inmem.widget_ids['MainTab'].change_system_page('AIDAA')
 class MainTopCallEGIS(ABCPushButton):
@@ -158,6 +161,7 @@ class MainTopCallEGIS(ABCPushButton):
         self.setChecked(False)
 
     def dis_update(self):
+        self.setChecked(True)
         self.inmem.widget_ids['MainTopSystemName'].setText('EGIS')
         self.inmem.widget_ids['MainTab'].change_system_page('EGIS')
 class MainTopClose(ABCPushButton):

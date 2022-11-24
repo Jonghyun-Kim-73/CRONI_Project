@@ -1,23 +1,15 @@
-import os
-
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Function_Mem_ShMem import *
 from AIDAA_Ver21.Interface_ABCWidget import *
-from AIDAA_Ver21.Function_Simulator_CNS import *
 from AIDAA_Ver21.Interface_Alarm import *
-from AIDAA_Ver21.Interface_MainTabRight import *
-from AIDAA_Ver21.Interface_AIDAA_Procedure_Search import *
-import Interface_QSS as qss
-ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-
+from AIDAA_Ver21.Interface_AIDAA_Diagnosis import *
 
 class Procedure(ABCWidget):
     def __init__(self, parent):
         super(Procedure, self).__init__(parent)
         # self.setStyleSheet(qss.AIDAA_Diagnosis2)
-        # self.setObjectName("BG")
         lay = QVBoxLayout(self)
         lay.setContentsMargins(10, 15, 9, 15)
         lay.addWidget(ProcedureTop(self))
@@ -126,8 +118,7 @@ class Procedure(ABCWidget):
             ContentsClickHis_inTitle_index (int): 해당 값이 위치한 index
         """
         current_title = self.inmem.ProcedureHis[self.procedure_name]['SequenceTitleClick']
-        self.inmem.ProcedureHis[self.procedure_name]['ContentsClickHis'][current_title][
-            ContentsClickHis_index] = ContentsClickHis
+        self.inmem.ProcedureHis[self.procedure_name]['ContentsClickHis'][current_title][ContentsClickHis_index] = ContentsClickHis
 
         if self.Rule_1_Change_SequenceTitleCondHis():
             self.change_SequenceTitleCondHis(3)
@@ -163,8 +154,6 @@ class Procedure(ABCWidget):
         self.change_SequenceTitleCondHis(0)
 
         self.update_procedure_contents()
-# ----------------------------------------------------------------------------------------------------------------------
-
 class ProcedureTop(ABCWidget):
     def __init__(self, parent):
         super(ProcedureTop, self).__init__(parent)
@@ -181,108 +170,45 @@ class ProcedureTop(ABCWidget):
         lay.addWidget(DiagnosisTopCallProcedureSearch(self))
         lay.addWidget(DiagnosisTopCallSystemSearch(self))
         lay.setSpacing(10)
-
 class TopBTN(ABCLabel):
     def __init__(self, parent, widget_name, title):
         super(TopBTN, self).__init__(parent, widget_name)
-        self.setObjectName("Label") # 실행 후 확인
         self.setFixedSize(227, 40)
         self.setText(title)
-
+        self.setProperty('Condition', 'Off')
+        
     def dis_update(self, trigger):
-        if trigger:
-            self.setStyleSheet('background-color: rgb(192,0,0);')
-        else:
-            self.setStyleSheet('background-color: lightgray;')
-
-# 추후 알람파트 수정시 사용
-# class PredictionBTN(ABCPushButton):
-#     def __init__(self, parent):
-#         super(PredictionBTN, self).__init__(parent)
-#         self.setObjectName("Button")
-#         self.setFixedSize(393, 55)
-#         self.setText('Prediction')
-#
-# class TripBTN(ABCPushButton):
-#     def __init__(self, parent):
-#         super(TripBTN, self).__init__(parent)
-#         self.setObjectName("Button")
-#         self.setFixedSize(393, 55)
-#         self.setText('Trip')
-
-class DiagnosisTopCallProcedureSearch(ABCPushButton):
-    def __init__(self, parent):
-        super(DiagnosisTopCallProcedureSearch, self).__init__(parent)
-        icon = os.path.join(ROOT_PATH, 'Img', 'search.png')
-        self.setObjectName("Search")
-        self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(25, 25))
-        self.setFixedSize(468, 40)
-        self.setText('비정상 절차서 검색')
-        self.setContentsMargins(5, 0, 0, 0)
-        # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")  # 실행 후 호버 확인
-        self.clicked.connect(self.dis_update)
-
-    def dis_update(self):
-        print('비정상 절차서 검색 창으로 이동')
-        ProcedureSearch(self).show()
-
-class DiagnosisTopCallSystemSearch(ABCPushButton):
-    def __init__(self, parent):
-        super(DiagnosisTopCallSystemSearch, self).__init__(parent)
-        icon = os.path.join(ROOT_PATH, 'Img', 'search.png')
-        self.setObjectName("Search")
-        self.setText('시스템 검색')
-        # self.setStyleSheet("""QPushButton:hover {background-color: yellow;}""")  # 실행 후 호버 확인
-        self.setIcon(QIcon(icon))
-        self.setIconSize(QSize(25, 25))
-        self.setFixedSize(468, 40)
-        self.clicked.connect(self.dis_update)
-
-    def dis_update(self):
-        print('시스템 검색 창으로 이동')
-        SystemSearch(self).show()
-# ----------------------------------------------------------------------------------------------------------------------
-
+        self.setProperty('Condition', 'On' if not trigger else 'Off')
+        self.style().polish(self)
 class ProcedureInfo(ABCLabel):
     def __init__(self, parent):
         super(ProcedureInfo, self).__init__(parent)
-        self.setObjectName("Title")
         self.setFixedHeight(40)
 
     def dis_update(self, procedure_name):
         self.setText(f" 비정상 절차서 이름: {procedure_name}")
 # ----------------------------------------------------------------------------------------------------------------------
-
 class ProcedureWindow(ABCWidget):
     def __init__(self, parent):
         super(ProcedureWindow, self).__init__(parent)
-        # self.setStyleSheet('background-color: rgb(212, 245, 211);') # 실행 후 확인
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(ProcedureSequence(self))
         lay.addWidget(ProcedureScrollArea(self))
         lay.setSpacing(15)
-
 class ProcedureSequence(ABCWidget):
     def __init__(self, parent):
         super(ProcedureSequence, self).__init__(parent)
-        # self.setStyleSheet('background-color: rgb(212, 245, 211);') # 실행 후 확인
         self.setFixedWidth(319)
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(ProcedureSequenceWidget(self, 'ProcedureSequenceTitlePu', 'ProcedureSequenceTitleCondPu', ' 1.0 ', '목적'))
-        lay.addWidget(
-            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleAl', 'ProcedureSequenceTitleCondAl', ' 2.0 ', '경보 및 증상'))
-        lay.addWidget(
-            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleAu', 'ProcedureSequenceTitleCondAu', ' 3.0 ', '자동 동작 사항'))
-        lay.addWidget(
-            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleUr', 'ProcedureSequenceTitleCondUr', ' 4.0 ', '긴급 조치 사항'))
-        lay.addWidget(
-            ProcedureSequenceWidget(self, 'ProcedureSequenceTitleFo', 'ProcedureSequenceTitleCondFo', ' 5.0 ', '후속 조치 사항'))
+        lay.addWidget(ProcedureSequenceWidget(self, 'ProcedureSequenceTitleAl', 'ProcedureSequenceTitleCondAl', ' 2.0 ', '경보 및 증상'))
+        lay.addWidget(ProcedureSequenceWidget(self, 'ProcedureSequenceTitleAu', 'ProcedureSequenceTitleCondAu', ' 3.0 ', '자동 동작 사항'))
+        lay.addWidget(ProcedureSequenceWidget(self, 'ProcedureSequenceTitleUr', 'ProcedureSequenceTitleCondUr', ' 4.0 ', '긴급 조치 사항'))
+        lay.addWidget(ProcedureSequenceWidget(self, 'ProcedureSequenceTitleFo', 'ProcedureSequenceTitleCondFo', ' 5.0 ', '후속 조치 사항'))
         lay.setSpacing(15)
         lay.addStretch(1)
-
 class ProcedureSequenceWidget(ABCWidget):
     def __init__(self, parent, title_w_name, title_cond_w_name, title_num, title):
         super(ProcedureSequenceWidget, self).__init__(parent)
@@ -291,14 +217,13 @@ class ProcedureSequenceWidget(ABCWidget):
         self.lay.addWidget(ProcedureSequenceTitleBTN(self, title_w_name, title_num, title))
         self.lay.addWidget(ProcedureSequenceTitleCond(self, title_cond_w_name, title))
         self.lay.setSpacing(15)
-
 class ProcedureSequenceTitleBTN(ABCPushButton):
     def __init__(self, parent, widget_name='', title_num='', title=''):
         super().__init__(parent, widget_name)
-        self.setObjectName("Tab")
         self.setFixedSize(264, 40)
         self.setText(title_num + title)
         self.blink = False
+        self.setProperty('Blink', 'False')
         self.clicked.connect(self.is_clicked)
         self.title = title
 
@@ -318,12 +243,9 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
 
             if ThisRank < CurrentRank:
                 if self.step_check(self.title) and not self.step_all_check(self.title):
-                    if not self.blink:
-                        self.setStyleSheet('background-color: rgb(255, 255, 255)')
-                        self.blink = True
-                    else:
-                        self.setStyleSheet('background-color: rgb(0, 176, 218)')
-                        self.blink = False
+                    self.blink = not self.blink
+                    self.setProperty('Blink', 'True' if not self.blink else 'False')
+                    self.style().polish(self)
                 else:
                     self.do_hover(SequenceTitleClickHis)
                     self.blink = False
@@ -352,13 +274,10 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
         """모두 동작 중 이라면"""
         return all([True if cond == 1 else False for cond in
                     self.inmem.ProcedureHis[self.procedure_name]['ContentsClickHis'][title]])
-
-
 class ProcedureSequenceTitleCond(ABCLabel):
     def __init__(self, parent, widget_name='', title=''):
         super().__init__(parent, widget_name)
         self.setFixedSize(40, 40)
-        self.setObjectName("Check")
         self.blink = False
         self.title = title
 
@@ -368,19 +287,12 @@ class ProcedureSequenceTitleCond(ABCLabel):
         Args:
             SequenceTitleCondHis (dict): {'목적': 0, ...}
         """
-        if SequenceTitleCondHis[self.title] == 0:
-            self.setStyleSheet('background-color:rgb(255, 255, 255)')
-        elif SequenceTitleCondHis[self.title] == 1:
-            self.setStyleSheet('background-color: rgb(0,0,0)')
+        if SequenceTitleCondHis[self.title] in [0, 1, 3]:
+            self.setProperty('Condition', f'{SequenceTitleCondHis[self.title]}')
         elif SequenceTitleCondHis[self.title] == 2:
-            if not self.blink:
-                self.setStyleSheet('background-color: yellow')
-                self.blink = True
-            else:
-                self.setStyleSheet('background-color: white')
-                self.blink = False
-        elif SequenceTitleCondHis[self.title] == 3:
-            self.setStyleSheet('background-color: rgb(192,0,0)')
+            self.setProperty('Condition', '0' if self.blink else '2')
+            self.blink = True
+        self.style().polish(self)
 # ----------------------------------------------------------------------------------------------------------------------
 # Scroll Bar 적용
 class ProcedureScrollArea(ABCScrollArea):
@@ -390,13 +302,7 @@ class ProcedureScrollArea(ABCScrollArea):
         self.setViewportMargins(self.margins)
         self.setFixedWidth(1562)
 
-        self.scrollwidget = QWidget()
-        self.scrollwidget.setObjectName("scroll")
-        self.grid = QHBoxLayout(self.scrollwidget)
-        self.grid.addWidget(ProcedureContents(self))
-        self.grid.setContentsMargins(0, 0, 0, 0)
-        self.grid.addStretch(1)
-        self.setWidget(self.scrollwidget)
+        self.setWidget(ProcedureScrollAreaWidget(self))
         self.setWidgetResizable(True)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -404,12 +310,18 @@ class ProcedureScrollArea(ABCScrollArea):
     def resizeEvent(self, event):
         rect = self.viewport().geometry()
         QScrollArea.resizeEvent(self, event)
-
+class ProcedureScrollAreaWidget(ABCWidget):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.grid = QHBoxLayout(self)
+        self.grid.addWidget(ProcedureContents(self))
+        self.grid.setContentsMargins(0, 0, 0, 0)
+        self.grid.addStretch(1)
+# ----------------------------------------------------------------------------------------------------------------------
 class ProcedureContents(ABCWidget):
     def __init__(self, parent):
         super(ProcedureContents, self).__init__(parent)
         self.lay = QVBoxLayout(self)
-        self.setObjectName("RightPG")
         self.setFixedWidth(1532)
         self.lay.setContentsMargins(0, 0, 0, 15)
 
@@ -440,8 +352,6 @@ class ProcedureContents(ABCWidget):
             child = layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
-
-
 class ProcedureTitleBar(ABCWidget):
     def __init__(self, parent, title):
         super(ProcedureTitleBar, self).__init__(parent)
@@ -450,23 +360,17 @@ class ProcedureTitleBar(ABCWidget):
         title_conv = {'목적': '1.0', '경보 및 증상': '2.0', '자동 동작 사항': '3.0', '긴급 조치 사항': '4.0', '후속 조치 사항': '5.0'}
         [lay.addWidget(w) for w in [ProcedureTitleBar_1(self, title_conv[title]), ProcedureTitleBar_2(self, title)]]
         lay.setSpacing(10)
-
 class ProcedureTitleBar_1(ABCLabel):
     def __init__(self, parent, title_conv):
         super(ProcedureTitleBar_1, self).__init__(parent)
-        self.setObjectName("TitleBar")
         self.setFixedSize(120, 40)
         self.setText(title_conv)
-
 class ProcedureTitleBar_2(ABCLabel):
     def __init__(self, parent, title):
         super(ProcedureTitleBar_2, self).__init__(parent)
-        self.setObjectName("TitleBar")
         self.setFixedHeight(40)
         self.setText(title)
-
 # ----------------------------------------------------------------------------------------------------------------------
-
 class Procedure_Content(ABCWidget):
     def __init__(self, parent, Contents_inTitle:dict, ContentsClickHis_inTitle:int, ContentsClickHis_inTitle_index:int):
         super(Procedure_Content, self).__init__(parent)
@@ -507,14 +411,11 @@ class Procedure_Content(ABCWidget):
         lay.addLayout(content2_lay)
 
         lay.setSpacing(10)
-
-
 class Procedure_Content_Nub(ABCLabel):
     def __init__(self, parent, Nub):
         super(Procedure_Content_Nub, self).__init__(parent)
         self.setFixedSize(120, 40)
         self.setText(Nub)
-
 # 참고사항 / 주의사항 label
 class Procedure_Content_EM(ABCLabel):
     def __init__(self, parent, Des, Nub_len):
@@ -523,7 +424,7 @@ class Procedure_Content_EM(ABCLabel):
         self.label_title = QLabel("")
         self.label_content = QLabel("")
         self.label_title.setAlignment(Qt.AlignCenter)
-        self.setObjectName("Notice")
+        # self.setObjectName("Notice")
         self.label_title.setObjectName("label_title")
         self.label_content.setObjectName("label_content")
         self.label_content.setWordWrap(True)
@@ -535,15 +436,12 @@ class Procedure_Content_EM(ABCLabel):
 
         self.label_title.setText("%s" % Des[:4])
         self.label_content.setText("%s" % Des[7:])
-
 class Procedure_Content_Basic(ABCLabel):
     def __init__(self, parent, Des, Nub_len):
         super(Procedure_Content_Basic, self).__init__(parent)
         self.setWordWrap(True)
         self.setFixedWidth(Nub_len)
         self.setText(Des)
-
-
 class Procedure_Content_Check(ABCPushButton):
     def __init__(self, parent, ContentsClickHis_inTitle, ContentsClickHis_inTitle_index):
         super(Procedure_Content_Check, self).__init__(parent)
@@ -554,7 +452,7 @@ class Procedure_Content_Check(ABCPushButton):
         self.clicked.connect(self.is_clicked)
 
     def dis_update(self):
-        color_table = {0: 'background-color:rgb(255, 255, 255)',  # 0 (진행 중)
+        color_table = {0: 'background-color: rgb(255, 255, 255)',  # 0 (진행 중)
                        1: 'background-color: rgb(0,0,0)',  # 1 (완료)
                        2: 'background-color: rgb(192,0,0)'}  # 2 (불만족)
         self.setStyleSheet(color_table[self.ContentsClickHis_inTitle])
@@ -564,7 +462,6 @@ class Procedure_Content_Check(ABCPushButton):
         self.inmem.widget_ids['Procedure'].change_ContentsClickHis(self.ContentsClickHis_inTitle,
                                                                    self.ContentsClickHis_inTitle_index)
         self.dis_update()
-
 class ProcedureBottom(ABCWidget):
     def __init__(self, parent):
         super(ProcedureBottom, self).__init__(parent)
@@ -575,34 +472,28 @@ class ProcedureBottom(ABCWidget):
         lay.addWidget(ProcedureParallel(self))
         lay.addWidget(ProcedureReconduct(self))
         lay.setSpacing(10)
-
 class ProcedureComplete(ABCPushButton):
     def __init__(self, parent):
         super(ProcedureComplete, self).__init__(parent)
         self.setFixedSize(227, 40)
-        self.setObjectName("Bottom")
         self.setText('완료')
         self.clicked.connect(self.is_clicked)
 
     def is_clicked(self):
         self.inmem.widget_ids['Procedure'].change_SequenceTitleCondHis_then_SequenceNextTitle(1)
-
 class ProcedureParallel(ABCPushButton, QPushButton):
     def __init__(self, parent):
         super(ProcedureParallel, self).__init__(parent)
         self.setFixedSize(227, 40)
-        self.setObjectName("Bottom")
         self.setText('병행')
         self.clicked.connect(self.is_clicked)
 
     def is_clicked(self):
         self.inmem.widget_ids['Procedure'].change_SequenceTitleCondHis_then_SequenceNextTitle(2)
-
 class ProcedureReconduct(ABCPushButton, QPushButton):
     def __init__(self, parent):
         super(ProcedureReconduct, self).__init__(parent)
         self.setFixedSize(227, 40)
-        self.setObjectName("Bottom")
         self.setText('재수행')
         self.clicked.connect(self.is_clicked)
 

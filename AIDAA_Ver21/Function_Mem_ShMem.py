@@ -165,14 +165,7 @@ class InterfaceMem:
                       'Train': 0,
                        'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'], ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
                        'System': [['화학 및 체적제어계통', '5', '72%'], ['원자로냉각재계통', '3', '16%'], ['급수계통', '1', '6%'], ['제어봉제어계통', '1', '3%'], ['잔열제거계통', '1', '3%']]}# 정지냉각계통
-        
-
-
-
-        
-        
-        
-        #---------------------------------------------------------------------------------------------------------------------------------------
+        # Interface_AIDAA_Procedure.py -------------------------------------------------------------------------------------
         looptitle = ['목적', '경보 및 증상', '자동 동작 사항', '긴급 조치 사항', '후속 조치 사항']
         self.ProcedureHis = {pro_name: {
             'SequenceTitleClickHis': {'목적': True, '경보 및 증상': False, '자동 동작 사항': False, '긴급 조치 사항': False,
@@ -183,19 +176,14 @@ class InterfaceMem:
                                  looptitle},
             'Contents': {title: self.ShMem.get_pro_procedure_contents(pro_name, title) for title in looptitle},
         } for pro_name in self.ShMem.get_pro_all_ab_procedure_names()}
-        # ------------------------------------------------------------------------------------------------------------------------------------------
 
+
+        # ------------------------------------------------------------------------------------------------------------------------------------------
         self.current_table = {'Procedure': -1, 'System': -1, 'current_window': -1, 'procedure_name': "",
                               'selected_procedure':"", 'selected_system':""}
-
-
         self.pro_procedure_count = [self.ShMem.get_pro_procedure_count(self.diagnosis_convert_text[i]) for i in
                                     range(16)]
-
         self.access_procedure = []
-        
-
-
 
         # self.current_search = {'Procedure':{'number':'', 'name':''}, # 검색창에 작성한 내용 저장
         #                        'System':'', # 검색창에 작성한 내용 저장
@@ -315,6 +303,22 @@ class InterfaceMem:
 
         return result
     # Procedure_Search.py ----------------------------------------------------------------------------------------------
+    def is_name_in_db(self, target_list, target_name):
+        if target_name == '':
+            return target_list, False
+        else:
+            bool_list, set_list = [], []
+            for name in target_list:
+                if target_name in name:
+                    bool_list.append(True)
+                    set_list.append(name)
+                else:
+                    bool_list.append(False)
+            if any(bool_list):
+                return set_list, True
+            else:
+                return target_list, False
+        
     def is_procedure_name_in_db(self, procedure_name:str) -> tuple[list, bool]:
         """ abnormal_procedure_list 에 procedure_name이 있으면 true
 
@@ -324,21 +328,7 @@ class InterfaceMem:
         Returns:
             tuple[str, bool]: [절차서 명, [1 존재, 0 없음]]
         """
-        procedure_list = list(self.abnormal_procedure_list)
-        if procedure_name == '':
-            return procedure_list, False
-        else:
-            bool_list, set_list = [], []
-            for name in procedure_list:
-                if procedure_name in name:
-                    bool_list.append(True)
-                    set_list.append(name)
-                else:
-                    bool_list.append(False)
-            if any(bool_list):
-                return set_list, True
-            else:
-                return procedure_list, False
+        return self.is_name_in_db(list(self.abnormal_procedure_list), procedure_name)
             
     def is_system_name_in_db(self, system_name:str) -> tuple[list, bool]:
         """ abnormal_system_list 에 system_name이 있으면 true
@@ -349,21 +339,7 @@ class InterfaceMem:
         Returns:
             tuple[str, bool]: [시스템 명, [1 존재, 0 없음]]
         """
-        system_list = self.abnormal_system_list
-        if system_name == '':
-            return system_list, False
-        else:
-            bool_list, set_list = [], []
-            for name in system_list:
-                if system_name in name:
-                    bool_list.append(True)
-                    set_list.append(name)
-                else:
-                    bool_list.append(False)
-            if any(bool_list):
-                return set_list, True
-            else:
-                return system_list, False
+        return self.is_name_in_db(self.abnormal_system_list, system_name)
     
     # Widget 링크 용 ----------------------------------------------------------------------------------------------------
     def add_widget_id(self, widget, widget_name=''):

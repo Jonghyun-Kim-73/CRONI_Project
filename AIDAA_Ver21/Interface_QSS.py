@@ -17,13 +17,16 @@ def builder(objecttype:str, objectname:str, contents:list):
 def rgb_to_qCOLOR(color_code:str):
     color_code = color_code.replace('rgb(', '').replace(')', '').replace(' ', '').split(',')
     return QColor(int(color_code[0]), int(color_code[1]), int(color_code[2]))
-
+def rgb_to_tuplecode(color_code:str):
+    color_code = color_code.replace('rgb(', '').replace(')', '').replace(' ', '').split(',')
+    return (int(color_code[0]), int(color_code[1]), int(color_code[2]))
 # Color Table -------------------------------------------------
 DarkGray = 'rgb(80, 80, 80)' # old 128, 128, 128
 Gray = 'rgb(181, 181, 181)'
 LightGray = 'rgb(231, 231, 234)'
 LightWhite = 'rgb(255, 255, 255)'
 LightBlue = 'rgb(0, 178, 216)'
+DarkBlue = 'rgb(64, 61, 152)'
 DarkRed = 'rgb(192, 0, 0)'
 Yellow = 'rgb(249, 249, 0)'
 DarkYellow = 'rgb(255, 192, 0)'
@@ -291,7 +294,6 @@ QssMain = ''.join([
     builder('QTableWidget', 'ProcedureCheckTable::item:selected', [f'background-color: {DarkGray};']),
     builder('QLabel', 'ProcedureCheckTableItem', ['border:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
     builder('QWidget', 'DiagnosisSystemTableWidget', ['border:0px;', f'background-color: {LightGray};']),
-    
     # Interface_AIDAA_Procedure_Search.py ---------------------------------------------------------------------------
     builder('QWidget', 'ProcedureSearch', [f'background-color: {LightGray};']),
     builder('QWidget', 'ProcedureSearchTitleBar', [f'background-color: {DarkGray};', 'border: 0px;']),
@@ -323,7 +325,7 @@ QssMain = ''.join([
     builder('QWidget', 'ProcedureSearchBottom', [f'background-color: {LightGray};']),
     builder('QPushButton', 'ProcedureSearchOpen', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
     builder('QPushButton', 'ProcedureSearchCancel', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
-
+    # --
     builder('QWidget', 'SystemSearch', [f'background-color: {LightGray};']),
     builder('QWidget', 'SystemSearchTitleBar', [f'background-color: {DarkGray};', 'border: 0px;']),
     builder('QLabel', 'SystemSearchTitleName', [f'background-color: {LightGray};', 'border: 0px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};', 'qproperty-alignment: AlignCenter;', 'font-weight: bold;']),
@@ -351,6 +353,98 @@ QssMain = ''.join([
     builder('QWidget', 'SystemSearchBottom', [f'background-color: {LightGray};']),
     builder('QPushButton', 'SystemSearchOpen', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
     builder('QPushButton', 'SystemSearchCancel', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Content_font_size};' 'font-weight: bold;']),
+    # Interface_AIDAA_Procedure.py ----------------------------------------------------------------------------------
+    builder('QWidget', 'Procedure', [f'background-color: {LightGray};', 'border: 0px;']),
+    builder('QWidget', 'ProcedureTop', [f'background-color: {LightGray};']),
+    builder('QLabel', 'UrgentBTN', [f'background-color: {Gray};', 'border:0px;', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'UrgentBTN[Condition="On"]', [f'background-color: {DarkRed};']),
+    builder('QLabel', 'UrgentBTN[Condition="Off"]', [f'background-color: {Gray};']),
+    builder('QLabel', 'RadiationBTN', [f'background-color: {Gray};', 'border:0px;', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'RadiationBTN[Condition="On"]', [f'background-color: {DarkRed};']),
+    builder('QLabel', 'RadiationBTN[Condition="Off"]', [f'background-color: {Gray};']),
+    builder('QLabel', 'ProcedureInfo', [f'background-color: {LightWhite};', 'border:0px;', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    # --
+    builder('QWidget', 'ProcedureWindow', [f'background-color: {LightGray};']),
+    builder('QWidget', 'ProcedureSequence', [f'background-color: {LightGray};']),
+    builder('QWidget', 'ProcedureSequenceWidget', [f'background-color: {LightGray};']),
+    builder('QPushButton', 'ProcedureSequenceTitlePu', [f'background-color: {LightWhite};', 'border-radius: 5px;', 'border:0px;', 'text-align: left;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureSequenceTitlePu:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitlePu[Blink="True"]', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitlePu[Blink="False"]', [f'background-color: {LightWhite};']),
+    builder('QPushButton', 'ProcedureSequenceTitleAl', [f'background-color: {LightWhite};', 'border-radius: 5px;', 'border:0px;', 'text-align: left;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureSequenceTitleAl:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitleAl[Blink="True"]', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitleAl[Blink="False"]', [f'background-color: {LightWhite};']),
+    builder('QPushButton', 'ProcedureSequenceTitleAu', [f'background-color: {LightWhite};', 'border-radius: 5px;', 'border:0px;', 'text-align: left;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureSequenceTitleAu:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitleAu[Blink="True"]', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitleAu[Blink="False"]', [f'background-color: {LightWhite};']),
+    builder('QPushButton', 'ProcedureSequenceTitleUr', [f'background-color: {LightWhite};', 'border-radius: 5px;', 'border:0px;', 'text-align: left;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureSequenceTitleUr:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitleUr[Blink="True"]', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitleUr[Blink="False"]', [f'background-color: {LightWhite};']),
+    builder('QPushButton', 'ProcedureSequenceTitleFo', [f'background-color: {LightWhite};', 'border-radius: 5px;', 'border:0px;', 'text-align: left;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureSequenceTitleFo:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitleFo[Blink="True"]', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'ProcedureSequenceTitleFo[Blink="False"]', [f'background-color: {LightWhite};']),
+    # --
+    builder('QLabel', 'ProcedureSequenceTitleCondPu', [f'background-color: {LightWhite};', f'border: 1px solid {DarkGray};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'ProcedureSequenceTitleCondPu[Condition="0"]', [f'background-color: {LightWhite};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondPu[Condition="1"]', [f'background-color: {Black};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondPu[Condition="2"]', [f'background-color: {DarkYellow};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondPu[Condition="3"]', [f'background-color: {DarkRed};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAl', [f'background-color: {LightWhite};', f'border: 1px solid {DarkGray};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAl[Condition="0"]', [f'background-color: {LightWhite};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAl[Condition="1"]', [f'background-color: {Black};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAl[Condition="2"]', [f'background-color: {DarkYellow};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAl[Condition="3"]', [f'background-color: {DarkRed};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAu', [f'background-color: {LightWhite};', f'border: 1px solid {DarkGray};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAu[Condition="0"]', [f'background-color: {LightWhite};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAu[Condition="1"]', [f'background-color: {Black};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAu[Condition="2"]', [f'background-color: {DarkYellow};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondAu[Condition="3"]', [f'background-color: {DarkRed};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondUr', [f'background-color: {LightWhite};', f'border: 1px solid {DarkGray};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'ProcedureSequenceTitleCondUr[Condition="0"]', [f'background-color: {LightWhite};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondUr[Condition="1"]', [f'background-color: {Black};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondUr[Condition="2"]', [f'background-color: {DarkYellow};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondUr[Condition="3"]', [f'background-color: {DarkRed};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondFo', [f'background-color: {LightWhite};', f'border: 1px solid {DarkGray};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'ProcedureSequenceTitleCondFo[Condition="0"]', [f'background-color: {LightWhite};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondFo[Condition="1"]', [f'background-color: {Black};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondFo[Condition="2"]', [f'background-color: {DarkYellow};']),
+    builder('QLabel', 'ProcedureSequenceTitleCondFo[Condition="3"]', [f'background-color: {DarkRed};']),
+    # --
+    builder('QScrollArea', 'ProcedureScrollArea', [f'background: {LightGray};', 'border:0px;']),
+    builder('QScrollArea', 'ProcedureScrollArea::sub-page:vertical', [f'background: {LightGray};', f'border: 1px solid {DarkGray};']),
+    builder('QScrollArea', 'ProcedureScrollArea::add-page:vertical', [f'background: {LightGray};', f'border: 1px solid {DarkGray};']),
+    builder('QScrollArea', 'ProcedureScrollArea:vertical', [f'background: {DarkGray};', 'width: 20px;']),
+    builder('QScrollArea', 'ProcedureScrollArea::up-arrow::vertical', ['image: url(./img/Arrow_U.png);']),
+    builder('QScrollArea', 'ProcedureScrollArea::down-arrow::vertical', ['image: url(./img/Arrow_D.png);']),
+    builder('QWidget', 'ProcedureScrollAreaWidget', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QWidget', 'ProcedureContents', [f'background-color: {LightGray};', 'border-radius: 5px;', f'border: 1px solid {DarkGray};']),
+    builder('QLabel', 'ProcedureTitleBar_1', [f'background-color: {DarkGray};', 'border:0px;', 'border-radius: 5px;', 'padding-left:5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'ProcedureTitleBar_2', [f'background-color: {DarkGray};', 'border:0px;', 'border-radius: 5px;', 'padding-left:5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    # --
+    builder('QLabel', 'Procedure_Content_Nub', [f'background-color: {LightWhite};', 'border:0px;', 'border-radius: 5px;', 'padding-left:5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'Procedure_Content_EM', [f'background-color: {LightWhite};', f'border:1px solid {DarkRed};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'Procedure_Content_EM, QLabel#label_title', [f'color: {DarkRed};', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'Procedure_Content_EM, QLabel#label_content', [f'color: {Black};', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'Procedure_Content_Basic', [f'background-color: {LightWhite};', 'border:0px;', 'border-radius: 5px;', 'padding-left:5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'Procedure_Content_Check', [f'background-color: {LightWhite};', f'border:1px solid {DarkGray};', 'border-radius: 5px;']),
+    builder('QPushButton', 'ProcedureComplete', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureParallel', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QPushButton', 'ProcedureReconduct', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    # Interface_AIDAA_Pretrip.py ----------------------------------------------------------------------------------
+    builder('QWidget', 'PreTrip', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QWidget', 'PreTrip, QLabel#title', ['border-radius: 5px;', f'background-color: {LightGreen};', 'qproperty-alignment: AlignCenter;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QWidget', 'LeftPrediction', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QWidget', 'RightPrediction', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QWidget', 'RightPrediction', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QWidget', 'Parameter_Graph', ['border-radius: 10px;', f'border: 1px solid {DarkGray};']),
+    builder('QWidget', 'Parameter_Graph, QWidget#Graph_sub', [f'background-color: {LightGray};', 'border-radius: 10px;', f'border: 1px solid {DarkGray};']),
+    builder('QLabel', 'TripTimeLabel', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {LightGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'Parameter_name', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {LightGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'Parameter_TripTime', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {LightGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
 ])
 # final qss !! 
 qss = ''.join(

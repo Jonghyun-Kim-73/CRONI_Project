@@ -32,6 +32,10 @@ class ABCWidget(QWidget, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCScrollArea(QScrollArea, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCScrollArea, self).__init__()
@@ -39,6 +43,10 @@ class ABCScrollArea(QScrollArea, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+    
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCPushButton(QPushButton, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCPushButton, self).__init__()
@@ -46,6 +54,10 @@ class ABCPushButton(QPushButton, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+    
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCCheckBox(QCheckBox, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCCheckBox, self).__init__()
@@ -53,6 +65,10 @@ class ABCCheckBox(QCheckBox, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+    
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCLabel(QLabel, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCLabel, self).__init__()
@@ -60,6 +76,10 @@ class ABCLabel(QLabel, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+    
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCTabWidget(QTabWidget, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCTabWidget, self).__init__()
@@ -67,6 +87,10 @@ class ABCTabWidget(QTabWidget, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+    
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCTabWidgetItem(QTableWidgetItem, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCTabWidgetItem, self).__init__()
@@ -79,6 +103,10 @@ class ABCPlainTextEdit(QPlainTextEdit, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+        
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCGroupBox(QGroupBox, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCGroupBox, self).__init__()
@@ -86,6 +114,10 @@ class ABCGroupBox(QGroupBox, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCTableWidget(QTableWidget, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCTableWidget, self).__init__()
@@ -93,6 +125,10 @@ class ABCTableWidget(QTableWidget, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+    
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCStackWidget(QStackedWidget, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCStackWidget, self).__init__()
@@ -100,9 +136,17 @@ class ABCStackWidget(QStackedWidget, TOOL):
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
         self.setAttribute(Qt.WA_StyledBackground, True)
+        
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
 class ABCGraphicsScene(QGraphicsScene, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCGraphicsScene, self).__init__()
         self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
         self.setObjectName(self.widget_name)
+        
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}')
+        return super().mousePressEvent(a0)
