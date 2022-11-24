@@ -535,25 +535,26 @@ class SystemSearchCancel(ABCPushButton):
         self.setText('취소')
         self.clicked.connect(self.inmem.widget_ids['SystemSearch'].close)
 # ----------------------------------------------------------------------------------------------------------------------
-
 class XAISearch(ABCWidget):
     def __init__(self, parent):
         super(XAISearch, self).__init__(parent)
+        self.setStyleSheet(qss)
+        
         self.setWindowFlags(Qt.FramelessWindowHint)  # 상단바 제거
-        self.setStyleSheet(qss.Search_Popup)
-        self.setObjectName("Search")
         self.setGeometry(454, 215, 800, 570)
+        
         lay = QVBoxLayout(self)
-        lay_content = QVBoxLayout(self)
+        lay_content = QVBoxLayout()
         lay.setContentsMargins(0, 0, 0, 0)
         self.TitleBar = XAISearchTitleBar(self)
         lay.addWidget(self.TitleBar)
+        lay.addLayout(lay_content)
         lay_content.addWidget(XAISearchWindow(self))
-        lay_content.addWidget(XAISearchTable(self))
+        lay_content.addWidget(XAISearchScrollArea(self))
         lay_content.addWidget(XAISearchBottom(self))
         lay_content.setContentsMargins(10, 0, 10, 0)
-        lay.addLayout(lay_content)
-
+        self.name = ''
+        self.m_flag = False
     # window drag
     def mousePressEvent(self, event):
         if (event.button() == Qt.LeftButton) and self.TitleBar.underMouse():
@@ -570,138 +571,129 @@ class XAISearch(ABCWidget):
     def mouseReleaseEvent(self, QMouseEvent):
         self.m_flag = False
         self.setCursor(QCursor(Qt.ArrowCursor))
+    
+    def show(self, name) -> None:
+        self.name = name # 절차서 명 또는 시스템 명을 전달받은 뒤 업데이트
+        self.inmem.widget_ids['XAISearchTitleName'].setText(name)
+        return super().show()
 # --------------------------------------------------------------------------------
-
 class XAISearchTitleBar(ABCWidget):
-    def __init__(self, parent):
-        super(XAISearchTitleBar, self).__init__(parent)
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setFixedHeight(50)
-        self.setObjectName("SearchTitleBar")
         lay = QHBoxLayout(self)
-        lay.addWidget(XAISearchTitleName(self))
+        lay.addWidget(XAISearchTitleBarName(self))
         lay.addWidget(XAISearchClose(self))
-
-class XAISearchTitleName(ABCLabel):
+class XAISearchTitleBarName(ABCLabel):
     def __init__(self, parent):
-        super(XAISearchTitleName, self).__init__(parent)
-        self.setObjectName("SearchTitleBar3")
+        super(XAISearchTitleBarName, self).__init__(parent)
         self.setText('AI 기여도')
-
 class XAISearchClose(ABCPushButton):
     def __init__(self, parent):
         super(XAISearchClose, self).__init__(parent)
         icon = os.path.join(ROOT_PATH, '../AIDAA_Ver21/Img/close.png')
-        self.setObjectName("SearchTitleBar")
         self.setIcon(QIcon(icon))
         self.setIconSize(QSize(33, 33))  # 아이콘 크기
         self.setFixedSize(QSize(33, 33))
         self.setContentsMargins(1, 0, 0, 0)
-        self.clicked.connect(self.close_XAISearch)
-
-    def close_XAISearch(self):
-        XAISearch(self).close()
-
+        self.clicked.connect(self.inmem.widget_ids['XAISearch'].close)
 # --------------------------------------------------------------------------------
-
 class XAISearchWindow(ABCWidget):
     def __init__(self, parent):
         super(XAISearchWindow, self).__init__(parent)
         lay = QHBoxLayout(self)
-        lay.addWidget(XAISearchProcedureNumber(self))
-        lay.addWidget(XAISearchProcedureName(self))
+        lay.addWidget(XAISearchTitleName(self))
         lay.setContentsMargins(20, 10, 0, 10)
         lay.setSpacing(10)
         lay.addStretch(1)
-        gb = QGroupBox(self)
-        gb.setObjectName("SearchWindow")
-        gb.setContentsMargins(0, 0, 0, 0)
-        gb.setFixedHeight(80)
-        gb.setLayout(lay)
-
-        search_lay = QHBoxLayout(self)
-        search_lay.setContentsMargins(0, 0, 0, 0)
-        search_lay.addWidget(gb)
-
-class XAISearchProcedureNumber(ABCLabel):
-    def __init__(self, parent):
-        super(XAISearchProcedureNumber, self).__init__(parent)
-        self.setFixedHeight(30)
-        self.setObjectName("SearchLabel")
-        self.setText(f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0][2:7]}')
-
-class XAISearchProcedureName(ABCLabel):
-    def __init__(self, parent):
-        super(XAISearchProcedureName, self).__init__(parent)
-        self.setFixedHeight(30)
-        self.setObjectName("SearchLabel")
-        self.setText(f'{self.inmem.dis_AI["AI"][self.inmem.current_table["Procedure"]][0][9:]}')
-
+class XAISearchTitleName(ABCLabel):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText('')
 # --------------------------------------------------------------------------------
+class XAISearchScrollArea(ABCScrollArea):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.heading_height = 40
 
+    def resizeEvent(self, a0: QResizeEvent) -> None:
+        # resize 된 이후 수행
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(0)
+        lay_heading = QHBoxLayout()
+        lay_heading.setContentsMargins(0, 0, 0, 0)
+        lay_heading.setSpacing(0)
+        
+        lay.addLayout(lay_heading)
+
+        col_info = {' 변수 명':200, ' 기여도': self.size().width() - 200}
+
+        lay_heading.addWidget(XAISearchHeadingLabel(self, ' 변수 명', col_info[' 변수 명'], self.heading_height, 'F'))
+        lay_heading.addWidget(XAISearchHeadingLabel(self, ' 기여도', col_info[' 기여도'], self.heading_height, 'L'))
+        
+        lay.addWidget(XAISearchTable(self, col_info))
+
+        return super().resizeEvent(a0)
+class XAISearchHeadingLabel(ABCLabel):
+    def __init__(self, parent, text, fix_width, fix_height, pos, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+        self.setFixedWidth(fix_width)
+        self.setFixedHeight(fix_height)
+        self.setProperty('Pos', pos)
+        self.style().polish(self)
 class XAISearchTable(ABCTableWidget):
-    def __init__(self, parent):
-        super(XAISearchTable, self).__init__(parent)
+    def __init__(self, parent, col_info:dict, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setRowCount(5)
-        self.setFixedSize(780, 366)
+        # self.setFixedSize(780, 366)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setShowGrid(False)  # Grid 지우기
         self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.horizontalHeader().setVisible(False)  # Row 넘버 숨기기
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.column_labels = [(' 변수 명', 200), (' 기여도', 940)]
-        self.setColumnCount(len(self.column_labels))
-        self.col_names = []
-        for i, (l, w) in enumerate(self.column_labels):
-            self.setColumnWidth(i, w)
-            self.col_names.append(l)
+        self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionBehavior(QTableView.SelectRows)
-        self.setHorizontalHeaderLabels(self.col_names)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        
+        self.setColumnCount(len(col_info))
+
+        for i, (l, w) in enumerate(col_info.items()):
+            self.setColumnWidth(i, w)
+
         self.setSortingEnabled(True)  # 테이블 sorting
 
-        header = self.horizontalHeader()
-        header.setSortIndicatorShown(True)
-        header.sortIndicatorChanged.connect(self.sortItems)
-        self.horizontalHeader().setFixedHeight(40)
-        self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
-        self.horizontalHeaderItem(1).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
-        self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
+        [self.setRowHeight(i, 65) for i in range(self.rowCount())] # 테이블 행 높이 조절
 
-        # 테이블 행 높이 조절
-        for i in range(0, self.rowCount()):
-            self.setRowHeight(i, 65)
-
-        self.widget_timer(iter_=500, funs=[self.dis_update])
-
-    def dis_update(self):
         try:
             if self.item(0, 0).text() == self.inmem.dis_AI['XAI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['XAI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['XAI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['XAI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['XAI'][4][0]:
                 pass
             else:
-                [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['XAI'][i][0])) for i in range(5)]
-                [self.setItem(i, 1, QTableWidgetItem(" " +self.inmem.dis_AI['XAI'][i][1])) for i in range(5)]
+                [self.setCellWidget(i, 0, XAISearchItem(self, " " + self.inmem.dis_AI['XAI'][i][0], Qt.AlignmentFlag.AlignCenter, 'F')) for i in range(5)]
+                [self.setCellWidget(i, 1, XAISearchItem(self, " " +self.inmem.dis_AI['XAI'][i][1], Qt.AlignmentFlag.AlignLeft, 'L')) for i in range(5)]
         except:
-            [self.setItem(i, 0, QTableWidgetItem(" " + self.inmem.dis_AI['XAI'][i][0])) for i in range(5)]
-            [self.setItem(i, 1, QTableWidgetItem(" " + self.inmem.dis_AI['XAI'][i][1])) for i in range(5)]
-
+            [self.setCellWidget(i, 0, XAISearchItem(self, " " + self.inmem.dis_AI['XAI'][i][0], Qt.AlignmentFlag.AlignCenter, 'F')) for i in range(5)]
+            [self.setCellWidget(i, 1, XAISearchItem(self, " " + self.inmem.dis_AI['XAI'][i][1], Qt.AlignmentFlag.AlignLeft, 'L')) for i in range(5)]
+class XAISearchItem(ABCLabel):
+    def __init__(self, parent, text, alignment, pos, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+        self.setProperty('Pos', pos)
+        self.setAlignment(Qt.AlignVCenter | alignment)
 # --------------------------------------------------------------------------------
-
 class XAISearchBottom(ABCWidget):
     def __init__(self, parent):
         super(XAISearchBottom, self).__init__(parent)
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 5, 0, 10)
         lay.addStretch(1)
-        lay.addWidget(XAISearchCancle(self))
+        lay.addWidget(XAISearchCancel(self))
         lay.setSpacing(15)
-
-class XAISearchCancle(ABCPushButton):
-    def __init__(self, parent):
-        super(XAISearchCancle, self).__init__(parent)
-        self.setObjectName("Bottom")
+class XAISearchCancel(ABCPushButton):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
         self.setFixedSize(160, 30)
         self.setText('닫기')
-        self.clicked.connect(self.close_XAISearch)
-
-    def close_XAISearch(self):
-        XAISearch(self).close()
+        self.clicked.connect(self.inmem.widget_ids['XAISearch'].close)

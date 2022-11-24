@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from AIDAA_Ver21.Interface_ABCWidget import *
-from AIDAA_Ver21.Interface_AIDAA_Procedure_Search import ProcedureSearch, SystemSearch
+from AIDAA_Ver21.Interface_AIDAA_Procedure_Search import ProcedureSearch, SystemSearch, XAISearch
 
 import numpy as np
 import os
@@ -24,12 +24,17 @@ class Diagnosis(ABCWidget):
         lay.setSpacing(15)
         self.ProSearchWidget = ProcedureSearch(self)
         self.SysSearchWidget = SystemSearch(self)
+        self.XAISearchWidget = XAISearch(self)
         
     def show_ProSearchWidget(self):
         self.ProSearchWidget.show()
     
     def show_SysSearchWidget(self):
         self.SysSearchWidget.show()
+        
+    def show_XAISearchWidget(self, name):
+        # name = sys_name or pro_name
+        self.XAISearchWidget.show(name)
 class DiagnosisTop(ABCWidget):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
@@ -140,12 +145,16 @@ class DiagnosisProcedureTable(ABCTableWidget):
             self.setCellWidget(i, 4, DiagnosisProcedureItem(self, ai_probability, pro_name))
 
         self.startTimer(600)
-        # self.clicked.connect(self.control_table)
-
-        # self.setContextMenuPolicy(Qt.ActionsContextMenu)  # 우클릭 컨텍스트 메뉴 구성
-        # xai_menu = QAction("XAI", self)
-        # xai_menu.triggered.connect(self.XAISearchShow)
-        # self.addAction(xai_menu)
+        
+    def contextMenuEvent(self, a0: QContextMenuEvent) -> None:
+        if self.inmem.ShMem.get_para_val('iFixTrain') == 0:
+            menu = QMenu()
+            xai = menu.addAction('XAI')
+            act = menu.exec(a0.globalPos())
+            if act == xai:
+                pro_name = self.cellWidget(self.selectedIndexes()[0].row(), 0).pro_name
+                self.inmem.widget_ids['Diagnosis'].show_XAISearchWidget(pro_name)
+        return super().contextMenuEvent(a0)
 
     def timerEvent(self, event: QTimerEvent) -> None:
         block = 'Off' if self.inmem.ShMem.get_para_val('iFixTrain') == 0 else 'On'
@@ -385,19 +394,16 @@ class DiagnosisSystemTable(ABCTableWidget):
             self.setCellWidget(i, 2, DiagnosisSystemItem(self, ai_probability, sys_name))
 
         self.startTimer(600)
-
-    #     self.widget_timer(iter_=500, funs=[self.dis_update])
-    #     self.doubleClicked.connect(self.dis_system)
-    #     self.clicked.connect(self.control_table)
-    #     self.setContextMenuPolicy(Qt.ActionsContextMenu)  # 우클릭 컨텍스트 메뉴 구성
-    #     xai_menu = QAction("XAI", self)
-    #     xai_menu.triggered.connect(self.XAISearchShow)
-    #     self.addAction(xai_menu)
-
-    #     self.widget_timer(iter_=500, funs=[self.dis_update])
-
-    # def XAISearchShow(self):
-    #     XAISearch(self).show()
+        
+    def contextMenuEvent(self, a0: QContextMenuEvent) -> None:
+        if self.inmem.ShMem.get_para_val('iFixTrain') == 1:
+            menu = QMenu()
+            xai = menu.addAction('XAI')
+            act = menu.exec(a0.globalPos())
+            if act == xai:
+                sys_name = self.cellWidget(self.selectedIndexes()[0].row(), 0).sys_name
+                self.inmem.widget_ids['Diagnosis'].show_XAISearchWidget(sys_name)
+        return super().contextMenuEvent(a0)
 
     def timerEvent(self, event: QTimerEvent) -> None:
         block = 'Off' if self.inmem.ShMem.get_para_val('iFixTrain') == 1 else 'On'
