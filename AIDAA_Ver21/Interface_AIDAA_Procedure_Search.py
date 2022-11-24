@@ -142,6 +142,7 @@ class ProcedureSearchReset(ABCPushButton):
     def search_reset(self):
         self.inmem.widget_ids['ProcedureSearchInput1'].clear()
         self.inmem.widget_ids['ProcedureSearchInput2'].clear()
+        self.inmem.widget_ids['ProcedureSearchTable'].show_procedure_list_in_table()
 # --------------------------------------------------------------------------------
 class ProcedureSearchScrollArea(ABCScrollArea):
     def __init__(self, parent):
@@ -395,7 +396,11 @@ class SystemSearchReset(ABCPushButton):
         super(SystemSearchReset, self).__init__(parent)
         self.setFixedSize(160, 30)
         self.setText('초기화')
-        self.clicked.connect(self.inmem.widget_ids['SystemSearchInput'].clear)
+        self.clicked.connect(self.search_reset)
+    
+    def search_reset(self):
+        self.inmem.widget_ids['SystemSearchInput'].clear()
+        self.inmem.widget_ids['SystemSearchTable'].show_system_list_in_table()
 # --------------------------------------------------------------------------------
 class SystemSearchScrollArea(ABCScrollArea):
     def __init__(self, parent):

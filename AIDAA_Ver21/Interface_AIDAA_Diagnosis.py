@@ -517,6 +517,9 @@ class ProcedureCheckTable(ABCTableWidget):
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
 
+        self.startTimer(300)
+        self.index_previously_selected = None
+
     def update_table_items(self, type_, name):
         [self.removeRow(0) for _ in range(self.rowCount())]
 
@@ -543,8 +546,33 @@ class ProcedureCheckTable(ABCTableWidget):
             [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...')) for i in range(symptom_count)]
             [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...')) for i in range(symptom_count)]
 
+        if type_ == 'Init':
+            self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 비정상절차서:")
+            self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setToolTip(f"None")
+            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' ...')) for i in range(1)]
+            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...')) for i in range(1)]
+            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...')) for i in range(1)]
+            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...')) for i in range(1)]
+
         [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절
         self.setFixedSize(915, 40 * self.rowCount() if 675 < 40 * self.rowCount() else 675) # Scroll 위함
+
+    def timerEvent(self, event: QTimerEvent) -> None:
+        if self.inmem.ShMem.get_para_val('iFixTrain') == 0:
+            selected_indexes = self.inmem.widget_ids['DiagnosisProcedureTable'].selectedIndexes()
+            if len(selected_indexes) == 0:
+                self.update_table_items('Init', '')
+            elif len(selected_indexes) != 0 and selected_indexes[0] != self.index_previously_selected: # 이미 선택된 경우 업데이트를 하지 않음.
+                self.index_previously_selected = selected_indexes[0]
+                self.update_table_items('Pro_name', self.inmem.widget_ids['DiagnosisProcedureTable'].cellWidget(selected_indexes[0].row(), 0).pro_name)
+        else:
+            selected_indexes = self.inmem.widget_ids['DiagnosisSystemTable'].selectedIndexes()
+            if len(selected_indexes) == 0:
+                self.update_table_items('Init', '')
+            elif len(selected_indexes) != 0 and selected_indexes[0] != self.index_previously_selected: # 이미 선택된 경우 업데이트를 하지 않음.
+                self.index_previously_selected = selected_indexes[0]
+                self.update_table_items('Sys_name', self.inmem.widget_ids['DiagnosisSystemTable'].cellWidget(selected_indexes[0].row(), 0).sys_name)
+        return super().timerEvent(event)
 # ----------------------------------------------------------------------------------------------------------------------
 class ProcedureCheckTableItem(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
