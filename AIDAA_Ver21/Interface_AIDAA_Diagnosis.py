@@ -423,7 +423,8 @@ class DiagnosisSystemItem(ABCLabel):
         return super().mouseDoubleClickEvent(a0)
 
     def mousePressEvent(self, ev: QMouseEvent) -> None:
-        self.inmem.widget_ids['ProcedureCheckTable'].update_table_items('Sys_name', self.sys_name)
+        if self.block == 'Off':
+            self.inmem.widget_ids['ProcedureCheckTable'].update_table_items('Sys_name', self.sys_name)
         return super().mousePressEvent(ev)
 
     def update_item(self, text, sys_name, block):

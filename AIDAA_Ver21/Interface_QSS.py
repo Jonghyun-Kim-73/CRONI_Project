@@ -17,9 +17,12 @@ def builder(objecttype:str, objectname:str, contents:list):
 def rgb_to_qCOLOR(color_code:str):
     color_code = color_code.replace('rgb(', '').replace(')', '').replace(' ', '').split(',')
     return QColor(int(color_code[0]), int(color_code[1]), int(color_code[2]))
-def rgb_to_tuplecode(color_code:str):
+def rgb_to_hex(color_code:str):
     color_code = color_code.replace('rgb(', '').replace(')', '').replace(' ', '').split(',')
-    return (int(color_code[0]), int(color_code[1]), int(color_code[2]))
+    r = int(color_code[0])
+    g = int(color_code[1])
+    b = int(color_code[2])
+    return '#' + hex(r)[2:].zfill(2) + hex(g)[2:].zfill(2) + hex(b)[2:].zfill(2)
 # Color Table -------------------------------------------------
 DarkGray = 'rgb(80, 80, 80)' # old 128, 128, 128
 Gray = 'rgb(181, 181, 181)'
@@ -279,9 +282,9 @@ QssMain = ''.join([
     builder('QScrollArea', 'DiagnosisSystemScrollArea', ['border:0px;', f'background-color: {LightGray};']),
     builder('QTableWidget', 'DiagnosisSystemTable', [f'background-color: {LightGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
     builder('QTableWidget', 'DiagnosisSystemTable::item', [f'border-bottom: 1px solid {DarkGray};']),
-    builder('QTableWidget', 'DiagnosisSystemTable[Block="On"]::item:selected', [f'background-color: {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisSystemTable[Block="On"]::item:selected', [f'background-color: {Gray};']),
     builder('QTableWidget', 'DiagnosisSystemTable[Block="Off"]::item:selected', [f'background-color: {LightBlue};', f'color:{Black};', 'outline: 0;']),
-    builder('QTableWidget', 'DiagnosisSystemTable[Block="On"]', [f'background-color: {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisSystemTable[Block="On"]', [f'background-color: {Gray};']),
     builder('QTableWidget', 'DiagnosisSystemTable[Block="Off"]', [f'background-color: {LightGray};']),
     builder('QLabel', 'DiagnosisSystemItem', ['border:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
     builder('QLabel', 'DiagnosisSystemItem[Block="On"]', [f'background-color: {DarkGray};', f'color:{DarkGray}']),
@@ -436,15 +439,15 @@ QssMain = ''.join([
     builder('QPushButton', 'ProcedureReconduct', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
     # Interface_AIDAA_Pretrip.py ----------------------------------------------------------------------------------
     builder('QWidget', 'PreTrip', ['border:0px;', f'background-color: {LightGray};']),
-    builder('QWidget', 'PreTrip, QLabel#title', ['border-radius: 5px;', f'background-color: {LightGreen};', 'qproperty-alignment: AlignCenter;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'PreTripTitle', ['border-radius: 5px;', f'background-color: {LightGreen};', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
     builder('QWidget', 'LeftPrediction', ['border:0px;', f'background-color: {LightGray};']),
     builder('QWidget', 'RightPrediction', ['border:0px;', f'background-color: {LightGray};']),
     builder('QWidget', 'RightPrediction', ['border:0px;', f'background-color: {LightGray};']),
     builder('QWidget', 'Parameter_Graph', ['border-radius: 10px;', f'border: 1px solid {DarkGray};']),
-    builder('QWidget', 'Parameter_Graph, QWidget#Graph_sub', [f'background-color: {LightGray};', 'border-radius: 10px;', f'border: 1px solid {DarkGray};']),
-    builder('QLabel', 'TripTimeLabel', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {LightGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
-    builder('QLabel', 'Parameter_name', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {LightGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
-    builder('QLabel', 'Parameter_TripTime', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {LightGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QWidget', 'ParameterGraphSub', [f'background-color: {LightGray};', 'border-radius: 10px;', f'border: 1px solid {DarkGray};']),
+    builder('QLabel', 'TripTimeLabel', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {Gray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'Parameter_name', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {DarkYellow};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'Parameter_TripTime', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {DarkYellow};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
 ])
 # final qss !! 
 qss = ''.join(

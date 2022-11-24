@@ -348,9 +348,6 @@ class PreTrip(ABCWidget):
         super(PreTrip, self).__init__(parent)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 0)
-        title = QLabel("Trip")
-        title.setObjectName("title")
-        title.setFixedSize(227, 40)
 
         lay = QHBoxLayout()
         lay.addWidget(LeftPrediction(self))
@@ -358,9 +355,14 @@ class PreTrip(ABCWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(18)
         
-        layout.addWidget(title)
+        layout.addWidget(PreTripTitle(self))
         layout.addLayout(lay)
         layout.setSpacing(15)
+class PreTripTitle(ABCLabel):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText('Trip')
+        self.setFixedSize(227, 40)
 class LeftPrediction(ABCWidget):
     def __init__(self, parent):
         super(LeftPrediction, self).__init__(parent)
@@ -395,6 +397,9 @@ class Parameter(ABCWidget): # 그래프 포함
         lay.addWidget(Parameter_Graph(self, id=self.id))
         lay.setSpacing(0)
         lay.addStretch(1)
+class ParameterGraphSub(ABCWidget):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
 class Parameter_Graph(ABCWidget):
     def __init__(self, parent, id=None):
         super(Parameter_Graph, self).__init__(parent)
@@ -410,59 +415,57 @@ class Parameter_Graph(ABCWidget):
         lay = QHBoxLayout(self)
 
         # stylesheet 적용 위함
-        layout_widget1 = QWidget(self)
-        lay_1 = QHBoxLayout(self)
+        layout_widget1 = ParameterGraphSub(self)
+        lay_1 = QHBoxLayout()
         layout_widget1.setLayout(lay_1)
-        layout_widget2 = QWidget(self)
-        lay_2 = QHBoxLayout(self)
+        layout_widget2 = ParameterGraphSub(self)
+        lay_2 = QHBoxLayout()
         layout_widget2.setLayout(lay_2)
         lay.addWidget(layout_widget1)
         lay.addWidget(layout_widget2)
         lay.setSpacing(17)
-        layout_widget1.setObjectName("Graph_sub")
-        layout_widget2.setObjectName("Graph_sub")
         lay_1.setContentsMargins(5, 5, 5, 5)
         lay_2.setContentsMargins(5, 5, 5, 5)
 
-        plt.rcParams['axes.facecolor'] = rgb_to_tuplecode(DarkGray)
+        plt.rcParams['axes.facecolor'] = rgb_to_hex(LightGray)
         #Shortterm prediction
-        canvas = FigureCanvas(Figure(facecolor=rgb_to_tuplecode(Gray)))
+        canvas = FigureCanvas(Figure(facecolor=rgb_to_hex(LightGray)))
         lay_1.addWidget(canvas)
         self.ax = canvas.figure.subplots()
 
         x = np.arange(0, 120, 1)
         x_real = np.arange(-59, 1, 1)
 
-        self.ax.plot(x_real, past_data[self.id],c=rgb_to_tuplecode(DarkGray), linewidth = '1',label = 'Past values')
-        self.ax.plot(x, grap[self.id],c=rgb_to_tuplecode(DarkBlue), linewidth = '1',label = 'Prediction results')
+        self.ax.plot(x_real, past_data[self.id],c=rgb_to_hex(DarkGray), linewidth = '1',label = 'Past values')
+        self.ax.plot(x, grap[self.id],c=rgb_to_hex(DarkBlue), linewidth = '1',label = 'Prediction results')
         self.ax.set_xlim(-10, 10)
-        self.ax.axvline(x=0, linestyle='--', c=rgb_to_tuplecode(DarkGray), linewidth = '1')
+        self.ax.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth = '1')
         self.ax.set_xticks([-10, 0, 10])
         self.ax.set_xticklabels(['-10min', '0', '10min'])
         self.ax.tick_params(axis='x', direction='in', which='major', labelsize=7, bottom=False)
         self.ax.tick_params(axis='y', direction='in', which='major', labelsize=7, bottom=False)
         self.ax.set_ylabel(y_label[self.id], fontsize='7')
-        self.ax.axhline(y=trip_setpoint[self.id][0], c=rgb_to_tuplecode(DarkRed), linewidth = '1')
-        self.ax.axhline(y=trip_setpoint[self.id][1], c=rgb_to_tuplecode(DarkRed), linewidth = '1')
+        self.ax.axhline(y=trip_setpoint[self.id][0], c=rgb_to_hex(DarkRed), linewidth = '1')
+        self.ax.axhline(y=trip_setpoint[self.id][1], c=rgb_to_hex(DarkRed), linewidth = '1')
         self.ax.spines['top'].set_visible(False)
         self.ax.spines['right'].set_visible(False)
         self.ax.spines['left'].set_visible(False)
 
         # Longterm prediction
-        canvas1 = FigureCanvas(Figure(facecolor='#E7E7EA'))
+        canvas1 = FigureCanvas(Figure(facecolor=rgb_to_hex(LightGray)))
         lay_2.addWidget(canvas1)
         self.ax1 = canvas1.figure.subplots()
-        self.ax1.plot(x_real, past_data[self.id],c=rgb_to_tuplecode(DarkGray),linewidth = '1',label = 'Past values')
-        self.ax1.plot(x, grap[self.id],c=rgb_to_tuplecode(DarkBlue), linewidth = '1',label = 'Prediction results')
+        self.ax1.plot(x_real, past_data[self.id],c=rgb_to_hex(DarkGray),linewidth = '1',label = 'Past values')
+        self.ax1.plot(x, grap[self.id],c=rgb_to_hex(DarkBlue), linewidth = '1',label = 'Prediction results')
         self.ax1.set_xlim(-60, 120)
-        self.ax1.axvline(x=0, linestyle='--', c=rgb_to_tuplecode(DarkGray), linewidth = '1')
+        self.ax1.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth = '1')
         self.ax1.set_xticks([-60, 0, 120])
         self.ax1.set_xticklabels(['-60min', '0', '120min'])
         self.ax1.tick_params(axis='x', direction='in', which='major', labelsize=7)
         self.ax1.tick_params(axis='y', direction='in', which='major', labelsize=7)
         self.ax1.set_ylabel(y_label[self.id], fontsize='7')
-        self.ax1.axhline(y=trip_setpoint[self.id][0], c=rgb_to_tuplecode(DarkRed), linewidth = '1')
-        self.ax1.axhline(y=trip_setpoint[self.id][1], c=rgb_to_tuplecode(DarkRed), linewidth = '1')
+        self.ax1.axhline(y=trip_setpoint[self.id][0], c=rgb_to_hex(DarkRed), linewidth = '1')
+        self.ax1.axhline(y=trip_setpoint[self.id][1], c=rgb_to_hex(DarkRed), linewidth = '1')
         self.ax1.spines['top'].set_visible(False)
         self.ax1.spines['right'].set_visible(False)
         self.ax1.spines['left'].set_visible(False)
