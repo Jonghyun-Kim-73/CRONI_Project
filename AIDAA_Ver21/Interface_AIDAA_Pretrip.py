@@ -436,17 +436,17 @@ class Parameter_Graph(ABCWidget):
         x = np.arange(0, 120, 1)
         x_real = np.arange(-59, 1, 1)
 
-        self.ax.plot(x_real, past_data[self.id],c=rgb_to_hex(DarkGray), linewidth = '1',label = 'Past values')
-        self.ax.plot(x, grap[self.id],c=rgb_to_hex(DarkBlue), linewidth = '1',label = 'Prediction results')
+        self.ax.plot(x_real, past_data[self.id],c=rgb_to_hex(DarkGray), linewidth = '2',label = 'Past values')
+        self.ax.plot(x, grap[self.id],c=rgb_to_hex(DarkBlue), linewidth = '2',label = 'Prediction results')
         self.ax.set_xlim(-10, 10)
-        self.ax.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth = '1')
+        self.ax.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth = '2')
         self.ax.set_xticks([-10, 0, 10])
         self.ax.set_xticklabels(['-10min', '0', '10min'])
         self.ax.tick_params(axis='x', direction='in', which='major', labelsize=7, bottom=False)
         self.ax.tick_params(axis='y', direction='in', which='major', labelsize=7, bottom=False)
-        self.ax.set_ylabel(y_label[self.id], fontsize='7')
-        self.ax.axhline(y=trip_setpoint[self.id][0], c=rgb_to_hex(DarkRed), linewidth = '1')
-        self.ax.axhline(y=trip_setpoint[self.id][1], c=rgb_to_hex(DarkRed), linewidth = '1')
+        self.ax.set_ylabel(y_label[self.id], fontsize='10')
+        self.ax.axhline(y=trip_setpoint[self.id][0], c=rgb_to_hex(DarkRed), linewidth = '2')
+        self.ax.axhline(y=trip_setpoint[self.id][1], c=rgb_to_hex(DarkRed), linewidth = '2')
         self.ax.spines['top'].set_visible(False)
         self.ax.spines['right'].set_visible(False)
         self.ax.spines['left'].set_visible(False)
@@ -455,17 +455,17 @@ class Parameter_Graph(ABCWidget):
         canvas1 = FigureCanvas(Figure(facecolor=rgb_to_hex(LightGray)))
         lay_2.addWidget(canvas1)
         self.ax1 = canvas1.figure.subplots()
-        self.ax1.plot(x_real, past_data[self.id],c=rgb_to_hex(DarkGray),linewidth = '1',label = 'Past values')
-        self.ax1.plot(x, grap[self.id],c=rgb_to_hex(DarkBlue), linewidth = '1',label = 'Prediction results')
+        self.ax1.plot(x_real, past_data[self.id],c=rgb_to_hex(DarkGray),linewidth = '2',label = 'Past values')
+        self.ax1.plot(x, grap[self.id],c=rgb_to_hex(DarkBlue), linewidth = '2',label = 'Prediction results')
         self.ax1.set_xlim(-60, 120)
-        self.ax1.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth = '1')
+        self.ax1.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth = '2')
         self.ax1.set_xticks([-60, 0, 120])
         self.ax1.set_xticklabels(['-60min', '0', '120min'])
         self.ax1.tick_params(axis='x', direction='in', which='major', labelsize=7)
         self.ax1.tick_params(axis='y', direction='in', which='major', labelsize=7)
-        self.ax1.set_ylabel(y_label[self.id], fontsize='7')
-        self.ax1.axhline(y=trip_setpoint[self.id][0], c=rgb_to_hex(DarkRed), linewidth = '1')
-        self.ax1.axhline(y=trip_setpoint[self.id][1], c=rgb_to_hex(DarkRed), linewidth = '1')
+        self.ax1.set_ylabel(y_label[self.id], fontsize='10')
+        self.ax1.axhline(y=trip_setpoint[self.id][0], c=rgb_to_hex(DarkRed), linewidth = '2')
+        self.ax1.axhline(y=trip_setpoint[self.id][1], c=rgb_to_hex(DarkRed), linewidth = '2')
         self.ax1.spines['top'].set_visible(False)
         self.ax1.spines['right'].set_visible(False)
         self.ax1.spines['left'].set_visible(False)
@@ -473,52 +473,52 @@ class Parameter_Graph(ABCWidget):
         #
         # lay.addWidget(Parameter_ShortTerm(self, id))
 if len(np.where(np.logical_or(power_mean<25,power_mean>109))[0])==0:
-    power_triptime = 'None'
+    power_triptime = '00:00:00'
 else:
     power_triptime =np.where(np.logical_or(power_mean<25,power_mean>109))[0][0]
 
 if len(np.where(over_delta_T_mean>1.3)[0])==0:
-    over_delta_T_triptime = 'None'
+    over_delta_T_triptime = '00:00:00'
 else:
     over_delta_T_triptime =np.where(over_delta_T_mean>1.3)[0][0]
 
 if len(np.where(np.logical_or(prz_pressure_mean<136.78,prz_pressure_mean>167.72))[0])==0:
-    prz_pressure_triptime = 'None'
+    prz_pressure_triptime = '00:00:00'
 else:
     prz_pressure_triptime = np.where(np.logical_or(prz_pressure_mean<136.78,prz_pressure_mean>167.72))[0][0]
 
 if len(np.where(prz_level_mean>92)[0])==0:
-    prz_level_triptime = 'None'
+    prz_level_triptime = '00:00:00'
 else:
     prz_level_triptime =np.where(prz_level_mean>92)[0][0]
 
 if len(np.where(loop3_flow_mean<90)[0])==0:
-    loop3_flow_triptime = 'None'
+    loop3_flow_triptime = '00:00:00'
 else:
     loop3_flow_triptime =np.where(loop3_flow_mean<90)[0][0]
 
 if len(np.where(loop2_flow_mean<90)[0])==0:
-    loop2_flow_triptime = 'None'
+    loop2_flow_triptime = '00:00:00'
 else:
     loop2_flow_triptime =np.where(loop2_flow_mean<90)[0][0]
 
 if len(np.where(loop1_flow_mean<90)[0])==0:
-    loop1_flow_triptime = 'None'
+    loop1_flow_triptime = '00:00:00'
 else:
     loop1_flow_triptime =np.where(loop1_flow_mean<90)[0][0]
 
 if len(np.where(sg3_level_mean<17)[0])==0:
-    sg3_level_triptime = 'None'
+    sg3_level_triptime = '00:00:00'
 else:
     sg3_level_triptime =np.where(sg3_level_mean<17)[0][0]
 
 if len(np.where(sg2_level_mean<17)[0])==0:
-    sg2_level_triptime = 'None'
+    sg2_level_triptime = '00:00:00'
 else:
     sg2_level_triptime =np.where(sg2_level_mean<17)[0][0]
 
 if len(np.where(sg1_level_mean<17)[0])==0:
-    sg1_level_triptime = 'None'
+    sg1_level_triptime = '00:00:00'
 else:
     sg1_level_triptime =np.where(sg1_level_mean<17)[0][0]
 class Parameter_Info(ABCWidget):
@@ -532,24 +532,30 @@ class Parameter_Info(ABCWidget):
         self.blink = False
         self.lay = QHBoxLayout(self)
         self.lay.setContentsMargins(15, 0, 0, 0)
-        self.lay.addWidget(Parameter_name(self, name[self.id]))
-        self.lay.addWidget(TripTimeLabel(self))
-        self.lay.addWidget(Parameter_TripTime(self, self.Trip_time[self.id]))
+        
+        self.parameter_name_w = Parameter_name(self, name[self.id])
+        self.trip_time_label_w = TripTimeLabel(self)
+        self.parameter_triptime_w = Parameter_TripTime(self, self.Trip_time[self.id])
+        
+        self.lay.addWidget(self.parameter_name_w)
+        self.lay.addWidget(self.trip_time_label_w)
+        self.lay.addWidget(self.parameter_triptime_w)
 
-        self.widget_timer(iter_=500, funs=[self.dis_update])
         self.lay.setSpacing(30)
         self.lay.addStretch(1)
-    def dis_update(self):
-        if self.Trip_time[self.id] =='None':
-            pass
+        
+        self.startTimer(300)
+    
+    def timerEvent(self, a0: 'QTimerEvent') -> None:
+        if self.inmem.ShMem.get_para_val(f'iPreTrip{self.id}') == 1:
+            self.blink = not self.blink
         else:
-            # self.lay.addWidget(Parameter_TripTime(self, self.Trip_time[self.id]))
-            if not self.blink:
-                self.setStyleSheet('background-color: rgb(255, 255, 255)')
-                self.blink = True
-            else:
-                self.setStyleSheet('background-color: rgb(0, 176, 218)')
-                self.blink = False
+            self.blink = False
+        self.parameter_name_w.setProperty('Blink', 'True' if self.blink else 'False')
+        self.parameter_triptime_w.setProperty('Blink', 'True' if self.blink else 'False')
+        self.parameter_name_w.style().polish(self.parameter_name_w)
+        self.parameter_triptime_w.style().polish(self.parameter_triptime_w)
+        return super().timerEvent(a0)
 class TripTimeLabel(ABCLabel):
     def __init__(self, parent):
         super(TripTimeLabel, self).__init__(parent)
