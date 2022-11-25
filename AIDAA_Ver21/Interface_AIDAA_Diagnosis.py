@@ -166,88 +166,6 @@ class DiagnosisProcedureTable(ABCTableWidget):
             self.cellWidget(i, 2).update_item(pro_name, block)
             self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
             self.cellWidget(i, 4).update_item(ai_probability, pro_name, block)
-
-        # def XAISearchShow(self):
-    #     XAISearch(self).show()
-
-    #     # --------------------------------------------------------------------------------------------------------------
-    #     # 인공지능 모듈 적용 시 구동 코드
-    #     # AI Diagnosis Calculation -------------------------------------------------------------------------------------
-    #     # self.inmem.get_diagnosis_result()
-    #     # if self.inmem.ShMem.get_para_val('iFixTrain') == 1:
-    #     #     self.inmem.dis_AI['Train'] = 0
-    #     # elif self.inmem.ShMem.get_para_val('iFixTrain') == 2:
-    #     #     self.inmem.dis_AI['Train'] = 1
-    #     # else:
-    #     #     if np.shape(self.inmem.get_train_check_val()) == (1, 10, 46):
-    #     #         self.inmem.get_train_check_result()
-    #     # --------------------------------------------------------------------------------------------------------------
-    #     # if self.inmem.ShMem.get_para_val('iFixTrain') == 2 or self.inmem.dis_AI['Train'] == 1: # 훈련되지 않은 시나리오
-    #     #     try:
-    #     #         if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
-    #     #             [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1,5)]
-    #     #             [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1,5)]
-    #     #         else:
-    #     #             self.clear()
-    #     #             self.setHorizontalHeaderLabels(self.col_names)
-    #     #             self.horizontalHeaderItem(0).setTextAlignment(Qt.AlignLeft and Qt.AlignVCenter)
-    #     #             self.make_centerCB()
-    #     #             [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-    #     #             [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(1,5)]
-    #     #             [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1,5)]
-    #     #             [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1,5)]
-    #     #             [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1,5)]
-    #     #             [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
-    #     #     except:
-    #     #         [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-    #     #         [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(1,5)]
-    #     #         [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(1,5)]
-    #     #         [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(1, 5)]
-    #     #         [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(1, 5)]
-    #     #         [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
-    #     #
-    #     # elif self.inmem.ShMem.get_para_val('iFixTrain') == 1 or self.inmem.dis_AI['Train'] == 0 : # 훈련된 시나리오
-    #     #     try:
-    #     #         if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
-    #     #             [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-    #     #             [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-    #     #         else:
-    #     #             self.make_centerCB()
-    #     #             [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-    #     #             [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-    #     #             [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-    #     #             [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-    #     #             [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-    #     #             [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
-    #     #     except:
-    #     #         [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-    #     #         [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-    #     #         [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-    #     #         [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-    #     #         [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-    #     #         [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
-    #     #
-    #     # else:
-    #     #     try:
-    #     #         if self.item(0, 0).text() == self.inmem.dis_AI['AI'][0][0] and self.item(1, 0).text() == self.inmem.dis_AI['AI'][1][0] and self.item(2, 0).text() == self.inmem.dis_AI['AI'][2][0] and self.item(3, 0).text() == self.inmem.dis_AI['AI'][3][0] and self.item(4, 0).text() == self.inmem.dis_AI['AI'][4][0]:
-    #     #             [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-    #     #             [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-    #     #         else:
-    #     #             self.make_centerCB()
-    #     #             [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-    #     #             [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-    #     #             [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-    #     #             [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-    #     #             [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-    #     #             [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
-    #     #     except:
-    #     #         [self.setItem(i, 0, QTableWidgetItem(self.inmem.dis_AI['AI'][i][0])) for i in range(5)]
-    #     #         [self.urgent_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][1]) for i in range(5)]
-    #     #         [self.radiation_chbox[i].setChecked(self.inmem.dis_AI['AI'][i][2]) for i in range(5)]
-    #     #         [self.setItem(i, 3, QTableWidgetItem(self.inmem.dis_AI['AI'][i][3])) for i in range(5)]
-    #     #         [self.setItem(i, 4, QTableWidgetItem(self.inmem.dis_AI['AI'][i][4])) for i in range(5)]
-    #     #         [self.item(i, 0).setToolTip(self.item(i, 0).text()) for i in range(5)]
-
         self.style().polish(self)
         return super().timerEvent(event)
 # ----------------------------------------------------------------------------------------------------------------------
@@ -524,35 +442,35 @@ class ProcedureCheckTable(ABCTableWidget):
         [self.removeRow(0) for _ in range(self.rowCount())]
 
         if type_ == 'Pro_name':
-            out_name = f'{name[:15]}...'if len(name) >= 15 else name
+            out_name = f'{name[:15]} ...'if len(name) >= 15 else name
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 비정상절차서: {out_name}")
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setToolTip(f" 비정상절차서: {name}")
             symptom = self.inmem.ShMem.get_pro_symptom(name)
             symptom_count = self.inmem.ShMem.get_pro_symptom_count(name)
             self.setRowCount(symptom_count)
             
-            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {symptom[i]["Des"]}')) for i in range(symptom_count)]
-            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' Test...')) for i in range(symptom_count)]
-            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' Test...')) for i in range(symptom_count)]
-            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' Test...')) for i in range(symptom_count)]
+            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {symptom[i]["Des"]}', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
+            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
+            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
+            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
             
         if type_ == 'Sys_name':
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 시스템 명: {name[:15]}")
 
             symptom_count = 10
             self.setRowCount(symptom_count)
-            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' ...')) for i in range(symptom_count)]
-            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...')) for i in range(symptom_count)]
-            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...')) for i in range(symptom_count)]
-            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...')) for i in range(symptom_count)]
+            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' ...', False)) for i in range(symptom_count)]
+            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...', False)) for i in range(symptom_count)]
+            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...', False)) for i in range(symptom_count)]
+            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...', False)) for i in range(symptom_count)]
 
         if type_ == 'Init':
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 비정상절차서:")
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setToolTip(f"None")
-            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' ...')) for i in range(1)]
-            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...')) for i in range(1)]
-            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...')) for i in range(1)]
-            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...')) for i in range(1)]
+            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' ...', False)) for i in range(1)]
+            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...', False)) for i in range(1)]
+            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...', False)) for i in range(1)]
+            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...', False)) for i in range(1)]
 
         [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절
         self.setFixedSize(915, 40 * self.rowCount() if 675 < 40 * self.rowCount() else 675) # Scroll 위함
@@ -575,13 +493,15 @@ class ProcedureCheckTable(ABCTableWidget):
         return super().timerEvent(event)
 # ----------------------------------------------------------------------------------------------------------------------
 class ProcedureCheckTableItem(ABCLabel):
-    def __init__(self, parent, text, widget_name=''):
+    def __init__(self, parent, text, activation, widget_name=''):
         super().__init__(parent, widget_name)
         self.setToolTip(text)
+        self.setProperty('Activate', "On" if activation else "Off")
         if len(text) >= 20:
-            self.setText(text[:20] + '...')
+            self.setText(text[:20] + ' ...')
         else:
             self.setText(text)
+        self.style().polish(self)
 class ProcedureCheckTableWidget(ABCWidget):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)

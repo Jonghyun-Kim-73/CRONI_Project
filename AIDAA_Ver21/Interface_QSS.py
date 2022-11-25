@@ -294,9 +294,9 @@ QssMain = ''.join([
     # --
     builder('QScrollArea', 'ProcedureCheckTableScrollArea', ['border:0px;', f'background-color: {LightGray};']),
     builder('QTableWidget', 'ProcedureCheckTable', [f'background-color: {LightGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
-    builder('QTableWidget', 'ProcedureCheckTable::item', [f'border-bottom: 1px solid {DarkGray};']),
-    builder('QTableWidget', 'ProcedureCheckTable::item:selected', [f'background-color: {DarkGray};']),
     builder('QLabel', 'ProcedureCheckTableItem', ['border:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QLabel', 'ProcedureCheckTableItem[Activate="On"]', [f'background-color: {LightBlue};', f'border-bottom: 1px solid {DarkGray};']),
+    builder('QLabel', 'ProcedureCheckTableItem[Activate="Off"]', [f'background-color: {LightGray};', f'border-bottom: 1px solid {DarkGray};']),
     builder('QWidget', 'DiagnosisSystemTableWidget', ['border:0px;', f'background-color: {LightGray};']),
     # Interface_AIDAA_Procedure_Search.py ---------------------------------------------------------------------------
     builder('QWidget', 'ProcedureSearch', [f'background-color: {LightGray};']),
