@@ -24,14 +24,14 @@ def rgb_to_hex(color_code:str):
     b = int(color_code[2])
     return '#' + hex(r)[2:].zfill(2) + hex(g)[2:].zfill(2) + hex(b)[2:].zfill(2)
 # Color Table -------------------------------------------------
-DarkGray = 'rgb(80, 80, 80)' # old 128, 128, 128
+DarkGray = 'rgb(80, 80, 80)'            # Title, Header
 Gray = 'rgb(181, 181, 181)'
-LightGray = 'rgb(231, 231, 234)'
+LightGray = 'rgb(231, 231, 234)'        # 배경
 LightWhite = 'rgb(255, 255, 255)'
 LightBlue = 'rgb(0, 178, 216)'
 DarkBlue = 'rgb(64, 61, 152)'
 DarkRed = 'rgb(192, 0, 0)'
-Yellow = 'rgb(249, 249, 0)'
+Yellow = 'rgb(255, 204, 0)'
 DarkYellow = 'rgb(255, 192, 0)'
 Black = 'rgb(0, 0, 0)'
 Green = 'rgb(0, 170, 0)'
@@ -156,8 +156,6 @@ QssMain = ''.join([
         f'background-color: {DarkGray};',
         f'font-family: {Global_font};',
         f'font-size: {Global_font_size};',
-        "qproperty-alignment: 'AlignCenter';",
-        'font-weight: bold;',
         ]),
     builder('QLabel', 'AlarmHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
     builder('QLabel', 'AlarmHeadingLabel[Pos="M"]', ['']),
@@ -203,44 +201,47 @@ QssMain = ''.join([
         ]),
     builder('QPushButton', 'AlarmAIDAA_Suppress_SortPress:hover', [f'background-color: {LightBlue};']),
     # Interface_MainTabRight.py -------------------------------------------------------------------------------------
+    ### Pre-Abnormal
     builder('QWidget', 'MainTabRightPreAbnormalW', [
         f'background-color: {LightWhite};', 
-        'border-radius: 20px;', f'border:1px solid {DarkGray};'
+        'border-radius: 10px;', f'border:1px solid {DarkGray};'
     ]),
     builder('QLabel', 'MainTabRightPreAbnormalWTitle', [
-        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 45px;',
+        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 40px;',
     ]),
-    builder('QPushButton', 'MainTabRightPreAbnormalWBTN', [f'background-color: {Gray};', 'border-radius: 20px;', f'font-family: {Global_font};', 'font-size: 45px;']),
+    builder('QPushButton', 'MainTabRightPreAbnormalWBTN', [f'background-color: {Gray};', 'border-radius: 5px;', f'font-family: {Global_font};', 'font-size: 40px;']),
     builder('QPushButton', 'MainTabRightPreAbnormalWBTN:hover', [f'background-color: {LightBlue};']),
     builder('QLabel', 'MainTabRightPreAbnormalWContent', [
-        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 45px;',
-        'border-bottom-right-radius: 20px;', 'border-bottom-left-radius: 20px;'
+        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 40px;',
+        'border-bottom-right-radius: 10px;', 'border-bottom-left-radius: 10px;'
     ]),
+    ### Abnormal
     builder('QWidget', 'MainTabRightAbnormalW', [
         f'background-color: {Yellow};', 
-        'border-radius: 20px;', f'border:1px solid {DarkGray};'
+        'border-radius: 10px;', f'border:1px solid {DarkGray};'
     ]),
     builder('QLabel', 'MainTabRightAbnormalWTitle', [
-        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 45px;',
+        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 40px;',
     ]),
-    builder('QPushButton', 'MainTabRightAbnormalWBTN', [f'background-color: {Gray};', 'border-radius: 20px;', f'font-family: {Global_font};', 'font-size: 45px;']),
+    builder('QPushButton', 'MainTabRightAbnormalWBTN', [f'background-color: {Gray};', 'border-radius: 5px;', f'font-family: {Global_font};', 'font-size: 40px;']),
     builder('QPushButton', 'MainTabRightAbnormalWBTN:hover', [f'background-color: {LightBlue};']),
     builder('QLabel', 'MainTabRightAbnormalWContent', [
-        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 45px;',
-        'border-bottom-right-radius: 20px;', 'border-bottom-left-radius: 20px;'
+        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 40px;',
+        'border-bottom-right-radius: 10px;', 'border-bottom-left-radius: 10px;'
     ]),
+    ### Emergency
     builder('QWidget', 'MainTabRightEmergencyW', [
         f'background-color: {DarkRed};', 
-        'border-radius: 20px;', f'border:1px solid {DarkGray};'
+        'border-radius: 10px;', f'border:1px solid {DarkGray};'
     ]),
     builder('QLabel', 'MainTabRightEmergencyWTitle', [
-        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 45px;',
+        'background: None;', 'border: None;', f'font-family: {Global_font};', 'font-size: 40px;',
     ]),
-    builder('QPushButton', 'MainTabRightEmergencyWBTN', [f'background-color: {Gray};', 'border-radius: 20px;', f'font-family: {Global_font};', 'font-size: 45px;']),
+    builder('QPushButton', 'MainTabRightEmergencyWBTN', [f'background-color: {Gray};', 'border-radius: 5px;', f'font-family: {Global_font};', 'font-size: 40px;']),
     builder('QPushButton', 'MainTabRightEmergencyWBTN:hover', [f'background-color: {LightBlue};']),
     builder('QLabel', 'MainTabRightEmergencyWContent', [
-        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 45px;',
-        'border-bottom-right-radius: 20px;', 'border-bottom-left-radius: 20px;'
+        f'background-color: {LightGray};', f'border:1px solid {DarkGray};', f'font-family: {Global_font};', 'font-size: 40px;',
+        'border-bottom-right-radius: 10px;', 'border-bottom-left-radius: 10px;'
     ]),
     # Interface_MainTabAIDAA.py -------------------------------------------------------------------------------------
     builder('QWidget', 'MainTabAIDAA', [f'background-color: {LightGray};']),
