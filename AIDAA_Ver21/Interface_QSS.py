@@ -467,6 +467,17 @@ QssMain = ''.join([
     builder('QLabel', 'TripTimeLabel', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {Gray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
     builder('QLabel', 'Parameter_name', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {DarkYellow};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
     builder('QLabel', 'Parameter_TripTime', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {DarkYellow};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    # Interface_AIDAA_Action.py -----------------------------------------------------------------------------------
+    builder('QWidget', 'Action', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QLabel', 'ActionTitleLabel', ['border:0px;', f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QScrollArea', 'ActionAlarmArea', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QLabel', 'ActionAlarmAreaTableHeadingLabel', ['border:0px;', f'background-color: {DarkGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};', 'font-weight: bold;']),
+    builder('QLabel', 'ActionAlarmAreaTableHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
+    builder('QLabel', 'ActionAlarmAreaTableHeadingLabel[Pos="M"]', ['']),
+    builder('QLabel', 'ActionAlarmAreaTableHeadingLabel[Pos="L"]', ['border-top-right-radius:10px;']),
+    builder('QTableWidget', 'ActionAlarmAreaTable', [f'background-color: {LightGray};', 'border:0px;']),
+    builder('QTableWidget', 'ActionAlarmAreaTable::item', [f'background-color: {LightGray};', f'border-bottom: 1px solid {DarkGray};']),
+    builder('QTableWidget', 'ActionAlarmAreaTable::item:selected', [f'background-color: {LightBlue};']),
 ])
 # final qss !! 
 qss = ''.join(

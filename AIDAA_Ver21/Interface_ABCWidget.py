@@ -34,7 +34,7 @@ class ABCWidget(QWidget, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCScrollArea(QScrollArea, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -45,7 +45,7 @@ class ABCScrollArea(QScrollArea, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
     
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCPushButton(QPushButton, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -56,7 +56,7 @@ class ABCPushButton(QPushButton, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
     
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCCheckBox(QCheckBox, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -67,7 +67,7 @@ class ABCCheckBox(QCheckBox, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
     
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCLabel(QLabel, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -78,7 +78,7 @@ class ABCLabel(QLabel, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
     
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCTabWidget(QTabWidget, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -89,7 +89,7 @@ class ABCTabWidget(QTabWidget, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
     
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCTabWidgetItem(QTableWidgetItem, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -105,7 +105,7 @@ class ABCPlainTextEdit(QPlainTextEdit, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
         
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCGroupBox(QGroupBox, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -116,7 +116,7 @@ class ABCGroupBox(QGroupBox, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
 
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCTableWidget(QTableWidget, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -127,7 +127,7 @@ class ABCTableWidget(QTableWidget, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
     
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCStackWidget(QStackedWidget, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -138,7 +138,7 @@ class ABCStackWidget(QStackedWidget, TOOL):
         self.setAttribute(Qt.WA_StyledBackground, True)
         
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
 class ABCGraphicsScene(QGraphicsScene, TOOL):
     def __init__(self, parent, widget_name=''):
@@ -148,5 +148,5 @@ class ABCGraphicsScene(QGraphicsScene, TOOL):
         self.setObjectName(self.widget_name)
         
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}')
+        print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)

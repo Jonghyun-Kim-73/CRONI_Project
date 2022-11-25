@@ -424,7 +424,7 @@ class DiagnosisSystemItem(ABCLabel):
     
     def mouseDoubleClickEvent(self, a0: QMouseEvent) -> None:
         if self.block == 'Off':
-            # self.inmem.widget_ids['Procedure'].set_procedure_name(self.sys_name)
+            self.inmem.widget_ids['ActionTitleLabel'].update_text(self.sys_name)
             self.inmem.widget_ids['MainTab'].change_system_page('Action')
         return super().mouseDoubleClickEvent(a0)
 

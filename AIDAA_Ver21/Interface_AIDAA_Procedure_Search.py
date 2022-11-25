@@ -489,6 +489,7 @@ class SystemSearchTable(ABCTableWidget):
     def open_clicked_item_system(self):
         if not len(self.selectedItems()) == 0:
             sys_name = self.selectedItems()[0].sys_name
+            self.inmem.widget_ids['ActionTitleLabel'].update_text(sys_name)
             self.inmem.widget_ids['MainTab'].change_system_page('Action')
             self.inmem.widget_ids['SystemSearch'].close()
         else:
