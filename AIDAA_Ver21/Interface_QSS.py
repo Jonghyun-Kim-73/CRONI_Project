@@ -482,6 +482,16 @@ QssMain = ''.join([
     builder('QTableWidget', 'ActionAlarmAreaTable', [f'background-color: {LightGray};', 'border:0px;']),
     builder('QTableWidget', 'ActionAlarmAreaTable::item', [f'background-color: {LightGray};', f'border-bottom: 1px solid {DarkGray};']),
     builder('QTableWidget', 'ActionAlarmAreaTable::item:selected', [f'background-color: {LightBlue};']),
+    # --
+    builder('QScrollArea', 'ActionSuggestionArea', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QLabel', 'ActionSuggestionAreaTableHeadingLabel', ['border:0px;', f'background-color: {DarkGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};', 'font-weight: bold;']),
+    builder('QLabel', 'ActionSuggestionAreaTableHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
+    builder('QLabel', 'ActionSuggestionAreaTableHeadingLabel[Pos="M"]', ['']),
+    builder('QLabel', 'ActionSuggestionAreaTableHeadingLabel[Pos="L"]', ['border-top-right-radius:10px;']),
+    builder('QTableWidget', 'ActionSuggestionAreaTable', [f'background-color: {LightGray};', 'border:0px;']),
+    builder('QTableWidget', 'ActionSuggestionAreaTable::item', [f'background-color: {LightGray};', f'border-bottom: 1px solid {DarkGray};']),
+    builder('QTableWidget', 'ActionSuggestionAreaTable::item:selected', [f'background-color: {LightBlue};']),
+    # Interface_AIDAA_ActionMimic.py > 해당 파일에서 수정 ----------------------------------------------------------
 ])
 # final qss !! 
 qss = ''.join(

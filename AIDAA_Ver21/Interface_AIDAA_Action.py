@@ -1,12 +1,10 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 import pandas as pd
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Interface_AIDAA_ActionMimic import *
 from AIDAA_Ver21.Interface_ABCWidget import *
-# from AIDAA_Ver21.Interface_AIDAA_Action_System_Mimic import *
-# from AIDAA_Ver21.Interface_AIDAA_Action_alarm_area import *
 
 
 class Action(ABCWidget):
@@ -32,10 +30,10 @@ class Action(ABCWidget):
         [ 2 ]|[ 4 ]
         [ 3 ]|[ 4 ]
         """
-        lay.addWidget(ActionTitleLabel(self), 0, 0, 1, 0)  # 1
-        lay.addWidget(ActionAlarmArea(self), 2, 0)   # 2
-        # lay.addWidget(ActionAlarmArea(self), 2, 0, 0, 0)   # 3
-        # lay.addWidget(ActionAlarmArea(self), 1, 1, 2, 0)   # 4
+        lay.addWidget(ActionTitleLabel(self),       0, 0, 1, 2)   # 1
+        lay.addWidget(ActionAlarmArea(self),        1, 0, 1, 1)   # 2
+        lay.addWidget(ActionSuggestionArea(self),   2, 0, 1, 1)   # 3
+        lay.addWidget(ActionMimicArea(self),        1, 1, 2, 1)   # 4
 class ActionTitleLabel(ABCLabel):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
@@ -48,6 +46,7 @@ class ActionAlarmArea(ABCScrollArea):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.heading_height = 40
+        # self.setFixedWidth(940)
         
     def mousePressEvent(self, a0: QMouseEvent) -> None:
         print(self.widget_name)
@@ -64,7 +63,7 @@ class ActionAlarmArea(ABCScrollArea):
         
         lay.addLayout(lay_heading)
 
-        col_info = {'경보':300, '정상 상태': 200, '현재 상태': 200, '시간':self.size().width() - 700}
+        col_info = {'경보':self.size().width() - 600, '정상 상태': 200, '현재 상태': 200, '시간': 200}
 
         lay_heading.addWidget(ActionAlarmAreaTableHeadingLabel(self, '경보', col_info['경보'], self.heading_height, 'F'))
         lay_heading.addWidget(ActionAlarmAreaTableHeadingLabel(self, '정상 상태', col_info['정상 상태'], self.heading_height, 'M'))
@@ -105,6 +104,62 @@ class ActionAlarmAreaTable(ABCTableWidget):
 
         [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절
 # ----------------------------------------------------------------------------------------------------------------------
-class ActionSuggestion(ABCWidget):
+class ActionSuggestionArea(ABCScrollArea):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
+        self.heading_height = 40
+        # self.setFixedWidth(940)
+        
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(self.widget_name)
+        return super().mousePressEvent(a0)
+    
+    def resizeEvent(self, a0: QResizeEvent) -> None:
+        # resize 된 이후 수행
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(0)
+        lay_heading = QHBoxLayout()
+        lay_heading.setContentsMargins(0, 0, 0, 0)
+        lay_heading.setSpacing(0)
+        
+        lay.addLayout(lay_heading)
+
+        col_info = {'조치 제안':self.size().width() - 150, '수행 여부': 150}
+
+        lay_heading.addWidget(ActionAlarmAreaTableHeadingLabel(self, '조치 제안', col_info['조치 제안'], self.heading_height, 'F'))
+        lay_heading.addWidget(ActionAlarmAreaTableHeadingLabel(self, '수행 여부', col_info['수행 여부'], self.heading_height, 'L'))
+        
+        lay.addWidget(ActionAlarmAreaTable(self, col_info))
+
+        return super().resizeEvent(a0)
+class ActionSuggestionAreaTableHeadingLabel(ABCLabel):
+    def __init__(self, parent, text, fix_width, fix_height, pos, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setText(text)
+        self.setFixedWidth(fix_width)
+        self.setFixedHeight(fix_height)
+        self.setProperty('Pos', pos)
+        self.style().polish(self)
+class ActionSuggestionAreaTable(ABCTableWidget):
+    def __init__(self, parent, col_info:dict, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.setRowCount(20)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setShowGrid(False)  # Grid 지우기
+        self.verticalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.horizontalHeader().setVisible(False)  # Row 넘버 숨기기
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.setSelectionBehavior(QTableView.SelectRows)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        
+        self.setColumnCount(len(col_info))
+        
+        for i, (l, w) in enumerate(col_info.items()):
+            self.setColumnWidth(i, w)
+            
+        self.setSortingEnabled(True)  # 테이블 sorting
+
+        [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절

@@ -148,5 +148,24 @@ class ABCGraphicsScene(QGraphicsScene, TOOL):
         self.setObjectName(self.widget_name)
         
     def mousePressEvent(self, a0: QMouseEvent) -> None:
-        print(f'{self.widget_name}, {self.size()}')
+        print(f'{self.widget_name}')
         return super().mousePressEvent(a0)
+class ABCGraphicsView(QGraphicsView, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsView, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+        self.setObjectName(self.widget_name)
+    
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.size()}')
+        return super().mousePressEvent(event)
+class ABCGraphicsRectItem(QGraphicsRectItem):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsRectItem, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.shape()}')
+        return super().mousePressEvent(event)

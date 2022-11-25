@@ -7,7 +7,7 @@ from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_MainTabMain import *
 from AIDAA_Ver21.Interface_MainTabAIDAA import *
 from AIDAA_Ver21.Interface_AIDAA_Procedure import *
-from AIDAA_Ver21.Interface_AIDAA_Action_ import *
+from AIDAA_Ver21.Interface_AIDAA_Action import *
 from AIDAA_Ver21.Interface_AIDAA_Pretrip import *
 
 from Interface_QSS import qss
