@@ -40,9 +40,11 @@ Orange = 'rgb(255, 192, 0)'
 # Font Table --------------------------------------------------
 Global_font_size_nub = 20
 Content_font_size_nub = 12
+Pre_trip_font_size_nub = 10
 Mimic_font_size_nub = 12
 Global_font_size = f'{Global_font_size_nub}pt'
 Content_font_size = f'{Content_font_size_nub}pt'
+Pre_trip_font_size_nub = f'{Content_font_size_nub}pt'
 Global_font = 'Arial'
 Global_font2 = '맑은 고딕'
 # Qss ---------------------------------------------------------
@@ -464,13 +466,13 @@ QssMain = ''.join([
     builder('QWidget', 'RightPrediction', ['border:0px;', f'background-color: {LightGray};']),
     builder('QWidget', 'Parameter_Graph', ['border-radius: 10px;', f'border: 1px solid {DarkGray};']),
     builder('QWidget', 'ParameterGraphSub', [f'background-color: {LightGray};', 'border-radius: 10px;', f'border: 1px solid {DarkGray};']),
-    builder('QLabel', 'TripTimeLabel', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {Gray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
-    builder('QLabel', 'Parameter_name', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {DarkGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'TripTimeLabel', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {Gray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Pre_trip_font_size_nub};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'Parameter_name', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {DarkGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Pre_trip_font_size_nub};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
     builder('QLabel', 'Parameter_name[Blink="True"]', [f'background-color: {DarkYellow};']),
-    builder('QLabel', 'Parameter_name[Blink="False"]', [f'background-color: {DarkGray};']),
-    builder('QLabel', 'Parameter_TripTime', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {DarkGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'Parameter_name[Blink="False"]', [f'background-color: {Gray};']),
+    builder('QLabel', 'Parameter_TripTime', ['border-top-left-radius:10px;', 'border-top-right-radius:10px;', f'background-color: {DarkGray};', 'margin:0px;', f'font-family: {Global_font};', f'font-size: {Pre_trip_font_size_nub};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
     builder('QLabel', 'Parameter_TripTime[Blink="True"]', [f'background-color: {DarkYellow};']),
-    builder('QLabel', 'Parameter_TripTime[Blink="False"]', [f'background-color: {DarkGray};']),
+    builder('QLabel', 'Parameter_TripTime[Blink="False"]', [f'background-color: {Gray};']),
     # Interface_AIDAA_Action.py -----------------------------------------------------------------------------------
     builder('QWidget', 'Action', ['border:0px;', f'background-color: {LightGray};']),
     builder('QLabel', 'ActionTitleLabel', ['border:0px;', f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
