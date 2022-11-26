@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 import Interface_QSS as qss
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 
@@ -8,7 +9,6 @@ def make_shmem(parent, child, widget_name):
     result = parent.inmem
     result.add_widget_id(child, widget_name)
     return result
-
 
 class TOOL:
     def widget_timer(self, iter_, funs):
@@ -163,6 +163,61 @@ class ABCGraphicsView(QGraphicsView, TOOL):
 class ABCGraphicsRectItem(QGraphicsRectItem):
     def __init__(self, parent, widget_name=''):
         super(ABCGraphicsRectItem, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.shape()}')
+        return super().mousePressEvent(event)
+class ABCGraphicsSvgItem(QGraphicsSvgItem, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsSvgItem, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.shape()}')
+        return super().mousePressEvent(event)
+class ABCGraphicsTextItem(QGraphicsTextItem, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsTextItem, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.shape()}')
+        return super().mousePressEvent(event)
+class ABCGraphicsPolygonItem(QGraphicsPolygonItem, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsPolygonItem, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.shape()}')
+        return super().mousePressEvent(event)        
+class ABCGraphicsPathItem(QGraphicsPathItem, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsPathItem, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+        self.setObjectName(self.widget_name)
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.shape()}')
+        return super().mousePressEvent(event)
+class ABCGraphicsLineItem(QGraphicsLineItem, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsLineItem, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.shape()}')
+        return super().mousePressEvent(event)
+class ABCGraphicsItemGroup(QGraphicsItemGroup, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCGraphicsItemGroup, self).__init__()
         self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
         self.widget_name=type(self).__name__ if widget_name == '' else widget_name
 

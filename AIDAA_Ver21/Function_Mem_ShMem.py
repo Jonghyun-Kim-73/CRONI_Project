@@ -2,6 +2,7 @@ from turtle import st
 from AIDAA_Ver21.DB_AlarmDB import AlarmDB
 from datetime import timedelta
 from AIDAA_Ver21.ab_procedure import ab_pro
+from AIDAA_Ver21.CVCS.Core_mimic import *
 from collections import deque
 import numpy as np
 import pandas as pd
@@ -14,7 +15,15 @@ class ShMem:
         self.mem = self.make_cns_mem(max_len=10)
         self.AlarmDB: AlarmDB = AlarmDB(self)
         self.add_val_to_list()
-
+        # Interface_AIDAA_Action.py -------------------------------------------------------------------------------------
+        self.CVCS = CVCS()
+    
+    # - CVCS part -------------------------------------------------------------------------------------------------------
+    def update_CVCS(self):
+        self.CVCS.step()
+    def get_CVCS_para_val(self, para):
+        return self.CVCS.mem[para]['V']
+    # - Normal part -----------------------------------------------------------------------------------------------------
     def make_cns_mem(self, max_len, db_path='./db.txt', db_add_path='./db_add.txt'):
         # 초기 shared_mem의 구조를 선언한다.
         idx = 0
@@ -176,7 +185,6 @@ class InterfaceMem:
                                  looptitle},
             'Contents': {title: self.ShMem.get_pro_procedure_contents(pro_name, title) for title in looptitle},
         } for pro_name in self.ShMem.get_pro_all_ab_procedure_names()}
-
 
         # ------------------------------------------------------------------------------------------------------------------------------------------
         self.current_table = {'Procedure': -1, 'System': -1, 'current_window': -1, 'procedure_name': "",

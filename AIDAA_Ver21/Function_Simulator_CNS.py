@@ -44,7 +44,8 @@ class CNS(QWidget):
         self.ShMem.change_para_val('KCNTOMS', self.ShMem.get_para_val('KCNTOMS') + 5)
         self.ShMem.add_val_to_list()
         self.ShMem.update_alarmdb()
-        self.mes.setText(f'OneStep 진행함. [KCNTOMS: {self.ShMem.get_para_val("KCNTOMS")}]')
+        self.ShMem.update_CVCS()
+        self.mes.setText(f'OneStep 진행함. [KCNTOMS: {self.ShMem.get_para_val("KCNTOMS")}][CVCS: {self.ShMem.get_CVCS_para_val("SimTime")}]')
 
     def change_val(self):
         if self.ShMem.check_para_name(self.paraname.text()):

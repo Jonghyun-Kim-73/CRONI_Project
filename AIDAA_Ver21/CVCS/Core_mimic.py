@@ -15,8 +15,11 @@ class CVCS:
 
     def call_init(self, init_pzr_level=55.156153):
         self.mem = {
+            'iTestS': {'V': 0, 'RF': [0], 'SF': [0]},               # Mimic 테스트 용
+
             'SISignal': {'V': 0, 'RF': [0], 'SF': [0]},             # SI signal / KSAFEI
             'DEPRZ': {'V': init_pzr_level / 100, 'RF': [init_pzr_level / 100], 'SF': [init_pzr_level / 100]}, # PZR level
+            'NOPRZ': {'V': init_pzr_level, 'RF': [init_pzr_level], 'SF': [init_pzr_level]}, # PZR level
             'ZPRZSP': {'V': 0.57, 'RF': [0.57], 'SF': [0.57]},      # PZR Set-point
 
             'LV459_Delay': {'V': 0, 'RF': [0], 'SF': [0]},          # Letdown Valve LV459 / KTLV459
@@ -160,6 +163,7 @@ class CVCS:
             'WDEMI': {'V': 5.6410036, 'RF': [5.6410036], 'SF': [5.6410036]},        # Demi water
             'PLETIN': {'V': 15012566.00, 'RF': [15012566.00], 'SF': [15012566.00]}, # Letdown Inlet Pressure      # C
             'PPRZN': {'V': 15305906.00, 'RF': [15305906.00], 'SF': [15305906.00]},  # PZR Pressure                # C
+            'NOPPRZ': {'V': 153.00, 'RF': [153.00], 'SF': [1530.00]},               # PZR Pressure                # C
             'PLETDB': {'V': 2842650.3, 'RF': [2842650.3], 'SF': [2842650.3]},                                     # C
             'ZVCT': {'V': 72.865021, 'RF': [72.865021], 'SF': [72.865021]},         # VCT level                   # C
             'PVCT': {'V': 0, 'RF': [0], 'SF': [0]},                                 # VCT Pressure                # C
@@ -531,6 +535,9 @@ class CVCS:
                 # self.mem['DEPRZ']['V' += delta * 0.0000095
                 self.mem['DEPRZ']['V'] += delta * 0.0000095 * 5
                 self.mem['DEPRZ']['V'] = 1 if self.mem['DEPRZ']['V'] >= 1 else self.mem['DEPRZ']['V']
+
+                self.mem['NOPRZ']['V'] = self.mem['DEPRZ']['V'] * 100
+                self.mem['NOPPRZ']['V'] = self.mem['PPRZN']['V'] / 1e5
 
                 if self.mem['PZRMode']['V'] == 0:
                     if self.mem['DEPRZ']['V'] < 0.17:

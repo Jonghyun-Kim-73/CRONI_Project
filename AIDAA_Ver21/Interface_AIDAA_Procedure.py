@@ -306,10 +306,6 @@ class ProcedureScrollArea(ABCScrollArea):
         self.setWidgetResizable(True)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-    def resizeEvent(self, event):
-        rect = self.viewport().geometry()
-        QScrollArea.resizeEvent(self, event)
 class ProcedureScrollAreaWidget(ABCWidget):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)

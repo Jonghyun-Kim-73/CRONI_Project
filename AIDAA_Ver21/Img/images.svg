@@ -1,0 +1,1938 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg17"
+   sodipodi:docname="images.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/">
+  <sodipodi:namedview
+     id="namedview19"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="2.1997092"
+     inkscape:cx="279.1278"
+     inkscape:cy="250.71496"
+     inkscape:window-width="1504"
+     inkscape:window-height="1080"
+     inkscape:window-x="322"
+     inkscape:window-y="227"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs14">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2224">
+      <stop
+         style="stop-color:#2b9291;stop-opacity:1;"
+         offset="0"
+         id="stop2220" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop2222" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2224"
+       id="linearGradient2226"
+       x1="88.597758"
+       y1="110.53828"
+       x2="92.665785"
+       y2="110.53828"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="레이어 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="Pump_Off"
+       data-name="레이어 1"
+       transform="matrix(0.1615502,0,0,0.1615502,42.081855,83.513665)">
+      <g
+         id="pump_l_stop"
+         data-name="pump l stop"
+         transform="translate(-151.7266,-446.17909)">
+        <ellipse
+           id="path16656-58"
+           class="cls-1"
+           cx="41.130001"
+           cy="31.969999"
+           rx="32.57"
+           ry="31.969999"
+           style="fill:#4b9c89;fill-opacity:1" />
+        <rect
+           id="rect16762-0"
+           class="cls-1"
+           y="0"
+           width="41.130001"
+           height="27.51"
+           x="0"
+           style="fill:#4b9c89;fill-opacity:1" />
+        <path
+           id="path16797-3"
+           class="cls-1"
+           d="m 73.7,76.53 c -21.88,0 -65.81,0 -65.81,0 l 31.95,-32.3 z"
+           style="fill:#4b9c89;fill-opacity:1" />
+      </g>
+    </g>
+    <g
+       id="Pump_On"
+       data-name="레이어 1"
+       transform="matrix(0.1615502,0,0,0.1615502,71.235798,83.691513)"
+       style="fill:#b61c2e;fill-opacity:1">
+      <g
+         id="pump_l_stop-5"
+         data-name="pump l stop"
+         transform="translate(-151.7266,-446.17909)"
+         style="fill:#b61c2e;fill-opacity:1">
+        <ellipse
+           id="path16656-58-5"
+           class="cls-1"
+           cx="41.130001"
+           cy="31.969999"
+           rx="32.57"
+           ry="31.969999"
+           style="fill:#b61c2e;fill-opacity:1" />
+        <rect
+           id="rect16762-0-7"
+           class="cls-1"
+           y="0"
+           width="41.130001"
+           height="27.51"
+           x="0"
+           style="fill:#b61c2e;fill-opacity:1" />
+        <path
+           id="path16797-3-5"
+           class="cls-1"
+           d="m 73.7,76.53 c -21.88,0 -65.81,0 -65.81,0 l 31.95,-32.3 z"
+           style="fill:#b61c2e;fill-opacity:1" />
+      </g>
+    </g>
+    <g
+       id="HX_V"
+       transform="matrix(0.15360426,0,0,0.15360426,33.594343,37.153423)">
+      <g
+         id="HX"
+         transform="translate(-286.6288,-293.22058)">
+        <rect
+           id="rect15956-0"
+           class="cls-1"
+           x="159.36194"
+           y="293.9252"
+           width="47.73"
+           height="95.449997"
+           style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+        <g
+           id="g6551"
+           transform="translate(-1.1752319e-5,-0.45460011)">
+          <path
+             id="rect19827-7"
+             class="cls-1"
+             d="m 159.43695,321.4248 h 47.58 v 41.36 h -47.58 z"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-2-9-6"
+             class="cls-1"
+             d="m 175.00695,348.3648 c 3.46,3.27 5.89,6.05 8.82,9.08"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-9-0"
+             class="cls-1"
+             d="m 183.82695,357.4448 v 5.36"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-0"
+             class="cls-1"
+             d="m 183.82695,321.4248 v 6.59"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-2-80"
+             class="cls-1"
+             d="m 183.82695,328.0048 c 3.96,3.58 6.74,6.63 10.1,9.95"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-2-1-2-8-8"
+             class="cls-1"
+             d="m 193.98695,337.9548 -18.98,10.41"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="HX_H"
+       transform="matrix(0,0.15360426,-0.15360426,0,52.873378,63.243623)">
+      <g
+         id="HX-7"
+         transform="translate(-286.6288,-293.22058)">
+        <rect
+           id="rect15956-0-2"
+           class="cls-1"
+           x="159.36194"
+           y="293.9252"
+           width="47.73"
+           height="95.449997"
+           style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+        <g
+           id="g6551-0"
+           transform="translate(-1.1752319e-5,-0.45460011)">
+          <path
+             id="rect19827-7-8"
+             class="cls-1"
+             d="m 159.43695,321.4248 h 47.58 v 41.36 h -47.58 z"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-2-9-6-0"
+             class="cls-1"
+             d="m 175.00695,348.3648 c 3.46,3.27 5.89,6.05 8.82,9.08"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-9-0-5"
+             class="cls-1"
+             d="m 183.82695,357.4448 v 5.36"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-0-6"
+             class="cls-1"
+             d="m 183.82695,321.4248 v 6.59"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-2-80-9"
+             class="cls-1"
+             d="m 183.82695,328.0048 c 3.96,3.58 6.74,6.63 10.1,9.95"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+          <path
+             id="path31413-2-1-2-8-8-4"
+             class="cls-1"
+             d="m 193.98695,337.9548 -18.98,10.41"
+             style="fill:#727171;stroke:#231815;stroke-width:0.5px" />
+        </g>
+      </g>
+    </g>
+    <path
+       id="ACC_V"
+       style="fill:#4f4e4e;stroke-width:0.182655"
+       class="cls-1"
+       d="m 17.317726,55.968568 c -2.009227,0 -4.018523,0.162798 -5.818764,0.488341 -3.6026829,0.651074 -5.8208331,1.85801 -5.8208331,3.16415 0,0 0.00466,17.501838 0.00466,18.00045 l 23.2724821,-0.0078 v -17.99265 c 0,-1.30614 -2.218285,-2.513076 -5.818767,-3.16415 -1.800243,-0.325543 -3.809537,-0.488341 -5.818767,-0.488341 z M 5.6827777,77.621509 c 0,0.500137 2.2181528,0.96251 5.8208333,1.211813 3.600484,0.249309 8.037047,0.249309 11.637534,0 3.600481,-0.249303 5.814115,-0.719428 5.814115,-1.219565 z"
+       sodipodi:nodetypes="sccccsssccscc" />
+    <g
+       id="Valve_V_On"
+       transform="translate(-8.0588303,-7.4574251)">
+      <g
+         id="g2127">
+        <path
+           style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+           id="path699"
+           sodipodi:nodetypes="cccc" />
+        <path
+           style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+           id="path699-6"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="Valve_V_Off"
+       transform="translate(1.9558637,-7.207069)"
+       style="fill:#2b9291;fill-opacity:1">
+      <g
+         id="g2127-2"
+         style="fill:#2b9291;fill-opacity:1">
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+           id="path699-67"
+           sodipodi:nodetypes="cccc" />
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+           id="path699-6-7"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="Valve_V_Half"
+       transform="translate(11.81891,-7.0867878)"
+       style="fill:#2b9291;fill-opacity:1">
+      <g
+         id="g2127-2-9"
+         style="fill:#2b9291;fill-opacity:1">
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+           id="path699-67-4"
+           sodipodi:nodetypes="cccc" />
+        <path
+           style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+           id="path699-6-7-4"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="Turbine_H"
+       v:mID="1"
+       v:groupContext="shape"
+       transform="matrix(0.22652683,0,0,0.22652683,74.083533,-287.99543)">
+      <title
+         id="title6">시트.1</title>
+      <v:userDefs>
+        <v:ud
+           v:nameU="visNavOrder"
+           v:val="VT0(1000):26" />
+      </v:userDefs>
+      <path
+         d="m 194.98588,1366.086 v -36.34 l -90.85,17.13 -90.860004,-17.13 v 37.2 H 3.1858756 v 19.03 H 13.275876 v 37.21 l 90.860004,-17.13 90.85,17.13 v -38.07 h 10.1 v -19.03 z"
+         class="st1"
+         id="path8"
+         style="fill:#525252;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+    </g>
+    <g
+       v:mID="0"
+       v:index="1"
+       v:groupContext="foregroundPage"
+       id="Sump_V"
+       transform="matrix(0.24847748,0,0,0.24847748,89.361726,53.604957)">
+      <v:userDefs>
+        <v:ud
+           v:nameU="PEHideTags" />
+        <v:ud
+           v:nameU="visNavType"
+           v:val="VT0(1):26" />
+      </v:userDefs>
+      <title
+         id="title370">페이지-1</title>
+      <v:pageProperties
+         v:drawingScale="0.0393701"
+         v:pageScale="0.0393701"
+         v:drawingUnits="24"
+         v:shadowOffsetX="8.50394"
+         v:shadowOffsetY="-8.50394" />
+      <v:layer
+         v:name="장비"
+         v:index="0" />
+      <g
+         id="shape1-1"
+         v:mID="1"
+         v:groupContext="shape"
+         v:layerMember="0"
+         transform="translate(1.25,-20.5305)">
+        <title
+           id="title372">폐쇄형 탱크</title>
+        <v:custProps>
+          <v:cp
+             v:nameU="SubType"
+             v:lbl="폐쇄형 탱크 덮개 종류"
+             v:type="1"
+             v:format="편평한 덮개;뾰족한 덮개"
+             v:langID="1042"
+             v:val="VT4(편평한 덮개)" />
+          <v:cp
+             v:nameU="SubType2"
+             v:lbl="폐쇄형 탱크 기름통 표시"
+             v:type="3"
+             v:langID="1042"
+             v:val="VT0(0):26" />
+          <v:cp
+             v:nameU="Description"
+             v:lbl="설명"
+             v:type="0"
+             v:sortKey="0"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Material"
+             v:lbl="자재"
+             v:type="0"
+             v:sortKey="1"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Manufacturer"
+             v:lbl="제조업체"
+             v:type="0"
+             v:sortKey="2"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Model"
+             v:lbl="모델"
+             v:type="0"
+             v:sortKey="3"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="SubType"
+             v:lbl=""
+             v:prompt=""
+             v:type="0"
+             v:format=""
+             v:sortKey=""
+             v:invis="false"
+             v:ask="false"
+             v:langID="0"
+             v:cal="0"
+             v:val="VT4(뾰족한 덮개)" />
+        </v:custProps>
+        <v:userDefs>
+          <v:ud
+             v:nameU="SubType"
+             v:val="VT0(0):26" />
+          <v:ud
+             v:nameU="SubType2"
+             v:val="VT0(0):26" />
+          <v:ud
+             v:nameU="TextCH"
+             v:prompt="Determines text control handle visibility."
+             v:val="VT0(5):26" />
+          <v:ud
+             v:nameU="visVersion"
+             v:val="VT0(15):26" />
+          <v:ud
+             v:nameU="SOLSH"
+             v:val="VT4({D7D7DB7E-3668-43e5-AF97-97F58AB229A5})" />
+          <v:ud
+             v:nameU="ShapeClass"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="PEComponentTag"
+             v:val="VT4(E-0)" />
+          <v:ud
+             v:nameU="PETagNumber" />
+          <v:ud
+             v:nameU="PETagFormat"
+             v:prompt="E-0"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="PEHideTag" />
+          <v:ud
+             v:nameU="PEPageHideTags"
+             v:val="VT0(0):26" />
+          <v:ud
+             v:nameU="PELayout"
+             v:val="VT0(31):26" />
+          <v:ud
+             v:nameU="CPMSetList"
+             v:prompt="Description,Material,Manufacturer,Model"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="SubType"
+             v:prompt=""
+             v:val="VT0(1):26" />
+          <v:ud
+             v:nameU="visNavOrder"
+             v:prompt=""
+             v:val="VT0(1000):26" />
+        </v:userDefs>
+        <path
+           d="m 0,76.48 h 86.91 9.65 19.32 V 29.6 L 57.94,21.78 0,29.6 Z"
+           class="st1"
+           id="path374"
+           style="fill:#525252;stroke:#525252;stroke-width:1.25;stroke-linecap:butt" />
+      </g>
+    </g>
+    <g
+       id="Valve_H_On"
+       transform="rotate(90,47.364761,71.748142)">
+      <g
+         id="g2127-4">
+        <path
+           style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+           id="path699-69"
+           sodipodi:nodetypes="cccc" />
+        <path
+           style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+           id="path699-6-4"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="Valve_H_Off"
+       transform="rotate(90,53.870723,79.226148)"
+       style="fill:#2b9291;fill-opacity:1">
+      <g
+         id="g2127-2-8"
+         style="fill:#2b9291;fill-opacity:1">
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+           id="path699-67-0"
+           sodipodi:nodetypes="cccc" />
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+           id="path699-6-7-8"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="Valve_H_Half"
+       transform="matrix(0,1,1,0,-1.2374733,25.235144)"
+       style="fill:#2b9291;fill-opacity:1">
+      <g
+         id="g2127-2-9-7"
+         style="fill:#2b9291;fill-opacity:1">
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+           id="path699-67-4-5"
+           sodipodi:nodetypes="cccc" />
+        <path
+           style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+           id="path699-6-7-4-7"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="TValve_H_On"
+       transform="rotate(90,40.928992,82.967005)">
+      <g
+         id="g2127-4-1"
+         transform="translate(-0.6014052,1.9244968)">
+        <g
+           id="g2792">
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-69-5"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-4-5"
+             sodipodi:nodetypes="cccc" />
+        </g>
+        <path
+           style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 59.695611,71.702082 v 4.762501 l -4.365624,-2.38125 z"
+           id="path699-6-4-5-3"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="TValve_H_Off"
+       transform="rotate(90,48.295248,90.379007)">
+      <g
+         id="g2127-4-1-0"
+         transform="translate(-0.6014052,1.9244968)">
+        <g
+           id="g2792-6">
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-69-5-9"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-4-5-39"
+             sodipodi:nodetypes="cccc" />
+        </g>
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 59.695611,71.702082 v 4.762501 l -4.365624,-2.38125 z"
+           id="path699-6-4-5-3-0"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="TValve_V_Off"
+       transform="rotate(180,67.759682,86.766443)">
+      <g
+         id="g2127-4-1-3"
+         transform="translate(-0.6014052,1.9244968)">
+        <g
+           id="g2792-7">
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-69-5-6"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-4-5-7"
+             sodipodi:nodetypes="cccc" />
+        </g>
+        <path
+           style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 59.695611,71.702082 v 4.762501 l -4.365624,-2.38125 z"
+           id="path699-6-4-5-3-2"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="TValve_V_On"
+       transform="rotate(180,73.043892,86.909595)">
+      <g
+         id="g2127-4-1-0-2"
+         transform="translate(-0.6014052,1.9244968)">
+        <g
+           id="g2792-6-6">
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-69-5-9-8"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-4-5-39-9"
+             sodipodi:nodetypes="cccc" />
+        </g>
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 59.695611,71.702082 v 4.762501 l -4.365624,-2.38125 z"
+           id="path699-6-4-5-3-0-4"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       id="TValve_V_Half"
+       transform="rotate(180,78.430548,86.958303)">
+      <g
+         id="g2127-4-1-0-2-5"
+         transform="translate(-0.6014052,1.9244968)">
+        <g
+           id="g2792-6-6-1">
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-69-5-9-8-4"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-4-5-39-9-9"
+             sodipodi:nodetypes="cccc" />
+        </g>
+        <path
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 59.695611,71.702082 v 4.762501 l -4.365624,-2.38125 z"
+           id="path699-6-4-5-3-0-4-4"
+           sodipodi:nodetypes="cccc" />
+      </g>
+    </g>
+    <g
+       v:mID="0"
+       v:index="1"
+       v:groupContext="foregroundPage"
+       id="PZR_V"
+       transform="matrix(0.05060001,0,0,0.05060001,8.6315447,90.170321)">
+      <v:userDefs>
+        <v:ud
+           v:nameU="PEHideTags" />
+        <v:ud
+           v:nameU="visNavType"
+           v:val="VT0(1):26" />
+      </v:userDefs>
+      <title
+         id="title628">페이지-1</title>
+      <v:pageProperties
+         v:drawingScale="0.0393701"
+         v:pageScale="0.0393701"
+         v:drawingUnits="24"
+         v:shadowOffsetX="8.50394"
+         v:shadowOffsetY="-8.50394" />
+      <v:layer
+         v:name="장비"
+         v:index="0" />
+      <g
+         id="shape1-1-6"
+         v:mID="1"
+         v:groupContext="shape"
+         v:layerMember="0"
+         transform="translate(1.25,-51.2614)">
+        <title
+           id="title630">기둥</title>
+        <v:custProps>
+          <v:cp
+             v:nameU="SubType"
+             v:lbl="봉합선 표시"
+             v:type="3"
+             v:langID="1042"
+             v:val="VT0(0):26" />
+          <v:cp
+             v:nameU="Description"
+             v:lbl="설명"
+             v:type="0"
+             v:sortKey="0"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Material"
+             v:lbl="자재"
+             v:type="0"
+             v:sortKey="1"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Manufacturer"
+             v:lbl="제조업체"
+             v:type="0"
+             v:sortKey="2"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Model"
+             v:lbl="모델"
+             v:type="0"
+             v:sortKey="3"
+             v:langID="1042" />
+        </v:custProps>
+        <v:userDefs>
+          <v:ud
+             v:nameU="SubType"
+             v:val="VT0(0):26" />
+          <v:ud
+             v:nameU="TextCH"
+             v:prompt="Determines text control handle visibility."
+             v:val="VT0(5):26" />
+          <v:ud
+             v:nameU="visVersion"
+             v:val="VT0(15):26" />
+          <v:ud
+             v:nameU="SOLSH"
+             v:val="VT4({D7D7DB7E-3668-43e5-AF97-97F58AB229A5})" />
+          <v:ud
+             v:nameU="ShapeClass"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="PEComponentTag"
+             v:val="VT4(E-0)" />
+          <v:ud
+             v:nameU="PETagNumber" />
+          <v:ud
+             v:nameU="PETagFormat"
+             v:prompt="E-0"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="PEHideTag" />
+          <v:ud
+             v:nameU="PEPageHideTags"
+             v:val="VT0(0):26" />
+          <v:ud
+             v:nameU="PELayout"
+             v:val="VT0(31):26" />
+          <v:ud
+             v:nameU="CPMSetList"
+             v:prompt="Description,Material,Manufacturer,Model"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="visNavOrder"
+             v:prompt=""
+             v:val="VT0(1000):26" />
+        </v:userDefs>
+        <path
+           d="m 0,512.89 a 158.967,95.247 -180 0 0 312.8,0 V 130.71 a 158.967,95.247 -180 0 0 -312.8,0 z"
+           class="st1"
+           id="path632"
+           style="fill:#4f4e4e;stroke:none;stroke-width:1.25;stroke-linecap:butt" />
+      </g>
+    </g>
+    <g
+       v:mID="0"
+       v:index="1"
+       v:groupContext="foregroundPage"
+       id="ION_V"
+       transform="matrix(0.02691356,0,0,0.03438836,12.740857,128.26267)">
+      <v:userDefs>
+        <v:ud
+           v:nameU="PEHideTags" />
+        <v:ud
+           v:nameU="visNavType"
+           v:val="VT0(1):26" />
+      </v:userDefs>
+      <title
+         id="title628-1">페이지-1</title>
+      <v:pageProperties
+         v:drawingScale="0.0393701"
+         v:pageScale="0.0393701"
+         v:drawingUnits="24"
+         v:shadowOffsetX="8.50394"
+         v:shadowOffsetY="-8.50394" />
+      <v:layer
+         v:name="장비"
+         v:index="0" />
+      <g
+         id="shape1-1-6-8"
+         v:mID="1"
+         v:groupContext="shape"
+         v:layerMember="0"
+         transform="translate(1.25,-51.2614)">
+        <title
+           id="title630-5">기둥</title>
+        <v:custProps>
+          <v:cp
+             v:nameU="SubType"
+             v:lbl="봉합선 표시"
+             v:type="3"
+             v:langID="1042"
+             v:val="VT0(0):26" />
+          <v:cp
+             v:nameU="Description"
+             v:lbl="설명"
+             v:type="0"
+             v:sortKey="0"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Material"
+             v:lbl="자재"
+             v:type="0"
+             v:sortKey="1"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Manufacturer"
+             v:lbl="제조업체"
+             v:type="0"
+             v:sortKey="2"
+             v:langID="1042" />
+          <v:cp
+             v:nameU="Model"
+             v:lbl="모델"
+             v:type="0"
+             v:sortKey="3"
+             v:langID="1042" />
+        </v:custProps>
+        <v:userDefs>
+          <v:ud
+             v:nameU="SubType"
+             v:val="VT0(0):26" />
+          <v:ud
+             v:nameU="TextCH"
+             v:prompt="Determines text control handle visibility."
+             v:val="VT0(5):26" />
+          <v:ud
+             v:nameU="visVersion"
+             v:val="VT0(15):26" />
+          <v:ud
+             v:nameU="SOLSH"
+             v:val="VT4({D7D7DB7E-3668-43e5-AF97-97F58AB229A5})" />
+          <v:ud
+             v:nameU="ShapeClass"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="PEComponentTag"
+             v:val="VT4(E-0)" />
+          <v:ud
+             v:nameU="PETagNumber" />
+          <v:ud
+             v:nameU="PETagFormat"
+             v:prompt="E-0"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="PEHideTag" />
+          <v:ud
+             v:nameU="PEPageHideTags"
+             v:val="VT0(0):26" />
+          <v:ud
+             v:nameU="PELayout"
+             v:val="VT0(31):26" />
+          <v:ud
+             v:nameU="CPMSetList"
+             v:prompt="Description,Material,Manufacturer,Model"
+             v:val="VT4(장비)" />
+          <v:ud
+             v:nameU="visNavOrder"
+             v:prompt=""
+             v:val="VT0(1000):26" />
+        </v:userDefs>
+        <path
+           d="m 0,512.89 a 158.967,95.247 -180 0 0 312.8,0 V 130.71 a 158.967,95.247 -180 0 0 -312.8,0 z"
+           class="st1"
+           id="path632-8"
+           style="fill:#4f4e4e;stroke:none;stroke-width:1.25;stroke-linecap:butt" />
+      </g>
+    </g>
+    <g
+       v:mID="51"
+       v:index="16"
+       v:groupContext="foregroundPage"
+       id="RCP_On"
+       transform="matrix(0.08371124,0,0,0.08371124,36.899332,156.40585)">
+      <v:userDefs>
+        <v:ud
+           v:nameU="msvThemeOrder"
+           v:val="VT0(0):26" />
+        <v:ud
+           v:nameU="visNavType"
+           v:val="VT0(1):26" />
+      </v:userDefs>
+      <title
+         id="title955">RCP</title>
+      <v:pageProperties
+         v:drawingScale="0.0393701"
+         v:pageScale="0.0393701"
+         v:drawingUnits="24"
+         v:shadowOffsetX="8.50394"
+         v:shadowOffsetY="-8.50394" />
+      <g
+         id="shape1-1-9"
+         v:mID="1"
+         v:groupContext="shape"
+         transform="translate(49.6935,-1061.17)">
+        <title
+           id="title957">시트.1</title>
+        <v:userDefs>
+          <v:ud
+             v:nameU="visNavOrder"
+             v:prompt=""
+             v:val="VT0(1000):26" />
+        </v:userDefs>
+        <path
+           d="m 94.57,1155.61 h 47.16 v -37.92 H 94.57 47.16 0 v 37.92 h 47.16 v 139.61 h 47.41 z"
+           class="st1"
+           id="path959"
+           style="fill:#c00000;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+      </g>
+    </g>
+    <g
+       v:mID="51"
+       v:index="16"
+       v:groupContext="foregroundPage"
+       id="RCP_Off"
+       transform="matrix(0.08371124,0,0,0.08371124,56.415074,156.82935)">
+      <v:userDefs>
+        <v:ud
+           v:nameU="msvThemeOrder"
+           v:val="VT0(0):26" />
+        <v:ud
+           v:nameU="visNavType"
+           v:val="VT0(1):26" />
+      </v:userDefs>
+      <title
+         id="title955-9">RCP</title>
+      <v:pageProperties
+         v:drawingScale="0.0393701"
+         v:pageScale="0.0393701"
+         v:drawingUnits="24"
+         v:shadowOffsetX="8.50394"
+         v:shadowOffsetY="-8.50394" />
+      <g
+         id="shape1-1-9-5"
+         v:mID="1"
+         v:groupContext="shape"
+         transform="translate(49.6935,-1061.17)">
+        <title
+           id="title957-1">시트.1</title>
+        <v:userDefs>
+          <v:ud
+             v:nameU="visNavOrder"
+             v:prompt=""
+             v:val="VT0(1000):26" />
+        </v:userDefs>
+        <path
+           d="m 94.57,1155.61 h 47.16 v -37.92 H 94.57 47.16 0 v 37.92 h 47.16 v 139.61 h 47.41 z"
+           class="st1"
+           id="path959-3"
+           style="fill:#4b9c89;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+      </g>
+    </g>
+    <g
+       v:mID="0"
+       v:index="1"
+       v:groupContext="foregroundPage"
+       id="SG_V"
+       transform="matrix(0.04419682,0,0,0.04419682,115.36038,88.029663)">
+      <v:userDefs>
+        <v:ud
+           v:nameU="PEHideTags" />
+        <v:ud
+           v:nameU="visNavType"
+           v:val="VT0(1):26" />
+      </v:userDefs>
+      <title
+         id="title2218">페이지-1</title>
+      <v:pageProperties
+         v:drawingScale="0.0393701"
+         v:pageScale="0.0393701"
+         v:drawingUnits="24"
+         v:shadowOffsetX="8.50394"
+         v:shadowOffsetY="-8.50394" />
+      <v:layer
+         v:name="장비"
+         v:index="0" />
+      <g
+         id="group27-1"
+         transform="translate(0.25,-53.3777)"
+         v:mID="27"
+         v:groupContext="group">
+        <v:userDefs>
+          <v:ud
+             v:nameU="visNavOrder"
+             v:val="VT0(1022000):26" />
+        </v:userDefs>
+        <title
+           id="title2220">시트.27</title>
+        <g
+           id="shape3-2"
+           v:mID="3"
+           v:groupContext="shape"
+           transform="translate(0,-433.128)">
+          <title
+             id="title2222">타원</title>
+          <v:userDefs>
+            <v:ud
+               v:nameU="visVersion"
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(1021000):26" />
+          </v:userDefs>
+          <path
+             d="m 0,609.14 a 212.88,122.385 0 0 1 425.76,0 212.88,122.385 0 1 1 -425.76,0 z"
+             class="st1"
+             id="path2224"
+             style="fill:#4f4e4e;stroke:#525252;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+        </g>
+        <g
+           id="shape4-4"
+           v:mID="4"
+           v:groupContext="shape"
+           v:layerMember="0"
+           transform="translate(45.0474)">
+          <title
+             id="title2227">기둥.131</title>
+          <v:custProps>
+            <v:cp
+               v:nameU="SubType"
+               v:lbl="봉합선 표시"
+               v:type="3"
+               v:langID="1042"
+               v:val="VT0(0):26" />
+            <v:cp
+               v:nameU="Description"
+               v:lbl="설명"
+               v:type="0"
+               v:sortKey="0"
+               v:langID="1042" />
+            <v:cp
+               v:nameU="Material"
+               v:lbl="자재"
+               v:type="0"
+               v:sortKey="1"
+               v:langID="1042" />
+            <v:cp
+               v:nameU="Manufacturer"
+               v:lbl="제조업체"
+               v:type="0"
+               v:sortKey="2"
+               v:langID="1042" />
+            <v:cp
+               v:nameU="Model"
+               v:lbl="모델"
+               v:type="0"
+               v:sortKey="3"
+               v:langID="1042" />
+          </v:custProps>
+          <v:userDefs>
+            <v:ud
+               v:nameU="SubType"
+               v:val="VT0(0):26" />
+            <v:ud
+               v:nameU="TextCH"
+               v:prompt="Determines text control handle visibility."
+               v:val="VT0(5):26" />
+            <v:ud
+               v:nameU="visVersion"
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="SOLSH"
+               v:val="VT4({D7D7DB7E-3668-43e5-AF97-97F58AB229A5})" />
+            <v:ud
+               v:nameU="ShapeClass"
+               v:val="VT4(장비)" />
+            <v:ud
+               v:nameU="PEComponentTag"
+               v:val="VT4(E-0)" />
+            <v:ud
+               v:nameU="PETagNumber" />
+            <v:ud
+               v:nameU="PETagFormat"
+               v:prompt="E-0"
+               v:val="VT4(장비)" />
+            <v:ud
+               v:nameU="PEHideTag" />
+            <v:ud
+               v:nameU="PEPageHideTags"
+               v:val="VT0(0):26" />
+            <v:ud
+               v:nameU="PELayout"
+               v:val="VT0(31):26" />
+            <v:ud
+               v:nameU="CPMSetList"
+               v:prompt="Description,Material,Manufacturer,Model"
+               v:val="VT4(장비)" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:prompt=""
+               v:val="VT0(422000):26" />
+          </v:userDefs>
+          <path
+             d="m 0,647.61 a 170.587,102.209 -180 0 0 335.67,0 V 243 A 170.587,102.209 -180 0 0 0,243 Z"
+             class="st2"
+             id="path2229"
+             style="fill:#4f4e4e;stroke:#525252;stroke-width:1.25;stroke-linecap:butt" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="AValve_V_On"
+       transform="translate(0.29068787,16.331667)">
+      <g
+         id="Valve_H_On-9"
+         transform="rotate(90,26.973515,100.55905)">
+        <g
+           id="g2127-4-8">
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-69-9"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-4-6"
+             sodipodi:nodetypes="cccc" />
+        </g>
+      </g>
+      <g
+         id="g951"
+         transform="translate(-37.182539,16.418363)">
+        <g
+           id="group3-4-5-9"
+           transform="matrix(0.08979739,0,0,0.08979739,90.232267,-3.7946949)"
+           v:mID="3"
+           v:groupContext="group">
+          <v:userDefs>
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="visMasterStencil"
+               v:prompt=""
+               v:val="VT4(Basic_M.vssx)" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(3000):26" />
+          </v:userDefs>
+          <title
+             id="title231-2-6">원통</title>
+          <g
+             id="shape4-5-5-2"
+             v:mID="4"
+             v:groupContext="shape">
+            <title
+               id="title233-4-0">시트.4</title>
+            <v:userDefs>
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.11811023622047):24" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT0(1):26" />
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.033464566534248):1" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT5(#b61c2e)" />
+            </v:userDefs>
+            <path
+               d="m 0,1292.81 a 4.25197,2.40945 -180 0 0 8.5,0 v -19.28 H 0 Z"
+               class="st2"
+               id="path235-1-3"
+               style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+          <g
+             id="shape3-7-3-1"
+             v:mID="3"
+             v:groupContext="groupContent">
+            <ellipse
+               cx="4.2519698"
+               cy="1273.53"
+               rx="4.2519698"
+               ry="2.4094501"
+               class="st2"
+               id="ellipse238-1-7"
+               style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+        </g>
+        <g
+           id="shape8-9-6-3"
+           v:mID="8"
+           v:groupContext="shape"
+           transform="matrix(-0.06349634,-0.06349634,0.06349634,-0.06349634,11.235313,192.80671)">
+          <title
+             id="title242-6-5">원형 조각</title>
+          <v:userDefs>
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="CtrlAng2"
+               v:prompt=""
+               v:val="VT0(0.78539816339745):32" />
+            <v:ud
+               v:nameU="InnerDist"
+               v:prompt=""
+               v:val="VT0(0):24" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(6.2831853071796):32" />
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(3.9269908169873):32" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(5000):26" />
+          </v:userDefs>
+          <path
+             d="m 22.4,1272.81 -15.84,15.84 a 22.4019,22.4019 -180 0 0 31.68,-31.68 z"
+             class="st2"
+             id="path244-0-6"
+             style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="AValve_V_Half"
+       transform="translate(14.078563,16.616118)">
+      <g
+         id="Valve_H_On-9-3"
+         transform="rotate(90,26.973515,100.55905)">
+        <g
+           id="g2127-4-8-0">
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-69-9-4"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-4-6-4"
+             sodipodi:nodetypes="cccc" />
+        </g>
+      </g>
+      <g
+         id="g951-4"
+         transform="translate(-37.182539,16.418363)">
+        <g
+           id="group3-4-5-9-0"
+           transform="matrix(0.08979739,0,0,0.08979739,90.232267,-3.7946949)"
+           v:mID="3"
+           v:groupContext="group">
+          <v:userDefs>
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="visMasterStencil"
+               v:prompt=""
+               v:val="VT4(Basic_M.vssx)" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(3000):26" />
+          </v:userDefs>
+          <title
+             id="title231-2-6-40">원통</title>
+          <g
+             id="shape4-5-5-2-7"
+             v:mID="4"
+             v:groupContext="shape">
+            <title
+               id="title233-4-0-2">시트.4</title>
+            <v:userDefs>
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.11811023622047):24" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT0(1):26" />
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.033464566534248):1" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT5(#b61c2e)" />
+            </v:userDefs>
+            <path
+               d="m 0,1292.81 a 4.25197,2.40945 -180 0 0 8.5,0 v -19.28 H 0 Z"
+               class="st2"
+               id="path235-1-3-3"
+               style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+          <g
+             id="shape3-7-3-1-5"
+             v:mID="3"
+             v:groupContext="groupContent">
+            <ellipse
+               cx="4.2519698"
+               cy="1273.53"
+               rx="4.2519698"
+               ry="2.4094501"
+               class="st2"
+               id="ellipse238-1-7-2"
+               style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+        </g>
+        <g
+           id="shape8-9-6-3-7"
+           v:mID="8"
+           v:groupContext="shape"
+           transform="matrix(-0.06349634,-0.06349634,0.06349634,-0.06349634,11.235313,192.80671)">
+          <title
+             id="title242-6-5-3">원형 조각</title>
+          <v:userDefs>
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="CtrlAng2"
+               v:prompt=""
+               v:val="VT0(0.78539816339745):32" />
+            <v:ud
+               v:nameU="InnerDist"
+               v:prompt=""
+               v:val="VT0(0):24" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(6.2831853071796):32" />
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(3.9269908169873):32" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(5000):26" />
+          </v:userDefs>
+          <path
+             d="m 22.4,1272.81 -15.84,15.84 a 22.4019,22.4019 -180 0 0 31.68,-31.68 z"
+             class="st2"
+             id="path244-0-6-9"
+             style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="AValve_V_Off"
+       transform="translate(25.084279,16.616118)">
+      <g
+         id="Valve_H_On-9-0"
+         transform="rotate(90,26.973515,100.55905)">
+        <g
+           id="g2127-4-8-9"
+           style="fill:#2b9291;fill-opacity:1">
+          <path
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-69-9-6"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-4-6-8"
+             sodipodi:nodetypes="cccc" />
+        </g>
+      </g>
+      <g
+         id="g951-83"
+         transform="translate(-37.182539,16.418363)"
+         style="fill:#2b9291;fill-opacity:1;stroke:none">
+        <g
+           id="group3-4-5-9-19"
+           transform="matrix(0.08979739,0,0,0.08979739,90.232267,-3.7946949)"
+           v:mID="3"
+           v:groupContext="group"
+           style="fill:#2b9291;fill-opacity:1;stroke:none">
+          <v:userDefs>
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="visMasterStencil"
+               v:prompt=""
+               v:val="VT4(Basic_M.vssx)" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(3000):26" />
+          </v:userDefs>
+          <title
+             id="title231-2-6-0">원통</title>
+          <g
+             id="shape4-5-5-2-8"
+             v:mID="4"
+             v:groupContext="shape"
+             style="fill:#2b9291;fill-opacity:1;stroke:none">
+            <title
+               id="title233-4-0-11">시트.4</title>
+            <v:userDefs>
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.11811023622047):24" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT0(1):26" />
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.033464566534248):1" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT5(#b61c2e)" />
+            </v:userDefs>
+            <path
+               d="m 0,1292.81 a 4.25197,2.40945 -180 0 0 8.5,0 v -19.28 H 0 Z"
+               class="st2"
+               id="path235-1-3-2"
+               style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+          <g
+             id="shape3-7-3-1-0"
+             v:mID="3"
+             v:groupContext="groupContent"
+             style="fill:#2b9291;fill-opacity:1;stroke:none">
+            <ellipse
+               cx="4.2519698"
+               cy="1273.53"
+               rx="4.2519698"
+               ry="2.4094501"
+               class="st2"
+               id="ellipse238-1-7-51"
+               style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+        </g>
+        <g
+           id="shape8-9-6-3-86"
+           v:mID="8"
+           v:groupContext="shape"
+           transform="matrix(-0.06349634,-0.06349634,0.06349634,-0.06349634,11.235313,192.80671)"
+           style="fill:#2b9291;fill-opacity:1;stroke:none">
+          <title
+             id="title242-6-5-1">원형 조각</title>
+          <v:userDefs>
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="CtrlAng2"
+               v:prompt=""
+               v:val="VT0(0.78539816339745):32" />
+            <v:ud
+               v:nameU="InnerDist"
+               v:prompt=""
+               v:val="VT0(0):24" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(6.2831853071796):32" />
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(3.9269908169873):32" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(5000):26" />
+          </v:userDefs>
+          <path
+             d="m 22.4,1272.81 -15.84,15.84 a 22.4019,22.4019 -180 0 0 31.68,-31.68 z"
+             class="st2"
+             id="path244-0-6-2"
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="AValve_H_On"
+       transform="translate(-1.0324036,15.429559)">
+      <g
+         id="Valve_V_On-8"
+         transform="translate(0.36084245,41.258717)">
+        <g
+           id="g2127-3">
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-7"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-79"
+             sodipodi:nodetypes="cccc" />
+        </g>
+      </g>
+      <g
+         id="g951-8"
+         transform="rotate(90,71.751383,96.461662)">
+        <g
+           id="group3-4-5-9-1"
+           transform="matrix(0.08979739,0,0,0.08979739,90.232267,-3.7946949)"
+           v:mID="3"
+           v:groupContext="group">
+          <v:userDefs>
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="visMasterStencil"
+               v:prompt=""
+               v:val="VT4(Basic_M.vssx)" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(3000):26" />
+          </v:userDefs>
+          <title
+             id="title231-2-6-4">원통</title>
+          <g
+             id="shape4-5-5-2-9"
+             v:mID="4"
+             v:groupContext="shape">
+            <title
+               id="title233-4-0-1">시트.4</title>
+            <v:userDefs>
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.11811023622047):24" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT0(1):26" />
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.033464566534248):1" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT5(#b61c2e)" />
+            </v:userDefs>
+            <path
+               d="m 0,1292.81 a 4.25197,2.40945 -180 0 0 8.5,0 v -19.28 H 0 Z"
+               class="st2"
+               id="path235-1-3-5"
+               style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+          <g
+             id="shape3-7-3-1-6"
+             v:mID="3"
+             v:groupContext="groupContent">
+            <ellipse
+               cx="4.2519698"
+               cy="1273.53"
+               rx="4.2519698"
+               ry="2.4094501"
+               class="st2"
+               id="ellipse238-1-7-5"
+               style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+        </g>
+        <g
+           id="shape8-9-6-3-8"
+           v:mID="8"
+           v:groupContext="shape"
+           transform="matrix(-0.06349634,-0.06349634,0.06349634,-0.06349634,11.235313,192.80671)">
+          <title
+             id="title242-6-5-0">원형 조각</title>
+          <v:userDefs>
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="CtrlAng2"
+               v:prompt=""
+               v:val="VT0(0.78539816339745):32" />
+            <v:ud
+               v:nameU="InnerDist"
+               v:prompt=""
+               v:val="VT0(0):24" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(6.2831853071796):32" />
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(3.9269908169873):32" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(5000):26" />
+          </v:userDefs>
+          <path
+             d="m 22.4,1272.81 -15.84,15.84 a 22.4019,22.4019 -180 0 0 31.68,-31.68 z"
+             class="st2"
+             id="path244-0-6-0"
+             style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="AValve_H_Half"
+       transform="translate(7.9292479,15.256615)">
+      <g
+         id="Valve_V_On-8-0"
+         transform="translate(0.36084245,41.258717)">
+        <g
+           id="g2127-3-8">
+          <path
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-7-8"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#b61c2e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-79-3"
+             sodipodi:nodetypes="cccc" />
+        </g>
+      </g>
+      <g
+         id="g951-8-1"
+         transform="rotate(90,71.751383,96.461662)">
+        <g
+           id="group3-4-5-9-1-3"
+           transform="matrix(0.08979739,0,0,0.08979739,90.232267,-3.7946949)"
+           v:mID="3"
+           v:groupContext="group">
+          <v:userDefs>
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="visMasterStencil"
+               v:prompt=""
+               v:val="VT4(Basic_M.vssx)" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(3000):26" />
+          </v:userDefs>
+          <title
+             id="title231-2-6-4-5">원통</title>
+          <g
+             id="shape4-5-5-2-9-4"
+             v:mID="4"
+             v:groupContext="shape">
+            <title
+               id="title233-4-0-1-0">시트.4</title>
+            <v:userDefs>
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.11811023622047):24" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT0(1):26" />
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.033464566534248):1" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT5(#b61c2e)" />
+            </v:userDefs>
+            <path
+               d="m 0,1292.81 a 4.25197,2.40945 -180 0 0 8.5,0 v -19.28 H 0 Z"
+               class="st2"
+               id="path235-1-3-5-6"
+               style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+          <g
+             id="shape3-7-3-1-6-3"
+             v:mID="3"
+             v:groupContext="groupContent">
+            <ellipse
+               cx="4.2519698"
+               cy="1273.53"
+               rx="4.2519698"
+               ry="2.4094501"
+               class="st2"
+               id="ellipse238-1-7-5-1"
+               style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+          </g>
+        </g>
+        <g
+           id="shape8-9-6-3-8-4"
+           v:mID="8"
+           v:groupContext="shape"
+           transform="matrix(-0.06349634,-0.06349634,0.06349634,-0.06349634,11.235313,192.80671)">
+          <title
+             id="title242-6-5-0-1">원형 조각</title>
+          <v:userDefs>
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="CtrlAng2"
+               v:prompt=""
+               v:val="VT0(0.78539816339745):32" />
+            <v:ud
+               v:nameU="InnerDist"
+               v:prompt=""
+               v:val="VT0(0):24" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(6.2831853071796):32" />
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26" />
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(3.9269908169873):32" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(5000):26" />
+          </v:userDefs>
+          <path
+             d="m 22.4,1272.81 -15.84,15.84 a 22.4019,22.4019 -180 0 0 31.68,-31.68 z"
+             class="st2"
+             id="path244-0-6-0-5"
+             style="fill:#b61c2e;stroke:#b61c2e;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="AValve_H_Off"
+       transform="translate(17.672013,15.076193)">
+      <g
+         id="Valve_V_On-8-0-4"
+         transform="translate(0.36084245,41.258717)">
+        <g
+           id="g2127-3-8-7">
+          <path
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,78.448958 h 4.7625 l -2.38125,-4.365625 z"
+             id="path699-7-8-9"
+             sodipodi:nodetypes="cccc" />
+          <path
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             d="m 52.916667,69.717708 h 4.7625 l -2.38125,4.365625 z"
+             id="path699-6-79-3-7"
+             sodipodi:nodetypes="cccc" />
+        </g>
+      </g>
+      <g
+         id="g951-8-1-5"
+         transform="rotate(90,71.751383,96.461662)"
+         style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-opacity:1">
+        <g
+           id="group3-4-5-9-1-3-4"
+           transform="matrix(0.08979739,0,0,0.08979739,90.232267,-3.7946949)"
+           v:mID="3"
+           v:groupContext="group"
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-opacity:1">
+          <v:userDefs
+             style="stroke:url(#linearGradient2226)">
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="visMasterStencil"
+               v:prompt=""
+               v:val="VT4(Basic_M.vssx)"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(3000):26"
+               style="stroke:url(#linearGradient2226)" />
+          </v:userDefs>
+          <title
+             id="title231-2-6-4-5-5"
+             style="stroke:url(#linearGradient2226)">원통</title>
+          <g
+             id="shape4-5-5-2-9-4-6"
+             v:mID="4"
+             v:groupContext="shape"
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-opacity:1">
+            <title
+               id="title233-4-0-1-0-6"
+               style="stroke:url(#linearGradient2226)">시트.4</title>
+            <v:userDefs
+               style="stroke:url(#linearGradient2226)">
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.11811023622047):24"
+                 style="stroke:url(#linearGradient2226)" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT0(1):26"
+                 style="stroke:url(#linearGradient2226)" />
+              <v:ud
+                 v:nameU="ControlHalfHeight"
+                 v:prompt=""
+                 v:val="VT0(0.033464566534248):1"
+                 style="stroke:url(#linearGradient2226)" />
+              <v:ud
+                 v:nameU="FillForegnd"
+                 v:prompt=""
+                 v:val="VT5(#b61c2e)"
+                 style="stroke:url(#linearGradient2226)" />
+            </v:userDefs>
+            <path
+               d="m 0,1292.81 a 4.25197,2.40945 -180 0 0 8.5,0 v -19.28 H 0 Z"
+               class="st2"
+               id="path235-1-3-5-6-3"
+               style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+          </g>
+          <g
+             id="shape3-7-3-1-6-3-9"
+             v:mID="3"
+             v:groupContext="groupContent"
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-opacity:1">
+            <ellipse
+               cx="4.2519698"
+               cy="1273.53"
+               rx="4.2519698"
+               ry="2.4094501"
+               class="st2"
+               id="ellipse238-1-7-5-1-3"
+               style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+          </g>
+        </g>
+        <g
+           id="shape8-9-6-3-8-4-4"
+           v:mID="8"
+           v:groupContext="shape"
+           transform="matrix(-0.06349634,-0.06349634,0.06349634,-0.06349634,11.235313,192.80671)"
+           style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-opacity:1">
+          <title
+             id="title242-6-5-0-1-0"
+             style="stroke:url(#linearGradient2226)">원형 조각</title>
+          <v:userDefs
+             style="stroke:url(#linearGradient2226)">
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="CtrlAng2"
+               v:prompt=""
+               v:val="VT0(0.78539816339745):32"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="InnerDist"
+               v:prompt=""
+               v:val="VT0(0):24"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(6.2831853071796):32"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="visVersion"
+               v:prompt=""
+               v:val="VT0(15):26"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="CtrlAng1"
+               v:prompt=""
+               v:val="VT0(3.9269908169873):32"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="MidAngle"
+               v:prompt=""
+               v:val="VT0(5.4977871437822):32"
+               style="stroke:url(#linearGradient2226)" />
+            <v:ud
+               v:nameU="visNavOrder"
+               v:val="VT0(5000):26"
+               style="stroke:url(#linearGradient2226)" />
+          </v:userDefs>
+          <path
+             d="m 22.4,1272.81 -15.84,15.84 a 22.4019,22.4019 -180 0 0 31.68,-31.68 z"
+             class="st2"
+             id="path244-0-6-0-5-4"
+             style="fill:#2b9291;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

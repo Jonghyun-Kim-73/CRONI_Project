@@ -473,7 +473,7 @@ QssMain = ''.join([
     builder('QLabel', 'Parameter_TripTime[Blink="False"]', [f'background-color: {DarkGray};']),
     # Interface_AIDAA_Action.py -----------------------------------------------------------------------------------
     builder('QWidget', 'Action', ['border:0px;', f'background-color: {LightGray};']),
-    builder('QLabel', 'ActionTitleLabel', ['border:0px;', f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignCenter;']),
+    builder('QLabel', 'ActionTitleLabel', ['border:0px;', f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;', 'qproperty-alignment: AlignLeft;']),
     builder('QScrollArea', 'ActionAlarmArea', ['border:0px;', f'background-color: {LightGray};']),
     builder('QLabel', 'ActionAlarmAreaTableHeadingLabel', ['border:0px;', f'background-color: {DarkGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};', 'font-weight: bold;']),
     builder('QLabel', 'ActionAlarmAreaTableHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
@@ -483,15 +483,32 @@ QssMain = ''.join([
     builder('QTableWidget', 'ActionAlarmAreaTable::item', [f'background-color: {LightGray};', f'border-bottom: 1px solid {DarkGray};']),
     builder('QTableWidget', 'ActionAlarmAreaTable::item:selected', [f'background-color: {LightBlue};']),
     # --
-    builder('QScrollArea', 'ActionSuggestionArea', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QScrollArea', 'ActionSuggestionAreaScroll', ['border:0px;', f'background-color: {LightGray};']),
+    builder('QWidget', 'ActionSuggestionAreaScrollW', ['border:0px;', f'background-color: {LightGray};']),
     builder('QLabel', 'ActionSuggestionAreaTableHeadingLabel', ['border:0px;', f'background-color: {DarkGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};', 'font-weight: bold;']),
     builder('QLabel', 'ActionSuggestionAreaTableHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
     builder('QLabel', 'ActionSuggestionAreaTableHeadingLabel[Pos="M"]', ['']),
     builder('QLabel', 'ActionSuggestionAreaTableHeadingLabel[Pos="L"]', ['border-top-right-radius:10px;']),
-    builder('QTableWidget', 'ActionSuggestionAreaTable', [f'background-color: {LightGray};', 'border:0px;']),
-    builder('QTableWidget', 'ActionSuggestionAreaTable::item', [f'background-color: {LightGray};', f'border-bottom: 1px solid {DarkGray};']),
-    builder('QTableWidget', 'ActionSuggestionAreaTable::item:selected', [f'background-color: {LightBlue};']),
+    builder('QWidget', 'ActionSuggestionAreaTable', [f'background-color: {LightGray};', 'border:0px;']),
+    # --
+    builder('QLabel', 'ActionAlarmAreaTableItem', ['border: 0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QLabel', 'ActionAlarmAreaTableItem[Pos="F"]', [f'border-left: 1px solid {DarkGray};']),
+    builder('QLabel', 'ActionAlarmAreaTableItem[Pos="M"]', ['']),
+    builder('QLabel', 'ActionAlarmAreaTableItem[Pos="L"]', [f'border-right: 1px solid {DarkGray};']),
+    builder('QLabel', 'ActionAlarmAreaTableChangedItem', ['border: 0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    # --
+    builder('QWidget', 'ActionSuggestionAreaTable', [f'border: 1px solid {DarkGray};']),
+    builder('QWidget', 'ActionSuggestionAreaItem', ['border:0px;']),
+    builder('QLabel', 'ActionSuggestionAreaItemContent', [f'background-color: {LightWhite};', 'border-radius: 10px;', f'border: 1px solid {DarkGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QLabel', 'ActionSuggestionAreaItemContent[Activate="True"]', [f'background-color: {LightBlue};']),
+    builder('QLabel', 'ActionSuggestionAreaItemContent[Activate="False"]', [f'background-color: {LightGray};']),
+    builder('QLabel', 'ActionSuggestionAreaItemCheckBox', [f'background-color: {LightWhite};', 'border-radius: 10px;', f'border: 1px solid {DarkGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
+    builder('QLabel', 'ActionSuggestionAreaItemCheckBox[Condition="Stop"]', [f'background-color: {LightWhite};']),
+    builder('QLabel', 'ActionSuggestionAreaItemCheckBox[Condition="Abnormal"]', [f'background-color: {DarkYellow};']),
+    builder('QLabel', 'ActionSuggestionAreaItemCheckBox[Condition="AutoRun"]', [f'background-color: {Gray};']),
+    builder('QLabel', 'ActionSuggestionAreaItemCheckBox[Condition="ManRun"]', [f'background-color: {Black};']),
     # Interface_AIDAA_ActionMimic.py > 해당 파일에서 수정 ----------------------------------------------------------
+    
 ])
 # final qss !! 
 qss = ''.join(
