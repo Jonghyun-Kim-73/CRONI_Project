@@ -66,7 +66,6 @@ QssMain = ''.join([
     builder('QLabel', 'MainTopSystemName', [
         f'background-color: {LightWhite};',
         'border:0px;',
-        'border-radius: 5px;',
         f'color: {Black};'
         f'font-family: {Global_font};',
         f'font-size: {Global_font_size};',
@@ -259,13 +258,13 @@ QssMain = ''.join([
     builder('QTableWidget', 'DiagnosisProcedureTable::item', [f'border-bottom: 1px solid {DarkGray};']),
     builder('QTableWidget', 'DiagnosisProcedureTable[Block="On"]::item:selected', [f'background-color: {DarkGray};']),
     builder('QTableWidget', 'DiagnosisProcedureTable[Block="Off"]::item:selected', [f'background-color: {LightBlue};', f'color:{Black};', 'outline: 0;']),
-    builder('QTableWidget', 'DiagnosisProcedureTable[Block="On"]', [f'background-color: {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisProcedureTable[Block="On"]', [f'background-color: {Gray};']),
     builder('QTableWidget', 'DiagnosisProcedureTable[Block="Off"]', [f'background-color: {LightGray};']),
     # --
     builder('QLabel', 'DiagnosisProcedureItem', ['border:0px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
     builder('QLabel', 'DiagnosisProcedureItem[Block="On"]', [f'background-color: {DarkGray};', f'color:{DarkGray}']),
     builder('QLabel', 'DiagnosisProcedureItem[Block="Off"]', [f'color:{Black}']),
-    builder('QCheckBox', 'DiagnosisProcedureCheckBox', ['margin-left:40%;', 'margin-right:60%;']),
+    builder('QCheckBox', 'DiagnosisProcedureCheckBox', ['margin-left:30%;', 'margin-right:60%;']),
     builder('QCheckBox', 'DiagnosisProcedureCheckBox[Block="Off"]::indicator', ['width: 25px;', 'height: 25px;']),
     builder('QCheckBox', 'DiagnosisProcedureCheckBox[Block="On"]::indicator', ['width: 0px;', 'height: 0px;']),
     builder('QCheckBox', 'DiagnosisProcedureCheckBox::indicator:checked', ['image: url(./Img/uncheck.png);']),
@@ -276,7 +275,6 @@ QssMain = ''.join([
         f'background-color: {DarkGray};',
         f'font-family: {Global_font};',
         f'font-size: {Global_font_size};',
-        'font-weight: bold;',
         ]),
     builder('QLabel', 'DiagnosisProcedureHeadingLabel[Pos="F"]', ['border-top-left-radius:10px;']),
     builder('QLabel', 'DiagnosisProcedureHeadingLabel[Pos="M"]', ['']),

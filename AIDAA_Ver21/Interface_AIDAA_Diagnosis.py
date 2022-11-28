@@ -249,9 +249,9 @@ class DiagnosisSystemScrollArea(ABCScrollArea):
 
         # header item
         self.heading_label = [
-            DiagnosisProcedureHeadingLabel(self, " System:", 696, 'F', Qt.AlignmentFlag.AlignLeft),
-            DiagnosisProcedureHeadingLabel(self, "관련 경보", 130, 'M', Qt.AlignmentFlag.AlignCenter),
-            DiagnosisProcedureHeadingLabel(self, "AI 정확도", 120, 'L', Qt.AlignmentFlag.AlignCenter),
+            DiagnosisProcedureHeadingLabel(self, " 시스템명", 696, 'F', Qt.AlignmentFlag.AlignLeft),
+            DiagnosisProcedureHeadingLabel(self, " 관련 경보", 130, 'M', Qt.AlignmentFlag.AlignCenter),
+            DiagnosisProcedureHeadingLabel(self, " AI", 120, 'L', Qt.AlignmentFlag.AlignCenter),
         ]
 
         for label in self.heading_label:

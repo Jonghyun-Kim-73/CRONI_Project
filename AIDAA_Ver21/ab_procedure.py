@@ -291,7 +291,7 @@ ab_pro = {
                 'Des': '1차기기 냉각수계통의 방사성물질에 의한 오염을 최소로 하기 위하여 정상운전중 차단 가능한 곳은 아래의 해당 누설 부위에 따라 즉시 차단한다. ',
             },
             4: {
-                'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '5.1.4',
+                'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '0.0',
                 'Des': '참고사항 : 원자로냉각재가 1차기기 냉각수계통으로 누설 가능한 개소는 다음과 같은 곳이 있다.'
                        '◦ 결함연료 검출계통 시료 냉각기(GFFD Sample Cooler)'
                        '◦ 가압기 액체영역 시료 냉각기(PZR Liquid Sample Cooler)'
