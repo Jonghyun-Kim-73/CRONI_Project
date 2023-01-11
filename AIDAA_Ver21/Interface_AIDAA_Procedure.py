@@ -243,9 +243,13 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
 
             if ThisRank < CurrentRank:
                 if self.step_check(self.title) and not self.step_all_check(self.title):
-                    self.blink = not self.blink
-                    self.setProperty('Blink', 'True' if not self.blink else 'False')
-                    self.style().polish(self)
+                    if self.blink == True:
+                        self.setStyleSheet("background-color: rgb(0, 178, 216);")
+                        self.blink = False
+
+                    elif self.blink == False:
+                        self.setStyleSheet("background-color: rgb(255, 255, 255);")
+                        self.blink = True
                 else:
                     self.do_hover(SequenceTitleClickHis)
                     self.blink = False
@@ -292,6 +296,11 @@ class ProcedureSequenceTitleCond(ABCLabel):
         elif SequenceTitleCondHis[self.title] == 2:
             self.setProperty('Condition', '0' if self.blink else '2')
             self.blink = True
+            SequenceTitleCondHis[self.title] = 4
+        elif SequenceTitleCondHis[self.title] == 4:
+            self.setProperty('Condition', '0' if self.blink else '2')
+            self.blink = False
+            SequenceTitleCondHis[self.title] = 2
         self.style().polish(self)
 # ----------------------------------------------------------------------------------------------------------------------
 # Scroll Bar 적용
