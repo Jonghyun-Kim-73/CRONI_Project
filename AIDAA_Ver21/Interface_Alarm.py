@@ -266,13 +266,96 @@ class AlarmTable(ABCTableWidget):
             self.setItemDelegateForColumn(row, delegate)
 
         for alarm_name in new_alarm_list:
-            self.insertRow(0)
-            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))
-            self.setItem(0, 1, QTableWidgetItem('0'))
-            self.setItem(0, 2, QTableWidgetItem('0'))
-            self.setItem(0, 3, QTableWidgetItem('0'))
-            self.setItem(0, 4, QTableWidgetItem('0'))
-            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))
+            '''
+            1. Value 다수, Setpoint, Unit 단일: Value length에 따라 Setpoint, Unit 병합 필요
+            KLAMPO265, KLAMPO288, KLAMPO289, KLAMPO290, KLAMPO302, KLAMPO303, KLAMPO304, KLAMPO313, KLAMPO315, KLAMPO316, KLAMPO319, KLAMPO320, KLAMPO321, KLAMPO326, KLAMPO327, KLAMPO328, KLAMPO329, KLAMPO332, KLAMPO338, KLAMPO316    
+            2. Value 및 Setpoint 계산식 포함: 조건문 활용 개별 제어
+            KLAMPO287: 조건 1에 미포함, [KLAMPO302, KLAMPO303, KLAMPO304, KLAMPO320] : 조건 1에 포함
+            3. Value 다수, Setpoint, Unit : 모두 동일한 length를 가짐.
+            KLAMPO269: 2, KLAMPO287: 2, KLAMPO310: 2, KLAMPO311: 2
+            4. Value, Setpoint, Unit : 모두 단일 값
+            '''
+            # 조건 3을 위한 조건문
+            if alarm_name == 'KLAMPO269' or alarm_name == 'KLAMPO287' or alarm_name == 'KLAMPO310' or alarm_name == 'KLAMPO311':
+                for i in range(2):
+                    self.insertRow(0)
+                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i]))}'))  # Value
+                    self.setItem(0, 2, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]}'))  # Setpoint
+                    self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
+                    if i == 1:
+                        self.setSpan(0, 0, 2, 1)
+                        self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+                        self.setSpan(0, 4, 2, 1)
+                        self.setItem(0, 4, QTableWidgetItem('0'))  # Date
+                        self.setSpan(0, 5, 2, 1)
+                        self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
+            # 조건 2를 위한 조건문
+            elif alarm_name == 'KLAMPO287':
+                self.insertRow(0)
+                self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+                self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val("QPROREL")-self.inmem.ShMem.get_para_val("PWRHFX"))}'))  # Value
+                self.setItem(0, 2, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_setpoint(alarm_name)}'))  # Setpoint
+                self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
+                self.setItem(0, 4, QTableWidgetItem('0'))  # Date
+                self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
+
+            # 조건 1을 위한 조건문 (조건 1과 조건 2에 모두 포함되는 alarm의 경우 별도의 조건문 구성)
+            elif type(self.inmem.ShMem.get_alarm_val(alarm_name)) == list:
+                length = len(self.inmem.ShMem.get_alarm_val(alarm_name))
+                if alarm_name == 'KLAMPO302' or alarm_name == 'KLAMPO303' or alarm_name == 'KLAMPO304':
+                    self.insertRow(0)
+                    self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val("PCTMT")*self.inmem.ShMem.get_para_val("PAKGCM"))}'))  # Value
+                    self.setItem(0, 2, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_setpoint(alarm_name)}'))  # Setpoint
+                    self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
+                    self.setItem(0, 4, QTableWidgetItem('0'))  # Date
+                    self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
+                elif alarm_name == 'KLAMPO320':
+                    for i in range(3):
+                        self.insertRow(0)
+                        self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(f"WSTM{i+1}") - self.inmem.ShMem.get_para_val(f"WFWLN{i+1}"))}'))  # Value
+                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(f"WSTM{i+1}")*0.1)}'))  # Setpoint
+                        self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
+                        if i == 2:
+                            self.setSpan(0, 0, 2, 1)
+                            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+                            self.setSpan(0, 4, 2, 1)
+                            self.setItem(0, 4, QTableWidgetItem('0'))  # Date
+                            self.setSpan(0, 5, 2, 1)
+                            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
+                else:
+                    for i in range(length):
+                        self.insertRow(0)
+                        self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i]))}'))  # Value
+                        if i == length - 1:
+                            self.setSpan(0, 0, length, 1)
+                            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+                            self.setSpan(0, 2, length, 1)
+                            self.setItem(0, 2, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_setpoint(alarm_name)}'))  # Setpoint
+                            self.setSpan(0, 3, length, 1)
+                            self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
+                            self.setSpan(0, 4, length, 1)
+                            self.setItem(0, 4, QTableWidgetItem('0'))  # Date
+                            self.setSpan(0, 5, length, 1)
+                            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
+            # 조건 4 (조건 1,2,3 모두에 해당하지 않은 경우)
+            else:
+                if type(self.inmem.ShMem.get_alarm_val(alarm_name)) == str:
+                    self.insertRow(0)
+                    self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)))}'))  # Value
+                    self.setItem(0, 2, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_setpoint(alarm_name)}'))  # Setpoint
+                    self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
+                    self.setItem(0, 4, QTableWidgetItem('0'))  # Date
+                    self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
+                else:
+                    self.insertRow(0)
+                    self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_val(alarm_name))}'))  # Value
+                    self.setItem(0, 2, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_setpoint(alarm_name)}'))  # Setpoint
+                    self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
+                    self.setItem(0, 4, QTableWidgetItem('0'))  # Date
+                    self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
 
     def update_dis_alarm_list(self):
         new_alarm_list = []

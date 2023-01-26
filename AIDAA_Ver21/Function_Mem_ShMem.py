@@ -68,11 +68,29 @@ class ShMem:
     def get_on_alarms(self):
         return self.AlarmDB.get_on_alarms()
 
+    def get_on_alarms_val(self):
+        return self.AlarmDB.get_on_alarms_val()
+
+    def get_alarm_val(self, para):
+        return self.AlarmDB.get_alarm_val(para)
+
     def get_on_alarms_des(self):
         return self.AlarmDB.get_on_alarms_des()
 
     def get_alarm_des(self, para):
         return self.AlarmDB.get_alarm_des(para)
+
+    def get_on_alarms_unit(self):
+        return self.AlarmDB.get_on_alarms_unit()
+
+    def get_alarm_unit(self, para):
+        return self.AlarmDB.get_alarms_unit(para)
+
+    def get_on_alarms_setpoint(self):
+        return self.AlarmDB.get_on_alarms_setpoint()
+
+    def get_alarm_setpoint(self, para):
+        return self.AlarmDB.get_alarms_setpoint(para)
 
     def check_para_name(self, para):
         return True if para in self.mem.keys() else False
