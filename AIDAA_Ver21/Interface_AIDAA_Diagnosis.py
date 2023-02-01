@@ -460,7 +460,6 @@ class ProcedureCheckTable(ABCTableWidget):
             reset_list1 = list(filter(lambda x: symptom_des[x] == '참고사항', range(symptom_count)))
             reset_list2 = list(filter(lambda x: symptom_des[x] == '주의사항', range(symptom_count)))
             reset_list = reset_list1+reset_list2
-            print(reset_list)
             [self.removeRow(i) for i in reset_list]
 
         if type_ == 'Sys_name':
