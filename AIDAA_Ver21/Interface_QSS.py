@@ -256,7 +256,7 @@ QssMain = ''.join([
     builder('QScrollArea', 'DiagnosisProcedureTableScrollArea', ['border:0px;', f'background-color: {LightGray};']),
     builder('QTableWidget', 'DiagnosisProcedureTable', [f'background-color: {LightGray};', f'font-family: {Global_font};', f'font-size: {Global_font_size};']),
     builder('QTableWidget', 'DiagnosisProcedureTable::item', [f'border-bottom: 1px solid {DarkGray};']),
-    builder('QTableWidget', 'DiagnosisProcedureTable[Block="On"]::item:selected', [f'background-color: {DarkGray};']),
+    builder('QTableWidget', 'DiagnosisProcedureTable[Block="On"]::item:selected', [f'background-color: {Gray};']),
     builder('QTableWidget', 'DiagnosisProcedureTable[Block="Off"]::item:selected', [f'background-color: {LightBlue};', f'color:{Black};', 'outline: 0;']),
     builder('QTableWidget', 'DiagnosisProcedureTable[Block="On"]', [f'background-color: {Gray};']),
     builder('QTableWidget', 'DiagnosisProcedureTable[Block="Off"]', [f'background-color: {LightGray};']),

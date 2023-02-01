@@ -102,7 +102,6 @@ class DiagnosisProcedureTableScrollArea(ABCScrollArea):
 class DiagnosisProcedureTable(ABCTableWidget):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
-        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFixedWidth(945)
         # self.setFixedSize(945, 120) # 초기 테이블 크기
         
@@ -182,7 +181,8 @@ class DiagnosisProcedureItem(ABCLabel):
         return super().mouseDoubleClickEvent(a0)
 
     def mousePressEvent(self, ev: QMouseEvent) -> None:
-        self.inmem.widget_ids['ProcedureCheckTable'].update_table_items('Pro_name', self.pro_name)
+        if self.block == 'Off':
+            self.inmem.widget_ids['ProcedureCheckTable'].update_table_items('Pro_name', self.pro_name)
         return super().mousePressEvent(ev)
 
     def update_item(self, text, pro_name, block):
@@ -205,7 +205,8 @@ class DiagnosisProcedureCheckBox(ABCCheckBox):
         return super().mouseDoubleClickEvent(a0)
     
     def mousePressEvent(self, ev: QMouseEvent) -> None:
-        self.inmem.widget_ids['ProcedureCheckTable'].update_table_items('Pro_name', self.pro_name)
+        if self.block == 'Off':
+            self.inmem.widget_ids['ProcedureCheckTable'].update_table_items('Pro_name', self.pro_name)
         return super().mousePressEvent(ev)
 
     def update_item(self, pro_name, block):
