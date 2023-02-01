@@ -449,12 +449,20 @@ class ProcedureCheckTable(ABCTableWidget):
             symptom = self.inmem.ShMem.get_pro_symptom(name)
             symptom_count = self.inmem.ShMem.get_pro_symptom_count(name)
             self.setRowCount(symptom_count)
-            
+
             [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {symptom[i]["Des"]}', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
             [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
             [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
             [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
-            
+
+            # 참고사항 및 주의사항이 들어간 행을 선택한 후, 최종적으로 삭제 처리
+            symptom_des = [symptom[i]["Des"][:4] for i in range(symptom_count)]
+            reset_list1 = list(filter(lambda x: symptom_des[x] == '참고사항', range(symptom_count)))
+            reset_list2 = list(filter(lambda x: symptom_des[x] == '주의사항', range(symptom_count)))
+            reset_list = reset_list1+reset_list2
+            print(reset_list)
+            [self.removeRow(i) for i in reset_list]
+
         if type_ == 'Sys_name':
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 시스템 명: {name[:15]}")
 
