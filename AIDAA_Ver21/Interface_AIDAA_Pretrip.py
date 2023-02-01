@@ -314,24 +314,23 @@ power_mean = ytest[time][:,0]*minmax_output[0]+min_output[0]
 over_delta_T_mean = ytest[time][:,1]*minmax_output[1]+min_output[1]
 prz_pressure_mean = ytest[time][:,2]*minmax_output[2]+min_output[2]
 prz_level_mean = ytest[time][:,3]*minmax_output[3]+min_output[3]
-loop3_flow_mean = ytest[time][:,4]*minmax_output[4]+min_output[4]
+loop1_flow_mean = ytest[time][:,4]*minmax_output[4]+min_output[4]
 loop2_flow_mean = ytest[time][:,5]*minmax_output[5]+min_output[5]
-loop1_flow_mean = ytest[time][:,6]*minmax_output[6]+min_output[6]
-sg3_level_mean = ytest[time][:,7]*minmax_output[7]+min_output[7]
+loop3_flow_mean = ytest[time][:,6]*minmax_output[6]+min_output[6]
+sg1_level_mean = ytest[time][:,7]*minmax_output[7]+min_output[7]
 sg2_level_mean =ytest[time][:,8]*minmax_output[8]+min_output[8]
-sg1_level_mean = ytest[time][:,9]*minmax_output[9]+min_output[9]
-
+sg3_level_mean = ytest[time][:,9]*minmax_output[9]+min_output[9]
 
 power_mean_past = xtest[time][:,0]*minmax_output[0]+min_output[0]
 over_delta_T_mean_past = xtest[time][:,1]*minmax_output[1]+min_output[1]
 prz_pressure_mean_past = xtest[time][:,2]*minmax_output[2]+min_output[2]
 prz_level_mean_past = xtest[time][:,3]*minmax_output[3]+min_output[3]
-loop3_flow_mean_past = xtest[time][:,4]*minmax_output[4]+min_output[4]
+loop1_flow_mean_past = xtest[time][:,4]*minmax_output[4]+min_output[4]
 loop2_flow_mean_past = xtest[time][:,5]*minmax_output[5]+min_output[5]
-loop1_flow_mean_past = xtest[time][:,6]*minmax_output[6]+min_output[6]
-sg3_level_mean_past = xtest[time][:,7]*minmax_output[7]+min_output[7]
+loop3_flow_mean_past = xtest[time][:,6]*minmax_output[6]+min_output[6]
+sg1_level_mean_past = xtest[time][:,7]*minmax_output[7]+min_output[7]
 sg2_level_mean_past =xtest[time][:,8]*minmax_output[8]+min_output[8]
-sg1_level_mean_past = xtest[time][:,9]*minmax_output[9]+min_output[9]
+sg3_level_mean_past = xtest[time][:,9]*minmax_output[9]+min_output[9]
 
 power_mean=power_mean.astype(np.float32)
 over_delta_T_mean=over_delta_T_mean.astype(np.float32)
@@ -406,10 +405,10 @@ class Parameter_Graph(ABCWidget):
         self.setFixedSize(941, 173)
         self.setContentsMargins(0, 0, 0, 0)
         self.id = id
-        past_data = {1: power_mean_past, 2: over_delta_T_mean_past, 3: prz_pressure_mean_past, 
-                     4:prz_level_mean_past, 5:loop3_flow_mean_past, 6:loop2_flow_mean_past, 
-                     7: loop1_flow_mean_past, 8:sg3_level_mean_past, 9:sg2_level_mean_past, 10:sg1_level_mean_past}
-        grap = {1: power_mean, 2: over_delta_T_mean, 3: prz_pressure_mean, 4:prz_level_mean, 5:loop3_flow_mean, 6:loop2_flow_mean, 7: loop1_flow_mean, 8:sg3_level_mean, 9:sg2_level_mean, 10:sg1_level_mean}
+        past_data = {1: power_mean_past, 2: over_delta_T_mean_past, 3: prz_pressure_mean_past,
+                     4: prz_level_mean_past, 5: loop1_flow_mean_past, 6: loop2_flow_mean_past,
+                     7: loop3_flow_mean_past, 8: sg1_level_mean_past, 9: sg2_level_mean_past, 10: sg3_level_mean_past}
+        grap = {1: power_mean, 2: over_delta_T_mean, 3: prz_pressure_mean, 4: prz_level_mean, 5: loop1_flow_mean, 6: loop2_flow_mean, 7: loop3_flow_mean, 8: sg1_level_mean, 9: sg2_level_mean, 10: sg3_level_mean}
         y_label = {1:'%',2:'%',3:'$Kg/cm^2$', 4:'%',5:'%',6:'%',7:'%',8:'%',9:'%',10:'%'}
         trip_setpoint = {1:[25, 109], 2:[1.3, 1.3],3:[136.78, 167.72],4:[92, 92],5:[90, 90],6:[90, 90],7:[90, 90],8:[17, 17],9:[17, 17],10:[17, 17]}
         lay = QHBoxLayout(self)
@@ -526,9 +525,9 @@ class Parameter_Info(ABCWidget):
         super(Parameter_Info, self).__init__(parent)
         self.setFixedHeight(30)
         self.id = id
-        name = {1: 'POWER RANGE PERCENT POWER', 2: 'OVERTEMPERATURE DELTA-T', 3: 'PRZ PRESSURE', 4:'PRZ LEVEL', 5:'LOOP 3 FLOW', 6: 'LOOP 2 FLOW', 7: 'LOOP 1 FLOW', 8: 'SG#3 Narrow Range Level', 9: 'SG#2 Narrow Range Level', 10: 'SG#1 Narrow Range Level'}
+        name = {1: 'POWER RANGE PERCENT POWER', 2: 'OVERTEMPERATURE DELTA-T', 3: 'PRZ PRESSURE', 4:'PRZ LEVEL', 5:'LOOP 1 FLOW', 6: 'LOOP 2 FLOW', 7: 'LOOP 3 FLOW', 8: 'SG#1 Narrow Range Level', 9: 'SG#2 Narrow Range Level', 10: 'SG#3 Narrow Range Level'}
         self.Trip_time = {1: '{}'.format(power_triptime), 2: '{}'.format(over_delta_T_triptime), 3: '{}'.format(prz_pressure_triptime), 4:'{}'.format(prz_level_triptime),
-                     5:'{}'.format(loop3_flow_triptime), 6: '{}'.format(loop2_flow_triptime), 7: '{}'.format(loop1_flow_triptime), 8: '{}'.format(sg3_level_triptime), 9: '{}'.format(sg2_level_triptime), 10: '{}'.format(sg1_level_triptime)}
+                     5:'{}'.format(loop1_flow_triptime), 6: '{}'.format(loop2_flow_triptime), 7: '{}'.format(loop3_flow_triptime), 8: '{}'.format(sg1_level_triptime), 9: '{}'.format(sg2_level_triptime), 10: '{}'.format(sg3_level_triptime)}
         self.blink = False
         self.lay = QHBoxLayout(self)
         self.lay.setContentsMargins(15, 0, 0, 0)
