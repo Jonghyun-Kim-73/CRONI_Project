@@ -32,7 +32,7 @@ class MainTabRightPreAbnormalW(ABCWidget):
 
         self.w_title = MainTabRightPreAbnormalWTitle(self, 'Pre-abnormal')
 
-        self.gotobtn = MainTabRightPreAbnormalWBTN(self, 'IFAP')
+        self.gotobtn = MainTabRightPreAbnormalWBTN(self, 'Go to IFAP')
         self.gotobtn.setFixedSize(254, 51)
         self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallIFAP'].dis_update)
 
@@ -82,7 +82,8 @@ class MainTabRightAbnormalW(ABCWidget):
         self.gotobtn.setFixedSize(254, 51)
         self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallAIDAA'].dis_update)
 
-        self.w_contents = MainTabRightAbnormalWContent(self, 'AIDAA information')
+        self.w_contents = MainTabRightAbnormalWContent(self, '진단 결과: 증기발생기 수위 채널 고장 (고) \n'
+                                                             '진단 결과: -')
         self.w_contents.setContentsMargins(10, 0, 0, 0)
 
         self.hl = QHBoxLayout()

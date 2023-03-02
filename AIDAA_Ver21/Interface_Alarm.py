@@ -10,7 +10,7 @@ class MainAlarm(ABCWidget):
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(AlarmScrollArea(self, 'Main'))  # Alarm Table Height 구분 위함
-        lay.addWidget(AlarmSortSystemBtns(self))
+#         lay.addWidget(AlarmSortSystemBtns(self))
         lay.setSpacing(10)
 class AIDAAAlarm(ABCWidget):
     def __init__(self, parent, widget_name=''):
@@ -385,7 +385,7 @@ class AlarmHeadingLabel(ABCLabel):
         self.style().polish(self)
 # ----------------------------------------------------------------------------------------------------------------------
 # Main 에서 Sort 버튼
-class AlarmSortSystemBtns(ABCWidget):
+'''class AlarmSortSystemBtns(ABCWidget):
     def __init__(self, parent):
         super(AlarmSortSystemBtns, self).__init__(parent)
         self.setFixedWidth(945)
@@ -409,7 +409,7 @@ class AlarmSystem_EGIS_SortPress(ABCPushButton):
     def __init__(self, parent):
         super(AlarmSystem_EGIS_SortPress, self).__init__(parent)
         self.setFixedSize(307, 40)
-        self.setText('Alarm_Emergency')
+        self.setText('Alarm_Emergency')'''
 # ----------------------------------------------------------------------------------------------------------------------
 # AIDAA 에서 Sort 버튼
 class AlarmSortAIDAABtns(ABCWidget):
