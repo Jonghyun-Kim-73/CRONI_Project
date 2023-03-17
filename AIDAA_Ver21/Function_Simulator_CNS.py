@@ -19,6 +19,9 @@ class CNS(QWidget):
         one_step_btn = QPushButton('OneStep', self)
         one_step_btn.clicked.connect(self.one_step)
         # one_step_btn.clicked.connect(self.ex)
+        self.run_btn = QPushButton('Freeze', self)
+        self.run_btn.clicked.connect(self.run_)
+        self.run_trigger = False
 
         lay2 = QHBoxLayout()
         change_val_btn = QPushButton('ChangeVal', self)
@@ -32,8 +35,11 @@ class CNS(QWidget):
         self.mes = QLabel('')
 
         lay.addWidget(one_step_btn)
+        lay.addWidget(self.run_btn)
         lay.addLayout(lay2)
         lay.addWidget(self.mes)
+        
+        self.startTimer(600) # 600ms로 one_step 호출함. self.run_ 함수 참고
 
 # ----------------------------------------------------------------------------------------------------------------------
         # 컨트롤러 실행과 함께 AI 실행 준비
@@ -46,6 +52,14 @@ class CNS(QWidget):
         self.ShMem.update_alarmdb()
         self.ShMem.update_CVCS()
         self.mes.setText(f'OneStep 진행함. [KCNTOMS: {self.ShMem.get_para_val("KCNTOMS")}][CVCS: {self.ShMem.get_CVCS_para_val("SimTime")}]')
+
+    def run_(self): 
+        self.run_trigger = False if self.run_trigger == True else True
+        _ = self.run_btn.setText('Run') if self.run_trigger == True else self.run_btn.setText('Freeze')
+
+    def timerEvent(self, a0: 'QTimerEvent') -> None:
+        _ = self.one_step() if self.run_trigger else None
+        return super().timerEvent(a0)
 
     def change_val(self):
         if self.ShMem.check_para_name(self.paraname.text()):
