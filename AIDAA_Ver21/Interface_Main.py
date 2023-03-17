@@ -98,10 +98,11 @@ class MainTopTime(ABCLabel):
         super().__init__(parent, widget_name)
         self.setFixedSize(465, 36)
         self.startTimer(200)
+        self.time_freeze = datetime.now() # 현재 시간 Pick 하고 Freeze
         
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         """ 타이머 디스플레이 업데이트 """
-        current_time = datetime.now() + self.inmem.get_td() # 현재시간 + time_delta()
+        current_time = self.time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
         real_time = current_time.strftime('%Y.%m.%d')
         real_time2 = current_time.strftime("%H:%M:%S")
         self.setText(real_time + " / " + real_time2)
