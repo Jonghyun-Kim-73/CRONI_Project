@@ -6,6 +6,10 @@
 
 from math import sqrt
 from pickle import dump
+from collections import deque
+import time
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 class CVCS:
@@ -13,15 +17,30 @@ class CVCS:
         self.skip_frame = skip_frame
         self.call_init(init_pzr_level)
 
+    def get_level(self, vol):
+        _rol = 6.1e+2
+        _rog = 1.03e+2
+        _zwlev1 = (12.5 * vol)/(_rog * 50)
+        pzr_level = (((_zwlev1 - 1.45) * _rol) + (11.45 - _zwlev1)*_rog - 10*98.4)/(600-98.4)
+        return pzr_level / 10
+
     def call_init(self, init_pzr_level=55.156153):
+        # 초기 물 양 계산 링모양
+        self.RCS_VOLs = deque([2830 for _ in range(34)], maxlen=34) #np.array([2830 for _ in range(34)]) # 0~33 노드 정도 딜레이
+        # charging 은 16 노드로 letdown 은 2 노드로
+        
         self.mem = {
             'iTestS': {'V': 0, 'RF': [0], 'SF': [0]},               # Mimic 테스트 용
 
             'SISignal': {'V': 0, 'RF': [0], 'SF': [0]},             # SI signal / KSAFEI
-            'DEPRZ': {'V': init_pzr_level / 100, 'RF': [init_pzr_level / 100], 'SF': [init_pzr_level / 100]}, # PZR level
-            'NOPRZ': {'V': init_pzr_level, 'RF': [init_pzr_level], 'SF': [init_pzr_level]}, # PZR level
-            'ZPRZSP': {'V': 0.57, 'RF': [0.57], 'SF': [0.57]},      # PZR Set-point
 
+            'DEPRZ': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level
+            'DEPRZA': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH A
+            'DEPRZB': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH B
+            'DEPRZAVG': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH Avg
+            'DEPRZAVGNO': {'V': self.get_level(self.RCS_VOLs[-1]*100), 'RF': [self.get_level(self.RCS_VOLs[-1])*100], 'SF': [self.get_level(self.RCS_VOLs[-1])*100]}, # PZR level * 100
+
+            'ZPRZSP': {'V': 0.559, 'RF': [0.559], 'SF': [0.559]},   # PZR Set-point
             'LV459_Delay': {'V': 0, 'RF': [0], 'SF': [0]},          # Letdown Valve LV459 / KTLV459
             'LV459_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},      # Letdown Valve LV459 / KCLV459
             'LV459_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},     # Letdown Valve LV459 / KCLV459
@@ -66,7 +85,7 @@ class CVCS:
             'BFV122_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
             'BFV122_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
             'BFV122_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'BFV122': {'V': 0.49146140, 'RF': [0.49146140], 'SF': [0.49146140]},
+            'BFV122': {'V': 0.49, 'RF': [0.49], 'SF': [0.49]},
             'BFV122I': {'V': 0.48647678, 'RF': [0.48647678], 'SF': [0.48647678]},
             'BFV122Mode': {'V': 0, 'RF': [0], 'SF': [0]},           # Auto(0), Man(1)
 
@@ -124,17 +143,36 @@ class CVCS:
             'V059_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
             'V059_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
             'V059': {'V': 1, 'RF': [1], 'SF': [1]},
+            
+            'BHV41_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},       # Excess L/D suction valve from RCS loop #3 HV41
+            'BHV41_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV41_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV41_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV41': {'V': 0, 'RF': [0], 'SF': [0]},
+
+            'DEPRZAC_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},       # DEPRZ Level CH A
+            'DEPRZAC_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'DEPRZAC_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'DEPRZAC_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'DEPRZAC': {'V': 1, 'RF': [1], 'SF': [1]},
+
+            'DEPRZBC_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},       # DEPRZ Level CH B
+            'DEPRZBC_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'DEPRZBC_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'DEPRZBC_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'DEPRZBC': {'V': 1, 'RF': [1], 'SF': [1]},
 
             # 'WCHPFV122' = 'CWCHARG' * 'BFV122'
-            'WCHPFV122': {'V': 4.81632181829228, 'RF': [4.81632181829228], 'SF': [4.81632181829228]},
+            'WCHPFV122': {'V': 4.802000098, 'RF': [4.802000098], 'SF': [4.802000098]},
 
-            'RINOLD': {'V': 4.59163468E-41, 'RF': [4.59163468E-41], 'SF': [4.59163468E-41]},
+            'RINOLD': {'V': 0.00210236369830152, 'RF': [0.00210236369830152], 'SF': [0.00210236369830152]},
 
             'BLV143': {'V': 1, 'RF': [1], 'SF': [1]},
             'BLV614': {'V': 0, 'RF': [0], 'SF': [0]},
             'WLV616': {'V': 4.7957101, 'RF': [4.7957101], 'SF': [4.7957101]},
 
             'LV616_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
+            'LV616_AutoOpen': {'V': 0, 'RF': [0], 'SF': [0]},
             'LV616_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
             'LV616_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
             'LV616_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
@@ -145,12 +183,12 @@ class CVCS:
             'CHP3': {'V': 0, 'RF': [0], 'SF': [0]},
             'CWCHARG': {'V': 9.8000002, 'RF': [9.8000002], 'SF': [9.8000002]},  # [0, 9.8000002, 13.857000, 16.954000]
 
-
-            'WEXLD': {'V': 0, 'RF': [0], 'SF': [0]},
+            'WEXLD': {'V': 0, 'RF': [0], 'SF': [0]},                # Excess Letdown Flow
+            
             'T_delta': {'V': 0.2, 'RF': [0.2], 'SF': [0.2]},        # 0.2 Sec,  5 loop = 1Sec
 
             'WLETDNO': {'V': 5.6410036, 'RF': [5.6410036], 'SF': [5.6410036]},      # NORMAL LETDOWN FLOW         # C
-            'WLETDNO1': {'V': 5.6410036, 'RF': [5.6410036], 'SF': [5.6410036]},     # NORMAL LETDOWN FLOW         # C
+            'WLETDNO1': {'V': 0, 'RF': [0], 'SF': [0]},                             # NORMAL LETDOWN FLOW         # C
             'WLETDNO2': {'V': 5.6410036, 'RF': [5.6410036], 'SF': [5.6410036]},     # NORMAL LETDOWN FLOW         # C
             'WLETDNO3': {'V': 5.6410036, 'RF': [5.6410036], 'SF': [5.6410036]},     # NORMAL LETDOWN FLOW         # C
             'WLETDNO4': {'V': 5.6410036, 'RF': [5.6410036], 'SF': [5.6410036]},     # NORMAL LETDOWN FLOW         # C
@@ -163,10 +201,10 @@ class CVCS:
             'WDEMI': {'V': 5.6410036, 'RF': [5.6410036], 'SF': [5.6410036]},        # Demi water
             'PLETIN': {'V': 15012566.00, 'RF': [15012566.00], 'SF': [15012566.00]}, # Letdown Inlet Pressure      # C
             'PPRZN': {'V': 15305906.00, 'RF': [15305906.00], 'SF': [15305906.00]},  # PZR Pressure                # C
-            'NOPPRZ': {'V': 153.00, 'RF': [153.00], 'SF': [1530.00]},               # PZR Pressure                # C
+            'PPRZNNO': {'V': 153, 'RF': [153], 'SF': [153]},                        # PZR Pressure Normal         * 1e-5
             'PLETDB': {'V': 2842650.3, 'RF': [2842650.3], 'SF': [2842650.3]},                                     # C
-            'ZVCT': {'V': 72.865021, 'RF': [72.865021], 'SF': [72.865021]},         # VCT level                   # C
-            'PVCT': {'V': 0, 'RF': [0], 'SF': [0]},                                 # VCT Pressure                # C
+            'ZVCT': {'V': 70, 'RF': [70], 'SF': [70]},         # VCT level                   # C
+            'PVCT': {'V': 1.6930148117902, 'RF': [1.6930148117902], 'SF': [1.6930148117902]},                                 # VCT Pressure                # C
             'WRCPSI': {'V': 0.50499988, 'RF': [0.50499988], 'SF': [0.50499988]},    # RCP Seal inject
             # RCP Seal Return Flow
             'WRCPSR': {'V': 0.50499988 * 0.375, 'RF': [0.50499988 * 0.375], 'SF': [0.50499988 * 0.375]},
@@ -174,10 +212,10 @@ class CVCS:
             'WSWHX': {'V': 5.2949996, 'RF': [5.2949996], 'SF': [5.2949996]},
             'WCHGNO': {'V': 3.8525825, 'RF': [3.8525825], 'SF': [3.8525825]},
             'WCMINI': {'V': 3.78, 'RF': [3.78], 'SF': [3.78]},  # CHP Return Mini Flow3.78
-            'WNETCH': {'V': 0, 'RF': [0], 'SF': [0]},
-            'WTOFV122': {'V': 3.8525825, 'RF': [3.8525825], 'SF': [3.8525825]},
+            'WNETCH': {'V': 4.79971155729999, 'RF': [4.79971155729999], 'SF': [4.79971155729999]},
+            'WTOFV122': {'V': 4.802000098, 'RF': [4.802000098], 'SF': [4.802000098]},
             'WTOV084': {'V': 0, 'RF': [0], 'SF': [0]},
-            'WTOV083': {'V': 0, 'RF': [0], 'SF': [0]},
+            'WTOV083': {'V': 4.802000098, 'RF': [4.802000098], 'SF': [4.802000098]},
             # PZR heater
             'PZRHeater': {'V': 0, 'RF': [0], 'SF': [0]},
             'PZRMode': {'V': 0, 'RF': [0], 'SF': [0]}, # 0 Auto 1 Man
@@ -197,6 +235,9 @@ class CVCS:
             'CLDBP1': {'V': 0.15, 'RF': [0.15], 'SF': [0.15]},              # GAIN AND RESET TIME FOR L/D BACK PRESSURE
             'CLDBP2': {'V': 8.0, 'RF': [8.0], 'SF': [8.0]},                 # GAIN AND RESET TIME FOR L/D BACK PRESSURE
             'CVVCT': {'V': 8.85E-3, 'RF': [8.85E-3], 'SF': [8.85E-3]},      # VCT Volume to level
+
+            # Make Lee
+            'MCTMTRAD': {'V': 0, 'RF': [0], 'SF': [0]},                # CTMT 방사선 계측기
 
             # Alarm _ CNS
             'KLAMPO260': {'V': 0, 'RF': [0], 'SF': [0]},              # L10  L/D HX outlet flow lo(15 m3/hr)
@@ -224,8 +265,42 @@ class CVCS:
 
             'MAL07A': {'V': 0, 'RF': [0], 'SF': [0]},                  # 여과기 A
             'MAL07B': {'V': 0, 'RF': [0], 'SF': [0]},                  # 여과기 B
+            
+            'MAL08A': {'V': 0, 'RF': [0], 'SF': [0]},                  # CHP1 # 0 is not malfunction 1 is Stop Pump
+            'MAL08B': {'V': 0, 'RF': [0], 'SF': [0]},                  # CHP2
+            'MAL08C': {'V': 0, 'RF': [0], 'SF': [0]},                  # CHP3
+
+            'MAL09A': {'V': -1, 'RF': [-1], 'SF': [-1]},               # PZR Level CH A
+            'MAL09B': {'V': -1, 'RF': [-1], 'SF': [-1]},               # PZR Level CH B
 
             'SimTime': {'V': 0, 'RF': [0], 'SF': [0]},
+            
+            'Act1': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act2': {'V': 0, 'RF': [0], 'SF': [0]},
+            
+            'Act1P': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act2P': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act3P': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act4P': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act5P': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act6P': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act7P': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act8P': {'V': 0, 'RF': [0], 'SF': [0]},
+            'Act9P': {'V': 0, 'RF': [0], 'SF': [0]},
+            
+            'R': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R0': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R1': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R2': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R3': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R4': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R5': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R6': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R7': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R8': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R9': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R10': {'V': 0, 'RF': [0], 'SF': [0]},
+            'R11': {'V': 0, 'RF': [0], 'SF': [0]},
         }
 
     def control(self, para, step=0.05):
@@ -267,16 +342,14 @@ class CVCS:
                 5. SF 에 현 상태 저장
         """
         for n in range(self.skip_frame + 1):
-            # Leak RCS -*- 460 Valve
-            if self.mem['MAL01']['V'] > 0:
-                NEXTLET = self.mem['WLETDNO']['V'] - self.mem['MAL01']['V'] * 0.01
-            else:
+            # RCS -- 460
+            if True:
                 NEXTLET = self.mem['WLETDNO']['V']
-            self.mem['WLETDNO1']['V'] = NEXTLET
+                
             # Letdown 460 Valve ----------------------------------------------------------------------------------------
             if True:
                 # 가압기 수위 17 아래 시 10 Sec Delay
-                if self.mem['DEPRZ']['V'] < 0.17:
+                if self.mem['DEPRZAVG']['V'] < 0.17:
                     self.mem['LV460_Delay']['V'] += 1
                     if self.mem['LV460_Delay']['V'] > 10 / self.mem['T_delta']['V']:
                         self.mem['LV460_Delay']['V'] = 10 / self.mem['T_delta']['V']
@@ -307,15 +380,22 @@ class CVCS:
 
                 RWLTDN = sqrt(RPDIF) * self.mem['LV460']['V'] * self.mem['CLETNO']['V']
 
-                NEXTLET = (RWLTDN - NEXTLET) * 0.2 + NEXTLET
+                NEXTLET = (RWLTDN - NEXTLET) * 0.2 + NEXTLET         
+            # 결과적으로 가압기 수위에 영향을 미치는 유출 유량 **
+            self.mem['WLETDNO']['V'] = NEXTLET
+            # Excess Letdown RCS -- HV 41 <ref. cvcsyd_exldsd.f>
+            if True:
+                self.control('BHV41')
+                self.mem['WEXLD']['V'] = ((self.mem['PPRZN']['V']-5.0E5)*1.05E-7*self.mem['BHV41']['V'] - self.mem['WEXLD']['V'])*0.5+self.mem['WEXLD']['V']
+                self.mem['WLETDNO1']['V'] = self.mem['WEXLD']['V']
             # Leak 460 -*- 459
             if True:
-                NEXTLET = NEXTLET - self.mem['MAL02']['V'] * 0.01
+                NEXTLET = NEXTLET - self.mem['MAL02']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
                 self.mem['WLETDNO2']['V'] = NEXTLET
             # Letdown 459 Valve ----------------------------------------------------------------------------------------
             if True:
                 # 가압기 수위 17 아래 시 10 Sec Delay
-                if self.mem['DEPRZ']['V'] < 0.17:
+                if self.mem['DEPRZAVG']['V'] < 0.17:
                     self.mem['LV459_Delay']['V'] += 1
                     if self.mem['LV459_Delay']['V'] > 10 / self.mem['T_delta']['V']:
                         self.mem['LV459_Delay']['V'] = 10 / self.mem['T_delta']['V']
@@ -342,17 +422,17 @@ class CVCS:
             NEXTLET = NEXTLET * self.mem['LV459']['V']
             # Leak 459 -*- Orifice Valve
             if True:
-                NEXTLET = NEXTLET - self.mem['MAL03']['V'] * 0.01
+                NEXTLET = NEXTLET - self.mem['MAL03']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
                 self.mem['WLETDNO3']['V'] = NEXTLET
             # Orifice Valve --------------------------------------------------------------------------------------------
             if True:
                 for i in range(1, 4):   # 1, 2, 3
-                    if self.mem['DEPRZ']['V'] < 0.17:
+                    if self.mem['DEPRZAVG']['V'] < 0.17:
                         self.mem[f'HV{i}_AutoClose']['V'] = 1
                     else:
                         self.mem[f'HV{i}_AutoClose']['V'] = 0
 
-                    if self.mem['DEPRZ']['V'] >= 0.17 and self.mem[f'HV{i}_ControlSignal']['V'] == 1 and self.mem['LV459']['V'] >= 1:
+                    if self.mem['DEPRZAVG']['V'] >= 0.17 and self.mem[f'HV{i}_ControlSignal']['V'] == 1 and self.mem['LV459']['V'] >= 1:
                         self.mem[f'HV{i}_OpenSignal']['V'] = 1
                     else:
                         self.mem[f'HV{i}_OpenSignal']['V'] = 0
@@ -384,7 +464,7 @@ class CVCS:
                     NEXTLET = NEXTLET
             # Leak Orifice Valve -*- Letdown Heat EX Changer
             if True:
-                NEXTLET = NEXTLET - self.mem['MAL04']['V'] * 0.01
+                NEXTLET = NEXTLET - self.mem['MAL04']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
                 self.mem['WLETDNO4']['V'] = NEXTLET
             # L/D Back pressure ----------------------------------------------------------------------------------------
             if True:
@@ -462,18 +542,18 @@ class CVCS:
             # LV616 Valve Start ----------------------------------------------------------------------------------------
             if True:
                 self.mem['LV616_AutoClose']['V'] = 1 if self.mem['ZVCT']['V'] <= 5.0 or self.mem['SISignal']['V'] == 1 else 0
-                self.mem['LV616_OpenSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == 1 else 0
-                self.mem['LV616_CloseSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == -1 else 0
+                self.mem['LV616_AutoOpen']['V'] = 1 if self.mem['ZVCT']['V'] > 10.0 or self.mem['SISignal']['V'] == 1 else 0
+                self.mem['LV616_OpenSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == 1 or self.mem['LV616_AutoOpen']['V'] == 1 else 0
+                self.mem['LV616_CloseSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == -1 or self.mem['LV616_AutoClose']['V'] == 1 else 0
                 temp = 0
                 temp = 1 if self.mem['LV616_OpenSignal']['V'] == 1 else temp
-                temp = -1 if self.mem['LV616_CloseSignal']['V'] == 1 else temp
-                self.mem['LV616']['V'] = self.mem['LV616']['V'] + temp * 0.05
+                temp = -1 if self.mem['LV616_CloseSignal']['V'] == 1 else temp  
+                self.mem['LV616']['V'] = self.mem['LV616']['V'] + temp * 1
                 self.mem['LV616']['V'] = 1 if self.mem['LV616']['V'] >= 1 else self.mem['LV616']['V']
                 self.mem['LV616']['V'] = 0 if self.mem['LV616']['V'] <= 0 else self.mem['LV616']['V']
 
                 self.mem['LV616_ControlSignal']['V'] = 0 if self.mem['LV616']['V'] >= 1 else self.mem['LV616_ControlSignal']['V']
                 self.mem['LV616_ControlSignal']['V'] = 0 if self.mem['LV616']['V'] <= 0 else self.mem['LV616_ControlSignal']['V']
-
                 # LV616 -> Seal
                 self.mem['RTFLOW']['V'] = (self.mem['WRCPSI']['V'] - self.mem['WRCPSR']['V']) * 3.0
                 self.mem['WLV616']['V'] = (self.mem['WCHARGT']['V'] - self.mem['WSWHX']['V'] + self.mem['RTFLOW']['V']) * self.mem['LV616']['V']
@@ -487,13 +567,17 @@ class CVCS:
 
                 # Charging Line Flow via FV122
                 ChargingFlow = [0, 9.8000002, 13.857000, 16.954000]
+                if True: # Malfunction Stop CHP1:
+                    self.mem['CHP1']['V'] = (1 - self.mem['MAL08A']['V']) * self.mem['CHP1']['V']
+                    self.mem['CHP2']['V'] = (1 - self.mem['MAL08B']['V']) * self.mem['CHP2']['V']
+                    self.mem['CHP3']['V'] = (1 - self.mem['MAL08C']['V']) * self.mem['CHP3']['V']
                 start_CHP = self.mem['CHP1']['V'] + self.mem['CHP2']['V'] + self.mem['CHP3']['V']
-                self.mem['CWCHARG']['V'] = ChargingFlow[int(start_CHP)]
+                self.mem['CWCHARG']['V'] = ChargingFlow[int(start_CHP)] if self.mem['LV616']['V'] != 0 else 0
 
             # FV122 Charging Valve -------------------------------------------------------------------------------------
             if True:
                 # PID Controller for FV122
-                RIN = self.mem['ZPRZSP']['V'] - self.mem['DEPRZ']['V']
+                RIN = self.mem['ZPRZSP']['V'] - self.mem['DEPRZAVG']['V']
                 PIDOUT = self.PIDREG(RIN, self.mem['RINOLD']['V'], -1.0, 0, 1.0, 0.1,
                                      0.2, 5.0, 0.01, self.mem['T_delta']['V'], 0.0075 / self.mem['T_delta']['V'],
                                      self.mem['BFV122Mode']['V'], self.mem['BFV122_ControlSignal']['V'],
@@ -503,11 +587,11 @@ class CVCS:
                 self.mem['BFV122']['V'] = round(self.mem['BFV122']['V'], 2)
 
                 self.mem['RINOLD']['V'] = RIN
-            # V082/083
-            self.simple_control('V082')
-            self.simple_control('V083')
-            # V084 Bypass Valve
-            self.simple_control('V084', step=0.01)
+            # V082/083/V084 Bypass Valve
+            if True:
+                self.simple_control('V082')
+                self.simple_control('V083')            
+                self.simple_control('V084', step=0.01)
             # Bypass Flow Calculation
             if True:
                 self.mem['WTOFV122']['V'] = self.mem['CWCHARG']['V'] * self.mem['BFV122']['V'] * self.mem['V082']['V']
@@ -521,41 +605,83 @@ class CVCS:
                 else:
                     self.mem['WCHGNO']['V'] = 0
                 self.mem['WCHGNO']['V'] = 0 if self.mem['WCHGNO']['V'] <= 0 else self.mem['WCHGNO']['V']
+                self.mem['RTFLOW']['V'] = self.mem['RTFLOW']['V'] if self.mem['LV616']['V'] != 0 else 0
             # Net Charging / Letdown + 가압기 수위 반영
             if True:
                 self.mem['WNETCH']['V'] = self.mem['WCHGNO']['V'] + self.mem['RTFLOW']['V']
                 self.mem['WNETCH']['V'] = 0 if self.mem['WNETCH']['V'] <= 0 else self.mem['WNETCH']['V']
 
                 # Letdown
-                self.mem['WLETDNO']['V'] = NEXTLET
+                # self.mem['WLETDNO']['V'] = NEXTLET
+                
 
-                delta = self.mem['WNETCH']['V'] - self.mem['WLETDNO']['V']
+                # RCS 링 모델을 사용한 가압기 수위 계산
+                if True:
+                    delta = self.RCS_VOLs[-2] - self.RCS_VOLs[-1]
+                    
+                    # 볼륨 계산
+                    self.RCS_VOLs[16] -= self.mem['WLETDNO']['V'] * self.mem['LV460']['V']
+                    self.RCS_VOLs[16] -= self.mem['WEXLD']['V']
+                    self.RCS_VOLs[16] += self.mem['WNETCH']['V']
+                    
+                    # # 회전
+                    _end_rcs_vol = self.RCS_VOLs[-1]
+                    self.RCS_VOLs.appendleft(_end_rcs_vol)
 
                 # 가압기 수위에 반영
                 # self.mem['DEPRZ']['V' += delta * 0.0000095
-                self.mem['DEPRZ']['V'] += delta * 0.0000095 * 5
+                # self.mem['DEPRZ']['V'] += delta * 0.0000095 * 5
+                self.mem['DEPRZ']['V'] = self.get_level(self.RCS_VOLs[-1])
                 self.mem['DEPRZ']['V'] = 1 if self.mem['DEPRZ']['V'] >= 1 else self.mem['DEPRZ']['V']
-
-                self.mem['NOPRZ']['V'] = self.mem['DEPRZ']['V'] * 100
-                self.mem['NOPPRZ']['V'] = self.mem['PPRZN']['V'] / 1e5
-
-                if self.mem['PZRMode']['V'] == 0:
-                    if self.mem['DEPRZ']['V'] < 0.17:
-                        self.mem['PZRHeater']['V'] = 0          # 17% 이하 heat off
-                    elif self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZ']['V']:  # 0.62
-                        self.mem['PZRHeater']['V'] = 1          # 17% 이하 heat on
-                    elif self.mem['PPRZN']['V'] < 152.2E5:
-                        self.mem['PZRHeater']['V'] = 1
+                
+                # PZR Level indicator update
+                if True:
+                    # PZR Level Chanel Failure Malfunctions
+                    if self.mem['MAL09A']['V'] != -1:
+                        self.mem['DEPRZA']['V'] = self.mem['MAL09A']['V']
                     else:
-                        self.mem['PZRHeater']['V'] = 0
-                else:
-                    pass
+                        self.mem['DEPRZA']['V'] = self.mem['DEPRZ']['V']
+                    if self.mem['MAL09B']['V'] != -1:
+                        self.mem['DEPRZB']['V'] = self.mem['MAL09B']['V']
+                    else:
+                        self.mem['DEPRZB']['V'] = self.mem['DEPRZ']['V']
+
+                    self.simple_control('DEPRZAC', step=0.01)
+                    self.simple_control('DEPRZBC', step=0.01)
+                    # Final Avg
+                    if self.mem['DEPRZAC']['V'] == 1 and self.mem['DEPRZBC']['V'] == 1:
+                        self.mem['DEPRZAVG']['V'] = (self.mem['DEPRZA']['V'] + self.mem['DEPRZB']['V']) * 0.5
+                    elif self.mem['DEPRZAC']['V'] == 1 and self.mem['DEPRZBC']['V'] == 0:
+                        self.mem['DEPRZAVG']['V'] = self.mem['DEPRZA']['V']
+                    elif self.mem['DEPRZAC']['V'] == 0 and self.mem['DEPRZBC']['V'] == 1:
+                        self.mem['DEPRZAVG']['V'] = self.mem['DEPRZB']['V']
+                    else:
+                        self.mem['DEPRZAVG']['V'] = 0
+                    self.mem['DEPRZAVGNO']['V'] = self.mem['DEPRZAVG']['V'] * 100
+                        
+                # PZR Heater
+                if True:
+                    if self.mem['PZRMode']['V'] == 0:
+                        if self.mem['DEPRZAVG']['V'] < 0.17:
+                            self.mem['PZRHeater']['V'] = 0          # 17% 이하 heat off
+                        elif self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZAVG']['V']:  # 0.62
+                            self.mem['PZRHeater']['V'] = 1          # 17% 이하 heat on
+                        elif self.mem['PPRZN']['V'] < 152.2E5:
+                            self.mem['PZRHeater']['V'] = 1
+                        else:
+                            self.mem['PZRHeater']['V'] = 0
+                    else:
+                        pass
 
                 # 수위 상승에 따른 압력 증가 고려
                 self.mem['PPRZN']['V'] += delta * 100 * 1 + self.mem['PZRHeater']['V'] * 10
+                self.mem['PPRZNNO']['V'] = self.mem['PPRZN']['V'] * 1e-5
 
                 # 시간 추가
                 self.mem['SimTime']['V'] += 1
+        
+            # ----------------------------------------------------------------------------------------------------------
+            self.mem['MCTMTRAD']['V'] = sum([self.mem[f'MAL0{i}']['V'] for i in range(1, 7)])
 
             # ALARM update
             self.step_alarm()
@@ -566,8 +692,8 @@ class CVCS:
                 if n == self.skip_frame:
                     self.mem[key]['SF'].append(self.mem[key]['V'])
 
-                self.mem['BFV122_ControlSignal']['V'] = 0
-                self.mem['V084_ControlSignal']['V'] = 0
+                self.mem['BFV122_ControlSignal']['V'] = 0       # Manual 시 제어 후 초기화 용
+                self.mem['V084_ControlSignal']['V'] = 0         # Manual 시 제어 후 초기화 용
 
     def step_alarm(self):
         self.mem['KLAMPO260']['V'] = 1 if self.mem['WLETDNO']['V'] < 4.16 else 0
@@ -580,19 +706,12 @@ class CVCS:
         self.mem['KLAMPO272']['V'] = 1 if self.mem['PVCT']['V'] > 4.5 else 0
         self.mem['KLAMPO274']['V'] = 1 if self.mem['WCHGNO']['V'] > 7.5 else 0
 
-        self.mem['KLAMPO301']['V'] = 1 if self.mem['MAL01']['V'] > 0 or \
-                                          self.mem['MAL02']['V'] > 0 or \
-                                          self.mem['MAL03']['V'] > 0 or \
-                                          self.mem['MAL04']['V'] > 0 or \
-                                          self.mem['MAL05']['V'] > 0 or \
-                                          self.mem['MAL06']['V'] > 0 or \
-                                          self.mem['MAL07A']['V'] > 0 or \
-                                          self.mem['MAL07B']['V'] > 0 else 0
+        self.mem['KLAMPO301']['V'] = 1 if self.mem['MCTMTRAD']['V'] > 0 else 0
 
         self.mem['KLAMPO307']['V'] = 1 if self.mem['PPRZN']['V'] > 159.E5 else 0
         self.mem['KLAMPO308']['V'] = 1 if self.mem['PPRZN']['V'] < 151.E5 else 0
-        self.mem['KLAMPO310']['V'] = 1 if self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZ']['V'] else 0
-        self.mem['KLAMPO311']['V'] = 1 if self.mem['DEPRZ']['V'] < 0.17 else 0
+        self.mem['KLAMPO310']['V'] = 1 if self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZAVG']['V'] else 0
+        self.mem['KLAMPO311']['V'] = 1 if self.mem['DEPRZAVG']['V'] < 0.17 else 0
         self.mem['KLAMPO312']['V'] = 1 if self.mem['PPRZN']['V'] < 152.2E5 else 0
 
     def PIREGL(self, RIN, RINLMH, RINLML, RUTLMH, RUTLML,
@@ -706,3 +825,57 @@ class CVCS:
     def _dump_mem(self, file_path):
         with open(file_path, 'wb') as f:
             dump(self.mem, f)
+            
+    def _dump_csv(self, file_path):
+        # make frame
+        db_ = {key_: self.mem[key_]['RF'] for key_ in self.mem.keys()}
+        out_dbframe = pd.DataFrame(db_)
+        out_dbframe.to_csv(file_path)
+        
+if __name__ == '__main__':
+    cvcs = CVCS(skip_frame=5)
+    
+    curent_time = time.time()
+    
+    for _ in range(0, 5000):
+        # print(f'== {_} ==')
+        cvcs.step()
+        
+        # Control Test
+        # if _ == 500: # Do 1000 sec
+        #     cvcs.mem['MAL09A']['V'] = 1
+        # if _ == 1000: # Do 1200 sec : Turn-off Chanel A
+        #     cvcs.mem['DEPRZAC']['V'] = 0 # Off
+        
+        if _ == 500:
+            cvcs.mem['MAL02']['V'] = 50
+        if _ == 1000:
+            cvcs.mem['LV460']['V'] = 0
+            
+        if _ == 1200:
+            cvcs.mem['BHV41']['V'] = 1
+        
+        
+        if _ % 1000 == 0:
+            print(f'{_:20}{time.time() - curent_time:25}')
+            curent_time = time.time()
+    
+    # cvcs._dump_mem('test.pkl')
+    cvcs._dump_csv('test.csv')
+        # print(cvcs.mem['SimTime']['RF'])
+        # print(cvcs.mem['SimTime']['SF'])
+        #
+        # print(cvcs.mem['DEPRZ']['V'])
+        # print(cvcs.mem['DEPRZ']['RF'])
+        # print(cvcs.mem['DEPRZ']['SF'])
+
+    plt.plot(cvcs.mem['DEPRZ']['RF'], label='PZR_Level_R')
+    plt.plot(cvcs.mem['DEPRZA']['RF'], label='PZR_Level_A')
+    plt.plot(cvcs.mem['DEPRZB']['RF'], label='PZR_Level_B')
+    plt.plot(cvcs.mem['DEPRZAVG']['RF'], label='PZR_Level_AVG')
+    plt.plot([_/10 for _ in cvcs.mem['WLETDNO']['RF']], label='Letdown')
+    plt.plot(cvcs.mem['BFV122']['RF'], label='Flow')
+    plt.plot([_/100 for _ in cvcs.mem['ZVCT']['RF']], label='VCTLevel')
+    plt.legend()
+    plt.ylim(0, 1)
+    plt.show()

@@ -863,7 +863,7 @@
     "unit": "%",
     "comp_name": "L",
     "comp_name_size": 16,
-    "para_name": "NOPRZ",
+    "para_name": "DEPRZAVGNO",
     "alarm_name": "iTestA",
     "connected_id": []
   },
@@ -993,7 +993,7 @@
     "unit": "kg/cm^2",
     "comp_name": "P",
     "comp_name_size": 16,
-    "para_name": "NOPPRZ",
+    "para_name": "PPRZNNO",
     "alarm_name": "iTestA",
     "connected_id": []
   },
