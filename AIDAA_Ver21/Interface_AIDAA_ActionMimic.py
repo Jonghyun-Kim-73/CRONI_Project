@@ -35,8 +35,7 @@ class ActionMimicArea(ABCWidget):
         self.shortcut_move_item_delete = QShortcut(Qt.Key.Key_Delete, self, self.inmem.widget_ids['ActionMimicScene'].delete_item)
 
     def resizeEvent(self, a0: QResizeEvent) -> None:
-        w, h = self.ActionMimicView.size().width(), self.ActionMimicView.size().height()
-        self.ActionMimicScene.setSceneRect(QRectF(0, 0, w, h))
+        self.ActionMimicScene.setSceneRect(QRectF(0, 0, self.ActionMimicView.size().width(), self.ActionMimicView.size().height()))
 class ActionMimicView(ABCGraphicsView):
     def __init__(self, parent, scene, widget_name=''):
         super().__init__(parent, widget_name)
@@ -47,12 +46,11 @@ class ActionMimicScene(ABCGraphicsScene):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.setBackgroundBrush(rgb_to_qCOLOR(LightGray))
-
+        self.edit_mode = False # 처음 edit-mode False
         self.ItemBox = {}
         self.ItemAgs = {}
         
         self.load_scene()
-
         self.startTimer(600)
 
     def load_scene(self):
@@ -65,10 +63,11 @@ class ActionMimicScene(ABCGraphicsScene):
             self.removeItem(item)
         # Background
         self.addItem(ActionMimicSceneBackground(self))
+        # Edit Mode
+        _ = self.addItem(ActionMimicSceneEditModeIndicator(self)) if self.edit_mode else None
         # load json file
         with open('./Interface_AIDAA_ActionMimic.json', encoding='UTF8') as f:
             self.ItemAgs = json.load(f)
-            print(self.ItemAgs)
 
         for id in self.ItemAgs:
             if self.ItemAgs[id]['CType'] in ['Pump', 'RCP']:
@@ -94,16 +93,18 @@ class ActionMimicScene(ABCGraphicsScene):
         print('MainMiddle Mimic 화면 Save')
 
     def move_item(self, direction):
+        # If edit_mode is True, items can be moved.
         # If one or more than one item is selected and Up key is pressed, the item selected will be moved up, down, right or left.
-        for item in self.selectedItems():
-            if direction == 'up':
-                item.move_pos(0, -1)
-            if direction == 'down':
-                item.move_pos(0, 1)
-            if direction == 'right':
-                item.move_pos(1, 0)
-            if direction == 'left':
-                item.move_pos(-1, 0)
+        if self.edit_mode:
+            for item in self.selectedItems():
+                if direction == 'up':
+                    item.move_pos(0, -1)
+                if direction == 'down':
+                    item.move_pos(0, 1)
+                if direction == 'right':
+                    item.move_pos(1, 0)
+                if direction == 'left':
+                    item.move_pos(-1, 0)
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         [item.update_state() for item in self.ItemBox.values()]
@@ -140,41 +141,54 @@ class ActionMimicScene(ABCGraphicsScene):
     def contextMenuEvent(self, event: 'QGraphicsSceneContextMenuEvent') -> None:
         if len(self.selectedItems()) == 0:
             menu = QMenu()
-            pump = menu.addAction('Add Pump')
-            valv = menu.addAction('Add Valve')
-            pipe = menu.addAction('Add Pipe')
-            imgs = menu.addAction('Add ImgComp')
-            indi = menu.addAction('Add Indicator')
-            x = event.scenePos().x()
-            y = event.scenePos().y()
-            act = menu.exec(event.screenPos())
-            if act == pump:
-                Id = f'{self.find_empty_id("P")}'
-                self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Pump", "x": x, "y": y, "direction": "R",
-                                    "alarm_name": "iTestA", "comp_name": "TEMP", "para_name": "iTestS",
-                                    "connected_id": []}
-            elif act == valv:
-                Id = f'{self.find_empty_id("V")}'
-                self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Valve", "x": x, "y": y, "direction": "V",
-                                    "alarm_name": "iTestA", "comp_name": "TEMP", "comp_name_direction": "Right", 
-                                    "para_name": "iTestS", "connected_id": []}
-            elif act == pipe:
-                Id = f'{self.find_empty_id("L")}'
-                self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Pipe", "x1": x, "y1": y, 
-                                    "x2": x + 50, "y2": y + 50, "arrow": "true","connected_id": []}
-            elif act == imgs:
-                Id = f'{self.find_empty_id("N")}'
-                self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Img", "x": x, "y": y, "img_name": "Sump",
-                                    "direction": "V", "comp_name": "TEMP", "comp_name_direction": "Top",
-                                    "comp_name_size": 16, "alarm_name": "iTestA"}
-            elif act == indi:
-                Id = f'{self.find_empty_id("I")}'
-                self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Indicator", "x": x, "y": y, "unit": "%",
-                                    "comp_name": "P", "comp_name_size": 16, "para_name": "iTestS",
-                                    "alarm_name": "iTestA", "connected_id": []}
-            self.save_scene()
-            self.load_scene()
+            if self.edit_mode:
+                pump      = menu.addAction('Add Pump')
+                valv      = menu.addAction('Add Valve')
+                pipe      = menu.addAction('Add Pipe')
+                imgs      = menu.addAction('Add ImgComp')
+                indi      = menu.addAction('Add Indicator')
+                edit_mode = menu.addAction('Off Edit Mode')
+                x = event.scenePos().x()
+                y = event.scenePos().y()
+                act = menu.exec(event.screenPos())
+                if act == pump:
+                    Id = f'{self.find_empty_id("P")}'
+                    self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Pump", "x": x, "y": y, "direction": "R",
+                                        "alarm_name": "iTestA", "comp_name": "TEMP", "para_name": "iTestS",
+                                        "connected_id": []}
+                elif act == valv:
+                    Id = f'{self.find_empty_id("V")}'
+                    self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Valve", "x": x, "y": y, "direction": "V",
+                                        "alarm_name": "iTestA", "comp_name": "TEMP", "comp_name_direction": "Right", 
+                                        "para_name": "iTestS", "connected_id": []}
+                elif act == pipe:
+                    Id = f'{self.find_empty_id("L")}'
+                    self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Pipe", "x1": x, "y1": y, 
+                                        "x2": x + 50, "y2": y + 50, "arrow": "true","connected_id": []}
+                elif act == imgs:
+                    Id = f'{self.find_empty_id("N")}'
+                    self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Img", "x": x, "y": y, "img_name": "Sump",
+                                        "direction": "V", "comp_name": "TEMP", "comp_name_direction": "Top",
+                                        "comp_name_size": 16, "alarm_name": "iTestA"}
+                elif act == indi:
+                    Id = f'{self.find_empty_id("I")}'
+                    self.ItemAgs[Id] = {"Id": f"{Id}", "CType": "Indicator", "x": x, "y": y, "unit": "%",
+                                        "comp_name": "P", "comp_name_size": 16, "para_name": "iTestS",
+                                        "alarm_name": "iTestA", "connected_id": []}
+                elif act == edit_mode: self.edit_mode_trigger()
+                # 매번 편집 후 Save와 Load 방지 용.
+                if act in [pump, valv, pipe, imgs, indi, edit_mode]:
+                    self.save_scene()
+                    self.load_scene()
+            else: # If self.edit_mode is False.
+                edit_mode = menu.addAction('On Edit Mode')
+                act = menu.exec(event.screenPos())
+                if act == edit_mode: 
+                    self.edit_mode_trigger()
+                    self.load_scene()
         return super().contextMenuEvent(event)
+    # One_line Functions
+    def edit_mode_trigger(self): self.edit_mode = True if self.edit_mode != True else False
 # ==========================================================================================
 # Comp element
 # ==========================================================================================
@@ -191,6 +205,20 @@ class ActionMimicSceneBackground(ABCGraphicsRectItem):
         h = self.inmem.widget_ids['ActionMimicView'].rect().height() -1 - 2
         painter.setPen(QPen(rgb_to_qCOLOR(DarkGray), 2, Qt.PenStyle.SolidLine))
         painter.drawRoundedRect(QRect(x, y, w, h), 10, 10)
+        return super().paint(painter, option, widget)
+class ActionMimicSceneEditModeIndicator(ABCGraphicsRectItem):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        # Outline RoundRect
+        x = self.inmem.widget_ids['ActionMimicView'].rect().x() + 10
+        y = self.inmem.widget_ids['ActionMimicView'].rect().y() + 10
+        w = 100
+        h = 30
+        self.setRect(x, y, w, h)
+    def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem', widget) -> None:
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setFont(QFont(Global_font, 10, weight=QFont.Bold))
+        painter.drawText(self.boundingRect(), Qt.AlignmentFlag.AlignCenter|Qt.AlignmentFlag.AlignHCenter, 'Edit Mode')
         return super().paint(painter, option, widget)
 class BasicLabel(ABCGraphicsRectItem):
     def __init__(self, parent, args, widget_name=''):
@@ -422,8 +450,8 @@ class PumpG(ABCGraphicsItemGroup):
         #        
         self.addToGroup(self.compLabel)
         self.addToGroup(self.comp)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        self.setFlag(QGraphicsItem.ItemIsMovable, MOVE)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
+        self.setFlag(QGraphicsItem.ItemIsMovable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.setPos(self.args['x'], self.args['y'])
         self.flow = 0.0
     
@@ -516,8 +544,8 @@ class ValveG(ABCGraphicsItemGroup):
         #        
         self.addToGroup(self.compLabel)
         self.addToGroup(self.comp)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        self.setFlag(QGraphicsItem.ItemIsMovable, MOVE)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
+        self.setFlag(QGraphicsItem.ItemIsMovable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.setPos(self.args['x'], self.args['y'])
         self.flow = 0.0
         
@@ -614,8 +642,8 @@ class ImgG(ABCGraphicsItemGroup):
         #
         self.addToGroup(self.comp)
         self.addToGroup(self.compLabel)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        self.setFlag(QGraphicsItem.ItemIsMovable, MOVE)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
+        self.setFlag(QGraphicsItem.ItemIsMovable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.setPos(self.args['x'], self.args['y'])
         self.flow = 0.0
 
@@ -712,8 +740,8 @@ class IndiG(ABCGraphicsItemGroup):
         self.addToGroup(self.compLabel)
         self.addToGroup(self.comp)
         self.addToGroup(self.unitLabel)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        self.setFlag(QGraphicsItem.ItemIsMovable, MOVE)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
+        self.setFlag(QGraphicsItem.ItemIsMovable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.setPos(self.args['x'], self.args['y'])
         #
         self.flow = 0.0
@@ -826,8 +854,8 @@ class LineG(ABCGraphicsItemGroup):
         self.Arrowhead = ArrowHead(self, args)
         self.addToGroup(self.Pipe)
         self.addToGroup(self.Arrowhead)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        self.setFlag(QGraphicsItem.ItemIsMovable, MOVE)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
+        self.setFlag(QGraphicsItem.ItemIsMovable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.flow = 0.0
         
     def update_state(self):
