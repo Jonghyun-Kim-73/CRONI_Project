@@ -272,9 +272,12 @@ class CompLabel(ABCGraphicsRectItem):
         painter.setFont(self.CompNameFont)
         painter.drawText(self.boundingRect(), Qt.AlignmentFlag.AlignCenter|Qt.AlignmentFlag.AlignHCenter, self.CompName)
         
-        painter.setPen(QPen(rgb_to_qCOLOR(DarkYellow), self.AlarmLineTick, Qt.PenStyle.SolidLine))
+        alarm_state = self.inmem.ShMem.get_CVCS_para_val(f'{self.alarm_name}')
+        if alarm_state == 0: painter.setPen(QPen(rgb_to_qCOLOR(DarkYellow), self.AlarmLineTick, Qt.PenStyle.SolidLine))
+        if alarm_state == 1: painter.setPen(QPen(rgb_to_qCOLOR(DarkBlue), self.AlarmLineTick, Qt.PenStyle.SolidLine))
+        if alarm_state == 2: painter.setPen(QPen(rgb_to_qCOLOR(DarkYellow), self.AlarmLineTick, Qt.PenStyle.SolidLine))
         
-        if self.inmem.ShMem.get_para_val(f'{self.alarm_name}') == 1:
+        if self.inmem.ShMem.get_CVCS_para_val(f'{self.alarm_name}') != 0:
             self.blink = not self.blink
             if self.blink:
                 # TopLine

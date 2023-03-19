@@ -16,6 +16,7 @@ class CVCS:
     def __init__(self, init_pzr_level=55.156153, skip_frame=0):
         self.skip_frame = skip_frame
         self.call_init(init_pzr_level)
+        self.normal_op_state = pd.read_csv('./CVCS/normal.csv')
 
     def get_level(self, vol):
         _rol = 6.1e+2
@@ -31,6 +32,7 @@ class CVCS:
         
         self.mem = {
             'iTestS': {'V': 0, 'RF': [0], 'SF': [0]},               # Mimic 테스트 용
+            'iTestA': {'V': 0, 'RF': [0], 'SF': [0]},               # Mimic 테스트 용
 
             'SISignal': {'V': 0, 'RF': [0], 'SF': [0]},             # SI signal / KSAFEI
 
@@ -221,7 +223,7 @@ class CVCS:
             'PZRMode': {'V': 0, 'RF': [0], 'SF': [0]}, # 0 Auto 1 Man
 
             # 'RTFLOW': ('WRCPSI' - 'WRCPSR') * 3.0
-            'RTFLOW': {'V': 0.9468747749999998, 'RF': [0.9468747749999998], 'SF': [0.9468747749999998]},
+            'RTFLOW': {'V': 0.946874775, 'RF': [0.946874775], 'SF': [0.946874775]},
 
             # Fix
             'CPPRZN': {'V': 15400000.00, 'RF': [15400000.00], 'SF': [15400000.00]}, # NOMINAL PRZ Pressure
@@ -301,6 +303,48 @@ class CVCS:
             'R9': {'V': 0, 'RF': [0], 'SF': [0]},
             'R10': {'V': 0, 'RF': [0], 'SF': [0]},
             'R11': {'V': 0, 'RF': [0], 'SF': [0]},
+            
+            'MakePP': {'V': 0, 'RF': [0], 'SF': [0]},
+            'MakePPFlow': {'V': 0, 'RF': [0], 'SF': [0]},
+            
+            #--- Interface에 사용된 변수의 알람 Level 정보 ---
+            'A_CHP1': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_CHP2': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_CHP3': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_V082': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BFV122': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_WCHPFV122': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_V084': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_WTOV084': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_V083': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_VCT': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_CWCHARG': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_PVCT': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_ZVCT': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_LV616': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BLV614': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_WDEMI': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_MakePP': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_Hold-up': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_MakePPFlow': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_MakeupTank': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_RTFLOW': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_ION': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BLV143': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_HV3': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_HV2': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_HV1': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BLV143': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_LDHX': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_HX': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_PZR': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_DEPRZAVGNO': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_LV459': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_LV460': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BHV41': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_WLETDNO4': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_PPRZNNO': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_WEXLD': {'V': 0, 'RF': [0], 'SF': [0]},
         }
 
     def control(self, para, step=0.05):
@@ -713,6 +757,41 @@ class CVCS:
         self.mem['KLAMPO310']['V'] = 1 if self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZAVG']['V'] else 0
         self.mem['KLAMPO311']['V'] = 1 if self.mem['DEPRZAVG']['V'] < 0.17 else 0
         self.mem['KLAMPO312']['V'] = 1 if self.mem['PPRZN']['V'] < 152.2E5 else 0
+        
+        # Check Normal Op Out
+        for para in self.mem.keys():
+            alarm_v = 'A_' + para
+            if not 'A_' in para and alarm_v in self.mem.keys():
+                if self.normal_op_state[para][0] == self.normal_op_state[para][1]:
+                    if self.mem[para]['V'] == self.normal_op_state[para][0]:
+                        self.mem[alarm_v]['V'] = 0
+                    else:
+                        self.mem[alarm_v]['V'] = 1
+                else:
+                    if self.normal_op_state[para][0] <= self.mem[para]['V'] <= self.normal_op_state[para][1]:
+                        self.mem[alarm_v]['V'] = 0
+                    else:
+                        self.mem[alarm_v]['V'] = 1
+        
+        # if self.mem['KLAMPO260']['V'] == 1: self.mem['A_WLETDNO']['V'] = 2
+        if self.mem['KLAMPO263']['V'] == 1: self.mem['A_ZVCT']['V'] = 2
+        if self.mem['KLAMPO264']['V'] == 1: self.mem['A_PVCT']['V'] = 2
+        # if self.mem['KLAMPO265']['V'] == 1: self.mem['A_WRCPSI']['V'] = 2
+        # if self.mem['KLAMPO266']['V'] == 1: self.mem['A_WCHGNO']['V'] = 2
+        if self.mem['KLAMPO268']['V'] == 1: self.mem['A_WLETDNO4']['V'] = 2
+        if self.mem['KLAMPO271']['V'] == 1: self.mem['A_ZVCT']['V'] = 2
+        if self.mem['KLAMPO272']['V'] == 1: self.mem['A_PVCT']['V'] = 2
+        # if self.mem['KLAMPO274']['V'] == 1: self.mem['A_WCHGNO']['V'] = 2
+        
+        # if self.mem['KLAMPO301']['V'] == 1: self.mem['A_MCTMTRAD']['V'] = 2
+        
+        if self.mem['KLAMPO307']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
+        if self.mem['KLAMPO308']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
+        # if self.mem['KLAMPO310']['V'] == 1: self.mem['A_ZPRZSP']['V'] = 2
+        if self.mem['KLAMPO310']['V'] == 1: self.mem['A_DEPRZAVGNO']['V'] = 2
+        if self.mem['KLAMPO311']['V'] == 1: self.mem['A_DEPRZAVGNO']['V'] = 2
+        if self.mem['KLAMPO312']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
+               
 
     def PIREGL(self, RIN, RINLMH, RINLML, RUTLMH, RUTLML,
                RGAIN, RINTEG, RDT,
@@ -847,13 +926,13 @@ if __name__ == '__main__':
         # if _ == 1000: # Do 1200 sec : Turn-off Chanel A
         #     cvcs.mem['DEPRZAC']['V'] = 0 # Off
         
-        if _ == 500:
-            cvcs.mem['MAL02']['V'] = 50
-        if _ == 1000:
-            cvcs.mem['LV460']['V'] = 0
+        # if _ == 500:
+        #     cvcs.mem['MAL02']['V'] = 50
+        # if _ == 1000:
+        #     cvcs.mem['LV460']['V'] = 0
             
-        if _ == 1200:
-            cvcs.mem['BHV41']['V'] = 1
+        # if _ == 1200:
+        #     cvcs.mem['BHV41']['V'] = 1
         
         
         if _ % 1000 == 0:

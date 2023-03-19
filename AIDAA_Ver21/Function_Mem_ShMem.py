@@ -19,10 +19,8 @@ class ShMem:
         self.CVCS = CVCS()
     
     # - CVCS part -------------------------------------------------------------------------------------------------------
-    def update_CVCS(self):
-        self.CVCS.step()
-    def get_CVCS_para_val(self, para):
-        return self.CVCS.mem[para]['V']
+    def update_CVCS(self):                    self.CVCS.step()
+    def get_CVCS_para_val(self, para):        return self.CVCS.mem[para]['V']
     # - Normal part -----------------------------------------------------------------------------------------------------
     def make_cns_mem(self, max_len, db_path='./db.txt', db_add_path='./db_add.txt'):
         # 초기 shared_mem의 구조를 선언한다.
@@ -44,59 +42,30 @@ class ShMem:
         # 다음과정을 통하여 shared_mem 은 PID : { type. val, num }를 가진다.
         return shared_mem
 
-    def update_alarmdb(self):
-        self.AlarmDB.update_alarmdb_from_ShMem()
+    def update_alarmdb(self):        self.AlarmDB.update_alarmdb_from_ShMem()
+    def add_val_to_list(self):       [self.mem[para]['List'].append(self.mem[para]['Val']) for para in self.mem.keys()]
+    
+    def change_para_val(self, para, val):       self.mem[para]['Val'] = val
+    def change_cvcs_para_val(self, para, val):       self.CVCS.mem[para]['V'] = val
 
-    def add_val_to_list(self):
-        [self.mem[para]['List'].append(self.mem[para]['Val']) for para in self.mem.keys()]
+    def get_para_val(self, para):         return self.mem[para]['Val']
+    def get_para_list(self, para):        return self.mem[para]['List']
+    def get_mem(self):                    return self.mem
+    def get_alarmdb(self):                return self.AlarmDB.alarmdb
+    def get_on_alarms(self):              return self.AlarmDB.get_on_alarms()
+    def get_on_alarms_val(self):          return self.AlarmDB.get_on_alarms_val()
+    def get_alarm_val(self, para):        return self.AlarmDB.get_alarm_val(para)
+    def get_on_alarms_des(self):          return self.AlarmDB.get_on_alarms_des()
+    def get_alarm_des(self, para):        return self.AlarmDB.get_alarm_des(para)
+    def get_on_alarms_unit(self):         return self.AlarmDB.get_on_alarms_unit()
+    def get_alarm_unit(self, para):       return self.AlarmDB.get_alarms_unit(para)
+    def get_on_alarms_setpoint(self):     return self.AlarmDB.get_on_alarms_setpoint()
+    def get_alarm_setpoint(self, para):   return self.AlarmDB.get_alarms_setpoint(para)
 
-    def change_para_val(self, para, val):
-        self.mem[para]['Val'] = val
-
-    def get_para_val(self, para):
-        return self.mem[para]['Val']
-
-    def get_para_list(self, para):
-        return self.mem[para]['List']
-
-    def get_mem(self):
-        return self.mem
-
-    def get_alarmdb(self):
-        return self.AlarmDB.alarmdb
-
-    def get_on_alarms(self):
-        return self.AlarmDB.get_on_alarms()
-
-    def get_on_alarms_val(self):
-        return self.AlarmDB.get_on_alarms_val()
-
-    def get_alarm_val(self, para):
-        return self.AlarmDB.get_alarm_val(para)
-
-    def get_on_alarms_des(self):
-        return self.AlarmDB.get_on_alarms_des()
-
-    def get_alarm_des(self, para):
-        return self.AlarmDB.get_alarm_des(para)
-
-    def get_on_alarms_unit(self):
-        return self.AlarmDB.get_on_alarms_unit()
-
-    def get_alarm_unit(self, para):
-        return self.AlarmDB.get_alarms_unit(para)
-
-    def get_on_alarms_setpoint(self):
-        return self.AlarmDB.get_on_alarms_setpoint()
-
-    def get_alarm_setpoint(self, para):
-        return self.AlarmDB.get_alarms_setpoint(para)
-
-    def check_para_name(self, para):
-        return True if para in self.mem.keys() else False
-
-    def check_para_type(self, para):
-        return self.mem[para]['Sig']
+    def check_para_name(self, para):      return True if para in self.mem.keys() else False
+    def check_para_type(self, para):      return self.mem[para]['Sig']
+    def check_cvcs_para_name(self, para): return True if para in self.CVCS.mem.keys() else False
+    def check_cvcs_para_type(self, para): return 0 if isinstance(self.CVCS.mem[para], int) else 1
 
     # ----------------------------------------------------------------------------------------------------------------------
     def get_pro_all_ab_procedure_names(self):

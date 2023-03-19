@@ -5,7 +5,7 @@
     "x": 202.0,
     "y": 831.0,
     "direction": "R",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_CHP1",
     "comp_name": "CHPP 1",
     "para_name": "CHP1",
     "connected_id": []
@@ -16,7 +16,7 @@
     "x": 202.0,
     "y": 913.0,
     "direction": "R",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_CHP2",
     "comp_name": "CHPP 2",
     "para_name": "CHP2",
     "connected_id": []
@@ -27,7 +27,7 @@
     "x": 202.0,
     "y": 995.0,
     "direction": "R",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_CHP3",
     "comp_name": "CHPP 3",
     "para_name": "CHP3",
     "connected_id": []
@@ -138,7 +138,7 @@
     "x": 536.0,
     "y": 702.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_V082",
     "comp_name": "V082",
     "comp_name_direction": "Right",
     "para_name": "V082",
@@ -150,7 +150,7 @@
     "x": 535.0,
     "y": 633.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_BFV122",
     "comp_name": "FV122",
     "comp_name_direction": "Right",
     "para_name": "BFV122",
@@ -185,7 +185,7 @@
     "comp_name": "F",
     "comp_name_size": 14,
     "para_name": "WCHPFV122",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_WCHPFV122",
     "connected_id": []
   },
   "L11": {
@@ -214,7 +214,7 @@
     "x": 401.0,
     "y": 632.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_V084",
     "comp_name": "V084",
     "comp_name_direction": "Right",
     "para_name": "V084",
@@ -228,8 +228,8 @@
     "unit": "kg/hr",
     "comp_name": "F",
     "comp_name_size": 14,
-    "para_name": "iTestS",
-    "alarm_name": "iTestA",
+    "para_name": "WTOV084",
+    "alarm_name": "A_WTOV084",
     "connected_id": []
   },
   "V4": {
@@ -238,7 +238,7 @@
     "x": 534.0,
     "y": 541.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_V083",
     "comp_name": "V083",
     "comp_name_direction": "Right",
     "para_name": "V083",
@@ -304,7 +304,7 @@
     "comp_name": "VCT",
     "comp_name_direction": "Top",
     "comp_name_size": 16,
-    "alarm_name": "iTestA"
+    "alarm_name": "A_VCT"
   },
   "I1": {
     "Id": "I1",
@@ -315,7 +315,7 @@
     "comp_name": "F",
     "comp_name_size": 14,
     "para_name": "CWCHARG",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_CWCHARG",
     "connected_id": []
   },
   "I4": {
@@ -327,7 +327,7 @@
     "comp_name": "P",
     "comp_name_size": 14,
     "para_name": "PVCT",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_PVCT",
     "connected_id": []
   },
   "I3": {
@@ -339,7 +339,7 @@
     "comp_name": "L",
     "comp_name_size": 14,
     "para_name": "ZVCT",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_ZVCT",
     "connected_id": []
   },
   "V3": {
@@ -348,7 +348,7 @@
     "x": 90.0,
     "y": 642.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_LV616",
     "comp_name": "LV616",
     "comp_name_direction": "Right",
     "para_name": "LV616",
@@ -410,7 +410,7 @@
     "x": 155.0,
     "y": 234.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_BLV614",
     "comp_name": "BLV614",
     "comp_name_direction": "Right",
     "para_name": "BLV614",
@@ -425,7 +425,7 @@
     "comp_name": "F",
     "comp_name_size": 14,
     "para_name": "WDEMI",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_WDEMI",
     "connected_id": []
   },
   "L23": {
@@ -444,9 +444,9 @@
     "x": 292.0,
     "y": 348.0,
     "direction": "L",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_MakePP",
     "comp_name": "Make PP",
-    "para_name": "iTestS",
+    "para_name": "MakePP",
     "connected_id": []
   },
   "L26": {
@@ -469,7 +469,7 @@
     "comp_name": "Hold-up",
     "comp_name_direction": "Top",
     "comp_name_size": 16,
-    "alarm_name": "iTestA"
+    "alarm_name": "A_Hold-up"
   },
   "L25": {
     "Id": "L25",
@@ -509,8 +509,8 @@
     "unit": "kg/hr",
     "comp_name": "F",
     "comp_name_size": 14,
-    "para_name": "iTestS",
-    "alarm_name": "iTestA",
+    "para_name": "MakePPFlow",
+    "alarm_name": "A_MakePPFlow",
     "connected_id": []
   },
   "N1": {
@@ -523,7 +523,7 @@
     "comp_name": "Make-up Tank",
     "comp_name_direction": "Top",
     "comp_name_size": 16,
-    "alarm_name": "iTestA"
+    "alarm_name": "A_MakeupTank"
   },
   "L30": {
     "Id": "L30",
@@ -554,7 +554,7 @@
     "comp_name": "F",
     "comp_name_size": 14,
     "para_name": "RTFLOW",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_RTFLOW",
     "connected_id": []
   },
   "L32": {
@@ -587,7 +587,7 @@
     "comp_name": "ION",
     "comp_name_direction": "Top",
     "comp_name_size": 16,
-    "alarm_name": "iTestA"
+    "alarm_name": "A_ION"
   },
   "L34": {
     "Id": "L34",
@@ -605,7 +605,7 @@
     "x": 406.0,
     "y": 113.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_BLV143",
     "comp_name": "BLV143",
     "comp_name_direction": "Right",
     "para_name": "BLV143",
@@ -667,7 +667,7 @@
     "x": 703.0,
     "y": 17.0,
     "direction": "H",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_HV3",
     "comp_name": "HV3",
     "comp_name_direction": "Bottom",
     "para_name": "HV3",
@@ -679,7 +679,7 @@
     "x": 701.0,
     "y": 72.0,
     "direction": "H",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_HV2",
     "comp_name": "HV2",
     "comp_name_direction": "Bottom",
     "para_name": "HV2",
@@ -691,7 +691,7 @@
     "x": 701.0,
     "y": 127.0,
     "direction": "H",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_HV1",
     "comp_name": "HV1",
     "comp_name_direction": "Bottom",
     "para_name": "HV1",
@@ -703,7 +703,7 @@
     "x": 438.0,
     "y": 173.0,
     "direction": "H",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_BLV143",
     "comp_name": "BLV143",
     "comp_name_direction": "Bottom",
     "para_name": "BLV143",
@@ -719,7 +719,7 @@
     "comp_name": "L/D HX",
     "comp_name_direction": "Right",
     "comp_name_size": 12,
-    "alarm_name": "iTestA"
+    "alarm_name": "A_LDHX"
   },
   "L40": {
     "Id": "L40",
@@ -841,7 +841,7 @@
     "comp_name": "HX",
     "comp_name_direction": "Right",
     "comp_name_size": 16,
-    "alarm_name": "iTestA"
+    "alarm_name": "A_HX"
   },
   "N5": {
     "Id": "N5",
@@ -853,7 +853,7 @@
     "comp_name": "PZR",
     "comp_name_direction": "Top",
     "comp_name_size": 16,
-    "alarm_name": "iTestA"
+    "alarm_name": "A_PZR"
   },
   "I7": {
     "Id": "I7",
@@ -864,7 +864,7 @@
     "comp_name": "L",
     "comp_name_size": 16,
     "para_name": "DEPRZAVGNO",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_DEPRZAVGNO",
     "connected_id": []
   },
   "V12": {
@@ -873,7 +873,7 @@
     "x": 755.0,
     "y": 675.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_LV459",
     "comp_name": "LV459",
     "comp_name_direction": "Right",
     "para_name": "LV459",
@@ -925,7 +925,7 @@
     "x": 756.0,
     "y": 752.0,
     "direction": "V",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_LV460",
     "comp_name": "LV460",
     "comp_name_direction": "Right",
     "para_name": "LV460",
@@ -967,7 +967,7 @@
     "x": 914.0,
     "y": 993.0,
     "direction": "H",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_BHV41",
     "comp_name": "BHV41",
     "comp_name_direction": "Bottom",
     "para_name": "WEXLD",
@@ -982,7 +982,7 @@
     "comp_name": "F",
     "comp_name_size": 14,
     "para_name": "WLETDNO4",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_WLETDNO4",
     "connected_id": []
   },
   "I9": {
@@ -994,7 +994,7 @@
     "comp_name": "P",
     "comp_name_size": 16,
     "para_name": "PPRZNNO",
-    "alarm_name": "iTestA",
+    "alarm_name": "A_PPRZNNO",
     "connected_id": []
   },
   "L58": {
@@ -1015,8 +1015,8 @@
     "unit": "kg/cm^2",
     "comp_name": "F",
     "comp_name_size": 14,
-    "para_name": "iTestS",
-    "alarm_name": "iTestA",
+    "para_name": "WEXLD",
+    "alarm_name": "A_WEXLD",
     "connected_id": []
   }
 }

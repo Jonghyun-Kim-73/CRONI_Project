@@ -31,13 +31,24 @@ class CNS(QWidget):
         lay2.addWidget(change_val_btn)
         lay2.addWidget(self.paraname)
         lay2.addWidget(self.paraval)
-
         self.mes = QLabel('')
+        
+        lay3 = QHBoxLayout()
+        change_val_cvcs_btn = QPushButton('ChangeVal_CVCS', self)
+        change_val_cvcs_btn.clicked.connect(self.change_val_cvcs)
+        self.paraname_cvcs = QLineEdit('para_name')
+        self.paraval_cvcs = QLineEdit('para_val')
+        lay3.addWidget(change_val_cvcs_btn)
+        lay3.addWidget(self.paraname_cvcs)
+        lay3.addWidget(self.paraval_cvcs)
+        self.mes_cvcs = QLabel('')
 
         lay.addWidget(one_step_btn)
         lay.addWidget(self.run_btn)
         lay.addLayout(lay2)
         lay.addWidget(self.mes)
+        lay.addLayout(lay3)
+        lay.addWidget(self.mes_cvcs)
         
         self.startTimer(600) # 600ms로 one_step 호출함. self.run_ 함수 참고
 
@@ -75,6 +86,21 @@ class CNS(QWidget):
 
         self.paraname.setText('para_name')
         self.paraval.setText('para_val')
+        
+    def change_val_cvcs(self):
+        if self.ShMem.check_cvcs_para_name(self.paraname_cvcs.text()):
+            self.mes_cvcs.setText(f'{self.paraname_cvcs.text()} 변수 있음.')
+            if self.paraval_cvcs.text().isdigit():
+                self.mes_cvcs.setText(f'{self.paraname_cvcs.text()} 변수는 {self.paraval_cvcs.text()} 로 변경됨.')
+                o = int(self.paraval_cvcs.text()) if self.ShMem.check_cvcs_para_type(self.paraname_cvcs.text()) == 0 else float(self.paraval_cvcs.text())
+                self.ShMem.change_cvcs_para_val(self.paraname_cvcs.text(), o)
+            else:
+                self.mes_cvcs.setText(f'{self.paraval_cvcs.text()} 은 숫자가 아님.')
+        else:
+            self.mes_cvcs.setText(f'{self.paraname_cvcs.text()} 변수 없음.')
+
+        self.paraname_cvcs.setText('para_name')
+        self.paraval_cvcs.setText('para_val')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
