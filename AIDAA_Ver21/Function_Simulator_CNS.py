@@ -80,7 +80,7 @@ class CNS(QWidget):
                 o = int(self.paraval.text()) if self.ShMem.check_para_type(self.paraname.text()) == 0 else float(self.paraval.text())
                 self.ShMem.change_para_val(self.paraname.text(), o)
             else:
-                self.mes.setText(f'{self.paraval.text()} 은 숫자가 아님.')
+                self.mes.setText(f'{self.paraval_cvcs.text()} 은 숫자가 아님. 현재값:{self.ShMem.get_para_val(self.paraval.text())}')
         else:
             self.mes.setText(f'{self.paraname.text()} 변수 없음.')
 
@@ -95,7 +95,7 @@ class CNS(QWidget):
                 o = int(self.paraval_cvcs.text()) if self.ShMem.check_cvcs_para_type(self.paraname_cvcs.text()) == 0 else float(self.paraval_cvcs.text())
                 self.ShMem.change_cvcs_para_val(self.paraname_cvcs.text(), o)
             else:
-                self.mes_cvcs.setText(f'{self.paraval_cvcs.text()} 은 숫자가 아님.')
+                self.mes_cvcs.setText(f'{self.paraval_cvcs.text()} 은 숫자가 아님. 현재값:{self.ShMem.get_CVCS_para_val(self.paraname_cvcs.text())}')
         else:
             self.mes_cvcs.setText(f'{self.paraname_cvcs.text()} 변수 없음.')
 
