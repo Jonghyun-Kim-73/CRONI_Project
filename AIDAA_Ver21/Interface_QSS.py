@@ -14,9 +14,9 @@ def builder(objecttype:str, objectname:str, contents:list):
     qss_info += '}'
     
     return qss_info
-def rgb_to_qCOLOR(color_code:str):
+def rgb_to_qCOLOR(color_code:str, alpha=250):
     color_code = color_code.replace('rgb(', '').replace(')', '').replace(' ', '').split(',')
-    return QColor(int(color_code[0]), int(color_code[1]), int(color_code[2]))
+    return QColor(int(color_code[0]), int(color_code[1]), int(color_code[2]), alpha)
 def rgb_to_hex(color_code:str):
     color_code = color_code.replace('rgb(', '').replace(')', '').replace(' ', '').split(',')
     r = int(color_code[0])
@@ -29,6 +29,7 @@ Gray = 'rgb(181, 181, 181)'
 LightGray = 'rgb(231, 231, 234)'        # 배경
 LightWhite = 'rgb(255, 255, 255)'
 LightBlue = 'rgb(0, 178, 216)'
+LightYellow = 'rgb(255, 235, 0)'        # Alarm 2 Background (Mimic)
 DarkBlue = 'rgb(64, 61, 152)'
 DarkRed = 'rgb(192, 0, 0)'
 Yellow = 'rgb(255, 204, 0)'

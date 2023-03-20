@@ -7,6 +7,7 @@ from PyQt5.QtSvg import QGraphicsSvgItem, QSvgRenderer
 import json
 
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
+from AIDAA_Ver21.Function_Tool import convexhull
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.CVCS.Core_CVCS_mem import *
 from AIDAA_Ver21.Interface_QSS import *
@@ -65,6 +66,9 @@ class ActionMimicScene(ABCGraphicsScene):
         self.addItem(ActionMimicSceneBackground(self))
         # Edit Mode
         _ = self.addItem(ActionMimicSceneEditModeIndicator(self)) if self.edit_mode else None
+        # AlarmArea Level 1 & 2
+        _ = self.addItem(AlarmAreaLv1(self))
+        _ = self.addItem(AlarmAreaLv2(self))
         # load json file
         with open('./Interface_AIDAA_ActionMimic.json', encoding='UTF8') as f:
             self.ItemAgs = json.load(f)
@@ -108,6 +112,7 @@ class ActionMimicScene(ABCGraphicsScene):
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         [item.update_state() for item in self.ItemBox.values()]
+        self.draw_alarm_area()
         return super().timerEvent(a0)
 
     def mousePressEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
@@ -187,6 +192,25 @@ class ActionMimicScene(ABCGraphicsScene):
                     self.edit_mode_trigger()
                     self.load_scene()
         return super().contextMenuEvent(event)
+    # --------------------------------------------------------------------------------------
+    # 비정상 영역 Boundary
+    # --------------------------------------------------------------------------------------
+    def draw_alarm_area(self):
+        def get_alarm_points(level):
+            points = []
+            for item_ in self.ItemBox.values():
+                if item_.get_alarm_level() is not None:
+                    if item_.get_alarm_level() != 0 and item_.get_alarm_level() >= level:
+                        sceneBoundingRect:QRectF = item_.sceneBoundingRect()
+                        points.append(sceneBoundingRect.topLeft())
+                        points.append(sceneBoundingRect.topRight())
+                        points.append(sceneBoundingRect.bottomLeft())
+                        points.append(sceneBoundingRect.bottomRight())
+            if len(points) != 0:
+                points = convexhull(points)
+            return points
+        self.inmem.widget_ids['AlarmAreaLv1'].update_area(get_alarm_points(1))
+        self.inmem.widget_ids['AlarmAreaLv2'].update_area(get_alarm_points(2))
     # One_line Functions
     def edit_mode_trigger(self): self.edit_mode = True if self.edit_mode != True else False
 # ==========================================================================================
@@ -458,6 +482,8 @@ class PumpG(ABCGraphicsItemGroup):
         self.setPos(self.args['x'], self.args['y'])
         self.flow = 0.0
     
+    def get_alarm_level(self): return self.inmem.ShMem.get_CVCS_para_val(self.args['alarm_name']) # 있으면 반환 없음 None
+    
     def update_state(self):
         val = self.inmem.ShMem.get_CVCS_para_val(self.args['para_name'])
         self.comp.update_state(val)
@@ -551,7 +577,9 @@ class ValveG(ABCGraphicsItemGroup):
         self.setFlag(QGraphicsItem.ItemIsMovable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.setPos(self.args['x'], self.args['y'])
         self.flow = 0.0
-        
+    
+    def get_alarm_level(self): return self.inmem.ShMem.get_CVCS_para_val(self.args['alarm_name']) # 있으면 반환 없음 None
+    
     def update_state(self):
         val = self.inmem.ShMem.get_CVCS_para_val(self.args['para_name'])
         self.comp.update_state(val)
@@ -649,6 +677,8 @@ class ImgG(ABCGraphicsItemGroup):
         self.setFlag(QGraphicsItem.ItemIsMovable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.setPos(self.args['x'], self.args['y'])
         self.flow = 0.0
+
+    def get_alarm_level(self): return self.inmem.ShMem.get_CVCS_para_val(self.args['alarm_name']) # 있으면 반환 없음 None
 
     def update_state(self):
         self.compLabel.update()
@@ -748,7 +778,9 @@ class IndiG(ABCGraphicsItemGroup):
         self.setPos(self.args['x'], self.args['y'])
         #
         self.flow = 0.0
-
+    
+    def get_alarm_level(self): return self.inmem.ShMem.get_CVCS_para_val(self.args['alarm_name']) # 있으면 반환 없음 None
+    
     def update_state(self):
         val = self.inmem.ShMem.get_CVCS_para_val(self.args['para_name'])
         self.comp.update()
@@ -860,7 +892,9 @@ class LineG(ABCGraphicsItemGroup):
         self.setFlag(QGraphicsItem.ItemIsSelectable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.setFlag(QGraphicsItem.ItemIsMovable, self.inmem.widget_ids['ActionMimicScene'].edit_mode)
         self.flow = 0.0
-        
+    
+    def get_alarm_level(self): return None # 반환 없음 None
+    
     def update_state(self):
         if self.flow > 0:
             self.flow = 1 if self.flow >= 1 else self.flow
@@ -983,3 +1017,34 @@ class LineG(ABCGraphicsItemGroup):
         self.addToGroup(self.Pipe)
         self.addToGroup(self.Arrowhead)
         self.setPos(0, 0)
+# ==========================================================================================
+# Alarm Polygone
+# ==========================================================================================
+class AlarmAreaLv1(ABCGraphicsPolygonItem):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.update_area([])
+        
+    def update_area(self, points):
+        # if len(points) == 0:
+        self.setPolygon(QPolygonF(points))
+        self.setBrush(QBrush(rgb_to_qCOLOR(LightBlue), Qt.BrushStyle.SolidPattern))
+        self.setPen(QPen(rgb_to_qCOLOR(LightBlue), 25.0, cap=Qt.PenCapStyle.RoundCap))
+        
+    def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem', widget: typing.Optional[QWidget] = ...) -> None:
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        return super().paint(painter, option, widget)
+class AlarmAreaLv2(ABCGraphicsPolygonItem):
+    def __init__(self, parent, widget_name=''):
+        super().__init__(parent, widget_name)
+        self.update_area([])
+        
+    def update_area(self, points):
+        # if len(points) == 0:
+        self.setPolygon(QPolygonF(points))
+        self.setBrush(QBrush(rgb_to_qCOLOR(LightYellow), Qt.BrushStyle.SolidPattern))
+        self.setPen(QPen(rgb_to_qCOLOR(LightYellow), 10.0, cap=Qt.PenCapStyle.RoundCap))
+        
+    def paint(self, painter: QPainter, option: 'QStyleOptionGraphicsItem', widget: typing.Optional[QWidget] = ...) -> None:
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        return super().paint(painter, option, widget)

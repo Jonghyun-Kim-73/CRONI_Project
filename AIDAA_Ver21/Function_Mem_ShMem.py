@@ -20,7 +20,7 @@ class ShMem:
     
     # - CVCS part -------------------------------------------------------------------------------------------------------
     def update_CVCS(self):                    self.CVCS.step()
-    def get_CVCS_para_val(self, para):        return self.CVCS.mem[para]['V']
+    def get_CVCS_para_val(self, para):        return self.CVCS.mem[para]['V'] if para in self.CVCS.mem.keys() else None
     # - Normal part -----------------------------------------------------------------------------------------------------
     def make_cns_mem(self, max_len, db_path='./db.txt', db_add_path='./db_add.txt'):
         # 초기 shared_mem의 구조를 선언한다.
