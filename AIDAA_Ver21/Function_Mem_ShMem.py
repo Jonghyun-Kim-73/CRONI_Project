@@ -52,6 +52,7 @@ class ShMem:
     def get_para_list(self, para):        return self.mem[para]['List']
     def get_mem(self):                    return self.mem
     def get_alarmdb(self):                return self.AlarmDB.alarmdb
+    def get_alarms(self):                 return self.AlarmDB.get_alarms()
     def get_on_alarms(self):              return self.AlarmDB.get_on_alarms()
     def get_on_alarms_val(self):          return self.AlarmDB.get_on_alarms_val()
     def get_alarm_val(self, para):        return self.AlarmDB.get_alarm_val(para)
