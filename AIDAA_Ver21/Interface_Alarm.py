@@ -4,6 +4,8 @@ from PyQt5.QtGui import *
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_QSS import *
+from AIDAA_Ver21.Interface_Alarm_Pop import Popup
+
 class MainAlarm(ABCWidget):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
@@ -236,6 +238,8 @@ class AlarmTable(ABCTableWidget):
         self.widget_timer(500, [self.dis_update])
         self.dis_alarm_list = []
 
+        self.doubleClicked.connect(self.call_double_click) # 더블 클릭시 PDF 활성화 기능 추가
+
     def paintEvent(self, e: QPaintEvent) -> None:
         super(AlarmTable, self).paintEvent(e)
         qp = QPainter(self.viewport())
@@ -250,6 +254,21 @@ class AlarmTable(ABCTableWidget):
             if i % 5 == 0:
                 qp.setPen(QPen(rgb_to_qCOLOR(DarkGray), 3))
                 qp.drawLine(0, i * self.hcell, self.width(), i * self.hcell)
+
+    def call_double_click(self, index):
+        selected_row = self.selectedIndexes()[0].row()
+        for alarm_name in self.inmem.ShMem.get_alarmdb().keys():
+            if f"{' ' + self.inmem.ShMem.get_alarmdb()[alarm_name]['Des']}" == self.item(selected_row, 0).text():
+                print(alarm_name)
+                self.popup = Popup(file_path=f'D:/CRONI_Interface/AIDAA_Ver21/Alarm_procedures/{alarm_name}.pdf', alarm_des=alarm_name)
+                self.popup.show()
+
+
+        # alarm_des = self.inmem.shmem.get_alarm_des(self.inmem.get_w_id('WAlarmTableModel').get_row_alarm_name(index))
+        # if alarm_des != '':
+        #     self.popup = Popup(file_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "test.pdf")),
+        #                        alarm_des=alarm_des)
+        #     self.popup.show()
 
     def dis_update(self):
         new_alarm_list = self.update_dis_alarm_list()

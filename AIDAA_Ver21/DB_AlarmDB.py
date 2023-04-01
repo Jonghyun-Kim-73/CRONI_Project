@@ -916,6 +916,9 @@ class AlarmDB:
         alarms = [k if self.alarmdb[k]['Val'] == 1 else 0 for k in self.alarmdb.keys()]
         return [] if alarms is None else [i for i in alarms if i != 0]
 
+    def get_alarms(self):
+        return self.alarmdb.keys()
+
     def get_on_alarms_val(self):
         return [self.alarmdb[k]['Value'] for k in self.get_on_alarms()]
 
