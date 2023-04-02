@@ -263,13 +263,6 @@ class AlarmTable(ABCTableWidget):
                 self.popup = Popup(file_path=f'D:/CRONI_Interface/AIDAA_Ver21/Alarm_procedures/{alarm_name}.pdf', alarm_des=alarm_name)
                 self.popup.show()
 
-
-        # alarm_des = self.inmem.shmem.get_alarm_des(self.inmem.get_w_id('WAlarmTableModel').get_row_alarm_name(index))
-        # if alarm_des != '':
-        #     self.popup = Popup(file_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "test.pdf")),
-        #                        alarm_des=alarm_des)
-        #     self.popup.show()
-
     def dis_update(self):
         new_alarm_list = self.update_dis_alarm_list()
         self.setRowCount(len(self.dis_alarm_list))

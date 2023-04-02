@@ -464,13 +464,27 @@ class ProcedureCheckTable(ABCTableWidget):
 
         if type_ == 'Sys_name':
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 시스템 명: {name[:15]}")
-
-            symptom_count = 10
+            #  1. 시스템 이름 별 알람 매칭
+            alarmdb = self.inmem.ShMem.get_alarmdb()
+            dis_alarm = {'name': [],'Des': [], 'Value': [], 'Setpoint': [], 'Unit': []}
+            for alarm_name in alarmdb:
+                if alarmdb[alarm_name]['System'] == name:
+                    dis_alarm['name'].append(alarm_name)
+                    dis_alarm['Des'].append(alarmdb[alarm_name]['Des'])
+            true_alarm = self.inmem.ShMem.get_on_alarms()
+            symptom_count = len(dis_alarm['Des'])
             self.setRowCount(symptom_count)
-            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' ...', False)) for i in range(symptom_count)]
-            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...', False)) for i in range(symptom_count)]
-            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...', False)) for i in range(symptom_count)]
-            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...', False)) for i in range(symptom_count)]
+            for i in range(symptom_count):
+                if dis_alarm['name'][i] in true_alarm:
+                    self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {dis_alarm["Des"][i]}', True))
+                    self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...', True))
+                    self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...', True))
+                    self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...', True))
+                else:
+                    self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {dis_alarm["Des"][i]}', False))
+                    self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...', False))
+                    self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...', False))
+                    self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...', False))
 
         if type_ == 'Init':
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 비정상절차서:")

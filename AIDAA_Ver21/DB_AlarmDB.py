@@ -142,7 +142,7 @@ class AlarmDB:
             'KLAMPO323': {'Val': 0, 'Value': 'ZCNDTK', 'Des': 'Condensate stor Tk level lo-lo', 'Setpoint': 7.57, 'Unit': 'M', 'System': '복수 계통'},
             'KLAMPO324': {'Val': 0, 'Value': 'ZCNDTK', 'Des': 'Condensate stor Tk level hi', 'Setpoint': 'CZCTKH', 'Unit': 'M', 'System': '복수 계통'},
 
-            'KLAMPO325': {'Val': 0, 'Value': 'BHV108', 'Des': 'MSIV tripped', 'Setpoint': '', 'Unit': ''}, # 분할 경보
+            'KLAMPO325': {'Val': 0, 'Value': 'BHV108', 'Des': 'MSIV tripped', 'Setpoint': '', 'Unit': '', 'System': ''}, # 분할 경보
             'KLAMPO325_1': {'Val': 0, 'Value': 'BHV108', 'Des': 'MSIV 1 tripped', 'Setpoint': 0, 'Unit': '', 'System': '주증기 계통'}, # 분할 경보
             'KLAMPO325_2': {'Val': 0, 'Value': 'BHV208', 'Des': 'MSIV 2 tripped', 'Setpoint': 0, 'Unit': '', 'System': '주증기 계통'}, # 분할 경보
             'KLAMPO325_3': {'Val': 0, 'Value': 'BHV308', 'Des': 'MSIV 3 tripped', 'Setpoint': 0, 'Unit': '', 'System': '주증기 계통'}, # 분할 경보
