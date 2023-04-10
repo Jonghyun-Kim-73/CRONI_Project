@@ -136,6 +136,17 @@ class ShMem:
 
     def get_pro_procedure_contents(self, pro_name, title):
         return ab_pro[pro_name][title]
+    def get_system_alarm_num(self):
+        system_alarm = {'화학 및 체적 제어계통': [], '원자로 냉각재 계통': [], '주급수 계통': [],
+                        '보조 급수 계통': [], '제어봉 제어 계통': [], '잔열 제거 계통': [], '주증기 계통': [],
+                        '복수 계통': [], '터빈 계통': [], '전기 계통': []}
+        alarm_list = [alarm_name for alarm_name in self.get_on_alarms()]
+        alarmdb = self.get_alarmdb()
+        for alarm_name in alarm_list:
+            for system_name in system_alarm:
+                if system_name == alarmdb[alarm_name]['System']:
+                    system_alarm[system_name].append(alarm_name)
+        return system_alarm
 # ----------------------------------------------------------------------------------------------------------------------
 
 

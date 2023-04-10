@@ -5,6 +5,7 @@ from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_QSS import *
 from AIDAA_Ver21.Interface_Alarm_Pop import Popup
+from datetime import datetime
 
 class MainAlarm(ABCWidget):
     def __init__(self, parent, widget_name=''):
@@ -279,286 +280,32 @@ class AlarmTable(ABCTableWidget):
             self.setItemDelegateForColumn(row, delegate)
 
         for alarm_name in new_alarm_list:
-            '''
-            1. 분할 경보
-                1.1. 단순 분할 경보
-                1.2. 다중 변수 분할 경보
-                1.3. 계산식 포함 분할 경보
-            2. 다중 변수
-                2.1. 단순 다중 변수
-                2.2. 계산식 포함 다중 변수
-            3. 계산식 포함
-            4. 기타
-            '''
-            # 1.1 단순 분할 경보
-            if alarm_name[:-2] == 'KLAMPO321' or alarm_name[:-2] == 'KLAMPO325' or alarm_name[:-2] == 'KLAMPO328' or alarm_name[:-2] == 'KLAMPO329' or alarm_name[:-2] == 'KLAMPO332' or alarm_name[:-2] == 'KLAMPO265' or alarm_name[:-2] == 'KLAMPO314' or alarm_name[:-2] == 'KLAMPO338':
-                self.insertRow(0)
-                self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)))}'))  # Value
-                if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == float:
-                    self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
-                else: # Setpoint가 변수 이름일 경우
-                    self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)))}'))  # Setpoint
-                self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
-                self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
+            self.time_freeze = datetime.now()  # 현재 시간 Pick 하고 Freeze
+            current_time = self.time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
+            real_time = current_time.strftime('%y.%m.%d') # Date
+            real_time2 = current_time.strftime("%H:%M:%S") # Time
 
-            # 1.2 다중 변수 분할 경보
-            elif alarm_name[:-2] == 'KLAMPO316' or alarm_name[:-2] == 'KLAMPO326':
-                if alarm_name[:-2] == 'KLAMPO316':
-                    for i in range(2):
-                        self.insertRow(0)
-                        self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i]))}'))  # Value
-                        if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                        else:  # Setpoint가 변수 이름일 경우
-                            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]))}'))  # Setpoint
-                        self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
-                        if i == 1:
-                            self.setSpan(0, 0, 2, 1)
-                            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                            self.setSpan(0, 4, 2, 1)
-                            self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                            self.setSpan(0, 5, 2, 1)
-                            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-                elif alarm_name[:-2] == 'KLAMPO326':
-                    for i in range(2):
-                        self.insertRow(0)
-                        if i == 0:
-                            print(abs(self.inmem.ShMem.get_para_list(self.inmem.ShMem.get_alarm_val(alarm_name)[i])[-2] - (self.inmem.ShMem.get_para_list(self.inmem.ShMem.get_alarm_val(alarm_name)[i])[-1] * 5.0)))
-                            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(abs(self.inmem.ShMem.get_para_list(self.inmem.ShMem.get_alarm_val(alarm_name)[i])[-2] - (self.inmem.ShMem.get_para_list(self.inmem.ShMem.get_alarm_val(alarm_name)[i])[-1] * 5.0)))}'))  # Value
-                        else:
-                            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i]))}'))  # Value
-                        if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                        else:  # Setpoint가 변수 이름일 경우
-                            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]))}'))  # Setpoint
-                        self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
-                        if i == 1:
-                            self.setSpan(0, 0, 2, 1)
-                            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                            self.setSpan(0, 4, 2, 1)
-                            self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                            self.setSpan(0, 5, 2, 1)
-                            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-
-            # 1.3 계산식 포함 분할 경보
-            elif alarm_name[:-2] == 'KLAMPO254' or alarm_name[:-2] == 'KLAMPO315' or alarm_name[:-2] == 'KLAMPO319' or alarm_name[:-2] == 'KLAMPO320' or alarm_name[:-2] == 'KLAMPO327':
-                # 공통 정보 먼저 표기
-                self.insertRow(0)
-                self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
-                self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-                if alarm_name[:-2] == 'KLAMPO254':
-                    if self.inmem.ShMem.get_para_val('UMAXDT') == 0 or self.inmem.ShMem.get_para_val('CDT100') == 0:
-                        RDTEMP = 0
-                    else:
-                        RDTEMP = (self.inmem.ShMem.get_para_val('UMAXDT') / self.inmem.ShMem.get_para_val('CDT100')) * 100.0
-                    if RDTEMP >= 100.0: RDTEMP = 100.
-                    if RDTEMP <= 0.0: RDTEMP = 0.
-                    if True:
-                        CRIL = {1: 1.818, 2: 1.824, 3: 1.818, 4: 208.0,
-                                5: 93.0, 6: -22.0, 7: 12.0}
-                        # Control A
-                        KRIL1 = 228
-                        # Control B
-                        KRIL2 = int(CRIL[1] * RDTEMP + CRIL[4])
-                        if KRIL2 >= 228: KRIL2 = 228
-                        # Control C
-                        KRIL3 = int(CRIL[2] * RDTEMP + CRIL[5])
-                        if KRIL3 >= 228: KRIL3 = 228
-                        # Control D
-                        if RDTEMP >= CRIL[7]:
-                            KRIL4 = int(CRIL[3] * RDTEMP + CRIL[6])
-                            if KRIL4 >= 160: KRIL4 = 160
-                            if KRIL4 <= 0: KRIL4 = 0
-                        else:
-                            KRIL4 = 0
-
-                    setpoint_dic = {'1': KRIL1, '2': KRIL2, '3': KRIL3, '4': KRIL4}
-
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)))}'))  # Value
-                    self.setItem(0, 2, QTableWidgetItem(f'{" " + str(setpoint_dic[alarm_name[-1]])}'))  # Setpoint
-                elif alarm_name[:-2] == 'KLAMPO315':
-                    RUAVMX = max(self.inmem.ShMem.get_para_val('UAVLEG1'), self.inmem.ShMem.get_para_val('UAVLEG2'), self.inmem.ShMem.get_para_val('UAVLEG3'))
-                    RAVGT = {'1': abs(self.inmem.ShMem.get_para_val('UAVLEG1') - RUAVMX), '2': abs(self.inmem.ShMem.get_para_val('UAVLEG2') - RUAVMX), '3': abs(self.inmem.ShMem.get_para_val('UAVLEG3') - RUAVMX)}
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(RAVGT[alarm_name[-1]])}'))  # Value
-                    if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == float:
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
-                    else:  # Setpoint가 변수 이름일 경우
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)))}'))  # Setpoint
-                elif alarm_name[:-2] == 'KLAMPO319':
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name))*0.01)}'))  # Value
-                    if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == float:
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
-                    else:  # Setpoint가 변수 이름일 경우
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)))}'))  # Setpoint
-                elif alarm_name[:-2] == 'KLAMPO320':
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[0])-self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[1]))}'))  # Value
-                    if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == float:
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
-                    else:  # Setpoint가 변수 이름일 경우
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name))*0.1)}'))  # Setpoint
-                elif alarm_name[:-2] == 'KLAMPO327':
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(abs(self.inmem.ShMem.get_para_list(self.inmem.ShMem.get_alarm_val(alarm_name))[-2] - self.inmem.ShMem.get_para_list(self.inmem.ShMem.get_alarm_val(alarm_name))[-1] * 5.0))}'))  # Value
-                    if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == float:
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
-                    else:  # Setpoint가 변수 이름일 경우
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)))}'))  # Setpoint
-
-            #  2.1 단순 다중 변수
-            elif alarm_name == 'KLAMPO269' or alarm_name == 'KLAMPO301' or alarm_name == 'KLAMPO312' or alarm_name == 'KLAMPO337' or alarm_name == 'KLAMPO339' or alarm_name == 'KLAMPO340':
+            if type(self.inmem.ShMem.get_alarm_val(alarm_name)) == list:
                 for i in range(2):
                     self.insertRow(0)
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i]))}'))  # Value
-                    if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                    else:  # Setpoint가 변수 이름일 경우
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]))}'))  # Setpoint
-                    self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
+                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_val(alarm_name)[i])}'))  # Value
+                    self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
+                    self.setItem(0, 3, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_unit(alarm_name)[i])}'))  # Unit
                     if i == 1:
                         self.setSpan(0, 0, 2, 1)
                         self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
                         self.setSpan(0, 4, 2, 1)
-                        self.setItem(0, 4, QTableWidgetItem('0'))  # Date
+                        self.setItem(0, 4, QTableWidgetItem(f'{real_time}'))  # Date
                         self.setSpan(0, 5, 2, 1)
-                        self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-
-            # 2.2 계산식 포함 다중 변수
-            elif alarm_name == 'KLAMPO256' or alarm_name == 'KLAMPO310' or alarm_name == 'KLAMPO311' or alarm_name == 'KLAMPO313':
-                if alarm_name == 'KLAMPO256':
-                    for i in range(2):
-                        self.insertRow(0)
-                        self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i]))}'))  # Value
-                        if i == 1:
-                            if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                            else:  # Setpoint가 변수 이름일 경우
-                                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])-0.75)}'))  # Setpoint
-                        else:
-                            if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                            else:  # Setpoint가 변수 이름일 경우
-                                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]))}'))  # Setpoint
-                        self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
-                        if i == 1:
-                            self.setSpan(0, 0, 2, 1)
-                            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                            self.setSpan(0, 4, 2, 1)
-                            self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                            self.setSpan(0, 5, 2, 1)
-                            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-                elif alarm_name == 'KLAMPO310':
-                    for i in range(2):
-                        self.insertRow(0)
-                        if i == 0:
-                            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i])/100)}'))  # Value
-                        else:
-                            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i]))}'))  # Value
-                        if i == 0:
-                            if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                            else:  # Setpoint가 변수 이름일 경우
-                                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])+self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i+1]))}'))  # Setpoint
-                        else:
-                            if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                            else:  # Setpoint가 변수 이름일 경우
-                                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i+1]))}'))  # Setpoint
-                        self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
-                        if i == 1:
-                            self.setSpan(0, 0, 2, 1)
-                            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                            self.setSpan(0, 4, 2, 1)
-                            self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                            self.setSpan(0, 5, 2, 1)
-                            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-                elif alarm_name == 'KLAMPO311':
-                    for i in range(2):
-                        self.insertRow(0)
-                        if i == 0:
-                            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i])/100)}'))  # Value
-                        else:
-                            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i]))}'))  # Value
-                        if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                        else:  # Setpoint가 변수 이름일 경우
-                            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]))}'))  # Setpoint
-                        self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
-                        if i == 1:
-                            self.setSpan(0, 0, 2, 1)
-                            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                            self.setSpan(0, 4, 2, 1)
-                            self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                            self.setSpan(0, 5, 2, 1)
-                            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-                elif alarm_name == 'KLAMPO313':
-                    for i in range(2):
-                        self.insertRow(0)
-                        if i == 0:
-                            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i])-self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i+1]))}'))  # Value
-                        else:
-                            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i+1])-self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[i+2]))}'))  # Value
-                        if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]) == float:
-                            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
-                        else:  # Setpoint가 변수 이름일 경우
-                            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i]))}'))  # Setpoint
-                        self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)[i]}'))  # Unit
-                        if i == 1:
-                            self.setSpan(0, 0, 2, 1)
-                            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                            self.setSpan(0, 4, 2, 1)
-                            self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                            self.setSpan(0, 5, 2, 1)
-                            self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-
-            # 3. 계산식 포함
-            elif alarm_name == 'KLAMPO255' or alarm_name == 'KLAMPO258' or alarm_name == 'KLAMPO302' or alarm_name == 'KLAMPO303' or alarm_name == 'KLAMPO304' or alarm_name == 'KLAMPO318' or alarm_name == 'KLAMPO334':
-                # 공통 정보 먼저 표기
+                        self.setItem(0, 5, QTableWidgetItem(f'{real_time2}'))  # Time
+            else:
                 self.insertRow(0)
                 self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
-                self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
-                if alarm_name == 'KLAMPO258':
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)))}'))  # Value
-                    if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == float:
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
-                    else:  # Setpoint가 변수 이름일 경우
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name))-1.5)}'))  # Setpoint
-                else:
-                    if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == float:
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
-                    else:  # Setpoint가 변수 이름일 경우
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)))}'))  # Setpoint
-                    if alarm_name == 'KLAMPO255':
-                        IROD = 0
-                        for _ in range(1, 53):
-                            if self.inmem.ShMem.get_para_val([f'KZROD{_}']) < 0.0:
-                                IROD += 1
-                        self.setItem(0, 1, QTableWidgetItem(f'{" " + str(IROD)}'))  # Value
-                    elif alarm_name == 'KLAMPO302' or alarm_name == 'KLAMPO303' or alarm_name == 'KLAMPO304':
-                        self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[0])*self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)[1]))}'))  # Value
-                    elif alarm_name == 'KLAMPO318':
-                        self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)) - 0.98E5)}'))  # Value
-                    elif alarm_name == "KLAMPO334":
-                        self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)) * 0.047)}'))  # Value
-
-            # 4. 기타
-            else:
-                if alarm_name == 'KLAMPO325': pass
-                else:
-                    self.insertRow(0)
-                    self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_val(alarm_name)))}'))  # Value
-                    if type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == int or type(self.inmem.ShMem.get_alarm_setpoint(alarm_name)) == float:
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
-                    else:  # Setpoint가 변수 이름일 경우
-                        self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_para_val(self.inmem.ShMem.get_alarm_setpoint(alarm_name)))}'))  # Setpoint
-                    self.setItem(0, 3, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_unit(alarm_name)}'))  # Unit
-                    self.setItem(0, 4, QTableWidgetItem('0'))  # Date
-                    self.setItem(0, 5, QTableWidgetItem(f'{self.inmem.get_time()}'))  # Time
+                self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_val(alarm_name))}'))  # Value
+                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
+                self.setItem(0, 3, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_unit(alarm_name))}'))  # Unit
+                self.setItem(0, 4, QTableWidgetItem(f'{real_time}'))  # Date
+                self.setItem(0, 5, QTableWidgetItem(f'{real_time2}'))  # Time
     def update_dis_alarm_list(self):
         new_alarm_list = []
         for alarm_name in self.inmem.ShMem.get_on_alarms():

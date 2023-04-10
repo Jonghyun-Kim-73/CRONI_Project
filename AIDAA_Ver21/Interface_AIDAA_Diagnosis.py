@@ -327,10 +327,11 @@ class DiagnosisSystemTable(ABCTableWidget):
     def timerEvent(self, event: QTimerEvent) -> None:
         block = 'Off' if self.inmem.ShMem.get_para_val('iFixTrain') == 1 else 'On'
         self.setProperty('Block', block)
+        alarm_condition = self.inmem.ShMem.get_system_alarm_num()
         for i in range(3):
             sys_name, logic_condition, ai_probability = self.inmem.dis_AI['System'][i]
             self.cellWidget(i, 0).update_item(f' {sys_name}', sys_name, block)
-            self.cellWidget(i, 1).update_item(logic_condition, sys_name, block)
+            self.cellWidget(i, 1).update_item(f'{int(len(alarm_condition[sys_name]))}', sys_name, block)
             self.cellWidget(i, 2).update_item(ai_probability, sys_name, block)
         self.style().polish(self)
         return super().timerEvent(event)
@@ -464,27 +465,27 @@ class ProcedureCheckTable(ABCTableWidget):
 
         if type_ == 'Sys_name':
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 시스템 명: {name[:15]}")
-            #  1. 시스템 이름 별 알람 매칭
+            # 시스템 알람 추가
             alarmdb = self.inmem.ShMem.get_alarmdb()
-            dis_alarm = {'name': [],'Des': [], 'Value': [], 'Setpoint': [], 'Unit': []}
-            for alarm_name in alarmdb:
+            alarm_list = [alarm_name for alarm_name in self.inmem.ShMem.get_on_alarms()]
+            for alarm_name in alarm_list:
                 if alarmdb[alarm_name]['System'] == name:
-                    dis_alarm['name'].append(alarm_name)
-                    dis_alarm['Des'].append(alarmdb[alarm_name]['Des'])
-            true_alarm = self.inmem.ShMem.get_on_alarms()
-            symptom_count = len(dis_alarm['Des'])
-            self.setRowCount(symptom_count)
-            for i in range(symptom_count):
-                if dis_alarm['name'][i] in true_alarm:
-                    self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {dis_alarm["Des"][i]}', True))
-                    self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...', True))
-                    self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...', True))
-                    self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...', True))
-                else:
-                    self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {dis_alarm["Des"][i]}', False))
-                    self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' ...', False))
-                    self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' ...', False))
-                    self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' ...', False))
+                    if type(alarmdb[alarm_name]['Value']) == list:
+                        for i in range(2):
+                            self.insertRow(0)
+                            self.setCellWidget(0, 1, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Value"][i]}', False))  # Value
+                            self.setCellWidget(0, 2, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Setpoint"][i]}', False))  # Setpoint
+                            self.setCellWidget(0, 3, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Unit"][i]}', False))  # Unit
+                            if i == 1:
+                                self.setSpan(0, 0, 2, 1)
+                                self.setCellWidget(0, 0, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Des"]}', False))  # Description
+                    else:
+                        self.insertRow(0)
+                        self.setCellWidget(0, 0, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Des"]}', False)) # Description
+                        self.setCellWidget(0, 1, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Value"]}', False)) # Value
+                        self.setCellWidget(0, 2, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Setpoint"]}', False)) # Setpoint
+                        self.setCellWidget(0, 3, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Unit"]}', False)) # Unit
+                        # True: 페인팅 적용, False: 페인팅 미적용
 
         if type_ == 'Init':
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 비정상절차서:")
@@ -497,9 +498,12 @@ class ProcedureCheckTable(ABCTableWidget):
         [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절
         self.setFixedSize(915, 40 * self.rowCount() if 675 < 40 * self.rowCount() else 675) # Scroll 위함
 
+
+
     def timerEvent(self, event: QTimerEvent) -> None:
         if self.inmem.ShMem.get_para_val('iFixTrain') == 0:
             selected_indexes = self.inmem.widget_ids['DiagnosisProcedureTable'].selectedIndexes()
+            self.previously_alarm = [alarm_name for alarm_name in self.inmem.ShMem.get_on_alarms()]
             if len(selected_indexes) == 0:
                 self.update_table_items('Init', '')
             elif len(selected_indexes) != 0 and selected_indexes[0] != self.index_previously_selected: # 이미 선택된 경우 업데이트를 하지 않음.
@@ -507,10 +511,13 @@ class ProcedureCheckTable(ABCTableWidget):
                 self.update_table_items('Pro_name', self.inmem.widget_ids['DiagnosisProcedureTable'].cellWidget(selected_indexes[0].row(), 0).pro_name)
         else:
             selected_indexes = self.inmem.widget_ids['DiagnosisSystemTable'].selectedIndexes()
+            new_alarm = [alarm_name for alarm_name in self.inmem.ShMem.get_on_alarms()]
             if len(selected_indexes) == 0:
                 self.update_table_items('Init', '')
-            elif len(selected_indexes) != 0 and selected_indexes[0] != self.index_previously_selected: # 이미 선택된 경우 업데이트를 하지 않음.
-                self.index_previously_selected = selected_indexes[0]
+            # elif len(selected_indexes) != 0 and selected_indexes[0] != self.index_previously_selected: # 이미 선택된 경우 업데이트를 하지 않음.
+            elif new_alarm != self.previously_alarm:
+                self.previously_alarm = [alarm_name for alarm_name in self.inmem.ShMem.get_on_alarms()]
+                # self.index_previously_selected = selected_indexes[0]
                 self.update_table_items('Sys_name', self.inmem.widget_ids['DiagnosisSystemTable'].cellWidget(selected_indexes[0].row(), 0).sys_name)
         return super().timerEvent(event)
 # ----------------------------------------------------------------------------------------------------------------------
