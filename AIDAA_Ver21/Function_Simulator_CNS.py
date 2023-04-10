@@ -57,9 +57,9 @@ class CNS(QWidget):
         fix_ip_port_btn  = QPushButton('Set IP/PORT', self)
         fix_ip_port_btn.clicked.connect(self.fix_ip_port)
         self.my_com_ip    = QLineEdit(f'{self.ShMem.get_udp_my_com_ip()}')
-        self.my_com_port  = QLineEdit('7101')
-        self.cns_com_ip   = QLineEdit('121.0.0.1')
-        self.cns_com_port = QLineEdit('7102')
+        self.my_com_port  = QLineEdit('7001')
+        self.cns_com_ip   = QLineEdit('192.168.0.6')
+        self.cns_com_port = QLineEdit('7001')
         
         lay4_0.addWidget(QLabel('CNS Mode'))
         lay4_0.addWidget(self.CNSMode)
