@@ -7,6 +7,7 @@ from collections import deque
 import numpy as np
 import pandas as pd
 import pickle
+import socket
 # from keras.models import load_model
 
 
@@ -148,6 +149,13 @@ class ShMem:
                     system_alarm[system_name].append(alarm_name)
         return system_alarm
 # ----------------------------------------------------------------------------------------------------------------------
+# 통신 Part Function
+# ----------------------------------------------------------------------------------------------------------------------
+    def get_udp_my_com_ip(self):        return socket.gethostbyname(socket.getfqdn())
+    
+
+
+
 
 
 class InterfaceMem:
