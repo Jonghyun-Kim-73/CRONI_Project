@@ -100,7 +100,7 @@ class CNS(QWidget):
         self.size_buffer_mem = 46008
         self.want_tick = 5
         self.resv_sock.settimeout(5)
-        self.resv_sock.bind(('192.168.0.29', 7201)) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
+        self.resv_sock.bind(('192.168.0.2', 7101)) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
 
     def one_step(self):
         if self.CNSMode.isChecked():

@@ -280,8 +280,8 @@ class AlarmTable(ABCTableWidget):
             self.setItemDelegateForColumn(row, delegate)
 
         for alarm_name in new_alarm_list:
-            self.time_freeze = datetime.now()  # 현재 시간 Pick 하고 Freeze
-            current_time = self.time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
+            # self.time_freeze = datetime.now()  # 현재 시간 Pick 하고 Freeze
+            current_time = self.inmem.widget_ids['MainTopTime'].time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
             real_time = current_time.strftime('%y.%m.%d') # Date
             real_time2 = current_time.strftime("%H:%M:%S") # Time
 
