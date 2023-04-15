@@ -4,6 +4,7 @@ import sys
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+import socket
 
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem
 from AIDAA_Ver21.Interface_Main import Main

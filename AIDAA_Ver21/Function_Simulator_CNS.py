@@ -57,9 +57,9 @@ class CNS(QWidget):
         fix_ip_port_btn  = QPushButton('Set IP/PORT', self)
         fix_ip_port_btn.clicked.connect(self.fix_ip_port)
         self.my_com_ip    = QLineEdit(f'{self.ShMem.get_udp_my_com_ip()}')
-        self.my_com_port  = QLineEdit('7001')
-        self.cns_com_ip   = QLineEdit('192.168.0.6')
-        self.cns_com_port = QLineEdit('7001')
+        self.my_com_port  = QLineEdit('7101')
+        self.cns_com_ip   = QLineEdit('192.168.195.129')
+        self.cns_com_port = QLineEdit('7101')
         
         lay4_0.addWidget(QLabel('CNS Mode'))
         lay4_0.addWidget(self.CNSMode)
@@ -100,6 +100,7 @@ class CNS(QWidget):
         self.size_buffer_mem = 46008
         self.want_tick = 5
         self.resv_sock.settimeout(5)
+        self.resv_sock.bind(('192.168.0.29', 7201)) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
 
     def one_step(self):
         if self.CNSMode.isChecked():
@@ -152,11 +153,15 @@ class CNS(QWidget):
     def fix_ip_port(self):
         # ip / port 체크
         if self.CNSMode.isChecked():
-            try:
-                if self.resv_sock.connect_ex((self.my_com_ip.text(), int(self.my_com_port.text()))) == 0: # Success
-                    print('My_com_ip/port condition is good!')
-                else: print(f'[Error!] My_com_ip:{self.my_com_ip.text()} | My_com_port:{self.my_com_port.text()}')
-            except Exception as e: print(f'[Error!] My_com_ip:{self.my_com_ip.text()} | My_com_port:{self.my_com_port.text()} | {e}')
+            # try:
+            #     self.resv_sock.bind((self.my_com_ip.text(), int(self.my_com_port.text())))
+                
+            #     # if self.resv_sock.connect_ex((self.my_com_ip.text(), int(self.my_com_port.text()))) == 0: # Success
+            #     #     print('My_com_ip/port condition is good!')
+            #     #     self.resv_sock.close()
+            #     #     self.resv_sock.bind((self.my_com_ip.text(), int(self.my_com_port.text())))
+            #     # else: print(f'[Error!] My_com_ip:{self.my_com_ip.text()} | My_com_port:{self.my_com_port.text()}')
+            # except Exception as e: print(f'[Error!] My_com_ip:{self.my_com_ip.text()} | My_com_port:{self.my_com_port.text()} | {e}')
             try: 
                 if self.send_sock.sendto(b'\x00\x00\x00\x10\xa8\x0f', (self.cns_com_ip.text(), int(self.cns_com_port.text()))) == 6:
                     print('CNS is connected.')
@@ -210,7 +215,7 @@ class CNS(QWidget):
     def run_freeze_CNS(self):
         mem = self.ShMem.get_mem()
         old_cont = mem['KCNTOMS']['Val'] + self.want_tick
-        self._send_control_signal(['KFZRUN'], [self.want_tick + 0])
+        self._send_control_signal(['KFZRUN'], [self.want_tick + 100])
         while True:
             break_point = self._update_mem()
             if break_point == 1: break

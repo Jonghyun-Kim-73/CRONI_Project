@@ -6,8 +6,79 @@ from time import sleep
 from numpy import shape
 from collections import deque
 
-from AIDAA_Ver2.Interface.Procedure.alarm_procedure import alarm_pd
-
+#from AIDAA_Ver2.Interface.Procedure.alarm_procedure import alarm_pd
+alarm_pd = {
+    'Empty': None,
+    'KLAMPO251': 'Intermediate range high flux rod stop',
+    'KLAMPO252': 'Power range overpower rod stop',
+    'KLAMPO253': 'Control bank D full rod withdrawl',
+    'KLAMPO254': 'Control bank lo-lo limit',
+    'KLAMPO255': 'Two or more rod at bottom',
+    'KLAMPO256': 'Axial power distribution limit',
+    'KLAMPO257': 'CCWS outlet temp hi',
+    'KLAMPO258': 'Instrument air press lo',
+    'KLAMPO259': 'RWST level lo-lo',
+    'KLAMPO260': 'L/D HX outlet flow lo',
+    'KLAMPO261': 'L/D HX outlet temp hi',
+    'KLAMPO262': 'RHX L/D outlet temp hi',
+    'KLAMPO263': 'VCT level lo',
+    'KLAMPO264': 'VCT press lo',
+    'KLAMPO265': 'RCP seal inj wtr flow lo',
+    'KLAMPO266': 'Charging flow cont flow lo',
+    'KLAMPO267': 'Not used',
+    'KLAMPO268': 'L/D HX outlet flow hi',
+    'KLAMPO269': 'PRZ press lo SI',
+    'KLAMPO270': 'CTMT spray actuated',
+    'KLAMPO271': 'VCT level hi',
+    'KLAMPO272': 'VCT press hi',
+    'KLAMPO273': 'CTMT phase B iso actuated',
+    'KLAMPO274': 'Charging flow cont flow hi',
+    'KLAMPO295': 'CTMT sump level hi',
+    'KLAMPO296': 'CTMT sump level hi-hi',
+    'KLAMPO297': 'CTMT air temp hi',
+    'KLAMPO298': 'CTMT moisture hi',
+    'KLAMPO301': 'Rad hi alarm',
+    'KLAMPO302': 'CTMT press hi 1 alert',
+    'KLAMPO303': 'CTMT press hi 2 alert',
+    'KLAMPO304': 'CTMT press hi 3 alert',
+    'KLAMPO305': 'Accum. Tk press lo',
+    'KLAMPO306': 'Accum. Tk press hi',
+    'KLAMPO307': 'PRZ press hi alert',
+    'KLAMPO308': 'PRZ press lo alert',
+    'KLAMPO309': 'PRZ PORV opening',
+    'KLAMPO310': 'PRZ cont level hi heater on',
+    'KLAMPO311': 'PRZ cont level lo heater off',
+    'KLAMPO312': 'PRZ press lo back-up heater on',
+    'KLAMPO313': 'Tref/Auct. Tavg Deviation',
+    'KLAMPO314': 'RCS 1,2,3 Tavg hi',
+    'KLAMPO315': 'RCS 1,2,3 Tavg/auct Tavg hi/lo',
+    'KLAMPO316': 'RCS 1,2,3 lo flow alert',
+    'KLAMPO317': 'PRT temp hi',
+    'KLAMPO318': 'PRT press hi',
+    'KLAMPO319': 'SG 1,2,3 level lo',
+    'KLAMPO320': 'SG 1,2,3 stm/FW flow deviation',
+    'KLAMPO321': 'RCP 1,2,3 trip',
+    'KLAMPO322': 'Condensate stor Tk level lo',
+    'KLAMPO323': 'Condensate stor Tk level lo-lo',
+    'KLAMPO324': 'Condensate stor Tk level hi',
+    'KLAMPO325': 'MSIV tripped',
+    'KLAMPO326': 'MSL press rate hi steam iso',
+    'KLAMPO327': 'MSL 1,2,3 press rate hi',
+    'KLAMPO328': 'MSL 1,2,3 press low',
+    'KLAMPO329': 'AFW(MD) actuated',
+    'KLAMPO330': 'Condenser level lo',
+    'KLAMPO331': 'FW pump discharge header press hi',
+    'KLAMPO332': 'FW pump trip',
+    'KLAMPO333': 'FW temp hi',
+    'KLAMPO334': 'Condensate pump flow lo',
+    'KLAMPO335': 'Condenser abs press hi',
+    'KLAMPO336': 'Condenser level hi',
+    'KLAMPO337': 'TBN trip P-4',
+    'KLAMPO338': 'SG 1,2,3 wtr level hi-hi TBN trip',
+    'KLAMPO339': 'Condenser vacuum lo TBN trip',
+    'KLAMPO340': 'TBN overspeed hi TBN trip',
+    'KLAMPO341': 'Gen. brk open',
+}
 
 class CNS:
     def __init__(self, threrad_name, CNS_IP, CNS_Port, Remote_IP, Remote_Port, Max_len=10):
@@ -776,7 +847,7 @@ class CNS:
 
 
 if __name__ == '__main__':
-    module = CNS('Main', '192.168.0.103', 7101, '192.168.0.29', 7101)
+    module = CNS('Main', '192.168.0.29', 7201, '192.168.0.179', 7201)
     module.init_cns(1)
     print(module.mem['KFZRUN']['Val'], module.mem['KCNTOMS']['Val'])
     module._send_malfunction_signal(12, 100100, 10)
