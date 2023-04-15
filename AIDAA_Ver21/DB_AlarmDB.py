@@ -26,8 +26,8 @@ class AlarmDB:
             'KLAMPO257': {'Val': 0, 'Value': 'UCCWIN', 'Des': 'CCWS outlet temp hi', 'Setpoint': 'CUCCWH', 'Unit': '℃', 'System': '화학 및 체적 제어계통'},
             'KLAMPO258': {'Val': 0, 'Value': 'PINSTA', 'Des': 'Instrument air press lo', 'Setpoint': 'CINSTP', 'Unit': 'kg/cm²', 'System': '화학 및 체적 제어계통'},
             'KLAMPO259': {'Val': 0, 'Value': 'ZRWST', 'Des': 'RWST level lo-lo', 'Setpoint': 'CZRWSLL', 'Unit': '%', 'System': '화학 및 체적 제어계통'},
-            'KLAMPO260': {'Val': 0, 'Value': 'WNETLD', 'Des': 'L/D HX outlet flow lo', 'Setpoint': 'CWLHXL', 'Unit': 'kg/sec', 'System': '화학 및 체적 제어계통'},
-            'KLAMPO261': {'Val': 0, 'Value': 'UNRHXUT', 'Des': 'L/D HX outlet temp hi', 'Setpoint': 'CULDHX', 'Unit': '℃', 'System': '화학 및 체적 제어계통'},
+            'KLAMPO260': {'Val': 0, 'Value': 'WNETLD', 'Des': 'L/D HX outlet flow lo', 'Setpoint': 'CWLHXL', 'Unit': 'kg/sec', 'System': '화학 및 체적 제어계통'},       # Lee : CVCS Leak 시 동작.
+            'KLAMPO261': {'Val': 0, 'Value': 'UNRHXUT', 'Des': 'L/D HX outlet temp hi', 'Setpoint': 'CULDHX', 'Unit': '℃', 'System': '화학 및 체적 제어계통'},    
             'KLAMPO262': {'Val': 0, 'Value': 'URHXUT', 'Des': 'RHX L/D outlet temp hi', 'Setpoint': 'CURHX', 'Unit': '℃', 'System': '화학 및 체적 제어계통'},
             'KLAMPO263': {'Val': 0, 'Value': 'ZVCT', 'Des': 'VCT level lo', 'Setpoint': 'CZVCT2', 'Unit': '%', 'System': '화학 및 체적 제어계통'},
             'KLAMPO264': {'Val': 0, 'Value': 'PVCT', 'Des': 'VCT press lo', 'Setpoint': 'CPVCTL', 'Unit': 'kg/cm²', 'System': '화학 및 체적 제어계통'},
@@ -37,7 +37,7 @@ class AlarmDB:
             'KLAMPO265_2': {'Val': 0, 'Value': 'WRCPSI2', 'Des': 'RCP 2 seal inj wtr flow lo', 'Setpoint': 'CWRCPS', 'Unit': 'kg/sec', 'System': '원자로 냉각재 계통'},  # 분할 경보
             'KLAMPO265_3': {'Val': 0, 'Value': 'WRCPSI3', 'Des': 'RCP 3 seal inj wtr flow lo', 'Setpoint': 'CWRCPS', 'Unit': 'kg/sec', 'System': '원자로 냉각재 계통'},  # 분할 경보
 
-            'KLAMPO266': {'Val': 0, 'Value': 'WCHGNO', 'Des': 'Charging flow cont flow lo', 'Setpoint': 'CWCHGL', 'Unit': 'kg/sec', 'System': '화학 및 체적 제어계통'},
+            'KLAMPO266': {'Val': 0, 'Value': 'WCHGNO', 'Des': 'Charging flow cont flow lo', 'Setpoint': 'CWCHGL', 'Unit': 'kg/sec', 'System': '화학 및 체적 제어계통'},  # Lee : CVCS Leak 시 동작.
             'KLAMPO267': {'Val': 0, 'Value': 0, 'Des': 'Not used',  'Setpoint': '', 'Unit': '', 'System': ''}, # Not used
             'KLAMPO268': {'Val': 0, 'Value': 'WNETLD', 'Des': 'L/D HX outlet flow hi', 'Setpoint': 'CWLHXH', 'Unit': 'kg/sec', 'System': '화학 및 체적 제어계통'},
 
