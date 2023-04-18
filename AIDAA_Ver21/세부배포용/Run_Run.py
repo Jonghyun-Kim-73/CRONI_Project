@@ -6,15 +6,12 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import socket
 
-from AIDAA_Ver21.Function_Mem_ShMem import ShMem
-from AIDAA_Ver21.Interface_Main import Main
-from AIDAA_Ver21.Function_Simulator_CNS import CNS
-from AIDAA_Ver21.Function_IFAP import FunctionIFAP
+from Function_Mem_ShMem import ShMem
+from Interface_Main import Main
+from Function_IFAP import FunctionIFAP
+
 
 class Run:
-    def __init__(self):
-        pass
-
     def make_shmem(self):
         BaseManager.register('ShMem', ShMem)
         manager = BaseManager()
@@ -25,19 +22,21 @@ class Run:
     def start_process(self):
         """ MainProcess 동작 """
         mem = self.make_shmem()
-        p_list = [InterfaceRun(mem)]
-        # p_list = [FunctionIFAP(mem)]
+        p_list = [InterfaceRun(mem), FunctionIFAP(mem)]
+        #p_list = [InterfaceRun(mem)]
+        #p_list = [FunctionIFAP(mem)]
         [pr_.start() for pr_ in p_list]
         [pr_.join() for pr_ in p_list]  # finished at the same time
 
 
 class InterfaceRun(Process):
     def __init__(self, mem):
-        super(InterfaceRun, self).__init__()
+        super().__init__()
+        self.Shmem = mem
+        
+    def run(self) -> None:
         app = QApplication(sys.argv)
-        cns = CNS(mem)
-        cns.show()
-        w = Main(mem)
+        w = Main(self.Shmem)
         w.show()
         sys.exit(app.exec_())
 
