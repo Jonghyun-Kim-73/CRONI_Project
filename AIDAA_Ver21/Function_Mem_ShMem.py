@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 import pickle
 import socket
-# from keras.models import load_model
+from tensorflow.keras.models import load_model
+import shap
 
 
 class ShMem:
@@ -176,8 +177,8 @@ class InterfaceMem:
                                        16: '해당 시나리오는 학습되지 않은 시나리오입니다.', 17: '학습여부를 아직 확인할 수 없습니다.'}
         self.abnormal_procedure_list = set([key if 'Ab' in key else '' for key in  ab_pro.keys()])  # ab_pro에서 'Ab' 가진 key 만 추출 ['Ab63_04: 제어봉 낙하', 'Ab... ']
         self.abnormal_procedure_list.remove('')
-        self.abnormal_system_list = ['화학 및 체적 제어계통', '원자로 냉각재 계통', '주급수 계통', '보조 급수 계통', '제어봉 제어 계통', '잔열 제거 계통', '주증기 계통']
-        self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', '05/07', '79.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸브 후단누설', '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', '05/15', '0.76%']],
+        self.abnormal_system_list = ['화학 및 체적 제어계통', '원자로 냉각재 계통', '주급수 계통', '보조 급수 계통', '제어봉 제어 계통', '잔열 제거 계통', '주증기 계통', '복수 계통', '터빈 계통', '전기 계통']
+        self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', '05/07', '80.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸브 후단누설', '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', '05/15', '0.76%']],
                       'Train': 0,
                        'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'], ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
                        'System': [['화학 및 체적 제어계통', '5', '72%'], ['원자로 냉각재 계통', '3', '16%'], ['주급수 계통', '1', '6%'], ['제어봉 제어 계통', '1', '3%'], ['잔열 제거 계통', '1', '3%']]}# 정지냉각계통
@@ -208,12 +209,12 @@ class InterfaceMem:
         #                        'active_window': 0} # seach 비활성: 0, search 활성: 1
 
         # AI Part ---------------------------------------------------------------------------------------------------
-        # self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
-        # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
-        # self.diagnosis_model = pickle.load(open('./AI/Ab_Diagnosis_model.h5', 'rb'))
-        # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5',
-        #                                     compile=False)
-        # print('인공지능 모델 로드 완료')
+        self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
+        self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
+        self.diagnosis_model = pickle.load(open('./AI/Ab_Diagnosis_model.h5', 'rb'))
+        # self.explainer = shap.Explainer(self.diagnosis_model) # 추후 pickle 파일로 수정
+        self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
+        print('인공지능 모델 로드 완료')
 
     # 인공지능 전처리 용 ------------------------------------------------------------------------------------------------------
     def get_diagnosis_val(self):
@@ -223,15 +224,22 @@ class InterfaceMem:
         self.dis_AI['AI'] = [self.make_raw(max_v, max_i) for (max_v, max_i) in
                              self.GetTop(self.diagnosis_model.predict([self.get_diagnosis_val()])[0], 3)]
 
+    # def get_explainer_result(self):
+    #     self.dis_AI['XAI'] = self.explainer.shap_values(self.get_diagnosis_val())
+
     def get_train_check_val(self):
         return np.array([np.array([self.ShMem.get_para_list(i) for i in self.train_check_para]).reshape(-1, 46)])
 
     def get_train_check_result(self):  # 데이터 shape: (1,10,46) 강제
-        if np.mean(np.power(self.flatten(self.get_train_check_val()) - self.flatten(
-                self.train_check_model.predict(self.get_train_check_val())), 2), axis=1)[0] <= 0.00225299:
-            self.dis_AI['Train'] = 0  # 훈련된 시나리오
+        if np.shape(self.get_train_check_val())[1] == 10:
+            if np.mean(np.power(self.flatten(self.get_train_check_val()) - self.flatten(
+                    self.train_check_model.predict(self.get_train_check_val())), 2), axis=1)[0] <= 0.00225299:
+                self.dis_AI['Train'] = 0  # 훈련된 시나리오
+
+            else:
+                self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오
         else:
-            self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오
+            print('Non 10 stack')
 
     # 단축키 설정 --------------------------------------------------------------------------------------------------------
     # def Train_Shortcut_key(self):
@@ -280,7 +288,7 @@ class InterfaceMem:
 
     def GetTop(self, raw_list, get_top):
         """ 리스트에서 최대값 랭크와 인덱스 제공 """
-        if self.dis_AI['Train'] == 0 or self.ShMem.get_para_val('iFixTrain') == 1:
+        if self.dis_AI['Train'] == 0 or self.ShMem.get_para_val('iFixTrain') == 1: # Train 상태
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]
@@ -291,7 +299,7 @@ class InterfaceMem:
                 index_.pop(max_idx)
                 raw_list_.pop(max_idx)
                 result.append((maxv_, maxv_id))
-        elif self.dis_AI['Train'] == 1 or self.ShMem.get_para_val('iFixTrain') == 2:
+        elif self.dis_AI['Train'] == 1 or self.ShMem.get_para_val('iFixTrain') == 2: # Untrain 상태
             result = []
             index_ = [i for i in range(len(raw_list))]
             raw_list_ = [i for i in raw_list]

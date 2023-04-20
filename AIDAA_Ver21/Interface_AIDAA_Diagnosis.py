@@ -6,6 +6,7 @@ from AIDAA_Ver21.Interface_AIDAA_Procedure_Search import ProcedureSearch, System
 
 import numpy as np
 import os
+from collections import deque
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -135,7 +136,7 @@ class DiagnosisProcedureTable(ABCTableWidget):
 
         [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절
 
-        for i in range(3):
+        for i in range(3): # 초기 테이블 업로드를 위한 더미 파일 활용
             pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
             self.setCellWidget(i, 0, DiagnosisProcedureItem(self, f' {pro_name}', pro_name))
             self.setCellWidget(i, 1, DiagnosisProcedureCheckBox(self, pro_name, 'Rad'))
@@ -143,10 +144,12 @@ class DiagnosisProcedureTable(ABCTableWidget):
             self.setCellWidget(i, 3, DiagnosisProcedureItem(self, logic_condition, pro_name))
             self.setCellWidget(i, 4, DiagnosisProcedureItem(self, ai_probability, pro_name))
 
+        self.init_time = deque(maxlen=2)
+        self.train_check = deque(maxlen=5)
         self.startTimer(600)
         
     def contextMenuEvent(self, a0: QContextMenuEvent) -> None:
-        if self.inmem.ShMem.get_para_val('iFixTrain') == 0:
+        if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1: # 학습된 상태에서만 contextMenu 활성화
             menu = QMenu()
             xai = menu.addAction('XAI')
             act = menu.exec(a0.globalPos())
@@ -156,15 +159,33 @@ class DiagnosisProcedureTable(ABCTableWidget):
         return super().contextMenuEvent(a0)
 
     def timerEvent(self, event: QTimerEvent) -> None:
-        block = 'Off' if self.inmem.ShMem.get_para_val('iFixTrain') == 0 else 'On'
+        self.init_time.append(self.inmem.get_time())
+        self.train_check.append(self.inmem.dis_AI['Train'])
+        if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
+            block = 'Off'
+        elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
+            block = 'On'
         self.setProperty('Block', block)
-        for i in range(3):
-            pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
-            self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
-            self.cellWidget(i, 1).update_item(pro_name, block)
-            self.cellWidget(i, 2).update_item(pro_name, block)
-            self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
-            self.cellWidget(i, 4).update_item(ai_probability, pro_name, block)
+        if len(self.init_time) == 2 and self.init_time[0] != self.init_time[1]:
+            self.inmem.get_train_check_result()
+            if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
+                self.inmem.get_diagnosis_result()
+                for i in range(3):
+                    pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
+                    self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
+                    self.cellWidget(i, 1).update_item(pro_name, block)
+                    self.cellWidget(i, 2).update_item(pro_name, block)
+                    self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
+                    self.cellWidget(i, 4).update_item(ai_probability, pro_name, block)
+
+            elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 and sum(self.train_check) != 5 or self.inmem.ShMem.get_para_val('iFixTrain') == 2: # 테이블 초기화를 위한 조건
+                for i in range(3):
+                    pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
+                    self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
+                    self.cellWidget(i, 1).update_item(pro_name, block)
+                    self.cellWidget(i, 2).update_item(pro_name, block)
+                    self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
+                    self.cellWidget(i, 4).update_item(ai_probability, pro_name, block)
         self.style().polish(self)
         return super().timerEvent(event)
 # ----------------------------------------------------------------------------------------------------------------------
@@ -315,7 +336,7 @@ class DiagnosisSystemTable(ABCTableWidget):
         self.startTimer(600)
         
     def contextMenuEvent(self, a0: QContextMenuEvent) -> None:
-        if self.inmem.ShMem.get_para_val('iFixTrain') == 1:
+        if self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
             menu = QMenu()
             xai = menu.addAction('XAI')
             act = menu.exec(a0.globalPos())
@@ -325,7 +346,10 @@ class DiagnosisSystemTable(ABCTableWidget):
         return super().contextMenuEvent(a0)
 
     def timerEvent(self, event: QTimerEvent) -> None:
-        block = 'Off' if self.inmem.ShMem.get_para_val('iFixTrain') == 1 else 'On'
+        if self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
+            block = 'Off'
+        elif self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
+            block = 'On'
         self.setProperty('Block', block)
         alarm_condition = self.inmem.ShMem.get_system_alarm_num()
         for i in range(3):
@@ -501,7 +525,7 @@ class ProcedureCheckTable(ABCTableWidget):
 
 
     def timerEvent(self, event: QTimerEvent) -> None:
-        if self.inmem.ShMem.get_para_val('iFixTrain') == 0:
+        if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
             selected_indexes = self.inmem.widget_ids['DiagnosisProcedureTable'].selectedIndexes()
             self.previously_alarm = [alarm_name for alarm_name in self.inmem.ShMem.get_on_alarms()]
             if len(selected_indexes) == 0:
@@ -509,7 +533,7 @@ class ProcedureCheckTable(ABCTableWidget):
             elif len(selected_indexes) != 0 and selected_indexes[0] != self.index_previously_selected: # 이미 선택된 경우 업데이트를 하지 않음.
                 self.index_previously_selected = selected_indexes[0]
                 self.update_table_items('Pro_name', self.inmem.widget_ids['DiagnosisProcedureTable'].cellWidget(selected_indexes[0].row(), 0).pro_name)
-        else:
+        elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
             selected_indexes = self.inmem.widget_ids['DiagnosisSystemTable'].selectedIndexes()
             new_alarm = [alarm_name for alarm_name in self.inmem.ShMem.get_on_alarms()]
             if len(selected_indexes) == 0:

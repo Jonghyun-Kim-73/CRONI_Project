@@ -42,7 +42,7 @@ MAKE_UP	INTEGER	MAKE_UP
 iFixPreAb	INTEGER	PreAbnormal(0:off|1:on)
 iFixPreTrip	INTEGER	FixPreTrip(0:off|1:on)
 iFixTrip	INTEGER	FixTrip(0:off|1:on)
-iFixTrain	INTEGER	FixTrain(0:Train|1:Untrain)
+iFixTrain	INTEGER	FixTrain(0:Default|1:Train|2:Untrain)
 iPreTrip1	INTEGER PreTrip Val1(0:off|1:on)
 iPreTrip2	INTEGER PreTrip Val2(0:off|1:on)
 iPreTrip3	INTEGER PreTrip Val3(0:off|1:on)
