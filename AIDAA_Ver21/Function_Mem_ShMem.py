@@ -181,7 +181,8 @@ class InterfaceMem:
         self.dis_AI = {'AI': [['Ab63_02: 제어봉의 계속적인 삽입', '05/07', '80.52%'], ['Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설', '05/09', '9.34%'], ['Ab59_02: 충전수 유량조절밸브 후단누설', '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', '05/14', '1.55%'], ['Ab60_02: 재생열교환기 전단부위 파열', '05/15', '0.76%']],
                       'Train': 0,
                        'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'], ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
-                       'System': [['화학 및 체적 제어계통', '5', '72%'], ['원자로 냉각재 계통', '3', '16%'], ['주급수 계통', '1', '6%'], ['제어봉 제어 계통', '1', '3%'], ['잔열 제거 계통', '1', '3%']]}# 정지냉각계통
+                       'System': [['화학 및 체적 제어계통', '5', '72%'], ['원자로 냉각재 계통', '3', '16%'], ['주급수 계통', '1', '6%'], ['제어봉 제어 계통', '1', '3%'], ['잔열 제거 계통', '1', '3%']],
+                       'Selected_title': []}# 정지냉각계통
         # Interface_AIDAA_Procedure.py -------------------------------------------------------------------------------------
         looptitle = ['목적', '경보 및 증상', '자동 동작 사항', '긴급 조치 사항', '후속 조치 사항']
         self.ProcedureHis = {pro_name: {
@@ -210,9 +211,10 @@ class InterfaceMem:
 
         # AI Part ---------------------------------------------------------------------------------------------------
         self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
+        self.diagnosis_para_des = pd.read_csv('./AI/Final_parameter_200825.csv')['1'].tolist()
         self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
         self.diagnosis_model = pickle.load(open('./AI/Ab_Diagnosis_model.h5', 'rb'))
-        # self.explainer = shap.Explainer(self.diagnosis_model) # 추후 pickle 파일로 수정
+        self.explainer = pickle.load(open('./AI/Diagnosis_Explainer.h5', 'rb'))
         self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')
 
@@ -224,8 +226,23 @@ class InterfaceMem:
         self.dis_AI['AI'] = [self.make_raw(max_v, max_i) for (max_v, max_i) in
                              self.GetTop(self.diagnosis_model.predict([self.get_diagnosis_val()])[0], 3)]
 
-    # def get_explainer_result(self):
-    #     self.dis_AI['XAI'] = self.explainer.shap_values(self.get_diagnosis_val())
+    def get_explainer_result(self, num):
+        # self.dis_AI['XAI'] = self.explainer.shap_values(self.get_diagnosis_val())
+        shap_values = self.explainer.shap_values(np.array([self.get_diagnosis_val()]))[num] # 선택한 시나리오에 대한 shap_value 추출
+        temp1 = pd.DataFrame(shap_values, columns=self.diagnosis_para).T
+        # sign = []
+        # for i in range(len(temp1[0])):
+        #     if np.sign(temp1[0][i]) == 1.0 or np.sign(temp1[0][i]) == 0.0:
+        #         sign.append('+')
+        #     elif np.sign(temp1[0][i]) == -1.0:
+        #         sign.append('-')
+        prob = [np.round((np.abs(temp1[0][i]) / sum(np.abs(temp1[0]))) * 100, 2) for i in range(len(temp1[0]))]
+        # temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob, sign], index=['variable', 'describe', 'value', 'probability', 'sign']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
+        temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob], index=['variable', 'describe', 'value', 'probability']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
+        temp2 = temp2[temp2['value'] > 0]
+        self.dis_AI['XAI'] = [[temp2.iloc[i]['describe'], temp2.iloc[i]['probability']] for i in range(5)]
+
+
 
     def get_train_check_val(self):
         return np.array([np.array([self.ShMem.get_para_list(i) for i in self.train_check_para]).reshape(-1, 46)])
