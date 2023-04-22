@@ -10,6 +10,8 @@ import pickle
 import socket
 from tensorflow.keras.models import load_model
 import shap
+from struct import unpack, pack
+import socket
 
 
 class ShMem:
@@ -19,6 +21,9 @@ class ShMem:
         self.add_val_to_list()
         # Interface_AIDAA_Action.py -------------------------------------------------------------------------------------
         self.CVCS = CVCS()
+        # CNS ip Port
+        self.CNSIP, self.CNSPort = '127.0.0.1', 7000
+        self.send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     
     # - CVCS part -------------------------------------------------------------------------------------------------------
     def update_CVCS(self):                    self.CVCS.step()
@@ -43,8 +48,9 @@ class ShMem:
 
         # 다음과정을 통하여 shared_mem 은 PID : { type. val, num }를 가진다.
         return shared_mem
-
+    
     def update_alarmdb(self):        self.AlarmDB.update_alarmdb_from_ShMem()
+    
     def add_val_to_list(self):       [self.mem[para]['List'].append(self.mem[para]['Val']) for para in self.mem.keys()]
     
     def change_para_val(self, para, val):       self.mem[para]['Val'] = val
@@ -52,6 +58,7 @@ class ShMem:
 
     def get_para_val(self, para):         return self.mem[para]['Val']
     def get_para_list(self, para):        return self.mem[para]['List']
+    def get_paras_val(self, paras):       return [self.mem[para]['Val'] for para in paras]
     def get_mem(self):                    return self.mem
     def get_alarmdb(self):                return self.AlarmDB.alarmdb
     def get_alarms(self):                 return self.AlarmDB.get_alarms()
@@ -152,11 +159,39 @@ class ShMem:
 # ----------------------------------------------------------------------------------------------------------------------
 # 통신 Part Function
 # ----------------------------------------------------------------------------------------------------------------------
-    def get_udp_my_com_ip(self):        return socket.gethostbyname(socket.getfqdn())
-    
+    def update_cns_ip_port(self, ip, port):  self.CNSIP, self.CNSPort = ip, port
+    def get_udp_my_com_ip(self):             return socket.gethostbyname(socket.getfqdn())
+    def get_cns_ip_port(self):               return self.CNSIP, self.CNSPort
+    def send_control_signal(self, para, val):
+        '''
+        조작 필요없음
+        :param para:
+        :param val:
+        :return:
+        '''
+        mem = self.get_mem()
+        for i in range(np.shape(para)[0]):
+            mem[para[i]]['Val'] = val[i]
+        UDP_header = b'\x00\x00\x00\x10\xa8\x0f'
+        buffer = b'\x00' * 4008
+        temp_data = b''
 
+        # make temp_data to send CNS #
+        for i in range(np.shape(para)[0]):
+            pid_temp = b'\x00' * 12
+            pid_temp = bytes(para[i], 'ascii') + pid_temp[len(para[i]):]  # pid + \x00 ..
+            para_sw = '12sihh' if mem[para[i]]['Sig'] == 0 else '12sfhh'
+            # 만약 para가 CNS DB에 포함되지 않은 Custom para이면 Pass
+            if para[i][0] != 'c':
+                temp_data += pack(para_sw,
+                                  pid_temp,
+                                  mem[para[i]]['Val'],
+                                  mem[para[i]]['Sig'],
+                                  mem[para[i]]['Num'])
 
+        buffer = UDP_header + pack('h', np.shape(para)[0]) + temp_data + buffer[len(temp_data):]
 
+        self.send_sock.sendto(buffer, (self.CNSIP, int(self.CNSPort)))
 
 
 class InterfaceMem:
@@ -249,10 +284,8 @@ class InterfaceMem:
 
     def get_train_check_result(self):  # 데이터 shape: (1,10,46) 강제
         if np.shape(self.get_train_check_val())[1] == 10:
-            if np.mean(np.power(self.flatten(self.get_train_check_val()) - self.flatten(
-                    self.train_check_model.predict(self.get_train_check_val())), 2), axis=1)[0] <= 0.00225299:
+            if np.mean(np.power(self.flatten(self.get_train_check_val()) - self.flatten(self.train_check_model.predict(self.get_train_check_val(), verbose=0)), 2), axis=1)[0] <= 0.00225299:
                 self.dis_AI['Train'] = 0  # 훈련된 시나리오
-
             else:
                 self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오
         else:

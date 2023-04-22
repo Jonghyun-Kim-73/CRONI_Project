@@ -9,6 +9,7 @@ from AIDAA_Ver21.Interface_MainTabAIDAA import *
 from AIDAA_Ver21.Interface_AIDAA_Procedure import *
 from AIDAA_Ver21.Interface_AIDAA_Action import *
 from AIDAA_Ver21.Interface_AIDAA_Pretrip import *
+from AIDAA_Ver21.Interface_EGIS_Main import *
 
 from Interface_QSS import qss
 from datetime import datetime
@@ -197,7 +198,8 @@ class MainTab(ABCStackWidget):
 class MainTabIFAP(ABCWidget):
     def __init__(self, parent):
         super(MainTabIFAP, self).__init__(parent)
-
 class MainTabEGIS(ABCWidget):
     def __init__(self, parent):
         super(MainTabEGIS, self).__init__(parent)
+        self.EGISapp = EGISmain(self)
+        self.EGISapp.show()

@@ -36,6 +36,17 @@ class ABCWidget(QWidget, TOOL):
     def mousePressEvent(self, a0: QMouseEvent) -> None:
         print(f'{self.widget_name}, {self.size()}')
         return super().mousePressEvent(a0)
+class ABCDialog(QDialog, TOOL):
+    def __init__(self, parent, widget_name=''):
+        super(ABCDialog, self).__init__()
+        self.inmem: InterfaceMem = make_shmem(parent, self, widget_name)
+        self.widget_name=type(self).__name__ if widget_name == '' else widget_name
+        self.setObjectName(self.widget_name)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
+        print(f'{self.widget_name}, {self.size()}')
+        return super().mousePressEvent(a0)
 class ABCScrollArea(QScrollArea, TOOL):
     def __init__(self, parent, widget_name=''):
         super(ABCScrollArea, self).__init__()

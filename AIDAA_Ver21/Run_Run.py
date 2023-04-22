@@ -9,7 +9,6 @@ import socket
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem
 from AIDAA_Ver21.Interface_Main import Main
 from AIDAA_Ver21.Function_Simulator_CNS import CNS
-from AIDAA_Ver21.Function_IFAP import FunctionIFAP
 
 class Run:
     def __init__(self):
@@ -26,7 +25,6 @@ class Run:
         """ MainProcess 동작 """
         mem = self.make_shmem()
         p_list = [InterfaceRun(mem)]
-        # p_list = [FunctionIFAP(mem)]
         [pr_.start() for pr_ in p_list]
         [pr_.join() for pr_ in p_list]  # finished at the same time
 
