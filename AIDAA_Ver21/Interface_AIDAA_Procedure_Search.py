@@ -6,6 +6,7 @@ from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Function_Simulator_CNS import *
 from Interface_QSS import qss
+from collections import deque
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 # ----------------------------------------------------------------------------------------------------------------------
@@ -581,6 +582,7 @@ class XAISearch(ABCWidget):
     def show(self, name) -> None:
         self.name = name # 절차서 명 또는 시스템 명을 전달받은 뒤 업데이트
         self.inmem.widget_ids['XAISearchTitleName'].setText(name)
+        self.inmem.dis_AI['Selected_title'] = self.name
         return super().show()
 # --------------------------------------------------------------------------------
 class XAISearchTitleBar(ABCWidget):
@@ -633,7 +635,7 @@ class XAISearchScrollArea(ABCScrollArea):
         
         lay.addLayout(lay_heading)
 
-        col_info = {' 변수 명':200, ' 기여도': self.size().width() - 200}
+        col_info = {' 변수 명':500, ' 기여도': self.size().width() - 200}
 
         lay_heading.addWidget(XAISearchHeadingLabel(self, ' 변수 명', col_info[' 변수 명'], self.heading_height, 'F'))
         lay_heading.addWidget(XAISearchHeadingLabel(self, ' 기여도', col_info[' 기여도'], self.heading_height, 'L'))
@@ -682,6 +684,28 @@ class XAISearchTable(ABCTableWidget):
         except:
             [self.setCellWidget(i, 0, XAISearchItem(self, " " + self.inmem.dis_AI['XAI'][i][0], Qt.AlignmentFlag.AlignCenter, 'F')) for i in range(5)]
             [self.setCellWidget(i, 1, XAISearchItem(self, " " + self.inmem.dis_AI['XAI'][i][1], Qt.AlignmentFlag.AlignLeft, 'L')) for i in range(5)]
+
+        self.text_convert_num = {'Normal: 정상':0, 'Ab21_01: 가압기 압력 채널 고장 (고)':1, 'Ab21_02: 가압기 압력 채널 고장 (저)':2,
+                                  'Ab20_04: 가압기 수위 채널 고장 (저)':3, 'Ab15_07: 증기발생기 수위 채널 고장 (저)':4,
+                                  'Ab15_08: 증기발생기 수위 채널 고장 (고)':5,
+                                  'Ab63_04: 제어봉 낙하':6, 'Ab63_02: 제어봉의 계속적인 삽입':7, 'Ab21_12: 가압기 PORV (열림)':8,
+                                  'Ab19_02: 가압기 안전밸브 고장':9, 'Ab21_11: 가압기 살수밸브 고장 (열림)':10,
+                                  'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설':11,
+                                  'Ab60_02: 재생열교환기 전단부위 파열':12, 'Ab59_02: 충전수 유량조절밸브 후단누설':13,
+                                  'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설':14, 'Ab23_06: 증기발생기 전열관 누설':15}
+
+
+        self.init_time = deque(maxlen=2)
+        self.startTimer(600)
+
+    def timerEvent(self, event: QTimerEvent) -> None:
+        self.init_time.append(self.inmem.get_time())
+        if len(self.init_time) == 2 and self.init_time[0] != self.init_time[1]: # Run 상태에서만 실행
+            if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
+                self.inmem.get_explainer_result(num=self.text_convert_num[self.inmem.dis_AI['Selected_title']])
+                [self.setCellWidget(i, 0, XAISearchItem(self, f" {self.inmem.dis_AI['XAI'][i][0]}", Qt.AlignmentFlag.AlignCenter, 'F')) for i in range(5)]
+                [self.setCellWidget(i, 1, XAISearchItem(self, f" {self.inmem.dis_AI['XAI'][i][1]}%", Qt.AlignmentFlag.AlignLeft, 'L')) for i in range(5)]
+        return super().timerEvent(event)
 class XAISearchItem(ABCLabel):
     def __init__(self, parent, text, alignment, pos, widget_name=''):
         super().__init__(parent, widget_name)
