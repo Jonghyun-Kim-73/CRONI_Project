@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 import pickle
 import socket
-from tensorflow.keras.models import load_model
 import shap
 from struct import unpack, pack
 import socket
@@ -245,13 +244,15 @@ class InterfaceMem:
         #                        'active_window': 0} # seach 비활성: 0, search 활성: 1
 
         # AI Part ---------------------------------------------------------------------------------------------------
+        t = time.time()
+        from tensorflow.keras.models import load_model
         self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
         self.diagnosis_para_des = pd.read_csv('./AI/Final_parameter_200825.csv')['1'].tolist()
         self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
         self.diagnosis_model = pickle.load(open('./AI/Ab_Diagnosis_model.h5', 'rb'))
         self.explainer = pickle.load(open('./AI/Diagnosis_Explainer.h5', 'rb'))
         self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
-        print('인공지능 모델 로드 완료')
+        print(f'인공지능 모델 로드 완료 {time.time() - t}')
 
     # 인공지능 전처리 용 ------------------------------------------------------------------------------------------------------
     def get_diagnosis_val(self):

@@ -22,6 +22,7 @@ class EGISmain(ABCWidget):
         self.DApushButton.clicked.connect(self.DAclicked)
         #EGIS 타이머
         self.i = 0
+        self.old_time = self.inmem.ShMem.get_para_val('KCNTOMS')
         self.startTimer(500)
         #GUI 사전에 등록
         self.SIASwindow = SIASwindow(self)
@@ -37,7 +38,7 @@ class EGISmain(ABCWidget):
         self.k = 0
         
     def timerEvent(self, a0: 'QTimerEvent') -> None:
-        self.getCSFcolor() # Call Function
+        if self.old_time != self.inmem.ShMem.get_para_val('KCNTOMS'): self.getCSFcolor() # Call Function
         return super().timerEvent(a0)
 
     #CSF Procedure Status Checker
@@ -47,7 +48,7 @@ class EGISmain(ABCWidget):
         B = monitoring6(self.inmem.ShMem)
         C = mfm(B)
         self.time = self.i*0.5
-        print("\n\ntime: %d" %self.time)
+        # print("\n\ntime: %d" %self.time)
 
         # CSF 색상 상태 받기
         # self.CSF1pushButton.setStyleSheet('background:%s' %A.CSF_status()[0])
@@ -108,7 +109,7 @@ class EGISmain(ABCWidget):
         # Diagnosis Block
         if B.totalTaskNum == 0:
             self.k += 1
-            print(self.k)
+            # print(self.k)
 
         if B.totalTaskNum == 0 and self.k >= 30:
             self.DApushButton.setStyleSheet('background:green; font:bold 20px;')
@@ -171,6 +172,7 @@ class SIASwindow(ABCDialog):
         super().__init__(parent, widget_name)
         self.initUI()
         self.i = 0
+        self.old_time = self.inmem.ShMem.get_para_val('KCNTOMS')
         self.startTimer(500)
 
     def initUI(self):
@@ -185,7 +187,7 @@ class SIASwindow(ABCDialog):
         # self.tblock.setText('love')
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
-        self.getSIASinfo()
+        if self.old_time != self.inmem.ShMem.get_para_val('KCNTOMS'): self.getSIASinfo()
         return super().timerEvent(a0)
 
     def getSIASinfo(self):
@@ -213,12 +215,14 @@ class SIASwindow(ABCDialog):
 
     def SIASbtnclicked(self):
         self.inmem.ShMem.send_control_signal(['KMANSI'], [1]) # 동작 확인 필요함.
+        print('Send')
         # integer_set('KMANSI', 1)
 class HPSIwindow(ABCDialog):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.initUI()
         self.i = 0
+        self.old_time = self.inmem.ShMem.get_para_val('KCNTOMS')
         self.startTimer(500)
 
     def initUI(self):
@@ -227,13 +231,13 @@ class HPSIwindow(ABCDialog):
         self.setWindowTitle("HPSI")
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
-        self.getHPSIinfo()
+        if self.old_time != self.inmem.ShMem.get_para_val('KCNTOMS'): self.getHPSIinfo()
         return super().timerEvent(a0)
 
     def getHPSIinfo(self):
         self.i += 1
         B = monitoring6(self.inmem.ShMem)
-        print(B.pumpResult[0])
+        # print(B.pumpResult[0])
         if B.pumpResult[0] == 4:
             if self.i%2 == 0:
                 self.CHPpushButton.setStyleSheet('background:red')
@@ -276,6 +280,7 @@ class DAwindow(ABCDialog):
         super().__init__(parent, widget_name)
         self.initUI()
         self.i = 0
+        self.old_time = self.inmem.ShMem.get_para_val('KCNTOMS')
         self.startTimer(500)
 
     def initUI(self):
@@ -285,7 +290,7 @@ class DAwindow(ABCDialog):
         self.setWindowTitle("DA Window")
         
     def timerEvent(self, a0: 'QTimerEvent') -> None:
-        self.getDAinfo()
+        if self.old_time != self.inmem.ShMem.get_para_val('KCNTOMS'): self.getDAinfo()
         return super().timerEvent(a0)
     
     def getDAinfo(self):
