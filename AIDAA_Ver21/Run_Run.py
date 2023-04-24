@@ -5,6 +5,7 @@ import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import socket
+import time
 
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem
 from AIDAA_Ver21.Interface_Main import Main
@@ -23,11 +24,12 @@ class Run:
 
     def start_process(self):
         """ MainProcess 동작 """
+        t = time.time()
         mem = self.make_shmem()
+        print(time.time() - t)
         p_list = [InterfaceRun(mem)]
         [pr_.start() for pr_ in p_list]
         [pr_.join() for pr_ in p_list]  # finished at the same time
-
 
 class InterfaceRun(Process):
     def __init__(self, mem):

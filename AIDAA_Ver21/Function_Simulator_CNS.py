@@ -13,7 +13,6 @@ class CNS(QWidget):
     def __init__(self, ShMem):
         super(CNS, self).__init__()
         self.ShMem: ShMem = ShMem
-        self.inmem: InterfaceMem = InterfaceMem(ShMem, self)
         self.setGeometry(50, 50, 300, 100)
 
         lay = QVBoxLayout(self)
