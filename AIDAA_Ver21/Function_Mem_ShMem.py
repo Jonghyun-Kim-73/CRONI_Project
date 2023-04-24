@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 import pickle
 import socket
-from tensorflow.keras.models import load_model
-import shap
+# from tensorflow.keras.models import load_model # 시연용
+# import shap # 시연용
 from struct import unpack, pack
 import socket
 
@@ -202,14 +202,14 @@ class InterfaceMem:
         self.add_widget_id(top_widget)
                 
         self.diagnosis_convert_text = {0: 'Normal: 정상', 1: 'Ab21_01: 가압기 압력 채널 고장 (고)', 2: 'Ab21_02: 가압기 압력 채널 고장 (저)',
-                                       3: 'Ab20_04: 가압기 수위 채널 고장 (저)', 4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)',
-                                       5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
-                                       6: 'Ab63_04: 제어봉 낙하', 7: 'Ab63_02: 제어봉의 계속적인 삽입', 8: 'Ab21_12: 가압기 PORV (열림)',
-                                       9: 'Ab19_02: 가압기 안전밸브 고장', 10: 'Ab21_11: 가압기 살수밸브 고장 (열림)',
-                                       11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
-                                       12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸브 후단누설',
-                                       14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설',
-                                       16: '해당 시나리오는 학습되지 않은 시나리오입니다.', 17: '학습여부를 아직 확인할 수 없습니다.'}
+                                  3: 'Ab20_04: 가압기 수위 채널 고장 (저)', 4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)',
+                                  5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
+                                  6: 'Ab63_02: 제어봉의 계속적인 삽입', 7: 'Ab21_12: 가압기 PORV (열림)',
+                                  8: 'Ab19_02: 가압기 안전밸브 고장', 9: 'Ab21_11: 가압기 살수밸브 고장 (열림)',
+                                  10: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
+                                  11: 'Ab59_02: 충전수 유량조절밸브 후단누설',
+                                  12: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 13: 'Ab23_06: 증기발생기 전열관 누설',
+                                  14: '해당 시나리오는 학습되지 않은 시나리오입니다.', 15: '학습여부를 아직 확인할 수 없습니다.'}
         self.abnormal_procedure_list = set([key if 'Ab' in key else '' for key in  ab_pro.keys()])  # ab_pro에서 'Ab' 가진 key 만 추출 ['Ab63_04: 제어봉 낙하', 'Ab... ']
         self.abnormal_procedure_list.remove('')
         self.abnormal_system_list = ['화학 및 체적 제어계통', '원자로 냉각재 계통', '주급수 계통', '보조 급수 계통', '제어봉 제어 계통', '잔열 제거 계통', '주증기 계통', '복수 계통', '터빈 계통', '전기 계통']
@@ -234,48 +234,44 @@ class InterfaceMem:
         self.current_table = {'Procedure': -1, 'System': -1, 'current_window': -1, 'procedure_name': "",
                               'selected_procedure':"", 'selected_system':""}
         self.pro_procedure_count = [self.ShMem.get_pro_procedure_count(self.diagnosis_convert_text[i]) for i in
-                                    range(16)]
+                                    range(14)]
         self.access_procedure = []
 
-        # self.current_search = {'Procedure':{'number':'', 'name':''}, # 검색창에 작성한 내용 저장
-        #                        'System':'', # 검색창에 작성한 내용 저장
-        #                        'reset_number':-1, 'reset_name':-1,# reset: 0 / search: 1
-        #                        'system_reset':-1, # reset: 0 / search: 1
-        #                        'current_procedure': -1,
-        #                        'active_window': 0} # seach 비활성: 0, search 활성: 1
-
-        # AI Part ---------------------------------------------------------------------------------------------------
-        self.diagnosis_para = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
-        self.diagnosis_para_des = pd.read_csv('./AI/Final_parameter_200825.csv')['1'].tolist()
-        self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
-        self.diagnosis_model = pickle.load(open('./AI/Ab_Diagnosis_model.h5', 'rb'))
-        self.explainer = pickle.load(open('./AI/Diagnosis_Explainer.h5', 'rb'))
-        self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
+        # AI Part --------------------------------------------------------------------------------------------------- # 시연용
+        # self.diagnosis_para = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
+        # self.diagnosis_para_des = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
+        # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
+        # self.diagnosis_sclaer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
+        # self.diagnosis_model = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
+        # self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
+        # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')
 
     # 인공지능 전처리 용 ------------------------------------------------------------------------------------------------------
     def get_diagnosis_val(self):
-        return [self.ShMem.get_para_val(i) for i in self.diagnosis_para]
+        return self.diagnosis_sclaer.transform(np.array([self.ShMem.get_para_val(i) for i in self.diagnosis_para]).reshape(1,-1))
 
-    def get_diagnosis_result(self):  # 상위 5개의 진단 결과만 출력
-        self.dis_AI['AI'] = [self.make_raw(max_v, max_i) for (max_v, max_i) in
-                             self.GetTop(self.diagnosis_model.predict([self.get_diagnosis_val()])[0], 3)]
+    def get_diagnosis_result(self):  # 상위 3개의 진단 결과만 출력
+        # self.dis_AI['AI'] = [self.make_raw(max_v, max_i) for (max_v, max_i) in
+        #                      self.GetTop(self.diagnosis_model.predict_proba(self.get_diagnosis_val())[0], 3)] # 시연용
+        pass
 
     def get_explainer_result(self, num):
-        # self.dis_AI['XAI'] = self.explainer.shap_values(self.get_diagnosis_val())
-        shap_values = self.explainer.shap_values(np.array([self.get_diagnosis_val()]))[num] # 선택한 시나리오에 대한 shap_value 추출
-        temp1 = pd.DataFrame(shap_values, columns=self.diagnosis_para).T
-        # sign = []
-        # for i in range(len(temp1[0])):
-        #     if np.sign(temp1[0][i]) == 1.0 or np.sign(temp1[0][i]) == 0.0:
-        #         sign.append('+')
-        #     elif np.sign(temp1[0][i]) == -1.0:
-        #         sign.append('-')
-        prob = [np.round((np.abs(temp1[0][i]) / sum(np.abs(temp1[0]))) * 100, 2) for i in range(len(temp1[0]))]
-        # temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob, sign], index=['variable', 'describe', 'value', 'probability', 'sign']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
-        temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob], index=['variable', 'describe', 'value', 'probability']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
-        temp2 = temp2[temp2['value'] > 0]
-        self.dis_AI['XAI'] = [[temp2.iloc[i]['describe'], temp2.iloc[i]['probability']] for i in range(5)]
+        # # self.dis_AI['XAI'] = self.explainer.shap_values(self.get_diagnosis_val())
+        # shap_values = self.explainer.shap_values(np.array(self.get_diagnosis_val()))[num] # 선택한 시나리오에 대한 shap_value 추출
+        # temp1 = pd.DataFrame(shap_values, columns=self.diagnosis_para).T
+        # # sign = []
+        # # for i in range(len(temp1[0])):
+        # #     if np.sign(temp1[0][i]) == 1.0 or np.sign(temp1[0][i]) == 0.0:
+        # #         sign.append('+')
+        # #     elif np.sign(temp1[0][i]) == -1.0:
+        # #         sign.append('-')
+        # prob = [np.round((np.abs(temp1[0][i]) / sum(np.abs(temp1[0]))) * 100, 2) for i in range(len(temp1[0]))]
+        # # temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob, sign], index=['variable', 'describe', 'value', 'probability', 'sign']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
+        # temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob], index=['variable', 'describe', 'value', 'probability']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
+        # temp2 = temp2[temp2['value'] > 0]
+        # self.dis_AI['XAI'] = [[temp2.iloc[i]['describe'], temp2.iloc[i]['probability']] for i in range(5)]
+        pass # 시연용
 
 
 
@@ -283,13 +279,14 @@ class InterfaceMem:
         return np.array([np.array([self.ShMem.get_para_list(i) for i in self.train_check_para]).reshape(-1, 46)])
 
     def get_train_check_result(self):  # 데이터 shape: (1,10,46) 강제
-        if np.shape(self.get_train_check_val())[1] == 10:
-            if np.mean(np.power(self.flatten(self.get_train_check_val()) - self.flatten(self.train_check_model.predict(self.get_train_check_val(), verbose=0)), 2), axis=1)[0] <= 0.00225299:
-                self.dis_AI['Train'] = 0  # 훈련된 시나리오
-            else:
-                self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오
-        else:
-            print('Non 10 stack')
+        self.dis_AI['Train'] = 0  # 시연용
+        # if np.shape(self.get_train_check_val())[1] == 10:
+        #     if np.mean(np.power(self.flatten(self.get_train_check_val()) - self.flatten(self.train_check_model.predict(self.get_train_check_val(), verbose=0)), 2), axis=1)[0] <= 0.00225299:
+        #         self.dis_AI['Train'] = 0  # 훈련된 시나리오
+        #     else:
+        #         self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오
+        # else:
+        #     print('Non 10 stack')
 
     # 단축키 설정 --------------------------------------------------------------------------------------------------------
     # def Train_Shortcut_key(self):
@@ -315,12 +312,12 @@ class InterfaceMem:
         diagnosis_convert_text = {0: 'Normal: 정상', 1: 'Ab21_01: 가압기 압력 채널 고장 (고)', 2: 'Ab21_02: 가압기 압력 채널 고장 (저)',
                                   3: 'Ab20_04: 가압기 수위 채널 고장 (저)', 4: 'Ab15_07: 증기발생기 수위 채널 고장 (저)',
                                   5: 'Ab15_08: 증기발생기 수위 채널 고장 (고)',
-                                  6: 'Ab63_04: 제어봉 낙하', 7: 'Ab63_02: 제어봉의 계속적인 삽입', 8: 'Ab21_12: 가압기 PORV (열림)',
-                                  9: 'Ab19_02: 가압기 안전밸브 고장', 10: 'Ab21_11: 가압기 살수밸브 고장 (열림)',
-                                  11: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
-                                  12: 'Ab60_02: 재생열교환기 전단부위 파열', 13: 'Ab59_02: 충전수 유량조절밸브 후단누설',
-                                  14: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 15: 'Ab23_06: 증기발생기 전열관 누설',
-                                  16: '해당 시나리오는 학습되지 않은 시나리오입니다.', 17: '학습여부를 아직 확인할 수 없습니다.'}
+                                  6: 'Ab63_02: 제어봉의 계속적인 삽입', 7: 'Ab21_12: 가압기 PORV (열림)',
+                                  8: 'Ab19_02: 가압기 안전밸브 고장', 9: 'Ab21_11: 가압기 살수밸브 고장 (열림)',
+                                  10: 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설',
+                                  11: 'Ab59_02: 충전수 유량조절밸브 후단누설',
+                                  12: 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설', 13: 'Ab23_06: 증기발생기 전열관 누설',
+                                  14: '해당 시나리오는 학습되지 않은 시나리오입니다.', 15: '학습여부를 아직 확인할 수 없습니다.'}
 
         procedure_name = diagnosis_convert_text[max_i]
         try:

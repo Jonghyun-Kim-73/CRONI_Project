@@ -88,10 +88,6 @@ class CNS(QWidget):
         
         self.startTimer(600) # 600ms로 one_step 호출함. self.run_ 함수 참고
 
-# ----------------------------------------------------------------------------------------------------------------------
-        # 컨트롤러 실행과 함께 AI 실행 준비
-        self.AIProcedurePara = pd.read_csv('./AI/Final_parameter_200825.csv')['0'].tolist()
-        self.AIProcedureModel = pickle.load(open('./AI/Ab_Diagnosis_model.h5', 'rb'))
         # ------------------------------------------------------------------
         # CNS 통신용 소켓 및 버퍼
         # ------------------------------------------------------------------ 
@@ -100,7 +96,7 @@ class CNS(QWidget):
         self.size_buffer_mem = 46008
         self.want_tick = 5
         self.resv_sock.settimeout(5)
-        self.resv_sock.bind(('192.168.0.29', 7201)) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
+        self.resv_sock.bind(('192.168.0.2', 7101)) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
         self.ShMem.update_cns_ip_port(self.cns_com_ip.text(), int(self.cns_com_port.text()))
 
     def one_step(self):
