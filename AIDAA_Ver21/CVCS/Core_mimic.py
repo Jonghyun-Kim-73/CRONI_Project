@@ -10,6 +10,7 @@ from collections import deque
 import time
 import matplotlib.pyplot as plt
 import pandas as pd
+import traceback
 
 
 class CVCS:
@@ -23,7 +24,7 @@ class CVCS:
         _rog = 1.03e+2
         _zwlev1 = (12.5 * vol)/(_rog * 50)
         pzr_level = (((_zwlev1 - 1.45) * _rol) + (11.45 - _zwlev1)*_rog - 10*98.4)/(600-98.4)
-        return pzr_level / 10
+        return pzr_level * 0.1
 
     def call_init(self, init_pzr_level=55.156153):
         # 초기 물 양 계산 링모양
@@ -385,358 +386,363 @@ class CVCS:
                 4. skip frame 수에 따라서 n 회 반복 후 종료
                 5. SF 에 현 상태 저장
         """
-        for n in range(self.skip_frame + 1):
-            # RCS -- 460
-            if True:
-                NEXTLET = self.mem['WLETDNO']['V']
-            # Letdown 460 Valve ----------------------------------------------------------------------------------------
-            if True:
-                # 가압기 수위 17 아래 시 10 Sec Delay
-                if self.mem['DEPRZAVG']['V'] < 0.17:
-                    self.mem['LV460_Delay']['V'] += 1
-                    if self.mem['LV460_Delay']['V'] > 10 / self.mem['T_delta']['V']:
-                        self.mem['LV460_Delay']['V'] = 10 / self.mem['T_delta']['V']
-                else:
-                    self.mem['LV460_Delay']['V'] = 0
-
-                if self.mem['LV460_Delay']['V'] >= 10 / self.mem['T_delta']['V'] or self.mem['SISignal']['V'] == 1:
-                    self.mem['LV460_AutoClose']['V'] = 1
-                else:
-                    self.mem['LV460_AutoClose']['V'] = 0
-
-                if self.mem['LV460_ControlSignal']['V'] == 1:
-                    self.mem['LV460_OpenSignal']['V'] = 1
-                else:
-                    self.mem['LV460_OpenSignal']['V'] = 0
-
-                if self.mem['LV460_ControlSignal']['V'] == -1 or self.mem['LV460_AutoClose']['V'] == 1:
-                    self.mem['LV460_CloseSignal']['V'] = 1
-                else:
-                    self.mem['LV460_CloseSignal']['V'] = 0
-
-                self.control('LV460')
-            # Letdown Pressure / Normal letdown flow  (back pressure is assumed to be 1 bar ?)
-            if True:
-                RPRCS = max(self.mem['PLETIN']['V'], self.mem['PPRZN']['V'])
-                RPDIF = (RPRCS - self.mem['PLETDB']['V']) / (self.mem['CPPRZN']['V'] - self.mem['CPLDBN']['V'])
-                RPDIF = 0 if RPDIF <= 0 else RPDIF
-
-                RWLTDN = sqrt(RPDIF) * self.mem['LV460']['V'] * self.mem['CLETNO']['V']
-
-                NEXTLET = (RWLTDN - NEXTLET) * 0.2 + NEXTLET         
-            # 결과적으로 가압기 수위에 영향을 미치는 유출 유량 **
-            self.mem['WLETDNO']['V'] = NEXTLET
-            # Excess Letdown RCS -- HV 41 <ref. cvcsyd_exldsd.f>
-            if True:
-                self.control('BHV41')
-                self.mem['WEXLD']['V'] = ((self.mem['PPRZN']['V']-5.0E5)*1.05E-7*self.mem['BHV41']['V'] - self.mem['WEXLD']['V'])*0.5+self.mem['WEXLD']['V']
-                self.mem['WLETDNO1']['V'] = self.mem['WEXLD']['V']
-            # Leak 460 -*- 459
-            if True:
-                NEXTLET = NEXTLET - self.mem['MAL02']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
-                self.mem['WLETDNO2']['V'] = NEXTLET
-            # Letdown 459 Valve ----------------------------------------------------------------------------------------
-            if True:
-                # 가압기 수위 17 아래 시 10 Sec Delay
-                if self.mem['DEPRZAVG']['V'] < 0.17:
-                    self.mem['LV459_Delay']['V'] += 1
-                    if self.mem['LV459_Delay']['V'] > 10 / self.mem['T_delta']['V']:
-                        self.mem['LV459_Delay']['V'] = 10 / self.mem['T_delta']['V']
-                else:
-                    self.mem['LV459_Delay']['V'] = 0
-
-                if self.mem['LV459_Delay']['V'] >= 10 / self.mem['T_delta']['V'] or self.mem['SISignal']['V'] == 1:
-                    self.mem['LV459_AutoClose']['V'] = 1
-                else:
-                    self.mem['LV459_AutoClose']['V'] = 0
-
-                if self.mem['LV459_ControlSignal']['V'] == 1:
-                    self.mem['LV459_OpenSignal']['V'] = 1
-                else:
-                    self.mem['LV459_OpenSignal']['V'] = 0
-
-                if self.mem['LV459_ControlSignal']['V'] == -1 or self.mem['LV459_AutoClose']['V'] == 1:
-                    self.mem['LV459_CloseSignal']['V'] = 1
-                else:
-                    self.mem['LV459_CloseSignal']['V'] = 0
-
-                self.control('LV459')
-            # Letdown 459 out ->
-            NEXTLET = NEXTLET * self.mem['LV459']['V']
-            # Leak 459 -*- Orifice Valve
-            if True:
-                NEXTLET = NEXTLET - self.mem['MAL03']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
-                self.mem['WLETDNO3']['V'] = NEXTLET
-            # Orifice Valve --------------------------------------------------------------------------------------------
-            if True:
-                for i in range(1, 4):   # 1, 2, 3
+        try:
+            for n in range(self.skip_frame + 1):
+                # RCS -- 460
+                if True:
+                    NEXTLET = self.mem['WLETDNO']['V']
+                # Letdown 460 Valve ----------------------------------------------------------------------------------------
+                if True:
+                    # 가압기 수위 17 아래 시 10 Sec Delay
                     if self.mem['DEPRZAVG']['V'] < 0.17:
-                        self.mem[f'HV{i}_AutoClose']['V'] = 1
+                        self.mem['LV460_Delay']['V'] += 1
+                        if self.mem['LV460_Delay']['V'] > 10 / self.mem['T_delta']['V']:
+                            self.mem['LV460_Delay']['V'] = 10 / self.mem['T_delta']['V']
                     else:
-                        self.mem[f'HV{i}_AutoClose']['V'] = 0
+                        self.mem['LV460_Delay']['V'] = 0
 
-                    if self.mem['DEPRZAVG']['V'] >= 0.17 and self.mem[f'HV{i}_ControlSignal']['V'] == 1 and self.mem['LV459']['V'] >= 1:
-                        self.mem[f'HV{i}_OpenSignal']['V'] = 1
+                    if self.mem['LV460_Delay']['V'] >= 10 / self.mem['T_delta']['V'] or self.mem['SISignal']['V'] == 1:
+                        self.mem['LV460_AutoClose']['V'] = 1
                     else:
-                        self.mem[f'HV{i}_OpenSignal']['V'] = 0
+                        self.mem['LV460_AutoClose']['V'] = 0
 
-                    if self.mem[f'HV{i}_ControlSignal']['V'] == -1 or self.mem['LV459']['V'] < 0.95:
-                        self.mem[f'HV{i}_CloseSignal']['V'] = 1
+                    if self.mem['LV460_ControlSignal']['V'] == 1:
+                        self.mem['LV460_OpenSignal']['V'] = 1
                     else:
-                        self.mem[f'HV{i}_CloseSignal']['V'] = 0
+                        self.mem['LV460_OpenSignal']['V'] = 0
 
-                    temp = 0
+                    if self.mem['LV460_ControlSignal']['V'] == -1 or self.mem['LV460_AutoClose']['V'] == 1:
+                        self.mem['LV460_CloseSignal']['V'] = 1
+                    else:
+                        self.mem['LV460_CloseSignal']['V'] = 0
 
-                    if self.mem[f'HV{i}_OpenSignal']['V'] == 1:
-                        temp = 1
-                    if self.mem[f'HV{i}_CloseSignal']['V'] == 1:
-                        temp = -1
-
-                    self.mem[f'HV{i}']['V'] = self.mem[f'HV{i}']['V'] + temp * 0.05
-                    self.mem[f'HV{i}']['V'] = 1 if self.mem[f'HV{i}']['V'] > 1 else self.mem[f'HV{i}']['V']
-                    self.mem[f'HV{i}']['V'] = 0 if self.mem[f'HV{i}']['V'] < 0 else self.mem[f'HV{i}']['V']
-                if self.mem['HV1']['V'] == 1 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 0 and RWLTDN > self.mem['CWHV1']['V']:
-                    NEXTLET = self.mem['CWHV1']['V']
-                elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 1 and self.mem['HV3']['V'] == 0 and RWLTDN > self.mem['CWHV2']['V']:
-                    NEXTLET = self.mem['CWHV2']['V']
-                elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 1 and RWLTDN > self.mem['CWHV3']['V']:
-                    NEXTLET = self.mem['CWHV3']['V']
-                elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 0:
-                    NEXTLET = 0
-                else:
-                    NEXTLET = NEXTLET
-            # Leak Orifice Valve -*- Letdown Heat EX Changer
-            if True:
-                NEXTLET = NEXTLET - self.mem['MAL04']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
-                self.mem['WLETDNO4']['V'] = NEXTLET
-            # L/D Back pressure ----------------------------------------------------------------------------------------
-            if True:
-                # PI controller
-                RIN = (NEXTLET / self.mem['CWNETUT']['V'] - 1.0) + (1.0 - self.mem['PLETDB']['V'] / self.mem['CPLETDB']['V'])
-                PIOut = self.PIREGL(RIN, -1.0, 1.0, 1, 0, self.mem['CLDBP1']['V'], self.mem['CLDBP2']['V'],
-                                    self.mem['T_delta']['V'], 0.01 / self.mem['T_delta']['V'],
-                                    self.mem['BPV145Mode']['V'], self.mem['BPV145_ControlSignal']['V'],
-                                    self.mem['BPV145I']['V'], self.mem['BPV145']['V'])
-
-                self.mem['BPV145I']['V'], self.mem['BPV145']['V'] = PIOut
-                self.mem['BPV145']['V'] = round(self.mem['BPV145']['V'], 4)
-                self.mem['PLETDB']['V'] = self.mem['BPV145']['V'] * 44.1e5
-            # LV143 쪽 라인
-            if True:
-                self.mem['WLETDNO5UP']['V'] = NEXTLET * self.mem['BLV143']['V']
-                # 여과기 A
-                self.mem['WLETDNO5UPA']['V'] = self.mem['WLETDNO5UP']['V']/2
-
-                self.simple_control('V054', step=0.01)
-                self.simple_control('V055', step=0.01)
-                self.simple_control('V056', step=0.01)
-                if self.mem['V054']['V'] == 1 and self.mem['V055']['V'] == 1 and self.mem['V056']['V'] == 0:
-                    UPA = self.mem['WLETDNO5UPA']['V'] - self.mem['MAL07A']['V']
-                    UPABypass = (self.mem['WLETDNO5UPA']['V'] - UPA) * self.mem['V055']['V']
-                    self.mem['WLETDNO5UPA']['V'] = UPABypass + UPA
-                else:
-                    UPA = self.mem['V054']['V'] * self.mem['WLETDNO5UPA']['V']
-                    UPABypass = (self.mem['WLETDNO5UPA']['V'] - UPA) * self.mem['V055']['V']
-                    UPA = (UPA - self.mem['MAL07A']['V']) * self.mem['V056']['V']
-                    self.mem['WLETDNO5UPA']['V'] = UPABypass + UPA
-
-                # 여과기 B
-                self.mem['WLETDNO5UPB']['V'] = self.mem['WLETDNO5UP']['V']/2
-                self.simple_control('V057', step=0.01)
-                self.simple_control('V058', step=0.01)
-                self.simple_control('V059', step=0.01)
-                if self.mem['V057']['V'] == 1 and self.mem['V058']['V'] == 1 and self.mem['V059']['V'] == 0:
-                    UPB = self.mem['WLETDNO5UPB']['V'] - self.mem['MAL07B']['V']
-                    UPBBypass = (self.mem['WLETDNO5UPB']['V'] - UPB) * self.mem['V058']['V']
-                    self.mem['WLETDNO5UPB']['V'] = UPABypass + UPB
-                else:
-                    UPB = self.mem['V057']['V'] * self.mem['WLETDNO5UPB']['V']
-                    UPBBypass = (self.mem['WLETDNO5UPB']['V'] - UPB) * self.mem['V058']['V']
-                    UPB = (UPB - self.mem['MAL07B']['V']) * self.mem['V059']['V']
-                    self.mem['WLETDNO5UPB']['V'] = UPBBypass + UPB
-
-                self.mem['WLETDNO5UPB']['V'] = self.mem['V057']['V'] * self.mem['WLETDNO5UPB']['V'] - self.mem['MAL07B']['V']
-                self.mem['WLETDNO5UPB']['V'] = self.mem['V059']['V'] * self.mem['WLETDNO5UPB']['V']
-
-                self.mem['WLETDNO5DOWN']['V'] = NEXTLET * abs(self.mem['BLV143']['V'] - 1)
-
-                self.mem['WLETDNO6']['V'] = self.mem['WLETDNO5UPA']['V'] + self.mem['WLETDNO5UPB']['V'] + self.mem['WLETDNO5DOWN']['V']
-            # Bypass Valve LV614 ---------------------------------------------------------------------------------------
-            # VCT level high, bypass to hold-up tank
-            if True:
-                if self.mem['ZVCT']['V'] > 74.0:    # 74% Change
-                    self.mem['BLV614']['V'] = 1
-                elif self.mem['MAL05']['V'] != 0:
-                    self.mem['BLV614']['V'] = self.mem['MAL05']['V']
-                else:
-                    self.mem['BLV614']['V'] = 0
-
-                self.mem['WDEMI']['V'] = self.mem['WLETDNO6']['V'] * (1.0 - self.mem['BLV614']['V'])
-            # VCT Level and Pressure -----------------------------------------------------------------------------------
-            if True:
-                self.mem['ZVCT']['V'] = self.mem['ZVCT']['V'] + (self.mem['WEXLD']['V'] + self.mem['WDEMI']['V'] - self.mem['WLV616']['V']) * self.mem['CVVCT']['V'] * self.mem['T_delta']['V']
-
-                self.mem['ZVCT']['V'] = 0 if self.mem['ZVCT']['V'] < 0 else self.mem['ZVCT']['V']
-                self.mem['ZVCT']['V'] = 100 if self.mem['ZVCT']['V'] > 100 else self.mem['ZVCT']['V']
-
-                self.mem['PVCT']['V'] = 1.0 + self.mem['ZVCT']['V'] * 0.0099  # 1.2~2.0 kg/cm2
-            # ----------------------------------------------------------------------------------------------------------
-
-            # LV616 Valve Start ----------------------------------------------------------------------------------------
-            if True:
-                self.mem['LV616_AutoClose']['V'] = 1 if self.mem['ZVCT']['V'] <= 5.0 or self.mem['SISignal']['V'] == 1 else 0
-                self.mem['LV616_AutoOpen']['V'] = 1 if self.mem['ZVCT']['V'] > 10.0 or self.mem['SISignal']['V'] == 1 else 0
-                self.mem['LV616_OpenSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == 1 or self.mem['LV616_AutoOpen']['V'] == 1 else 0
-                self.mem['LV616_CloseSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == -1 or self.mem['LV616_AutoClose']['V'] == 1 else 0
-                temp = 0
-                temp = 1 if self.mem['LV616_OpenSignal']['V'] == 1 else temp
-                temp = -1 if self.mem['LV616_CloseSignal']['V'] == 1 else temp  
-                self.mem['LV616']['V'] = self.mem['LV616']['V'] + temp * 1
-                self.mem['LV616']['V'] = 1 if self.mem['LV616']['V'] >= 1 else self.mem['LV616']['V']
-                self.mem['LV616']['V'] = 0 if self.mem['LV616']['V'] <= 0 else self.mem['LV616']['V']
-
-                self.mem['LV616_ControlSignal']['V'] = 0 if self.mem['LV616']['V'] >= 1 else self.mem['LV616_ControlSignal']['V']
-                self.mem['LV616_ControlSignal']['V'] = 0 if self.mem['LV616']['V'] <= 0 else self.mem['LV616_ControlSignal']['V']
-                # LV616 -> Seal
-                self.mem['RTFLOW']['V'] = (self.mem['WRCPSI']['V'] - self.mem['WRCPSR']['V']) * 3.0
-                self.mem['WLV616']['V'] = (self.mem['WCHARGT']['V'] - self.mem['WSWHX']['V'] + self.mem['RTFLOW']['V']) * self.mem['LV616']['V']
-
-            # Charging Pump --------------------------------------------------------------------------------------------
-            if True:
-                RRCPSL = self.mem['WRCPSI']['V'] * 3  # RCP Seal 에서 Return Flow
-                self.mem['WCHARGT']['V'] = self.mem['WCHGNO']['V'] + RRCPSL + self.mem['WCMINI']['V']
-
-                # Mini Flow pass
-
-                # Charging Line Flow via FV122
-                ChargingFlow = [0, 9.8000002, 13.857000, 16.954000]
-                if True: # Malfunction Stop CHP1:
-                    self.mem['CHP1']['V'] = (1 - self.mem['MAL08A']['V']) * self.mem['CHP1']['V']
-                    self.mem['CHP2']['V'] = (1 - self.mem['MAL08B']['V']) * self.mem['CHP2']['V']
-                    self.mem['CHP3']['V'] = (1 - self.mem['MAL08C']['V']) * self.mem['CHP3']['V']
-                start_CHP = self.mem['CHP1']['V'] + self.mem['CHP2']['V'] + self.mem['CHP3']['V']
-                self.mem['CWCHARG']['V'] = ChargingFlow[int(start_CHP)] if self.mem['LV616']['V'] != 0 else 0
-
-            # FV122 Charging Valve -------------------------------------------------------------------------------------
-            if True:
-                # PID Controller for FV122
-                RIN = self.mem['ZPRZSP']['V'] - self.mem['DEPRZAVG']['V']
-                PIDOUT = self.PIDREG(RIN, self.mem['RINOLD']['V'], -1.0, 0, 1.0, 0.1,
-                                     0.2, 5.0, 0.01, self.mem['T_delta']['V'], 0.0075 / self.mem['T_delta']['V'],
-                                     self.mem['BFV122Mode']['V'], self.mem['BFV122_ControlSignal']['V'],
-                                     self.mem['BFV122I']['V'], self.mem['BFV122']['V'])
-
-                self.mem['BFV122I']['V'], self.mem['BFV122']['V'] = PIDOUT
-                self.mem['BFV122']['V'] = round(self.mem['BFV122']['V'], 2)
-
-                self.mem['RINOLD']['V'] = RIN
-            # V082/083/V084 Bypass Valve
-            if True:
-                self.simple_control('V082')
-                self.simple_control('V083')            
-                self.simple_control('V084', step=0.01)
-            # Bypass Flow Calculation
-            if True:
-                self.mem['WTOFV122']['V'] = self.mem['CWCHARG']['V'] * self.mem['BFV122']['V'] * self.mem['V082']['V']
-                self.mem['WTOV083']['V'] = self.mem['WTOFV122']['V'] - self.mem['MAL06']['V']
-                self.mem['WTOV084']['V'] = (self.mem['CWCHARG']['V'] - self.mem['WTOFV122']['V']) * self.mem['V084']['V']
-            # 최종 Chargning 유량 계산
-            if True:
-                if self.mem['PLETIN']['V'] < 182.0E5:
-                    self.mem['WCHPFV122']['V'] = self.mem['WTOV083']['V'] + self.mem['WTOV084']['V']
-                    self.mem['WCHGNO']['V'] = ((self.mem['WCHPFV122']['V'] - self.mem['RTFLOW']['V']) - self.mem['WCHGNO']['V']) * 0.1 + self.mem['WCHGNO']['V']
-                else:
-                    self.mem['WCHGNO']['V'] = 0
-                self.mem['WCHGNO']['V'] = 0 if self.mem['WCHGNO']['V'] <= 0 else self.mem['WCHGNO']['V']
-                self.mem['RTFLOW']['V'] = self.mem['RTFLOW']['V'] if self.mem['LV616']['V'] != 0 else 0
-            # Net Charging / Letdown + 가압기 수위 반영
-            if True:
-                self.mem['WNETCH']['V'] = self.mem['WCHGNO']['V'] + self.mem['RTFLOW']['V']
-                self.mem['WNETCH']['V'] = 0 if self.mem['WNETCH']['V'] <= 0 else self.mem['WNETCH']['V']
-
-                # Letdown
-                # self.mem['WLETDNO']['V'] = NEXTLET
-                
-
-                # RCS 링 모델을 사용한 가압기 수위 계산
+                    self.control('LV460')
+                # Letdown Pressure / Normal letdown flow  (back pressure is assumed to be 1 bar ?)
                 if True:
-                    delta = self.RCS_VOLs[-2] - self.RCS_VOLs[-1]
-                    
-                    # 볼륨 계산
-                    self.RCS_VOLs[16] -= self.mem['WLETDNO']['V'] * self.mem['LV460']['V']
-                    self.RCS_VOLs[16] -= self.mem['WEXLD']['V']
-                    self.RCS_VOLs[16] += self.mem['WNETCH']['V']
-                    
-                    # # 회전
-                    _end_rcs_vol = self.RCS_VOLs[-1]
-                    self.RCS_VOLs.appendleft(_end_rcs_vol)
+                    RPRCS = max(self.mem['PLETIN']['V'], self.mem['PPRZN']['V'])
+                    RPDIF = (RPRCS - self.mem['PLETDB']['V']) / (self.mem['CPPRZN']['V'] - self.mem['CPLDBN']['V'])
+                    RPDIF = 0 if RPDIF <= 0 else RPDIF
 
-                # 가압기 수위에 반영
-                # self.mem['DEPRZ']['V' += delta * 0.0000095
-                # self.mem['DEPRZ']['V'] += delta * 0.0000095 * 5
-                self.mem['DEPRZ']['V'] = self.get_level(self.RCS_VOLs[-1])
-                self.mem['DEPRZ']['V'] = 1 if self.mem['DEPRZ']['V'] >= 1 else self.mem['DEPRZ']['V']
-                
-                # PZR Level indicator update
-                if True:
-                    # PZR Level Chanel Failure Malfunctions
-                    if self.mem['MAL09A']['V'] != -1:
-                        self.mem['DEPRZA']['V'] = self.mem['MAL09A']['V']
-                    else:
-                        self.mem['DEPRZA']['V'] = self.mem['DEPRZ']['V']
-                    if self.mem['MAL09B']['V'] != -1:
-                        self.mem['DEPRZB']['V'] = self.mem['MAL09B']['V']
-                    else:
-                        self.mem['DEPRZB']['V'] = self.mem['DEPRZ']['V']
+                    RWLTDN = sqrt(RPDIF) * self.mem['LV460']['V'] * self.mem['CLETNO']['V']
 
-                    self.simple_control('DEPRZAC', step=0.01)
-                    self.simple_control('DEPRZBC', step=0.01)
-                    # Final Avg
-                    if self.mem['DEPRZAC']['V'] == 1 and self.mem['DEPRZBC']['V'] == 1:
-                        self.mem['DEPRZAVG']['V'] = (self.mem['DEPRZA']['V'] + self.mem['DEPRZB']['V']) * 0.5
-                    elif self.mem['DEPRZAC']['V'] == 1 and self.mem['DEPRZBC']['V'] == 0:
-                        self.mem['DEPRZAVG']['V'] = self.mem['DEPRZA']['V']
-                    elif self.mem['DEPRZAC']['V'] == 0 and self.mem['DEPRZBC']['V'] == 1:
-                        self.mem['DEPRZAVG']['V'] = self.mem['DEPRZB']['V']
-                    else:
-                        self.mem['DEPRZAVG']['V'] = 0
-                    self.mem['DEPRZAVGNO']['V'] = self.mem['DEPRZAVG']['V'] * 100
-                        
-                # PZR Heater
+                    NEXTLET = (RWLTDN - NEXTLET) * 0.2 + NEXTLET         
+                # 결과적으로 가압기 수위에 영향을 미치는 유출 유량 **
+                self.mem['WLETDNO']['V'] = NEXTLET
+                # Excess Letdown RCS -- HV 41 <ref. cvcsyd_exldsd.f>
                 if True:
-                    if self.mem['PZRMode']['V'] == 0:
+                    self.control('BHV41')
+                    self.mem['WEXLD']['V'] = ((self.mem['PPRZN']['V']-5.0E5)*1.05E-7*self.mem['BHV41']['V'] - self.mem['WEXLD']['V'])*0.5+self.mem['WEXLD']['V']
+                    self.mem['WLETDNO1']['V'] = self.mem['WEXLD']['V']
+                # Leak 460 -*- 459
+                if True:
+                    NEXTLET = NEXTLET - self.mem['MAL02']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
+                    self.mem['WLETDNO2']['V'] = NEXTLET
+                # Letdown 459 Valve ----------------------------------------------------------------------------------------
+                if True:
+                    # 가압기 수위 17 아래 시 10 Sec Delay
+                    if self.mem['DEPRZAVG']['V'] < 0.17:
+                        self.mem['LV459_Delay']['V'] += 1
+                        if self.mem['LV459_Delay']['V'] > 10 / self.mem['T_delta']['V']:
+                            self.mem['LV459_Delay']['V'] = 10 / self.mem['T_delta']['V']
+                    else:
+                        self.mem['LV459_Delay']['V'] = 0
+
+                    if self.mem['LV459_Delay']['V'] >= 10 / self.mem['T_delta']['V'] or self.mem['SISignal']['V'] == 1:
+                        self.mem['LV459_AutoClose']['V'] = 1
+                    else:
+                        self.mem['LV459_AutoClose']['V'] = 0
+
+                    if self.mem['LV459_ControlSignal']['V'] == 1:
+                        self.mem['LV459_OpenSignal']['V'] = 1
+                    else:
+                        self.mem['LV459_OpenSignal']['V'] = 0
+
+                    if self.mem['LV459_ControlSignal']['V'] == -1 or self.mem['LV459_AutoClose']['V'] == 1:
+                        self.mem['LV459_CloseSignal']['V'] = 1
+                    else:
+                        self.mem['LV459_CloseSignal']['V'] = 0
+
+                    self.control('LV459')
+                # Letdown 459 out ->
+                NEXTLET = NEXTLET * self.mem['LV459']['V']
+                # Leak 459 -*- Orifice Valve
+                if True:
+                    NEXTLET = NEXTLET - self.mem['MAL03']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
+                    self.mem['WLETDNO3']['V'] = NEXTLET
+                # Orifice Valve --------------------------------------------------------------------------------------------
+                if True:
+                    for i in range(1, 4):   # 1, 2, 3
                         if self.mem['DEPRZAVG']['V'] < 0.17:
-                            self.mem['PZRHeater']['V'] = 0          # 17% 이하 heat off
-                        elif self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZAVG']['V']:  # 0.62
-                            self.mem['PZRHeater']['V'] = 1          # 17% 이하 heat on
-                        elif self.mem['PPRZN']['V'] < 152.2E5:
-                            self.mem['PZRHeater']['V'] = 1
+                            self.mem[f'HV{i}_AutoClose']['V'] = 1
                         else:
-                            self.mem['PZRHeater']['V'] = 0
+                            self.mem[f'HV{i}_AutoClose']['V'] = 0
+
+                        if self.mem['DEPRZAVG']['V'] >= 0.17 and self.mem[f'HV{i}_ControlSignal']['V'] == 1 and self.mem['LV459']['V'] >= 1:
+                            self.mem[f'HV{i}_OpenSignal']['V'] = 1
+                        else:
+                            self.mem[f'HV{i}_OpenSignal']['V'] = 0
+
+                        if self.mem[f'HV{i}_ControlSignal']['V'] == -1 or self.mem['LV459']['V'] < 0.95:
+                            self.mem[f'HV{i}_CloseSignal']['V'] = 1
+                        else:
+                            self.mem[f'HV{i}_CloseSignal']['V'] = 0
+
+                        temp = 0
+
+                        if self.mem[f'HV{i}_OpenSignal']['V'] == 1:
+                            temp = 1
+                        if self.mem[f'HV{i}_CloseSignal']['V'] == 1:
+                            temp = -1
+
+                        self.mem[f'HV{i}']['V'] = self.mem[f'HV{i}']['V'] + temp * 0.05
+                        self.mem[f'HV{i}']['V'] = 1 if self.mem[f'HV{i}']['V'] > 1 else self.mem[f'HV{i}']['V']
+                        self.mem[f'HV{i}']['V'] = 0 if self.mem[f'HV{i}']['V'] < 0 else self.mem[f'HV{i}']['V']
+                    if self.mem['HV1']['V'] == 1 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 0 and RWLTDN > self.mem['CWHV1']['V']:
+                        NEXTLET = self.mem['CWHV1']['V']
+                    elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 1 and self.mem['HV3']['V'] == 0 and RWLTDN > self.mem['CWHV2']['V']:
+                        NEXTLET = self.mem['CWHV2']['V']
+                    elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 1 and RWLTDN > self.mem['CWHV3']['V']:
+                        NEXTLET = self.mem['CWHV3']['V']
+                    elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 0:
+                        NEXTLET = 0
                     else:
-                        pass
+                        NEXTLET = NEXTLET
+                # Leak Orifice Valve -*- Letdown Heat EX Changer
+                if True:
+                    NEXTLET = NEXTLET - self.mem['MAL04']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
+                    self.mem['WLETDNO4']['V'] = NEXTLET
+                # L/D Back pressure ----------------------------------------------------------------------------------------
+                if True:
+                    # PI controller
+                    
+                    #RIN = (NEXTLET / self.mem['CWNETUT']['V'] - 1.0) + (1.0 - self.mem['PLETDB']['V'] / self.mem['CPLETDB']['V'])
+                    RIN = (NEXTLET / 4.7347999 - 1.0) + (1.0 - self.mem['PLETDB']['V'] / 2410000.00)
+                    PIOut = self.PIREGL(RIN, -1.0, 1.0, 1, 0, self.mem['CLDBP1']['V'], self.mem['CLDBP2']['V'],
+                                        self.mem['T_delta']['V'], 0.01 / self.mem['T_delta']['V'],
+                                        self.mem['BPV145Mode']['V'], self.mem['BPV145_ControlSignal']['V'],
+                                        self.mem['BPV145I']['V'], self.mem['BPV145']['V'])
 
-                # 수위 상승에 따른 압력 증가 고려
-                self.mem['PPRZN']['V'] += delta * 100 * 1 + self.mem['PZRHeater']['V'] * 10
-                self.mem['PPRZNNO']['V'] = self.mem['PPRZN']['V'] * 1e-5
+                    self.mem['BPV145I']['V'], self.mem['BPV145']['V'] = PIOut
+                    self.mem['BPV145']['V'] = round(self.mem['BPV145']['V'], 4)
+                    self.mem['PLETDB']['V'] = self.mem['BPV145']['V'] * 44.1e5
+                # LV143 쪽 라인
+                if True:
+                    self.mem['WLETDNO5UP']['V'] = NEXTLET * self.mem['BLV143']['V']
+                    # 여과기 A
+                    self.mem['WLETDNO5UPA']['V'] = self.mem['WLETDNO5UP']['V']/2
 
-                # 시간 추가
-                self.mem['SimTime']['V'] += 1
-        
-            # ----------------------------------------------------------------------------------------------------------
-            self.mem['MCTMTRAD']['V'] = sum([self.mem[f'MAL0{i}']['V'] for i in range(1, 7)])
+                    self.simple_control('V054', step=0.01)
+                    self.simple_control('V055', step=0.01)
+                    self.simple_control('V056', step=0.01)
+                    if self.mem['V054']['V'] == 1 and self.mem['V055']['V'] == 1 and self.mem['V056']['V'] == 0:
+                        UPA = self.mem['WLETDNO5UPA']['V'] - self.mem['MAL07A']['V']
+                        UPABypass = (self.mem['WLETDNO5UPA']['V'] - UPA) * self.mem['V055']['V']
+                        self.mem['WLETDNO5UPA']['V'] = UPABypass + UPA
+                    else:
+                        UPA = self.mem['V054']['V'] * self.mem['WLETDNO5UPA']['V']
+                        UPABypass = (self.mem['WLETDNO5UPA']['V'] - UPA) * self.mem['V055']['V']
+                        UPA = (UPA - self.mem['MAL07A']['V']) * self.mem['V056']['V']
+                        self.mem['WLETDNO5UPA']['V'] = UPABypass + UPA
 
-            # ALARM update
-            self.step_alarm()
-            # ----------------------------------------------------------------------------------------------------------
-            # SAVE RF and inital control signal
-            for key in self.mem.keys():
-                self.mem[key]['RF'].append(self.mem[key]['V'])
-                if n == self.skip_frame:
-                    self.mem[key]['SF'].append(self.mem[key]['V'])
+                    # 여과기 B
+                    self.mem['WLETDNO5UPB']['V'] = self.mem['WLETDNO5UP']['V']/2
+                    self.simple_control('V057', step=0.01)
+                    self.simple_control('V058', step=0.01)
+                    self.simple_control('V059', step=0.01)
+                    if self.mem['V057']['V'] == 1 and self.mem['V058']['V'] == 1 and self.mem['V059']['V'] == 0:
+                        UPB = self.mem['WLETDNO5UPB']['V'] - self.mem['MAL07B']['V']
+                        UPBBypass = (self.mem['WLETDNO5UPB']['V'] - UPB) * self.mem['V058']['V']
+                        self.mem['WLETDNO5UPB']['V'] = UPABypass + UPB
+                    else:
+                        UPB = self.mem['V057']['V'] * self.mem['WLETDNO5UPB']['V']
+                        UPBBypass = (self.mem['WLETDNO5UPB']['V'] - UPB) * self.mem['V058']['V']
+                        UPB = (UPB - self.mem['MAL07B']['V']) * self.mem['V059']['V']
+                        self.mem['WLETDNO5UPB']['V'] = UPBBypass + UPB
 
-                self.mem['BFV122_ControlSignal']['V'] = 0       # Manual 시 제어 후 초기화 용
-                self.mem['V084_ControlSignal']['V'] = 0         # Manual 시 제어 후 초기화 용
+                    self.mem['WLETDNO5UPB']['V'] = self.mem['V057']['V'] * self.mem['WLETDNO5UPB']['V'] - self.mem['MAL07B']['V']
+                    self.mem['WLETDNO5UPB']['V'] = self.mem['V059']['V'] * self.mem['WLETDNO5UPB']['V']
+
+                    self.mem['WLETDNO5DOWN']['V'] = NEXTLET * abs(self.mem['BLV143']['V'] - 1)
+
+                    self.mem['WLETDNO6']['V'] = self.mem['WLETDNO5UPA']['V'] + self.mem['WLETDNO5UPB']['V'] + self.mem['WLETDNO5DOWN']['V']
+                # Bypass Valve LV614 ---------------------------------------------------------------------------------------
+                # VCT level high, bypass to hold-up tank
+                if True:
+                    if self.mem['ZVCT']['V'] > 74.0:    # 74% Change
+                        self.mem['BLV614']['V'] = 1
+                    elif self.mem['MAL05']['V'] != 0:
+                        self.mem['BLV614']['V'] = self.mem['MAL05']['V']
+                    else:
+                        self.mem['BLV614']['V'] = 0
+
+                    self.mem['WDEMI']['V'] = self.mem['WLETDNO6']['V'] * (1.0 - self.mem['BLV614']['V'])
+                # VCT Level and Pressure -----------------------------------------------------------------------------------
+                if True:
+                    self.mem['ZVCT']['V'] = self.mem['ZVCT']['V'] + (self.mem['WEXLD']['V'] + self.mem['WDEMI']['V'] - self.mem['WLV616']['V']) * self.mem['CVVCT']['V'] * self.mem['T_delta']['V']
+
+                    self.mem['ZVCT']['V'] = 0 if self.mem['ZVCT']['V'] < 0 else self.mem['ZVCT']['V']
+                    self.mem['ZVCT']['V'] = 100 if self.mem['ZVCT']['V'] > 100 else self.mem['ZVCT']['V']
+
+                    self.mem['PVCT']['V'] = 1.0 + self.mem['ZVCT']['V'] * 0.0099  # 1.2~2.0 kg/cm2
+                # ----------------------------------------------------------------------------------------------------------
+
+                # LV616 Valve Start ----------------------------------------------------------------------------------------
+                if True:
+                    self.mem['LV616_AutoClose']['V'] = 1 if self.mem['ZVCT']['V'] <= 5.0 or self.mem['SISignal']['V'] == 1 else 0
+                    self.mem['LV616_AutoOpen']['V'] = 1 if self.mem['ZVCT']['V'] > 10.0 or self.mem['SISignal']['V'] == 1 else 0
+                    self.mem['LV616_OpenSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == 1 or self.mem['LV616_AutoOpen']['V'] == 1 else 0
+                    self.mem['LV616_CloseSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == -1 or self.mem['LV616_AutoClose']['V'] == 1 else 0
+                    temp = 0
+                    temp = 1 if self.mem['LV616_OpenSignal']['V'] == 1 else temp
+                    temp = -1 if self.mem['LV616_CloseSignal']['V'] == 1 else temp  
+                    self.mem['LV616']['V'] = self.mem['LV616']['V'] + temp * 1
+                    self.mem['LV616']['V'] = 1 if self.mem['LV616']['V'] >= 1 else self.mem['LV616']['V']
+                    self.mem['LV616']['V'] = 0 if self.mem['LV616']['V'] <= 0 else self.mem['LV616']['V']
+
+                    self.mem['LV616_ControlSignal']['V'] = 0 if self.mem['LV616']['V'] >= 1 else self.mem['LV616_ControlSignal']['V']
+                    self.mem['LV616_ControlSignal']['V'] = 0 if self.mem['LV616']['V'] <= 0 else self.mem['LV616_ControlSignal']['V']
+                    # LV616 -> Seal
+                    self.mem['RTFLOW']['V'] = (self.mem['WRCPSI']['V'] - self.mem['WRCPSR']['V']) * 3.0
+                    self.mem['WLV616']['V'] = (self.mem['WCHARGT']['V'] - self.mem['WSWHX']['V'] + self.mem['RTFLOW']['V']) * self.mem['LV616']['V']
+
+                # Charging Pump --------------------------------------------------------------------------------------------
+                if True:
+                    RRCPSL = self.mem['WRCPSI']['V'] * 3  # RCP Seal 에서 Return Flow
+                    self.mem['WCHARGT']['V'] = self.mem['WCHGNO']['V'] + RRCPSL + self.mem['WCMINI']['V']
+
+                    # Mini Flow pass
+
+                    # Charging Line Flow via FV122
+                    ChargingFlow = [0, 9.8000002, 13.857000, 16.954000]
+                    if True: # Malfunction Stop CHP1:
+                        self.mem['CHP1']['V'] = (1 - self.mem['MAL08A']['V']) * self.mem['CHP1']['V']
+                        self.mem['CHP2']['V'] = (1 - self.mem['MAL08B']['V']) * self.mem['CHP2']['V']
+                        self.mem['CHP3']['V'] = (1 - self.mem['MAL08C']['V']) * self.mem['CHP3']['V']
+                    start_CHP = self.mem['CHP1']['V'] + self.mem['CHP2']['V'] + self.mem['CHP3']['V']
+                    self.mem['CWCHARG']['V'] = ChargingFlow[int(start_CHP)] if self.mem['LV616']['V'] != 0 else 0
+
+                # FV122 Charging Valve -------------------------------------------------------------------------------------
+                if True:
+                    # PID Controller for FV122
+                    RIN = self.mem['ZPRZSP']['V'] - self.mem['DEPRZAVG']['V']
+                    PIDOUT = self.PIDREG(RIN, self.mem['RINOLD']['V'], -1.0, 0, 1.0, 0.1,
+                                        0.2, 5.0, 0.01, self.mem['T_delta']['V'], 0.0075 / self.mem['T_delta']['V'],
+                                        self.mem['BFV122Mode']['V'], self.mem['BFV122_ControlSignal']['V'],
+                                        self.mem['BFV122I']['V'], self.mem['BFV122']['V'])
+
+                    self.mem['BFV122I']['V'], self.mem['BFV122']['V'] = PIDOUT
+                    self.mem['BFV122']['V'] = round(self.mem['BFV122']['V'], 2)
+
+                    self.mem['RINOLD']['V'] = RIN
+                # V082/083/V084 Bypass Valve
+                if True:
+                    self.simple_control('V082')
+                    self.simple_control('V083')            
+                    self.simple_control('V084', step=0.01)
+                # Bypass Flow Calculation
+                if True:
+                    self.mem['WTOFV122']['V'] = self.mem['CWCHARG']['V'] * self.mem['BFV122']['V'] * self.mem['V082']['V']
+                    self.mem['WTOV083']['V'] = self.mem['WTOFV122']['V'] - self.mem['MAL06']['V']
+                    self.mem['WTOV084']['V'] = (self.mem['CWCHARG']['V'] - self.mem['WTOFV122']['V']) * self.mem['V084']['V']
+                # 최종 Chargning 유량 계산
+                if True:
+                    if self.mem['PLETIN']['V'] < 182.0E5:
+                        self.mem['WCHPFV122']['V'] = self.mem['WTOV083']['V'] + self.mem['WTOV084']['V']
+                        self.mem['WCHGNO']['V'] = ((self.mem['WCHPFV122']['V'] - self.mem['RTFLOW']['V']) - self.mem['WCHGNO']['V']) * 0.1 + self.mem['WCHGNO']['V']
+                    else:
+                        self.mem['WCHGNO']['V'] = 0
+                    self.mem['WCHGNO']['V'] = 0 if self.mem['WCHGNO']['V'] <= 0 else self.mem['WCHGNO']['V']
+                    self.mem['RTFLOW']['V'] = self.mem['RTFLOW']['V'] if self.mem['LV616']['V'] != 0 else 0
+                # Net Charging / Letdown + 가압기 수위 반영
+                if True:
+                    self.mem['WNETCH']['V'] = self.mem['WCHGNO']['V'] + self.mem['RTFLOW']['V']
+                    self.mem['WNETCH']['V'] = 0 if self.mem['WNETCH']['V'] <= 0 else self.mem['WNETCH']['V']
+
+                    # Letdown
+                    # self.mem['WLETDNO']['V'] = NEXTLET
+                    
+
+                    # RCS 링 모델을 사용한 가압기 수위 계산
+                    if True:
+                        delta = self.RCS_VOLs[-2] - self.RCS_VOLs[-1]
+                        
+                        # 볼륨 계산
+                        self.RCS_VOLs[16] -= self.mem['WLETDNO']['V'] * self.mem['LV460']['V']
+                        self.RCS_VOLs[16] -= self.mem['WEXLD']['V']
+                        self.RCS_VOLs[16] += self.mem['WNETCH']['V']
+                        
+                        # # 회전
+                        _end_rcs_vol = self.RCS_VOLs[-1]
+                        self.RCS_VOLs.appendleft(_end_rcs_vol)
+
+                    # 가압기 수위에 반영
+                    # self.mem['DEPRZ']['V' += delta * 0.0000095
+                    # self.mem['DEPRZ']['V'] += delta * 0.0000095 * 5
+                    self.mem['DEPRZ']['V'] = self.get_level(self.RCS_VOLs[-1])
+                    self.mem['DEPRZ']['V'] = 1 if self.mem['DEPRZ']['V'] >= 1 else self.mem['DEPRZ']['V']
+                    
+                    # PZR Level indicator update
+                    if True:
+                        # PZR Level Chanel Failure Malfunctions
+                        if self.mem['MAL09A']['V'] != -1:
+                            self.mem['DEPRZA']['V'] = self.mem['MAL09A']['V']
+                        else:
+                            self.mem['DEPRZA']['V'] = self.mem['DEPRZ']['V']
+                        if self.mem['MAL09B']['V'] != -1:
+                            self.mem['DEPRZB']['V'] = self.mem['MAL09B']['V']
+                        else:
+                            self.mem['DEPRZB']['V'] = self.mem['DEPRZ']['V']
+
+                        self.simple_control('DEPRZAC', step=0.01)
+                        self.simple_control('DEPRZBC', step=0.01)
+                        # Final Avg
+                        if self.mem['DEPRZAC']['V'] == 1 and self.mem['DEPRZBC']['V'] == 1:
+                            self.mem['DEPRZAVG']['V'] = (self.mem['DEPRZA']['V'] + self.mem['DEPRZB']['V']) * 0.5
+                        elif self.mem['DEPRZAC']['V'] == 1 and self.mem['DEPRZBC']['V'] == 0:
+                            self.mem['DEPRZAVG']['V'] = self.mem['DEPRZA']['V']
+                        elif self.mem['DEPRZAC']['V'] == 0 and self.mem['DEPRZBC']['V'] == 1:
+                            self.mem['DEPRZAVG']['V'] = self.mem['DEPRZB']['V']
+                        else:
+                            self.mem['DEPRZAVG']['V'] = 0
+                        self.mem['DEPRZAVGNO']['V'] = self.mem['DEPRZAVG']['V'] * 100
+                            
+                    # PZR Heater
+                    if True:
+                        if self.mem['PZRMode']['V'] == 0:
+                            if self.mem['DEPRZAVG']['V'] < 0.17:
+                                self.mem['PZRHeater']['V'] = 0          # 17% 이하 heat off
+                            elif self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZAVG']['V']:  # 0.62
+                                self.mem['PZRHeater']['V'] = 1          # 17% 이하 heat on
+                            elif self.mem['PPRZN']['V'] < 152.2E5:
+                                self.mem['PZRHeater']['V'] = 1
+                            else:
+                                self.mem['PZRHeater']['V'] = 0
+                        else:
+                            pass
+
+                    # 수위 상승에 따른 압력 증가 고려
+                    self.mem['PPRZN']['V'] += delta * 100 * 1 + self.mem['PZRHeater']['V'] * 10
+                    self.mem['PPRZNNO']['V'] = self.mem['PPRZN']['V'] * 1e-5
+
+                    # 시간 추가
+                    self.mem['SimTime']['V'] += 1
+            
+                # ----------------------------------------------------------------------------------------------------------
+                self.mem['MCTMTRAD']['V'] = sum([self.mem[f'MAL0{i}']['V'] for i in range(1, 7)])
+
+                # ALARM update
+                self.step_alarm()
+                # ----------------------------------------------------------------------------------------------------------
+                # SAVE RF and inital control signal
+                for key in self.mem.keys():
+                    self.mem[key]['RF'].append(self.mem[key]['V'])
+                    if n == self.skip_frame:
+                        self.mem[key]['SF'].append(self.mem[key]['V'])
+
+                    self.mem['BFV122_ControlSignal']['V'] = 0       # Manual 시 제어 후 초기화 용
+                    self.mem['V084_ControlSignal']['V'] = 0         # Manual 시 제어 후 초기화 용
+        except Exception as e:
+            print(traceback.format_exc())
 
     def step_alarm(self):
         self.mem['KLAMPO260']['V'] = 1 if self.mem['WLETDNO']['V'] < 4.16 else 0
