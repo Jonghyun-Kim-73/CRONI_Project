@@ -171,7 +171,8 @@ class DiagnosisProcedureTable(ABCTableWidget):
             if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
                 self.inmem.get_diagnosis_result()
                 for i in range(3):
-                    pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
+                    # pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
+                    pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
                     self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
                     self.cellWidget(i, 1).update_item(pro_name, block)
                     self.cellWidget(i, 2).update_item(pro_name, block)
@@ -180,7 +181,8 @@ class DiagnosisProcedureTable(ABCTableWidget):
 
             elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 and sum(self.train_check) != 5 or self.inmem.ShMem.get_para_val('iFixTrain') == 2: # 테이블 초기화를 위한 조건
                 for i in range(3):
-                    pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
+                    # pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
+                    pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
                     self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
                     self.cellWidget(i, 1).update_item(pro_name, block)
                     self.cellWidget(i, 2).update_item(pro_name, block)
