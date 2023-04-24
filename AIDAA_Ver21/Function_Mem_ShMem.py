@@ -12,7 +12,7 @@ import shap
 from struct import unpack, pack
 import socket
 
-
+USECVCSMIMIC = False
 class ShMem:
     def __init__(self):
         self.mem = self.make_cns_mem(max_len=10)
@@ -25,8 +25,13 @@ class ShMem:
         self.send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     
     # - CVCS part -------------------------------------------------------------------------------------------------------
-    def update_CVCS(self):                    self.CVCS.step()
-    def get_CVCS_para_val(self, para):        return self.CVCS.mem[para]['V'] if para in self.CVCS.mem.keys() else None
+    def update_CVCS(self):                              _ = self.CVCS.step() if USECVCSMIMIC else self.overwrite_CVCS_from_CNS()
+    def overwrite_CVCS_from_CNS(self):
+        self.CVCS.step()
+        for para in self.mem.keys():
+            if para in self.CVCS.mem.keys(): 
+                self.CVCS.mem[para]['V'] = self.mem[para]['Val']
+    def get_CVCS_para_val(self, para):                  return self.CVCS.mem[para]['V'] if para in self.CVCS.mem.keys() else None
     # - Normal part -----------------------------------------------------------------------------------------------------
     def make_cns_mem(self, max_len, db_path='./db.txt', db_add_path='./db_add.txt'):
         # 초기 shared_mem의 구조를 선언한다.
@@ -48,34 +53,29 @@ class ShMem:
         # 다음과정을 통하여 shared_mem 은 PID : { type. val, num }를 가진다.
         return shared_mem
     
-    def update_alarmdb(self):        self.AlarmDB.update_alarmdb_from_ShMem()
-    
-    def add_val_to_list(self):       [self.mem[para]['List'].append(self.mem[para]['Val']) for para in self.mem.keys()]
-    
-    def change_para_val(self, para, val):       self.mem[para]['Val'] = val
-    def change_cvcs_para_val(self, para, val):       self.CVCS.mem[para]['V'] = val
-
-    def get_para_val(self, para):         return self.mem[para]['Val']
-    def get_para_list(self, para):        return self.mem[para]['List']
-    def get_paras_val(self, paras):       return [self.mem[para]['Val'] for para in paras]
-    def get_mem(self):                    return self.mem
-    def get_alarmdb(self):                return self.AlarmDB.alarmdb
-    def get_alarms(self):                 return self.AlarmDB.get_alarms()
-    def get_on_alarms(self):              return self.AlarmDB.get_on_alarms()
-    def get_on_alarms_val(self):          return self.AlarmDB.get_on_alarms_val()
-    def get_alarm_val(self, para):        return self.AlarmDB.get_alarm_val(para)
-    def get_on_alarms_des(self):          return self.AlarmDB.get_on_alarms_des()
-    def get_alarm_des(self, para):        return self.AlarmDB.get_alarm_des(para)
-    def get_on_alarms_unit(self):         return self.AlarmDB.get_on_alarms_unit()
-    def get_alarm_unit(self, para):       return self.AlarmDB.get_alarms_unit(para)
-    def get_on_alarms_setpoint(self):     return self.AlarmDB.get_on_alarms_setpoint()
-    def get_alarm_setpoint(self, para):   return self.AlarmDB.get_alarms_setpoint(para)
-
-    def check_para_name(self, para):      return True if para in self.mem.keys() else False
-    def check_para_type(self, para):      return self.mem[para]['Sig']
-    def check_cvcs_para_name(self, para): return True if para in self.CVCS.mem.keys() else False
-    def check_cvcs_para_type(self, para): return 0 if isinstance(self.CVCS.mem[para], int) else 1
-
+    def update_alarmdb(self):                           self.AlarmDB.update_alarmdb_from_ShMem()
+    def add_val_to_list(self):                          [self.mem[para]['List'].append(self.mem[para]['Val']) for para in self.mem.keys()]
+    def change_para_val(self, para, val):               self.mem[para]['Val'] = val
+    def change_cvcs_para_val(self, para, val):          self.CVCS.mem[para]['V'] = val
+    def get_para_val(self, para):                       return self.mem[para]['Val']
+    def get_para_list(self, para):                      return self.mem[para]['List']
+    def get_paras_val(self, paras):                     return [self.mem[para]['Val'] for para in paras]
+    def get_mem(self):                                  return self.mem
+    def get_alarmdb(self):                              return self.AlarmDB.alarmdb
+    def get_alarms(self):                               return self.AlarmDB.get_alarms()
+    def get_on_alarms(self):                            return self.AlarmDB.get_on_alarms()
+    def get_on_alarms_val(self):                        return self.AlarmDB.get_on_alarms_val()
+    def get_alarm_val(self, para):                      return self.AlarmDB.get_alarm_val(para)
+    def get_on_alarms_des(self):                        return self.AlarmDB.get_on_alarms_des()
+    def get_alarm_des(self, para):                      return self.AlarmDB.get_alarm_des(para)
+    def get_on_alarms_unit(self):                       return self.AlarmDB.get_on_alarms_unit()
+    def get_alarm_unit(self, para):                     return self.AlarmDB.get_alarms_unit(para)
+    def get_on_alarms_setpoint(self):                   return self.AlarmDB.get_on_alarms_setpoint()
+    def get_alarm_setpoint(self, para):                 return self.AlarmDB.get_alarms_setpoint(para)
+    def check_para_name(self, para):                    return True if para in self.mem.keys() else False
+    def check_para_type(self, para):                    return self.mem[para]['Sig']
+    def check_cvcs_para_name(self, para):               return True if para in self.CVCS.mem.keys() else False
+    def check_cvcs_para_type(self, para):               return 0 if isinstance(self.CVCS.mem[para], int) else 1
     # ----------------------------------------------------------------------------------------------------------------------
     def get_pro_all_ab_procedure_names(self):
         out = []
@@ -83,51 +83,22 @@ class ShMem:
             if 'Ab' in name_:
                 out.append(name_)
         return out
-
-    # Urgent action or not
-    def get_pro_urgent_act(self, procedure_name):
-        return ab_pro[procedure_name]['긴급조치']
-
-    # radiation or not
-    def get_pro_radiation(self, procedure_name):
-        return ab_pro[procedure_name]['방사선']
-
-    def get_pro_symptom(self, procedure_name):
-        return ab_pro[procedure_name]['경보 및 증상']
-
-    # Symptom count
-    def get_pro_count(self, procedure_name, title):
-        return len(ab_pro[procedure_name][title].keys())
-
-    def get_pro_purpose_count(self, procedure_name):
-        return self.get_pro_count(procedure_name, '목적')
-
-    def get_pro_symptom_count(self, procedure_name):
-        return self.get_pro_count(procedure_name, '경보 및 증상')
-
-    def get_pro_automatic_count(self, procedure_name):
-        return self.get_pro_count(procedure_name, '자동 동작 사항')
-
-    def get_pro_urgent_count(self, procedure_name):
-        return self.get_pro_count(procedure_name, '긴급 조치 사항')
-
-    def get_pro_follow_count(self, procedure_name):
-        return self.get_pro_count(procedure_name, '후속 조치 사항')
-
-    def get_pro_symptom_satify(self, procedure_name):
-        return 5
-
-    # Procedure
-    def get_pro_procedure(self, procedure_name):
-        return {'경보 및 증상': ab_pro[procedure_name]['경보 및 증상'], '자동 동작 사항': ab_pro[procedure_name]['자동 동작 사항'],
-                '긴급 조치 사항': ab_pro[procedure_name]['긴급 조치 사항'], '후속 조치 사항': ab_pro[procedure_name]['후속 조치 사항']}
-
+    def get_pro_urgent_act(self, procedure_name):       return ab_pro[procedure_name]['긴급조치']           # Urgent action or not
+    def get_pro_radiation(self, procedure_name):        return ab_pro[procedure_name]['방사선']             # radiation or not
+    def get_pro_symptom(self, procedure_name):          return ab_pro[procedure_name]['경보 및 증상']
+    def get_pro_count(self, procedure_name, title):     return len(ab_pro[procedure_name][title].keys())    # Symptom count
+    def get_pro_purpose_count(self, procedure_name):    return self.get_pro_count(procedure_name, '목적')
+    def get_pro_symptom_count(self, procedure_name):    return self.get_pro_count(procedure_name, '경보 및 증상')
+    def get_pro_automatic_count(self, procedure_name):  return self.get_pro_count(procedure_name, '자동 동작 사항')
+    def get_pro_urgent_count(self, procedure_name):     return self.get_pro_count(procedure_name, '긴급 조치 사항')
+    def get_pro_follow_count(self, procedure_name):     return self.get_pro_count(procedure_name, '후속 조치 사항')
+    def get_pro_symptom_satify(self, procedure_name):   return 5
+    def get_pro_procedure(self, procedure_name):        return {title: ab_pro[procedure_name][title] for title in ['경보 및 증상', '자동 동작 사항', '긴급 조치 사항', '후속 조치 사항']}
     def get_pro_procedure_count(self, procedure_name):
         return {'목적': 0, '경보 및 증상': len(ab_pro[procedure_name]['경보 및 증상'].keys()),
                 '자동 동작 사항': len(ab_pro[procedure_name]['자동 동작 사항'].keys()),
                 '긴급 조치 사항': len(ab_pro[procedure_name]['긴급 조치 사항'].keys()),
                 '후속 조치 사항': len(ab_pro[procedure_name]['후속 조치 사항'].keys())}
-
     def get_pro_procedure_content(self, procedure_name, state, content, type_) -> str:
         """_summary_
 
@@ -141,9 +112,7 @@ class ShMem:
             _type_: _description_
         """
         return ab_pro[procedure_name][state][content][type_]
-
-    def get_pro_procedure_contents(self, pro_name, title):
-        return ab_pro[pro_name][title]
+    def get_pro_procedure_contents(self, pro_name, title):  return ab_pro[pro_name][title]
     def get_system_alarm_num(self):
         system_alarm = {'화학 및 체적 제어계통': [], '원자로 냉각재 계통': [], '주급수 계통': [],
                         '보조 급수 계통': [], '제어봉 제어 계통': [], '잔열 제거 계통': [], '주증기 계통': [],
@@ -158,9 +127,9 @@ class ShMem:
 # ----------------------------------------------------------------------------------------------------------------------
 # 통신 Part Function
 # ----------------------------------------------------------------------------------------------------------------------
-    def update_cns_ip_port(self, ip, port):  self.CNSIP, self.CNSPort = ip, port
-    def get_udp_my_com_ip(self):             return socket.gethostbyname(socket.getfqdn())
-    def get_cns_ip_port(self):               return self.CNSIP, self.CNSPort
+    def update_cns_ip_port(self, ip, port):             self.CNSIP, self.CNSPort = ip, port
+    def get_udp_my_com_ip(self):                        return socket.gethostbyname(socket.getfqdn())
+    def get_cns_ip_port(self):                          return self.CNSIP, self.CNSPort
     def send_control_signal(self, para, val):
         '''
         조작 필요없음
@@ -191,7 +160,6 @@ class ShMem:
         buffer = UDP_header + pack('h', np.shape(para)[0]) + temp_data + buffer[len(temp_data):]
 
         self.send_sock.sendto(buffer, (self.CNSIP, int(self.CNSPort)))
-
 
 class InterfaceMem:
     def __init__(self, Shmem, top_widget):
@@ -277,8 +245,6 @@ class InterfaceMem:
         temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob], index=['variable', 'describe', 'value', 'probability']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
         temp2 = temp2[temp2['value'] > 0]
         self.dis_AI['XAI'] = [[temp2.iloc[i]['describe'], temp2.iloc[i]['probability']] for i in range(5)]
-
-
 
     def get_train_check_val(self):
         return np.array([np.array([self.ShMem.get_para_list(i) for i in self.train_check_para]).reshape(-1, 46)])

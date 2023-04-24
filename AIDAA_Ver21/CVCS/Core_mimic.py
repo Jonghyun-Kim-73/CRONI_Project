@@ -389,7 +389,6 @@ class CVCS:
             # RCS -- 460
             if True:
                 NEXTLET = self.mem['WLETDNO']['V']
-                
             # Letdown 460 Valve ----------------------------------------------------------------------------------------
             if True:
                 # 가압기 수위 17 아래 시 10 Sec Delay
@@ -791,7 +790,6 @@ class CVCS:
         if self.mem['KLAMPO310']['V'] == 1: self.mem['A_DEPRZAVGNO']['V'] = 2
         if self.mem['KLAMPO311']['V'] == 1: self.mem['A_DEPRZAVGNO']['V'] = 2
         if self.mem['KLAMPO312']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
-               
 
     def PIREGL(self, RIN, RINLMH, RINLML, RUTLMH, RUTLML,
                RGAIN, RINTEG, RDT,
