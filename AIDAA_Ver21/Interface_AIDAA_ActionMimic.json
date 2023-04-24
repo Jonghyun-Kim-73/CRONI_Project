@@ -5,9 +5,9 @@
     "x": 202.0,
     "y": 831.0,
     "direction": "R",
-    "alarm_name": "A_CHP1",
+    "alarm_name": "A_KLAMPO71",
     "comp_name": "CHPP 1",
-    "para_name": "CHP1",
+    "para_name": "KLAMPO71",
     "connected_id": []
   },
   "P2": {
@@ -16,9 +16,9 @@
     "x": 202.0,
     "y": 913.0,
     "direction": "R",
-    "alarm_name": "A_CHP2",
+    "alarm_name": "A_KLAMPO70",
     "comp_name": "CHPP 2",
-    "para_name": "CHP2",
+    "para_name": "KLAMPO70",
     "connected_id": []
   },
   "P1": {
@@ -27,9 +27,9 @@
     "x": 202.0,
     "y": 995.0,
     "direction": "R",
-    "alarm_name": "A_CHP3",
+    "alarm_name": "A_KLAMPO69",
     "comp_name": "CHPP 3",
-    "para_name": "CHP3",
+    "para_name": "KLAMPO69",
     "connected_id": []
   },
   "L0": {
@@ -348,10 +348,10 @@
     "x": 90.0,
     "y": 642.0,
     "direction": "V",
-    "alarm_name": "A_LV616",
-    "comp_name": "LV616",
+    "alarm_name": "A_BLV616",
+    "comp_name": "BLV616",
     "comp_name_direction": "Right",
-    "para_name": "LV616",
+    "para_name": "BLV616",
     "connected_id": []
   },
   "L20": {
@@ -667,10 +667,10 @@
     "x": 703.0,
     "y": 17.0,
     "direction": "H",
-    "alarm_name": "A_HV3",
-    "comp_name": "HV3",
+    "alarm_name": "A_BHV3",
+    "comp_name": "BHV3",
     "comp_name_direction": "Bottom",
-    "para_name": "HV3",
+    "para_name": "BHV3",
     "connected_id": []
   },
   "V7": {
@@ -679,10 +679,10 @@
     "x": 701.0,
     "y": 72.0,
     "direction": "H",
-    "alarm_name": "A_HV2",
-    "comp_name": "HV2",
+    "alarm_name": "A_BHV2",
+    "comp_name": "BHV2",
     "comp_name_direction": "Bottom",
-    "para_name": "HV2",
+    "para_name": "BHV2",
     "connected_id": []
   },
   "V10": {
@@ -691,10 +691,10 @@
     "x": 701.0,
     "y": 127.0,
     "direction": "H",
-    "alarm_name": "A_HV1",
-    "comp_name": "HV1",
+    "alarm_name": "A_BHV1",
+    "comp_name": "BHV1",
     "comp_name_direction": "Bottom",
-    "para_name": "HV1",
+    "para_name": "BHV1",
     "connected_id": []
   },
   "V9": {
@@ -863,8 +863,8 @@
     "unit": "%",
     "comp_name": "L",
     "comp_name_size": 16,
-    "para_name": "DEPRZAVGNO",
-    "alarm_name": "A_DEPRZAVGNO",
+    "para_name": "ZPRZNOAVGNO",
+    "alarm_name": "A_ZPRZNOAVGNO",
     "connected_id": []
   },
   "V12": {
@@ -873,10 +873,10 @@
     "x": 755.0,
     "y": 675.0,
     "direction": "V",
-    "alarm_name": "A_LV459",
-    "comp_name": "LV459",
+    "alarm_name": "A_BLV459",
+    "comp_name": "BLV459",
     "comp_name_direction": "Right",
-    "para_name": "LV459",
+    "para_name": "BLV459",
     "connected_id": []
   },
   "L49": {

@@ -32,6 +32,7 @@ class ShMem:
         for para in self.mem.keys():
             if para in self.CVCS.mem.keys(): 
                 self.CVCS.mem[para]['V'] = self.mem[para]['Val']
+        self.CVCS.step_alarm()
     def get_CVCS_para_val(self, para):                  return self.CVCS.mem[para]['V'] if para in self.CVCS.mem.keys() else None
     # - Normal part -----------------------------------------------------------------------------------------------------
     def make_cns_mem(self, max_len, db_path='./db.txt', db_add_path='./db_add.txt'):

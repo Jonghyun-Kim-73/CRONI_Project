@@ -37,19 +37,19 @@ class CVCS:
 
             'SISignal': {'V': 0, 'RF': [0], 'SF': [0]},             # SI signal / KSAFEI
 
-            'DEPRZ': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level
-            'DEPRZA': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH A
-            'DEPRZB': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH B
-            'DEPRZAVG': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH Avg
-            'DEPRZAVGNO': {'V': self.get_level(self.RCS_VOLs[-1]*100), 'RF': [self.get_level(self.RCS_VOLs[-1])*100], 'SF': [self.get_level(self.RCS_VOLs[-1])*100]}, # PZR level * 100
+            'ZPRZNO': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level
+            'ZPRZNOA': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH A
+            'ZPRZNOB': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH B
+            'ZPRZNOAVG': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH Avg
+            'ZPRZNOAVGNO': {'V': self.get_level(self.RCS_VOLs[-1]*100), 'RF': [self.get_level(self.RCS_VOLs[-1])*100], 'SF': [self.get_level(self.RCS_VOLs[-1])*100]}, # PZR level * 100
 
             'ZPRZSP': {'V': 0.559, 'RF': [0.559], 'SF': [0.559]},   # PZR Set-point
-            'LV459_Delay': {'V': 0, 'RF': [0], 'SF': [0]},          # Letdown Valve LV459 / KTLV459
-            'LV459_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},      # Letdown Valve LV459 / KCLV459
-            'LV459_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},     # Letdown Valve LV459 / KCLV459
-            'LV459_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},    # Letdown Valve LV459 / KALV459
-            'LV459_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},  # Letdown Valve LV459 Control Signal -1 Clsoe 0 1 Open
-            'LV459': {'V': 1, 'RF': [1], 'SF': [1]},                # Letdown Valve LV459 / BLV459
+            'BLV459_Delay': {'V': 0, 'RF': [0], 'SF': [0]},          # Letdown Valve BLV459 / KTBLV459
+            'BLV459_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},      # Letdown Valve BLV459 / KCBLV459
+            'BLV459_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},     # Letdown Valve BLV459 / KCBLV459
+            'BLV459_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},    # Letdown Valve BLV459 / KABLV459
+            'BLV459_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},  # Letdown Valve BLV459 Control Signal -1 Clsoe 0 1 Open
+            'BLV459': {'V': 1, 'RF': [1], 'SF': [1]},                # Letdown Valve BLV459 / BBLV459
 
             'LV460_Delay': {'V': 0, 'RF': [0], 'SF': [0]},
             'LV460_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
@@ -58,23 +58,23 @@ class CVCS:
             'LV460_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
             'LV460': {'V': 1, 'RF': [1], 'SF': [1]},
 
-            'HV1_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV1_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV1_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV1_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV1': {'V': 1, 'RF': [1], 'SF': [1]},
+            'BHV1_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV1_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV1_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV1_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV1': {'V': 1, 'RF': [1], 'SF': [1]},
 
-            'HV2_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV2_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV2_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV2_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV2': {'V': 1, 'RF': [1], 'SF': [1]},
+            'BHV2_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV2_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV2_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV2_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV2': {'V': 1, 'RF': [1], 'SF': [1]},
 
-            'HV3_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV3_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV3_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV3_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'HV3': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV3_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV3_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV3_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV3_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BHV3': {'V': 0, 'RF': [0], 'SF': [0]},
 
             'BPV145_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
             'BPV145_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
@@ -153,17 +153,17 @@ class CVCS:
             'BHV41_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
             'BHV41': {'V': 0, 'RF': [0], 'SF': [0]},
 
-            'DEPRZAC_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},       # DEPRZ Level CH A
-            'DEPRZAC_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'DEPRZAC_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'DEPRZAC_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'DEPRZAC': {'V': 1, 'RF': [1], 'SF': [1]},
+            'ZPRZNOAC_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},       # ZPRZNO Level CH A
+            'ZPRZNOAC_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'ZPRZNOAC_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'ZPRZNOAC_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'ZPRZNOAC': {'V': 1, 'RF': [1], 'SF': [1]},
 
-            'DEPRZBC_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},       # DEPRZ Level CH B
-            'DEPRZBC_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'DEPRZBC_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'DEPRZBC_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'DEPRZBC': {'V': 1, 'RF': [1], 'SF': [1]},
+            'ZPRZNOBC_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},       # ZPRZNO Level CH B
+            'ZPRZNOBC_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'ZPRZNOBC_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'ZPRZNOBC_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'ZPRZNOBC': {'V': 1, 'RF': [1], 'SF': [1]},
 
             # 'WCHPFV122' = 'CWCHARG' * 'BFV122'
             'WCHPFV122': {'V': 4.802000098, 'RF': [4.802000098], 'SF': [4.802000098]},
@@ -174,16 +174,16 @@ class CVCS:
             'BLV614': {'V': 0, 'RF': [0], 'SF': [0]},
             'WLV616': {'V': 4.7957101, 'RF': [4.7957101], 'SF': [4.7957101]},
 
-            'LV616_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
-            'LV616_AutoOpen': {'V': 0, 'RF': [0], 'SF': [0]},
-            'LV616_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'LV616_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'LV616_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
-            'LV616': {'V': 1, 'RF': [1], 'SF': [1]},
+            'BLV616_AutoClose': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BLV616_AutoOpen': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BLV616_OpenSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BLV616_CloseSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BLV616_ControlSignal': {'V': 0, 'RF': [0], 'SF': [0]},
+            'BLV616': {'V': 1, 'RF': [1], 'SF': [1]},
 
-            'CHP1': {'V': 1, 'RF': [1], 'SF': [1]},
-            'CHP2': {'V': 0, 'RF': [0], 'SF': [0]},
-            'CHP3': {'V': 0, 'RF': [0], 'SF': [0]},
+            'KLAMPO71': {'V': 1, 'RF': [1], 'SF': [1]}, # CHPP1
+            'KLAMPO70': {'V': 0, 'RF': [0], 'SF': [0]}, # CHPP2
+            'KLAMPO69': {'V': 0, 'RF': [0], 'SF': [0]}, # CHPP3
             'CWCHARG': {'V': 9.8000002, 'RF': [9.8000002], 'SF': [9.8000002]},  # [0, 9.8000002, 13.857000, 16.954000]
 
             'WEXLD': {'V': 0, 'RF': [0], 'SF': [0]},                # Excess Letdown Flow
@@ -208,9 +208,9 @@ class CVCS:
             'PLETDB': {'V': 2842650.3, 'RF': [2842650.3], 'SF': [2842650.3]},                                     # C
             'ZVCT': {'V': 70, 'RF': [70], 'SF': [70]},         # VCT level                   # C
             'PVCT': {'V': 1.6930148117902, 'RF': [1.6930148117902], 'SF': [1.6930148117902]},                                 # VCT Pressure                # C
-            'WRCPSI': {'V': 0.50499988, 'RF': [0.50499988], 'SF': [0.50499988]},    # RCP Seal inject
+            'WRCPSI1': {'V': 0.50499988, 'RF': [0.50499988], 'SF': [0.50499988]},    # RCP Seal inject
             # RCP Seal Return Flow
-            'WRCPSR': {'V': 0.50499988 * 0.375, 'RF': [0.50499988 * 0.375], 'SF': [0.50499988 * 0.375]},
+            'WRCPSR1': {'V': 0.50499988 * 0.375, 'RF': [0.50499988 * 0.375], 'SF': [0.50499988 * 0.375]},
             'WCHARGT': {'V': 9.1457081, 'RF': [9.1457081], 'SF': [9.1457081]},                                    # C
             'WSWHX': {'V': 5.2949996, 'RF': [5.2949996], 'SF': [5.2949996]},
             'WCHGNO': {'V': 3.8525825, 'RF': [3.8525825], 'SF': [3.8525825]},
@@ -223,7 +223,7 @@ class CVCS:
             'PZRHeater': {'V': 0, 'RF': [0], 'SF': [0]},
             'PZRMode': {'V': 0, 'RF': [0], 'SF': [0]}, # 0 Auto 1 Man
 
-            # 'RTFLOW': ('WRCPSI' - 'WRCPSR') * 3.0
+            # 'RTFLOW': ('WRCPSI1' - 'WRCPSR1') * 3.0
             'RTFLOW': {'V': 0.946874775, 'RF': [0.946874775], 'SF': [0.946874775]},
 
             # Fix
@@ -231,9 +231,9 @@ class CVCS:
             'CPLDBN': {'V': 1.0e5, 'RF': [1.0e5], 'SF': [1.0e5]},                   # NOMINAL Back Pressure
             'CPLETDB': {'V': 2410000.00, 'RF': [2410000.00], 'SF': [2410000.00]},   # NOMINAL L/D BACK PRESSURE
             'CLETNO': {'V': 6.25, 'RF': [6.25], 'SF': [6.25]},                      # NORMAL L/D FLOW ADMITTANCE
-            'CWHV1': {'V': 2.839, 'RF': [2.839], 'SF': [2.839]},                    # 45 gpm
-            'CWHV2': {'V': 3.785, 'RF': [3.785], 'SF': [3.785]},                    # 60 gpm
-            'CWHV3': {'V': 4.732, 'RF': [4.732], 'SF': [4.732]},                    # 75 gpm
+            'CWBHV1': {'V': 2.839, 'RF': [2.839], 'SF': [2.839]},                    # 45 gpm
+            'CWBHV2': {'V': 3.785, 'RF': [3.785], 'SF': [3.785]},                    # 60 gpm
+            'CWBHV3': {'V': 4.732, 'RF': [4.732], 'SF': [4.732]},                    # 75 gpm
             'CWNETUT': {'V': 4.7347999, 'RF': [4.7347999], 'SF': [4.7347999]},      # L/D BACK PRESSURE SET POINT
             'CLDBP1': {'V': 0.15, 'RF': [0.15], 'SF': [0.15]},              # GAIN AND RESET TIME FOR L/D BACK PRESSURE
             'CLDBP2': {'V': 8.0, 'RF': [8.0], 'SF': [8.0]},                 # GAIN AND RESET TIME FOR L/D BACK PRESSURE
@@ -309,9 +309,9 @@ class CVCS:
             'MakePPFlow': {'V': 0, 'RF': [0], 'SF': [0]},
             
             #--- Interface에 사용된 변수의 알람 Level 정보 ---
-            'A_CHP1': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_CHP2': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_CHP3': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_KLAMPO71': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_KLAMPO70': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_KLAMPO69': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_V082': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_BFV122': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_WCHPFV122': {'V': 0, 'RF': [0], 'SF': [0]},
@@ -332,15 +332,15 @@ class CVCS:
             'A_RTFLOW': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_ION': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_BLV143': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_HV3': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_HV2': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_HV1': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BHV3': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BHV2': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BHV1': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_BLV143': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_LDHX': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_HX': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_PZR': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_DEPRZAVGNO': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_LV459': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_ZPRZNOAVGNO': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BLV459': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_LV460': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_BHV41': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_WLETDNO4': {'V': 0, 'RF': [0], 'SF': [0]},
@@ -394,7 +394,7 @@ class CVCS:
                 # Letdown 460 Valve ----------------------------------------------------------------------------------------
                 if True:
                     # 가압기 수위 17 아래 시 10 Sec Delay
-                    if self.mem['DEPRZAVG']['V'] < 0.17:
+                    if self.mem['ZPRZNOAVG']['V'] < 0.17:
                         self.mem['LV460_Delay']['V'] += 1
                         if self.mem['LV460_Delay']['V'] > 10 / self.mem['T_delta']['V']:
                             self.mem['LV460_Delay']['V'] = 10 / self.mem['T_delta']['V']
@@ -440,31 +440,31 @@ class CVCS:
                 # Letdown 459 Valve ----------------------------------------------------------------------------------------
                 if True:
                     # 가압기 수위 17 아래 시 10 Sec Delay
-                    if self.mem['DEPRZAVG']['V'] < 0.17:
-                        self.mem['LV459_Delay']['V'] += 1
-                        if self.mem['LV459_Delay']['V'] > 10 / self.mem['T_delta']['V']:
-                            self.mem['LV459_Delay']['V'] = 10 / self.mem['T_delta']['V']
+                    if self.mem['ZPRZNOAVG']['V'] < 0.17:
+                        self.mem['BLV459_Delay']['V'] += 1
+                        if self.mem['BLV459_Delay']['V'] > 10 / self.mem['T_delta']['V']:
+                            self.mem['BLV459_Delay']['V'] = 10 / self.mem['T_delta']['V']
                     else:
-                        self.mem['LV459_Delay']['V'] = 0
+                        self.mem['BLV459_Delay']['V'] = 0
 
-                    if self.mem['LV459_Delay']['V'] >= 10 / self.mem['T_delta']['V'] or self.mem['SISignal']['V'] == 1:
-                        self.mem['LV459_AutoClose']['V'] = 1
+                    if self.mem['BLV459_Delay']['V'] >= 10 / self.mem['T_delta']['V'] or self.mem['SISignal']['V'] == 1:
+                        self.mem['BLV459_AutoClose']['V'] = 1
                     else:
-                        self.mem['LV459_AutoClose']['V'] = 0
+                        self.mem['BLV459_AutoClose']['V'] = 0
 
-                    if self.mem['LV459_ControlSignal']['V'] == 1:
-                        self.mem['LV459_OpenSignal']['V'] = 1
+                    if self.mem['BLV459_ControlSignal']['V'] == 1:
+                        self.mem['BLV459_OpenSignal']['V'] = 1
                     else:
-                        self.mem['LV459_OpenSignal']['V'] = 0
+                        self.mem['BLV459_OpenSignal']['V'] = 0
 
-                    if self.mem['LV459_ControlSignal']['V'] == -1 or self.mem['LV459_AutoClose']['V'] == 1:
-                        self.mem['LV459_CloseSignal']['V'] = 1
+                    if self.mem['BLV459_ControlSignal']['V'] == -1 or self.mem['BLV459_AutoClose']['V'] == 1:
+                        self.mem['BLV459_CloseSignal']['V'] = 1
                     else:
-                        self.mem['LV459_CloseSignal']['V'] = 0
+                        self.mem['BLV459_CloseSignal']['V'] = 0
 
-                    self.control('LV459')
+                    self.control('BLV459')
                 # Letdown 459 out ->
-                NEXTLET = NEXTLET * self.mem['LV459']['V']
+                NEXTLET = NEXTLET * self.mem['BLV459']['V']
                 # Leak 459 -*- Orifice Valve
                 if True:
                     NEXTLET = NEXTLET - self.mem['MAL03']['V'] * 0.01 if self.mem['LV460']['V'] != 0 else NEXTLET
@@ -472,38 +472,38 @@ class CVCS:
                 # Orifice Valve --------------------------------------------------------------------------------------------
                 if True:
                     for i in range(1, 4):   # 1, 2, 3
-                        if self.mem['DEPRZAVG']['V'] < 0.17:
-                            self.mem[f'HV{i}_AutoClose']['V'] = 1
+                        if self.mem['ZPRZNOAVG']['V'] < 0.17:
+                            self.mem[f'BHV{i}_AutoClose']['V'] = 1
                         else:
-                            self.mem[f'HV{i}_AutoClose']['V'] = 0
+                            self.mem[f'BHV{i}_AutoClose']['V'] = 0
 
-                        if self.mem['DEPRZAVG']['V'] >= 0.17 and self.mem[f'HV{i}_ControlSignal']['V'] == 1 and self.mem['LV459']['V'] >= 1:
-                            self.mem[f'HV{i}_OpenSignal']['V'] = 1
+                        if self.mem['ZPRZNOAVG']['V'] >= 0.17 and self.mem[f'BHV{i}_ControlSignal']['V'] == 1 and self.mem['BLV459']['V'] >= 1:
+                            self.mem[f'BHV{i}_OpenSignal']['V'] = 1
                         else:
-                            self.mem[f'HV{i}_OpenSignal']['V'] = 0
+                            self.mem[f'BHV{i}_OpenSignal']['V'] = 0
 
-                        if self.mem[f'HV{i}_ControlSignal']['V'] == -1 or self.mem['LV459']['V'] < 0.95:
-                            self.mem[f'HV{i}_CloseSignal']['V'] = 1
+                        if self.mem[f'BHV{i}_ControlSignal']['V'] == -1 or self.mem['BLV459']['V'] < 0.95:
+                            self.mem[f'BHV{i}_CloseSignal']['V'] = 1
                         else:
-                            self.mem[f'HV{i}_CloseSignal']['V'] = 0
+                            self.mem[f'BHV{i}_CloseSignal']['V'] = 0
 
                         temp = 0
 
-                        if self.mem[f'HV{i}_OpenSignal']['V'] == 1:
+                        if self.mem[f'BHV{i}_OpenSignal']['V'] == 1:
                             temp = 1
-                        if self.mem[f'HV{i}_CloseSignal']['V'] == 1:
+                        if self.mem[f'BHV{i}_CloseSignal']['V'] == 1:
                             temp = -1
 
-                        self.mem[f'HV{i}']['V'] = self.mem[f'HV{i}']['V'] + temp * 0.05
-                        self.mem[f'HV{i}']['V'] = 1 if self.mem[f'HV{i}']['V'] > 1 else self.mem[f'HV{i}']['V']
-                        self.mem[f'HV{i}']['V'] = 0 if self.mem[f'HV{i}']['V'] < 0 else self.mem[f'HV{i}']['V']
-                    if self.mem['HV1']['V'] == 1 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 0 and RWLTDN > self.mem['CWHV1']['V']:
-                        NEXTLET = self.mem['CWHV1']['V']
-                    elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 1 and self.mem['HV3']['V'] == 0 and RWLTDN > self.mem['CWHV2']['V']:
-                        NEXTLET = self.mem['CWHV2']['V']
-                    elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 1 and RWLTDN > self.mem['CWHV3']['V']:
-                        NEXTLET = self.mem['CWHV3']['V']
-                    elif self.mem['HV1']['V'] == 0 and self.mem['HV2']['V'] == 0 and self.mem['HV3']['V'] == 0:
+                        self.mem[f'BHV{i}']['V'] = self.mem[f'BHV{i}']['V'] + temp * 0.05
+                        self.mem[f'BHV{i}']['V'] = 1 if self.mem[f'BHV{i}']['V'] > 1 else self.mem[f'BHV{i}']['V']
+                        self.mem[f'BHV{i}']['V'] = 0 if self.mem[f'BHV{i}']['V'] < 0 else self.mem[f'BHV{i}']['V']
+                    if self.mem['BHV1']['V'] == 1 and self.mem['BHV2']['V'] == 0 and self.mem['BHV3']['V'] == 0 and RWLTDN > self.mem['CWBHV1']['V']:
+                        NEXTLET = self.mem['CWBHV1']['V']
+                    elif self.mem['BHV1']['V'] == 0 and self.mem['BHV2']['V'] == 1 and self.mem['BHV3']['V'] == 0 and RWLTDN > self.mem['CWBHV2']['V']:
+                        NEXTLET = self.mem['CWBHV2']['V']
+                    elif self.mem['BHV1']['V'] == 0 and self.mem['BHV2']['V'] == 0 and self.mem['BHV3']['V'] == 1 and RWLTDN > self.mem['CWBHV3']['V']:
+                        NEXTLET = self.mem['CWBHV3']['V']
+                    elif self.mem['BHV1']['V'] == 0 and self.mem['BHV2']['V'] == 0 and self.mem['BHV3']['V'] == 0:
                         NEXTLET = 0
                     else:
                         NEXTLET = NEXTLET
@@ -588,26 +588,26 @@ class CVCS:
 
                 # LV616 Valve Start ----------------------------------------------------------------------------------------
                 if True:
-                    self.mem['LV616_AutoClose']['V'] = 1 if self.mem['ZVCT']['V'] <= 5.0 or self.mem['SISignal']['V'] == 1 else 0
-                    self.mem['LV616_AutoOpen']['V'] = 1 if self.mem['ZVCT']['V'] > 10.0 or self.mem['SISignal']['V'] == 1 else 0
-                    self.mem['LV616_OpenSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == 1 or self.mem['LV616_AutoOpen']['V'] == 1 else 0
-                    self.mem['LV616_CloseSignal']['V'] = 1 if self.mem['LV616_ControlSignal']['V'] == -1 or self.mem['LV616_AutoClose']['V'] == 1 else 0
+                    self.mem['BLV616_AutoClose']['V'] = 1 if self.mem['ZVCT']['V'] <= 5.0 or self.mem['SISignal']['V'] == 1 else 0
+                    self.mem['BLV616_AutoOpen']['V'] = 1 if self.mem['ZVCT']['V'] > 10.0 or self.mem['SISignal']['V'] == 1 else 0
+                    self.mem['BLV616_OpenSignal']['V'] = 1 if self.mem['BLV616_ControlSignal']['V'] == 1 or self.mem['BLV616_AutoOpen']['V'] == 1 else 0
+                    self.mem['BLV616_CloseSignal']['V'] = 1 if self.mem['BLV616_ControlSignal']['V'] == -1 or self.mem['BLV616_AutoClose']['V'] == 1 else 0
                     temp = 0
-                    temp = 1 if self.mem['LV616_OpenSignal']['V'] == 1 else temp
-                    temp = -1 if self.mem['LV616_CloseSignal']['V'] == 1 else temp  
-                    self.mem['LV616']['V'] = self.mem['LV616']['V'] + temp * 1
-                    self.mem['LV616']['V'] = 1 if self.mem['LV616']['V'] >= 1 else self.mem['LV616']['V']
-                    self.mem['LV616']['V'] = 0 if self.mem['LV616']['V'] <= 0 else self.mem['LV616']['V']
+                    temp = 1 if self.mem['BLV616_OpenSignal']['V'] == 1 else temp
+                    temp = -1 if self.mem['BLV616_CloseSignal']['V'] == 1 else temp  
+                    self.mem['BLV616']['V'] = self.mem['BLV616']['V'] + temp * 1
+                    self.mem['BLV616']['V'] = 1 if self.mem['BLV616']['V'] >= 1 else self.mem['BLV616']['V']
+                    self.mem['BLV616']['V'] = 0 if self.mem['BLV616']['V'] <= 0 else self.mem['BLV616']['V']
 
-                    self.mem['LV616_ControlSignal']['V'] = 0 if self.mem['LV616']['V'] >= 1 else self.mem['LV616_ControlSignal']['V']
-                    self.mem['LV616_ControlSignal']['V'] = 0 if self.mem['LV616']['V'] <= 0 else self.mem['LV616_ControlSignal']['V']
+                    self.mem['BLV616_ControlSignal']['V'] = 0 if self.mem['BLV616']['V'] >= 1 else self.mem['BLV616_ControlSignal']['V']
+                    self.mem['BLV616_ControlSignal']['V'] = 0 if self.mem['BLV616']['V'] <= 0 else self.mem['BLV616_ControlSignal']['V']
                     # LV616 -> Seal
-                    self.mem['RTFLOW']['V'] = (self.mem['WRCPSI']['V'] - self.mem['WRCPSR']['V']) * 3.0
-                    self.mem['WLV616']['V'] = (self.mem['WCHARGT']['V'] - self.mem['WSWHX']['V'] + self.mem['RTFLOW']['V']) * self.mem['LV616']['V']
+                    self.mem['RTFLOW']['V'] = (self.mem['WRCPSI1']['V'] - self.mem['WRCPSR1']['V']) * 3.0
+                    self.mem['WLV616']['V'] = (self.mem['WCHARGT']['V'] - self.mem['WSWHX']['V'] + self.mem['RTFLOW']['V']) * self.mem['BLV616']['V']
 
                 # Charging Pump --------------------------------------------------------------------------------------------
                 if True:
-                    RRCPSL = self.mem['WRCPSI']['V'] * 3  # RCP Seal 에서 Return Flow
+                    RRCPSL = self.mem['WRCPSI1']['V'] * 3  # RCP Seal 에서 Return Flow
                     self.mem['WCHARGT']['V'] = self.mem['WCHGNO']['V'] + RRCPSL + self.mem['WCMINI']['V']
 
                     # Mini Flow pass
@@ -615,16 +615,16 @@ class CVCS:
                     # Charging Line Flow via FV122
                     ChargingFlow = [0, 9.8000002, 13.857000, 16.954000]
                     if True: # Malfunction Stop CHP1:
-                        self.mem['CHP1']['V'] = (1 - self.mem['MAL08A']['V']) * self.mem['CHP1']['V']
-                        self.mem['CHP2']['V'] = (1 - self.mem['MAL08B']['V']) * self.mem['CHP2']['V']
-                        self.mem['CHP3']['V'] = (1 - self.mem['MAL08C']['V']) * self.mem['CHP3']['V']
-                    start_CHP = self.mem['CHP1']['V'] + self.mem['CHP2']['V'] + self.mem['CHP3']['V']
-                    self.mem['CWCHARG']['V'] = ChargingFlow[int(start_CHP)] if self.mem['LV616']['V'] != 0 else 0
+                        self.mem['KLAMPO71']['V'] = (1 - self.mem['MAL08A']['V']) * self.mem['KLAMPO71']['V']
+                        self.mem['KLAMPO70']['V'] = (1 - self.mem['MAL08B']['V']) * self.mem['KLAMPO70']['V']
+                        self.mem['KLAMPO69']['V'] = (1 - self.mem['MAL08C']['V']) * self.mem['KLAMPO69']['V']
+                    start_CHP = self.mem['KLAMPO71']['V'] + self.mem['KLAMPO70']['V'] + self.mem['KLAMPO69']['V']
+                    self.mem['CWCHARG']['V'] = ChargingFlow[int(start_CHP)] if self.mem['BLV616']['V'] != 0 else 0
 
                 # FV122 Charging Valve -------------------------------------------------------------------------------------
                 if True:
                     # PID Controller for FV122
-                    RIN = self.mem['ZPRZSP']['V'] - self.mem['DEPRZAVG']['V']
+                    RIN = self.mem['ZPRZSP']['V'] - self.mem['ZPRZNOAVG']['V']
                     PIDOUT = self.PIDREG(RIN, self.mem['RINOLD']['V'], -1.0, 0, 1.0, 0.1,
                                         0.2, 5.0, 0.01, self.mem['T_delta']['V'], 0.0075 / self.mem['T_delta']['V'],
                                         self.mem['BFV122Mode']['V'], self.mem['BFV122_ControlSignal']['V'],
@@ -652,7 +652,7 @@ class CVCS:
                     else:
                         self.mem['WCHGNO']['V'] = 0
                     self.mem['WCHGNO']['V'] = 0 if self.mem['WCHGNO']['V'] <= 0 else self.mem['WCHGNO']['V']
-                    self.mem['RTFLOW']['V'] = self.mem['RTFLOW']['V'] if self.mem['LV616']['V'] != 0 else 0
+                    self.mem['RTFLOW']['V'] = self.mem['RTFLOW']['V'] if self.mem['BLV616']['V'] != 0 else 0
                 # Net Charging / Letdown + 가압기 수위 반영
                 if True:
                     self.mem['WNETCH']['V'] = self.mem['WCHGNO']['V'] + self.mem['RTFLOW']['V']
@@ -676,42 +676,42 @@ class CVCS:
                         self.RCS_VOLs.appendleft(_end_rcs_vol)
 
                     # 가압기 수위에 반영
-                    # self.mem['DEPRZ']['V' += delta * 0.0000095
-                    # self.mem['DEPRZ']['V'] += delta * 0.0000095 * 5
-                    self.mem['DEPRZ']['V'] = self.get_level(self.RCS_VOLs[-1])
-                    self.mem['DEPRZ']['V'] = 1 if self.mem['DEPRZ']['V'] >= 1 else self.mem['DEPRZ']['V']
+                    # self.mem['ZPRZNO']['V' += delta * 0.0000095
+                    # self.mem['ZPRZNO']['V'] += delta * 0.0000095 * 5
+                    self.mem['ZPRZNO']['V'] = self.get_level(self.RCS_VOLs[-1])
+                    self.mem['ZPRZNO']['V'] = 1 if self.mem['ZPRZNO']['V'] >= 1 else self.mem['ZPRZNO']['V']
                     
                     # PZR Level indicator update
                     if True:
                         # PZR Level Chanel Failure Malfunctions
                         if self.mem['MAL09A']['V'] != -1:
-                            self.mem['DEPRZA']['V'] = self.mem['MAL09A']['V']
+                            self.mem['ZPRZNOA']['V'] = self.mem['MAL09A']['V']
                         else:
-                            self.mem['DEPRZA']['V'] = self.mem['DEPRZ']['V']
+                            self.mem['ZPRZNOA']['V'] = self.mem['ZPRZNO']['V']
                         if self.mem['MAL09B']['V'] != -1:
-                            self.mem['DEPRZB']['V'] = self.mem['MAL09B']['V']
+                            self.mem['ZPRZNOB']['V'] = self.mem['MAL09B']['V']
                         else:
-                            self.mem['DEPRZB']['V'] = self.mem['DEPRZ']['V']
+                            self.mem['ZPRZNOB']['V'] = self.mem['ZPRZNO']['V']
 
-                        self.simple_control('DEPRZAC', step=0.01)
-                        self.simple_control('DEPRZBC', step=0.01)
+                        self.simple_control('ZPRZNOAC', step=0.01)
+                        self.simple_control('ZPRZNOBC', step=0.01)
                         # Final Avg
-                        if self.mem['DEPRZAC']['V'] == 1 and self.mem['DEPRZBC']['V'] == 1:
-                            self.mem['DEPRZAVG']['V'] = (self.mem['DEPRZA']['V'] + self.mem['DEPRZB']['V']) * 0.5
-                        elif self.mem['DEPRZAC']['V'] == 1 and self.mem['DEPRZBC']['V'] == 0:
-                            self.mem['DEPRZAVG']['V'] = self.mem['DEPRZA']['V']
-                        elif self.mem['DEPRZAC']['V'] == 0 and self.mem['DEPRZBC']['V'] == 1:
-                            self.mem['DEPRZAVG']['V'] = self.mem['DEPRZB']['V']
+                        if self.mem['ZPRZNOAC']['V'] == 1 and self.mem['ZPRZNOBC']['V'] == 1:
+                            self.mem['ZPRZNOAVG']['V'] = (self.mem['ZPRZNOA']['V'] + self.mem['ZPRZNOB']['V']) * 0.5
+                        elif self.mem['ZPRZNOAC']['V'] == 1 and self.mem['ZPRZNOBC']['V'] == 0:
+                            self.mem['ZPRZNOAVG']['V'] = self.mem['ZPRZNOA']['V']
+                        elif self.mem['ZPRZNOAC']['V'] == 0 and self.mem['ZPRZNOBC']['V'] == 1:
+                            self.mem['ZPRZNOAVG']['V'] = self.mem['ZPRZNOB']['V']
                         else:
-                            self.mem['DEPRZAVG']['V'] = 0
-                        self.mem['DEPRZAVGNO']['V'] = self.mem['DEPRZAVG']['V'] * 100
+                            self.mem['ZPRZNOAVG']['V'] = 0
+                        self.mem['ZPRZNOAVGNO']['V'] = self.mem['ZPRZNOAVG']['V'] * 100
                             
                     # PZR Heater
                     if True:
                         if self.mem['PZRMode']['V'] == 0:
-                            if self.mem['DEPRZAVG']['V'] < 0.17:
+                            if self.mem['ZPRZNOAVG']['V'] < 0.17:
                                 self.mem['PZRHeater']['V'] = 0          # 17% 이하 heat off
-                            elif self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZAVG']['V']:  # 0.62
+                            elif self.mem['ZPRZSP']['V'] + 0.05 < self.mem['ZPRZNOAVG']['V']:  # 0.62
                                 self.mem['PZRHeater']['V'] = 1          # 17% 이하 heat on
                             elif self.mem['PPRZN']['V'] < 152.2E5:
                                 self.mem['PZRHeater']['V'] = 1
@@ -748,7 +748,7 @@ class CVCS:
         self.mem['KLAMPO260']['V'] = 1 if self.mem['WLETDNO']['V'] < 4.16 else 0
         self.mem['KLAMPO263']['V'] = 1 if self.mem['ZVCT']['V'] < 20 else 0
         self.mem['KLAMPO264']['V'] = 1 if self.mem['PVCT']['V'] < 0.7 else 0
-        self.mem['KLAMPO265']['V'] = 1 if self.mem['WRCPSI']['V'] < 0.4 else 0
+        self.mem['KLAMPO265']['V'] = 1 if self.mem['WRCPSI1']['V'] < 0.4 else 0
         self.mem['KLAMPO266']['V'] = 1 if self.mem['WCHGNO']['V'] < 1.38 else 0
         self.mem['KLAMPO268']['V'] = 1 if self.mem['WLETDNO4']['V'] > 8.33 else 0
         self.mem['KLAMPO271']['V'] = 1 if self.mem['ZVCT']['V'] > 80 else 0
@@ -759,8 +759,8 @@ class CVCS:
 
         self.mem['KLAMPO307']['V'] = 1 if self.mem['PPRZN']['V'] > 159.E5 else 0
         self.mem['KLAMPO308']['V'] = 1 if self.mem['PPRZN']['V'] < 151.E5 else 0
-        self.mem['KLAMPO310']['V'] = 1 if self.mem['ZPRZSP']['V'] + 0.05 < self.mem['DEPRZAVG']['V'] else 0
-        self.mem['KLAMPO311']['V'] = 1 if self.mem['DEPRZAVG']['V'] < 0.17 else 0
+        self.mem['KLAMPO310']['V'] = 1 if self.mem['ZPRZSP']['V'] + 0.05 < self.mem['ZPRZNOAVG']['V'] else 0
+        self.mem['KLAMPO311']['V'] = 1 if self.mem['ZPRZNOAVG']['V'] < 0.17 else 0
         self.mem['KLAMPO312']['V'] = 1 if self.mem['PPRZN']['V'] < 152.2E5 else 0
         
         # Check Normal Op Out
@@ -793,8 +793,8 @@ class CVCS:
         if self.mem['KLAMPO307']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
         if self.mem['KLAMPO308']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
         # if self.mem['KLAMPO310']['V'] == 1: self.mem['A_ZPRZSP']['V'] = 2
-        if self.mem['KLAMPO310']['V'] == 1: self.mem['A_DEPRZAVGNO']['V'] = 2
-        if self.mem['KLAMPO311']['V'] == 1: self.mem['A_DEPRZAVGNO']['V'] = 2
+        if self.mem['KLAMPO310']['V'] == 1: self.mem['A_ZPRZNOAVGNO']['V'] = 2
+        if self.mem['KLAMPO311']['V'] == 1: self.mem['A_ZPRZNOAVGNO']['V'] = 2
         if self.mem['KLAMPO312']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
 
     def PIREGL(self, RIN, RINLMH, RINLML, RUTLMH, RUTLML,
@@ -928,7 +928,7 @@ if __name__ == '__main__':
         # if _ == 500: # Do 1000 sec
         #     cvcs.mem['MAL09A']['V'] = 1
         # if _ == 1000: # Do 1200 sec : Turn-off Chanel A
-        #     cvcs.mem['DEPRZAC']['V'] = 0 # Off
+        #     cvcs.mem['ZPRZNOAC']['V'] = 0 # Off
         
         # if _ == 500:
         #     cvcs.mem['MAL02']['V'] = 50
@@ -948,14 +948,14 @@ if __name__ == '__main__':
         # print(cvcs.mem['SimTime']['RF'])
         # print(cvcs.mem['SimTime']['SF'])
         #
-        # print(cvcs.mem['DEPRZ']['V'])
-        # print(cvcs.mem['DEPRZ']['RF'])
-        # print(cvcs.mem['DEPRZ']['SF'])
+        # print(cvcs.mem['ZPRZNO']['V'])
+        # print(cvcs.mem['ZPRZNO']['RF'])
+        # print(cvcs.mem['ZPRZNO']['SF'])
 
-    plt.plot(cvcs.mem['DEPRZ']['RF'], label='PZR_Level_R')
-    plt.plot(cvcs.mem['DEPRZA']['RF'], label='PZR_Level_A')
-    plt.plot(cvcs.mem['DEPRZB']['RF'], label='PZR_Level_B')
-    plt.plot(cvcs.mem['DEPRZAVG']['RF'], label='PZR_Level_AVG')
+    plt.plot(cvcs.mem['ZPRZNO']['RF'], label='PZR_Level_R')
+    plt.plot(cvcs.mem['ZPRZNOA']['RF'], label='PZR_Level_A')
+    plt.plot(cvcs.mem['ZPRZNOB']['RF'], label='PZR_Level_B')
+    plt.plot(cvcs.mem['ZPRZNOAVG']['RF'], label='PZR_Level_AVG')
     plt.plot([_/10 for _ in cvcs.mem['WLETDNO']['RF']], label='Letdown')
     plt.plot(cvcs.mem['BFV122']['RF'], label='Flow')
     plt.plot([_/100 for _ in cvcs.mem['ZVCT']['RF']], label='VCTLevel')
