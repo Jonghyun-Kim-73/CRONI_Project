@@ -39,10 +39,10 @@ Green = 'rgb(0, 170, 0)'
 LightGreen = 'rgb(0, 176, 86)'
 Orange = 'rgb(255, 192, 0)'
 # Font Table --------------------------------------------------
-Global_font_size_nub = 20
-Content_font_size_nub = 12
-Pre_trip_font_size_nub = 10
-Mimic_font_size_nub = 12
+Global_font_size_nub = 16
+Content_font_size_nub = 10
+Pre_trip_font_size_nub = 8
+Mimic_font_size_nub = 10
 Global_font_size = f'{Global_font_size_nub}pt'
 Content_font_size = f'{Content_font_size_nub}pt'
 Pre_trip_font_size_nub = f'{Content_font_size_nub}pt'

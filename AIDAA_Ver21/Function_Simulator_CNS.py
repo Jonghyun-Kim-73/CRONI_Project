@@ -32,7 +32,7 @@ class CNS(QWidget):
         lay2.addWidget(self.paraname)
         lay2.addWidget(self.paraval)
         self.mes = QLabel('')
-        
+
         lay3 = QHBoxLayout()
         change_val_cvcs_btn = QPushButton('ChangeVal_CVCS', self)
         change_val_cvcs_btn.clicked.connect(self.change_val_cvcs)
@@ -52,12 +52,12 @@ class CNS(QWidget):
         lay4_2 = QHBoxLayout()
         self.CNSMode = QCheckBox(self)
         call_init_btn = QPushButton('CallInit', self)
-        call_init_btn.clicked.connect(lambda x:self.init_cns(1))
-        self.my_com_ip    = QLabel(f'{self.ShMem.get_udp_my_com_ip()}')
-        self.my_com_port  = QLabel('7201')
-        self.cns_com_ip   = QLineEdit('192.168.0.179')
+        call_init_btn.clicked.connect(lambda x: self.init_cns(1))
+        self.my_com_ip = QLabel(f'{self.ShMem.get_udp_my_com_ip()}')
+        self.my_com_port = QLabel('7201')
+        self.cns_com_ip = QLineEdit('192.168.0.179')
         self.cns_com_port = QLineEdit('7201')
-        
+
         lay4_0.addWidget(QLabel('CNS Mode'))
         lay4_0.addWidget(self.CNSMode)
         lay4_0.addWidget(call_init_btn)
@@ -67,12 +67,11 @@ class CNS(QWidget):
         lay4_2.addWidget(QLabel('CNS IP/PORT'))
         lay4_2.addWidget(self.cns_com_ip)
         lay4_2.addWidget(self.cns_com_port)
-        
         lay4.addLayout(lay4_0)
         lay4.addLayout(lay4_1)
         lay4.addLayout(lay4_2)
         # ------------------------------------------------------------------
-        # Layer 구조 파트 
+        # Layer 구조 파트
         # ------------------------------------------------------------------
         lay.addWidget(one_step_btn)
         lay.addWidget(self.run_btn)
@@ -81,12 +80,12 @@ class CNS(QWidget):
         lay.addLayout(lay3)
         lay.addWidget(self.mes_cvcs)
         lay.addLayout(lay4)
-        
-        self.startTimer(600) # 600ms로 one_step 호출함. self.run_ 함수 참고
+
+        self.startTimer(600)  # 600ms로 one_step 호출함. self.run_ 함수 참고
 
         # ------------------------------------------------------------------
         # CNS 통신용 소켓 및 버퍼
-        # ------------------------------------------------------------------ 
+        # ------------------------------------------------------------------
         self.resv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.size_buffer_mem = 46008
@@ -98,7 +97,7 @@ class CNS(QWidget):
     def one_step(self):
         if self.CNSMode.isChecked():
             if self.run_freeze_CNS() != 1: self.one_step_part()
-        else:                           
+        else:
             self.ShMem.change_para_val('KCNTOMS', self.ShMem.get_para_val('KCNTOMS') + 5)
             self.one_step_part()
     def one_step_part(self):
@@ -106,7 +105,7 @@ class CNS(QWidget):
         self.ShMem.update_alarmdb()
         self.ShMem.update_CVCS()
         self.mes.setText(f'OneStep 진행함. [KCNTOMS: {self.ShMem.get_para_val("KCNTOMS")}][CVCS: {self.ShMem.get_CVCS_para_val("SimTime")}]')
-    def run_(self): 
+    def run_(self):
         self.run_trigger = False if self.run_trigger == True else True
         _ = self.run_btn.setText('Run') if self.run_trigger == True else self.run_btn.setText('Freeze')
     def timerEvent(self, a0: 'QTimerEvent') -> None:

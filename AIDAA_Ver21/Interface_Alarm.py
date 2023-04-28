@@ -261,7 +261,8 @@ class AlarmTable(ABCTableWidget):
         for alarm_name in self.inmem.ShMem.get_alarmdb().keys():
             if f"{' ' + self.inmem.ShMem.get_alarmdb()[alarm_name]['Des']}" == self.item(selected_row, 0).text():
                 print(alarm_name)
-                self.popup = Popup(file_path=f'D:/CRONI_Interface/AIDAA_Ver21/Alarm_procedures/{alarm_name}.pdf', alarm_des=alarm_name)
+                self.popup = Popup(file_path=f'D:/CRONI_Interface/AIDAA_Ver21/Alarm_procedures/{alarm_name}.pdf', alarm_des=alarm_name) # 경로 설정 필요
+                self.popup = Popup(file_path=f'C:/Users/YounheeChoi/PycharmProjects/CRONI_Project/AIDAA_Ver21/Alarm_procedures/{alarm_name}.pdf', alarm_des=alarm_name) # 윤히
                 self.popup.show()
 
     def dis_update(self):
