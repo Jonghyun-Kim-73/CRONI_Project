@@ -100,13 +100,14 @@ class MainTopTime(ABCLabel):
         self.setFixedSize(465, 36)
         self.startTimer(600)
         self.time_freeze = datetime.now() # 현재 시간 Pick 하고 Freeze
+        self.simtime = ''
         
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         """ 타이머 디스플레이 업데이트 """
         current_time = self.time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
         real_time = current_time.strftime('%Y.%m.%d')
-        real_time2 = current_time.strftime("%H:%M:%S")
-        self.setText(real_time + " / " + real_time2)
+        self.simtime = current_time.strftime("%H:%M:%S")
+        self.setText(real_time + " / " + self.simtime)
         return super().timerEvent(a0)
 class MainTopSystemName(ABCLabel):
     def __init__(self, parent, widget_name=''):

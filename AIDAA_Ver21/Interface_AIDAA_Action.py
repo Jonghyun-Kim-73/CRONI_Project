@@ -113,19 +113,45 @@ class ActionAlarmAreaTable(ABCTableWidget):
             for j, item in enumerate(self.alarm_line[i]):
                 self.setCellWidget(i, j, item)
 
-        # self.setCellWidget(1, 0, ActionAlarmAreaTableItem(self, 'VCT level lo', 'F'))
-        # self.setCellWidget(1, 1, ActionAlarmAreaTableItem(self, '20~80', 'M'))
-        # self.setCellWidget(1, 2, ActionAlarmAreaTableChangedItem(self, 'ZVCT'))
-        # self.setCellWidget(1, 3, ActionAlarmAreaTableItem(self, '[%]', 'M'))
-        # self.setCellWidget(1, 4, ActionAlarmAreaTableItem(self, '00:00:15', 'L'))
-        
         [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절
+        self.stacked_alarm_number = 4
         self.startTimer(1200)
+        
     def timerEvent(self, event: QTimerEvent) -> None:
-        # 1. 현재 발생한 알람 확인
-        for alarm_para in ['A_ZVCT', 'A_PVCT', 'A_ZINST65', 'A_ZPRZNOAVGNO']:
-            alarm_level = self.inmem.ShMem.get_CVCS_para_val(alarm_para)
+        # Level 1
+        if self.inmem.ShMem.get_CVCS_para_val('WDEMI') < 5.4:              self.check_alarm('WDEMI_DOWN',   'WDEMI',     'Demineralizer Flow ▼',     '5.4~5.7',    '[kg/sec]')
+        if self.inmem.ShMem.get_CVCS_para_val('WDEMI') > 5.7:              self.check_alarm('WDEMI_UP',     'WDEMI',     'Demineralizer Flow ▲',     '5.4~5.7',    '[kg/sec]')
+        if self.inmem.ShMem.get_CVCS_para_val('WLETDNO4') < 5.634567406:   self.check_alarm('WLETDNO4_Down','WLETDNO4',  'Letdown Flow ▼',           '5.63~5.64',  '[kg/sec]')
+        if self.inmem.ShMem.get_CVCS_para_val('WLETDNO4') > 5.64225358:    self.check_alarm('WLETDNO4_UP',  'WLETDNO4',  'Letdown Flow ▲',           '5.63~5.64',  '[kg/sec]')
+        if self.inmem.ShMem.get_CVCS_para_val('ZINST65') < 150:            self.check_alarm('ZINST65_Down1','ZINST65',   'PZR Pressure ▼',           '150~157',    '[kg/cm³]')
+        if self.inmem.ShMem.get_CVCS_para_val('ZINST65') > 157:            self.check_alarm('ZINST65_Up1',  'ZINST65',   'PZR Pressure ▲',           '150~157',    '[kg/cm³]')
+        if self.inmem.ShMem.get_CVCS_para_val('ZINST63') < 55.0:           self.check_alarm('ZINST63_Down', 'ZINST63',   'PZR Level ▼',              '55.0~56.7',  '[%]')
+        if self.inmem.ShMem.get_CVCS_para_val('ZINST63') > 56.7:           self.check_alarm('ZINST63_Up',   'ZINST63',   'PZR Level ▲',              '55.0~56.7',  '[%]')
+        # Level 2
+        if self.inmem.ShMem.get_CVCS_para_val('ZVCT') > 80:                self.check_alarm('ZVCT_UP',      'ZVCT',      'VCT Level High',           '20~80',      '[%]')
+        if self.inmem.ShMem.get_CVCS_para_val('ZVCT') < 20:                self.check_alarm('ZVCT_DOWN',    'ZVCT',      'VCT Level Low',            '20~80',      '[%]')
+        if self.inmem.ShMem.get_CVCS_para_val('PVCT') < 0.7:               self.check_alarm('PVCT_DOWN',    'PVCT',      'VCT Pressure Low',         '0.7▲',       '[kg/cm³]')
+        if self.inmem.ShMem.get_CVCS_para_val('ZINST65') > 159:            self.check_alarm('ZINST65_UP',   'ZINST65',   'PZR Pressure High',        '159~151',    '[kg/cm³]')
+        if self.inmem.ShMem.get_CVCS_para_val('ZINST65') < 151:            self.check_alarm('ZINST65_DOWN', 'ZINST65',   'PZR Pressure Low',         '159~151',    '[kg/cm³]')
         return super().timerEvent(event)
+            
+    def check_alarm(self, name, para, alarm_title, alarm_op_range, alarm_unit):
+        pos, in_alarm = self.check_aready_alarm(name) # 'ZVCT_DOWN')
+        if in_alarm:
+            self.alarm_line[pos][2].update(para) # 'ZVCT')
+        else:
+            self.alarm_line[self.stacked_alarm_number][0].setText(alarm_title) # VCT Level Low')
+            self.alarm_line[self.stacked_alarm_number][1].setText(alarm_op_range) #'20~80')
+            self.alarm_line[self.stacked_alarm_number][2].name = name # 'ZVCT_DOWN'
+            self.alarm_line[self.stacked_alarm_number][3].setText(alarm_unit) #'[%]')
+            self.alarm_line[self.stacked_alarm_number][4].setText(f"{self.inmem.widget_ids['MainTopTime'].simtime}")
+            self.stacked_alarm_number -= 1
+
+    def check_aready_alarm(self, name):
+        for key, item in self.alarm_line.items():
+            if item[2].name == name:
+                return key, True # 검색 중 발견된 경우 위치와 참 반환
+        return 0, False # 검색 했는데 없는 경우
 class ActionAlarmAreaTableItem(ABCLabel):
     def __init__(self, parent, pos, widget_name=''):
         super().__init__(parent, widget_name)
@@ -135,8 +161,9 @@ class ActionAlarmAreaTableItem(ABCLabel):
 class ActionAlarmAreaTableChangedItem(ABCLabel):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
+        self.name = ''
     def update(self, para):
-        _ = self.setText(f'{self.inmem.ShMem.get_CVCS_para_val(para):.2f}') if para.para != '' else self.setText('')
+        _ = self.setText(f'{self.inmem.ShMem.get_CVCS_para_val(para):.2f}') if para != '' else self.setText('')
 # ----------------------------------------------------------------------------------------------------------------------
 class ActionSuggestionArea(ABCWidget):
     def __init__(self, parent, widget_name=''):

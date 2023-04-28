@@ -41,7 +41,7 @@ class CVCS:
             'ZPRZNOA': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH A
             'ZPRZNOB': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH B
             'ZPRZNOAVG': {'V': self.get_level(self.RCS_VOLs[-1]), 'RF': [self.get_level(self.RCS_VOLs[-1])], 'SF': [self.get_level(self.RCS_VOLs[-1])]}, # PZR level CH Avg
-            'ZPRZNOAVGNO': {'V': self.get_level(self.RCS_VOLs[-1]*100), 'RF': [self.get_level(self.RCS_VOLs[-1])*100], 'SF': [self.get_level(self.RCS_VOLs[-1])*100]}, # PZR level * 100
+            'ZINST63': {'V': self.get_level(self.RCS_VOLs[-1]*100), 'RF': [self.get_level(self.RCS_VOLs[-1])*100], 'SF': [self.get_level(self.RCS_VOLs[-1])*100]}, # PZR level * 100
 
             'ZPRZSP': {'V': 0.559, 'RF': [0.559], 'SF': [0.559]},   # PZR Set-point
             'BLV459_Delay': {'V': 0, 'RF': [0], 'SF': [0]},          # Letdown Valve BLV459 / KTBLV459
@@ -339,7 +339,7 @@ class CVCS:
             'A_LDHX': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_HX': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_PZR': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_ZPRZNOAVGNO': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_ZINST63': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_BLV459': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_LV460': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_BHV41': {'V': 0, 'RF': [0], 'SF': [0]},
@@ -704,7 +704,7 @@ class CVCS:
                             self.mem['ZPRZNOAVG']['V'] = self.mem['ZPRZNOB']['V']
                         else:
                             self.mem['ZPRZNOAVG']['V'] = 0
-                        self.mem['ZPRZNOAVGNO']['V'] = self.mem['ZPRZNOAVG']['V'] * 100
+                        self.mem['ZINST63']['V'] = self.mem['ZPRZNOAVG']['V'] * 100
                             
                     # PZR Heater
                     if True:
@@ -757,11 +757,13 @@ class CVCS:
 
         self.mem['KLAMPO301']['V'] = 1 if self.mem['MCTMTRAD']['V'] > 0 else 0
 
-        self.mem['KLAMPO307']['V'] = 1 if self.mem['PPRZN']['V'] > 159.E5 else 0
-        self.mem['KLAMPO308']['V'] = 1 if self.mem['PPRZN']['V'] < 151.E5 else 0
+        # self.mem['KLAMPO307']['V'] = 1 if self.mem['PPRZN']['V'] > 159.E5 else 0
+        # self.mem['KLAMPO308']['V'] = 1 if self.mem['PPRZN']['V'] < 151.E5 else 0
+        self.mem['KLAMPO307']['V'] = 1 if self.mem['ZINST65']['V'] > 159 else 0
+        self.mem['KLAMPO308']['V'] = 1 if self.mem['ZINST65']['V'] < 151 else 0
         self.mem['KLAMPO310']['V'] = 1 if self.mem['ZPRZSP']['V'] + 0.05 < self.mem['ZPRZNOAVG']['V'] else 0
         self.mem['KLAMPO311']['V'] = 1 if self.mem['ZPRZNOAVG']['V'] < 0.17 else 0
-        self.mem['KLAMPO312']['V'] = 1 if self.mem['PPRZN']['V'] < 152.2E5 else 0
+        # self.mem['KLAMPO312']['V'] = 1 if self.mem['PPRZN']['V'] < 152.2E5 else 0
         
         # Check Normal Op Out
         for para in self.mem.keys():
@@ -793,9 +795,9 @@ class CVCS:
         if self.mem['KLAMPO307']['V'] == 1: self.mem['A_ZINST65']['V'] = 2
         if self.mem['KLAMPO308']['V'] == 1: self.mem['A_ZINST65']['V'] = 2
         # if self.mem['KLAMPO310']['V'] == 1: self.mem['A_ZPRZSP']['V'] = 2
-        if self.mem['KLAMPO310']['V'] == 1: self.mem['A_ZPRZNOAVGNO']['V'] = 2
-        if self.mem['KLAMPO311']['V'] == 1: self.mem['A_ZPRZNOAVGNO']['V'] = 2
-        if self.mem['KLAMPO312']['V'] == 1: self.mem['A_ZINST65']['V'] = 2
+        if self.mem['KLAMPO310']['V'] == 1: self.mem['A_ZINST63']['V'] = 2
+        if self.mem['KLAMPO311']['V'] == 1: self.mem['A_ZINST63']['V'] = 2
+        # if self.mem['KLAMPO312']['V'] == 1: self.mem['A_ZINST65']['V'] = 2
 
     def PIREGL(self, RIN, RINLMH, RINLML, RUTLMH, RUTLML,
                RGAIN, RINTEG, RDT,
