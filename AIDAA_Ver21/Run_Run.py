@@ -27,18 +27,27 @@ class Run:
         t = time.time()
         mem = self.make_shmem()
         print(time.time() - t)
-        p_list = [InterfaceRun(mem)]
+        p_list = [InterfaceRun_CNS(mem), InterfaceRun(mem)]
         [pr_.start() for pr_ in p_list]
         [pr_.join() for pr_ in p_list]  # finished at the same time
 
 class InterfaceRun(Process):
     def __init__(self, mem):
         super(InterfaceRun, self).__init__()
+        self.mem = mem
+    def run(self) -> None:
         app = QApplication(sys.argv)
-        cns = CNS(mem)
-        cns.show()
-        w = Main(mem)
+        w = Main(self.mem)
         w.show()
+        sys.exit(app.exec_())
+class InterfaceRun_CNS(Process):
+    def __init__(self, mem):
+        super(InterfaceRun_CNS, self).__init__()
+        self.mem = mem
+    def run(self) -> None:
+        app = QApplication(sys.argv)
+        cns = CNS(self.mem)
+        cns.show()
         sys.exit(app.exec_())
 
 

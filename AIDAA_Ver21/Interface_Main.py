@@ -202,5 +202,5 @@ class MainTabIFAP(ABCWidget):
 class MainTabEGIS(ABCWidget):
     def __init__(self, parent):
         super(MainTabEGIS, self).__init__(parent)
-        self.EGISapp = EGISmain(self)
-        self.EGISapp.show()
+        # self.EGISapp = EGISmain(self)
+        # self.EGISapp.show()
