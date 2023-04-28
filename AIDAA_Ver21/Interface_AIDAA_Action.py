@@ -33,6 +33,15 @@ class Action(ABCWidget):
         lay.addWidget(ActionAlarmArea(self),        1, 0, 1, 1)   # 2
         lay.addWidget(ActionSuggestionArea(self),   2, 0, 1, 1)   # 3
         lay.addWidget(ActionMimicArea(self),        1, 1, 2, 1)   # 4
+        
+        self.startTimer(1200)
+    def timerEvent(self, a0: QTimerEvent) -> None:
+        try:
+            self.inmem.widget_ids['ActionAlarmAreaTable'].refresh()
+            self.inmem.widget_ids['ActionSuggestionAreaTable'].refresh()
+        except:
+            pass
+        return super().timerEvent(a0)
 class ActionTitleLabel(ABCLabel):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
@@ -115,9 +124,8 @@ class ActionAlarmAreaTable(ABCTableWidget):
 
         [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절
         self.stacked_alarm_number = 4
-        self.startTimer(1200)
         
-    def timerEvent(self, event: QTimerEvent) -> None:
+    def refresh(self):
         # Level 1
         if self.inmem.ShMem.get_CVCS_para_val('WDEMI') < 5.4:              self.check_alarm('WDEMI_DOWN',   'WDEMI',     'Demineralizer Flow ▼',     '5.4~5.7',    '[kg/sec]')
         if self.inmem.ShMem.get_CVCS_para_val('WDEMI') > 5.7:              self.check_alarm('WDEMI_UP',     'WDEMI',     'Demineralizer Flow ▲',     '5.4~5.7',    '[kg/sec]')
@@ -133,7 +141,6 @@ class ActionAlarmAreaTable(ABCTableWidget):
         if self.inmem.ShMem.get_CVCS_para_val('PVCT') < 0.7:               self.check_alarm('PVCT_DOWN',    'PVCT',      'VCT Pressure Low',         '0.7▲',       '[kg/cm³]')
         if self.inmem.ShMem.get_CVCS_para_val('ZINST65') > 159:            self.check_alarm('ZINST65_UP',   'ZINST65',   'PZR Pressure High',        '159~151',    '[kg/cm³]')
         if self.inmem.ShMem.get_CVCS_para_val('ZINST65') < 151:            self.check_alarm('ZINST65_DOWN', 'ZINST65',   'PZR Pressure Low',         '159~151',    '[kg/cm³]')
-        return super().timerEvent(event)
             
     def check_alarm(self, name, para, alarm_title, alarm_op_range, alarm_unit):
         pos, in_alarm = self.check_aready_alarm(name) # 'ZVCT_DOWN')
@@ -223,31 +230,39 @@ class ActionSuggestionAreaTable(ABCWidget):
         self.vl = QVBoxLayout(self)
         self.vl.setContentsMargins(0, 10, 0, 0)
         self.vl.setSpacing(20)
-    
-    # def add_suggestion_action(self):
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 0, 'G1: 가압기 수위', 'False', 'Abnormal'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 1, 'F1: Letdown 유로 확보', 'False', 'Abnormal'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 2, 'A1.1.1: Letdown LV459 Open', 'False', 'AutoRun'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 2, 'A1.1.2: Letdown Flow', 'False', 'Abnormal'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 2, 'A1.2.1: Letdown Excess Valve', 'True', 'Stop'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 2, 'A1.2.2: Letdown Excess Flow', 'True', 'Stop'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 1, 'F2: Charging 유로 확보', 'False', 'AutoRun'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 2, 'A2.1.1: Charging Pump 1', 'False', 'AutoRun'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 2, 'A2.1.2: Charging Pump 2', 'False', 'Stop'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 2, 'A2.1.3: Charging Valve', 'False', 'AutoRun'))
-        self.vl.addWidget(ActionSuggestionAreaItem(self, 2, 'A2.1.4: Charging Flow', 'False', 'AutoRun'))
+        
+        self.Action_items = {
+            0:  ActionSuggestionAreaItem(self, 0, 'G1: 가압기 수위', 'False', 'Abnormal'),
+            1:  ActionSuggestionAreaItem(self, 1, 'F1: Letdown 유로 확보', 'False', 'Abnormal'),
+            2:  ActionSuggestionAreaItem(self, 2, 'A1.1.1: Letdown LV459 Open', 'False', 'AutoRun'),
+            3:  ActionSuggestionAreaItem(self, 2, 'A1.1.2: Letdown Flow', 'False', 'Abnormal'),
+            4:  ActionSuggestionAreaItem(self, 2, 'A1.2.1: Letdown Excess Valve', 'True', 'Stop'),
+            5:  ActionSuggestionAreaItem(self, 2, 'A1.2.2: Letdown Excess Flow', 'True', 'Stop'),
+            6:  ActionSuggestionAreaItem(self, 1, 'F2: Charging 유로 확보', 'False', 'AutoRun'),
+            7:  ActionSuggestionAreaItem(self, 2, 'A2.1.1: Charging Pump 1', 'False', 'AutoRun'),
+            8:  ActionSuggestionAreaItem(self, 2, 'A2.1.2: Charging Pump 2', 'False', 'Stop'),
+            9:  ActionSuggestionAreaItem(self, 2, 'A2.1.3: Charging Valve', 'False', 'AutoRun'),
+            10: ActionSuggestionAreaItem(self, 2, 'A2.1.4: Charging Flow', 'False', 'AutoRun'),
+        }
+        [self.vl.addWidget(self.Action_items[i]) for i in range(len(self.Action_items))]
         self.vl.addStretch(1)
+    def refresh(self):
+        [self.Action_items[i].refresh() for i in range(len(self.Action_items))]
 class ActionSuggestionAreaItem(ABCWidget):
     def __init__(self, parent, level, text, activate, check_cond, widget_name=''):
         super().__init__(parent, widget_name)
         start_point = {0:730, 1:700, 2:670}[level] # 라인의 시작지점 셋팅
+        self.item_content = ActionSuggestionAreaItemContent(self, start_point, text, activate)
+        self.item_check_box = ActionSuggestionAreaItemCheckBox(self, check_cond, text)
         self.hl = QHBoxLayout(self)
         self.hl.setContentsMargins(0, 0, 0, 0)
         self.hl.addStretch(1)
-        self.hl.addWidget(ActionSuggestionAreaItemContent(self, start_point, text, activate))
+        self.hl.addWidget(self.item_content)
         self.hl.addSpacing(10)
-        self.hl.addWidget(ActionSuggestionAreaItemCheckBox(self, check_cond))
+        self.hl.addWidget(self.item_check_box)
         self.hl.addSpacing(10)
+    def refresh(self):        
+        self.item_check_box.refresh()
 class ActionSuggestionAreaItemContent(ABCLabel):
     def __init__(self, parent, fix_width, text, activate, widget_name=''):
         super().__init__(parent, widget_name)
@@ -257,11 +272,12 @@ class ActionSuggestionAreaItemContent(ABCLabel):
         self.setProperty('Activate', activate)
         self.style().polish(self)
 class ActionSuggestionAreaItemCheckBox(ABCLabel):
-    def __init__(self, parent, check_cond, widget_name=''):
+    def __init__(self, parent, check_cond, text, widget_name=''):
         super().__init__(parent, widget_name)
         self.setFixedHeight(40)
         self.setFixedWidth(40)
         self.setProperty('Condition', check_cond)
+        self.info_text = text
         self.style().polish(self)
 
     def mousePressEvent(self, a0: QMouseEvent) -> None:
@@ -272,3 +288,30 @@ class ActionSuggestionAreaItemCheckBox(ABCLabel):
     def update_cond(self, cond):
         self.setProperty('Condition', cond)
         self.style().polish(self)
+    
+    def refresh(self):
+        if self.info_text == 'A1.1.1: Letdown LV459 Open' and self.inmem.ShMem.get_CVCS_para_val('BLV459') == 0 and self.property('Condition') != 'Stop':
+            self.update_cond('Stop')
+        if self.info_text == 'A1.1.2: Letdown Flow'       and self.inmem.ShMem.get_CVCS_para_val('WLETDNO4') == 0 and self.property('Condition') != 'Stop':
+            self.update_cond('Stop')
+
+        if self.info_text == 'A1.2.1: Letdown Excess Valve' and self.inmem.ShMem.get_CVCS_para_val('BHV41') == 1 and self.property('Condition') == 'Stop':
+            self.update_cond('AutoRun')
+        if self.info_text == 'A1.2.2: Letdown Excess Flow' and self.inmem.ShMem.get_CVCS_para_val('WEXLD') > 0 and self.property('Condition') == 'Stop':
+            self.update_cond('AutoRun')
+
+        if self.info_text == 'F1: Letdown 유로 확보':
+            if self.inmem.widget_ids['ActionSuggestionAreaTable'].Action_items[2].item_check_box.property('Condition') == 'Abnormal' or  \
+                self.inmem.widget_ids['ActionSuggestionAreaTable'].Action_items[3].item_check_box.property('Condition') == 'Abnormal' or \
+                self.inmem.widget_ids['ActionSuggestionAreaTable'].Action_items[4].item_check_box.property('Condition') == 'Abnormal' or \
+                self.inmem.widget_ids['ActionSuggestionAreaTable'].Action_items[5].item_check_box.property('Condition') == 'Abnormal':
+                self.update_cond('Abnormal')
+            elif self.property('Condition') == 'Abnormal':
+                self.update_cond('AutoRun')
+        
+        if self.info_text == 'G1: 가압기 수위':
+            if self.inmem.widget_ids['ActionSuggestionAreaTable'].Action_items[1].item_check_box.property('Condition') == 'Abnormal' or  \
+                self.inmem.widget_ids['ActionSuggestionAreaTable'].Action_items[6].item_check_box.property('Condition') == 'Abnormal':
+                self.update_cond('Abnormal')
+            elif self.property('Condition') == 'Abnormal':
+                self.update_cond('AutoRun')
