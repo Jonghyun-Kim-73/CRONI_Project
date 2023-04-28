@@ -23,7 +23,7 @@ class EGISmain(ABCWidget):
         #EGIS 타이머
         self.i = 0
         self.old_time = self.inmem.ShMem.get_para_val('KCNTOMS')
-        self.startTimer(500)
+        self.startTimer(600)
         #GUI 사전에 등록
         self.SIASwindow = SIASwindow(self)
         self.HPSIwindow = HPSIwindow(self)
@@ -173,7 +173,7 @@ class SIASwindow(ABCDialog):
         self.initUI()
         self.i = 0
         self.old_time = self.inmem.ShMem.get_para_val('KCNTOMS')
-        self.startTimer(500)
+        self.startTimer(600)
 
     def initUI(self):
         uic.loadUi(SIASui, self)
@@ -223,7 +223,7 @@ class HPSIwindow(ABCDialog):
         self.initUI()
         self.i = 0
         self.old_time = self.inmem.ShMem.get_para_val('KCNTOMS')
-        self.startTimer(500)
+        self.startTimer(600)
 
     def initUI(self):
         uic.loadUi(HPSIui, self)
@@ -281,7 +281,7 @@ class DAwindow(ABCDialog):
         self.initUI()
         self.i = 0
         self.old_time = self.inmem.ShMem.get_para_val('KCNTOMS')
-        self.startTimer(500)
+        self.startTimer(600)
 
     def initUI(self):
         uic.loadUi(DAui, self)

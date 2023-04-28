@@ -970,7 +970,7 @@
     "alarm_name": "A_BHV41",
     "comp_name": "BHV41",
     "comp_name_direction": "Bottom",
-    "para_name": "WEXLD",
+    "para_name": "BHV41",
     "connected_id": []
   },
   "I10": {
@@ -993,8 +993,8 @@
     "unit": "kg/cm^2",
     "comp_name": "P",
     "comp_name_size": 16,
-    "para_name": "PPRZNNO",
-    "alarm_name": "A_PPRZNNO",
+    "para_name": "ZINST65",
+    "alarm_name": "A_ZINST65",
     "connected_id": []
   },
   "L58": {

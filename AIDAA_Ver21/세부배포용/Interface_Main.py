@@ -91,7 +91,7 @@ class MainTopTime(ABCLabel):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.setFixedSize(465, 36)
-        self.startTimer(200)
+        self.startTimer(600)
         self.time_freeze = datetime.now() # 현재 시간 Pick 하고 Freeze
         
     def timerEvent(self, a0: 'QTimerEvent') -> None:
@@ -246,7 +246,7 @@ class MainTabRightPreAbnormalW(ABCWidget):
         self.vl.addWidget(self.w_title_layout)
         self.vl.addWidget(self.w_contents)
         
-        self.startTimer(100)
+        self.startTimer(600)
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         self.w_contents.setText(f'IFAP information -> Val {self.inmem.ShMem.get_IFAP_para_val("V0")}')

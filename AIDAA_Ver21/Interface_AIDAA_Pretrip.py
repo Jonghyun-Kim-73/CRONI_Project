@@ -543,7 +543,7 @@ class Parameter_Info(ABCWidget):
         self.lay.setSpacing(30)
         self.lay.addStretch(1)
         
-        self.startTimer(300)
+        self.startTimer(600)
     
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         if self.inmem.ShMem.get_para_val(f'iPreTrip{self.id}') == 1:

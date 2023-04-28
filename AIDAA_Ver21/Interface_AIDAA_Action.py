@@ -101,55 +101,42 @@ class ActionAlarmAreaTable(ABCTableWidget):
         for i, (l, w) in enumerate(col_info.items()):
             self.setColumnWidth(i, w)
 
-        self.setCellWidget(0, 0, ActionAlarmAreaTableItem(self, 'L/D HX outlet flow lo', 'F'))
-        self.setCellWidget(0, 1, ActionAlarmAreaTableItem(self, '4.16▲' ,'M'))
-        self.setCellWidget(0, 2, ActionAlarmAreaTableChangedItem(self, 'WLETDNO'))
-        self.setCellWidget(0, 3, ActionAlarmAreaTableItem(self, 'kg/hr', 'M'))
-        self.setCellWidget(0, 4, ActionAlarmAreaTableItem(self, '00:00:10', 'L'))
+        self.alarm_line = {
+            i: [ActionAlarmAreaTableItem(self, 'F'),
+                ActionAlarmAreaTableItem(self, 'M'),
+                ActionAlarmAreaTableChangedItem(self),
+                ActionAlarmAreaTableItem(self, 'M'),
+                ActionAlarmAreaTableItem(self, 'L')] for i in range(self.rowCount())
+        }
 
-        self.setCellWidget(1, 0, ActionAlarmAreaTableItem(self, 'VCT level lo', 'F'))
-        self.setCellWidget(1, 1, ActionAlarmAreaTableItem(self, '20~80', 'M'))
-        self.setCellWidget(1, 2, ActionAlarmAreaTableChangedItem(self, 'ZVCT'))
-        self.setCellWidget(1, 3, ActionAlarmAreaTableItem(self, '[%]', 'M'))
-        self.setCellWidget(1, 4, ActionAlarmAreaTableItem(self, '00:00:15', 'L'))
-        
-        self.setCellWidget(2, 0, ActionAlarmAreaTableItem(self, '', 'F'))
-        self.setCellWidget(2, 1, ActionAlarmAreaTableItem(self, '', 'M'))
-        self.setCellWidget(2, 2, ActionAlarmAreaTableChangedItem(self, ''))
-        self.setCellWidget(2, 3, ActionAlarmAreaTableItem(self, '', 'M'))
-        self.setCellWidget(2, 4, ActionAlarmAreaTableItem(self, '', 'L'))
-        
-        self.setCellWidget(3, 0, ActionAlarmAreaTableItem(self, '', 'F'))
-        self.setCellWidget(3, 1, ActionAlarmAreaTableItem(self, '', 'M'))
-        self.setCellWidget(3, 2, ActionAlarmAreaTableChangedItem(self, ''))
-        self.setCellWidget(3, 3, ActionAlarmAreaTableItem(self, '', 'M'))
-        self.setCellWidget(3, 4, ActionAlarmAreaTableItem(self, '', 'L'))
-        
-        self.setCellWidget(4, 0, ActionAlarmAreaTableItem(self, '', 'F'))
-        self.setCellWidget(4, 1, ActionAlarmAreaTableItem(self, '', 'M'))
-        self.setCellWidget(4, 2, ActionAlarmAreaTableChangedItem(self, ''))
-        self.setCellWidget(4, 3, ActionAlarmAreaTableItem(self, '', 'M'))
-        self.setCellWidget(4, 4, ActionAlarmAreaTableItem(self, '', 'L'))
+        for i in range(self.rowCount()):
+            for j, item in enumerate(self.alarm_line[i]):
+                self.setCellWidget(i, j, item)
 
+        # self.setCellWidget(1, 0, ActionAlarmAreaTableItem(self, 'VCT level lo', 'F'))
+        # self.setCellWidget(1, 1, ActionAlarmAreaTableItem(self, '20~80', 'M'))
+        # self.setCellWidget(1, 2, ActionAlarmAreaTableChangedItem(self, 'ZVCT'))
+        # self.setCellWidget(1, 3, ActionAlarmAreaTableItem(self, '[%]', 'M'))
+        # self.setCellWidget(1, 4, ActionAlarmAreaTableItem(self, '00:00:15', 'L'))
+        
         [self.setRowHeight(i, 40) for i in range(self.rowCount())] # 테이블 행 높이 조절
+        self.startTimer(1200)
+    def timerEvent(self, event: QTimerEvent) -> None:
+        # 1. 현재 발생한 알람 확인
+        for alarm_para in ['A_ZVCT', 'A_PVCT', 'A_ZINST65', 'A_ZPRZNOAVGNO']:
+            alarm_level = self.inmem.ShMem.get_CVCS_para_val(alarm_para)
+        return super().timerEvent(event)
 class ActionAlarmAreaTableItem(ABCLabel):
-    def __init__(self, parent, text, pos, widget_name=''):
+    def __init__(self, parent, pos, widget_name=''):
         super().__init__(parent, widget_name)
-        self.setText(text)
         self.setProperty('Pos', pos)
         self.style().polish(self)
+        self.setText('')
 class ActionAlarmAreaTableChangedItem(ABCLabel):
-    def __init__(self, parent, para, widget_name=''):
+    def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
-        self.startTimer(300)
-        self.para = para
-
-    def timerEvent(self, a0: 'QTimerEvent') -> None:
-        if self.para != '':
-            self.setText(f'{self.inmem.ShMem.get_CVCS_para_val(self.para):.2f}')
-        else:
-            self.setText('')
-        return super().timerEvent(a0)
+    def update(self, para):
+        _ = self.setText(f'{self.inmem.ShMem.get_CVCS_para_val(para):.2f}') if para.para != '' else self.setText('')
 # ----------------------------------------------------------------------------------------------------------------------
 class ActionSuggestionArea(ABCWidget):
     def __init__(self, parent, widget_name=''):

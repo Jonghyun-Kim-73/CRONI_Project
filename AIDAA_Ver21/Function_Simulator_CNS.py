@@ -53,10 +53,8 @@ class CNS(QWidget):
         self.CNSMode = QCheckBox(self)
         call_init_btn = QPushButton('CallInit', self)
         call_init_btn.clicked.connect(lambda x:self.init_cns(1))
-        fix_ip_port_btn  = QPushButton('Set IP/PORT', self)
-        fix_ip_port_btn.clicked.connect(self.fix_ip_port)
-        self.my_com_ip    = QLineEdit(f'{self.ShMem.get_udp_my_com_ip()}')
-        self.my_com_port  = QLineEdit('7201')
+        self.my_com_ip    = QLabel(f'{self.ShMem.get_udp_my_com_ip()}')
+        self.my_com_port  = QLabel('7201')
         self.cns_com_ip   = QLineEdit('192.168.0.179')
         self.cns_com_port = QLineEdit('7201')
         
@@ -71,7 +69,6 @@ class CNS(QWidget):
         lay4_2.addWidget(self.cns_com_port)
         
         lay4.addLayout(lay4_0)
-        lay4.addWidget(fix_ip_port_btn)
         lay4.addLayout(lay4_1)
         lay4.addLayout(lay4_2)
         # ------------------------------------------------------------------
@@ -95,7 +92,7 @@ class CNS(QWidget):
         self.size_buffer_mem = 46008
         self.want_tick = 5
         self.resv_sock.settimeout(5)
-        self.resv_sock.bind(('127.0.0.1', 7101)) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
+        self.resv_sock.bind((f'{self.ShMem.get_udp_my_com_ip()}', int(self.my_com_port.text()))) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
         self.ShMem.update_cns_ip_port(self.cns_com_ip.text(), int(self.cns_com_port.text()))
 
     def one_step(self):
@@ -146,22 +143,6 @@ class CNS(QWidget):
     # ----------------------------------------------------------------------------------------------------------------------
     # CNS 통신용 소켓 및 버퍼 제어 함수
     # ----------------------------------------------------------------------------------------------------------------------
-    def fix_ip_port(self):
-        # ip / port 체크
-        if self.CNSMode.isChecked():
-            # try:
-            #     self.resv_sock.bind((self.my_com_ip.text(), int(self.my_com_port.text())))
-                
-            #     # if self.resv_sock.connect_ex((self.my_com_ip.text(), int(self.my_com_port.text()))) == 0: # Success
-            #     #     print('My_com_ip/port condition is good!')
-            #     #     self.resv_sock.close()
-            #     #     self.resv_sock.bind((self.my_com_ip.text(), int(self.my_com_port.text())))
-            #     # else: print(f'[Error!] My_com_ip:{self.my_com_ip.text()} | My_com_port:{self.my_com_port.text()}')
-            # except Exception as e: print(f'[Error!] My_com_ip:{self.my_com_ip.text()} | My_com_port:{self.my_com_port.text()} | {e}')
-            try: 
-                if self.send_sock.sendto(b'\x00\x00\x00\x10\xa8\x0f', (self.cns_com_ip.text(), int(self.cns_com_port.text()))) == 6:
-                    print('CNS is connected.')
-            except Exception as e: print(f'[Error!] CNS_com_ip:{self.cns_com_ip.text()} | CNS_com_port:{self.cns_com_port.text()} | {e}')
     def _update_mem(self):
         try:
             data, _ = self.resv_sock.recvfrom(self.size_buffer_mem)

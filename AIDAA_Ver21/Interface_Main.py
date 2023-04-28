@@ -98,7 +98,7 @@ class MainTopTime(ABCLabel):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.setFixedSize(465, 36)
-        self.startTimer(200)
+        self.startTimer(600)
         self.time_freeze = datetime.now() # 현재 시간 Pick 하고 Freeze
         
     def timerEvent(self, a0: 'QTimerEvent') -> None:

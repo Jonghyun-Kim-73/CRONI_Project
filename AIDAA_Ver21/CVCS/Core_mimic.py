@@ -204,7 +204,7 @@ class CVCS:
             'WDEMI': {'V': 5.6410036, 'RF': [5.6410036], 'SF': [5.6410036]},        # Demi water
             'PLETIN': {'V': 15012566.00, 'RF': [15012566.00], 'SF': [15012566.00]}, # Letdown Inlet Pressure      # C
             'PPRZN': {'V': 15305906.00, 'RF': [15305906.00], 'SF': [15305906.00]},  # PZR Pressure                # C
-            'PPRZNNO': {'V': 153, 'RF': [153], 'SF': [153]},                        # PZR Pressure Normal         * 1e-5
+            'ZINST65': {'V': 153, 'RF': [153], 'SF': [153]},                        # PZR Pressure Normal         * 1e-5
             'PLETDB': {'V': 2842650.3, 'RF': [2842650.3], 'SF': [2842650.3]},                                     # C
             'ZVCT': {'V': 70, 'RF': [70], 'SF': [70]},         # VCT level                   # C
             'PVCT': {'V': 1.6930148117902, 'RF': [1.6930148117902], 'SF': [1.6930148117902]},                                 # VCT Pressure                # C
@@ -322,7 +322,7 @@ class CVCS:
             'A_CWCHARG': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_PVCT': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_ZVCT': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_LV616': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_BLV616': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_BLV614': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_WDEMI': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_MakePP': {'V': 0, 'RF': [0], 'SF': [0]},
@@ -344,7 +344,7 @@ class CVCS:
             'A_LV460': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_BHV41': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_WLETDNO4': {'V': 0, 'RF': [0], 'SF': [0]},
-            'A_PPRZNNO': {'V': 0, 'RF': [0], 'SF': [0]},
+            'A_ZINST65': {'V': 0, 'RF': [0], 'SF': [0]},
             'A_WEXLD': {'V': 0, 'RF': [0], 'SF': [0]},
         }
 
@@ -722,7 +722,7 @@ class CVCS:
 
                     # 수위 상승에 따른 압력 증가 고려
                     self.mem['PPRZN']['V'] += delta * 100 * 1 + self.mem['PZRHeater']['V'] * 10
-                    self.mem['PPRZNNO']['V'] = self.mem['PPRZN']['V'] * 1e-5
+                    self.mem['ZINST65']['V'] = self.mem['PPRZN']['V'] * 1e-5
 
                     # 시간 추가
                     self.mem['SimTime']['V'] += 1
@@ -790,12 +790,12 @@ class CVCS:
         
         # if self.mem['KLAMPO301']['V'] == 1: self.mem['A_MCTMTRAD']['V'] = 2
         
-        if self.mem['KLAMPO307']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
-        if self.mem['KLAMPO308']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
+        if self.mem['KLAMPO307']['V'] == 1: self.mem['A_ZINST65']['V'] = 2
+        if self.mem['KLAMPO308']['V'] == 1: self.mem['A_ZINST65']['V'] = 2
         # if self.mem['KLAMPO310']['V'] == 1: self.mem['A_ZPRZSP']['V'] = 2
         if self.mem['KLAMPO310']['V'] == 1: self.mem['A_ZPRZNOAVGNO']['V'] = 2
         if self.mem['KLAMPO311']['V'] == 1: self.mem['A_ZPRZNOAVGNO']['V'] = 2
-        if self.mem['KLAMPO312']['V'] == 1: self.mem['A_PPRZNNO']['V'] = 2
+        if self.mem['KLAMPO312']['V'] == 1: self.mem['A_ZINST65']['V'] = 2
 
     def PIREGL(self, RIN, RINLMH, RINLML, RUTLMH, RUTLML,
                RGAIN, RINTEG, RDT,

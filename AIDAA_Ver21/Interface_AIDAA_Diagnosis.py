@@ -463,7 +463,7 @@ class ProcedureCheckTable(ABCTableWidget):
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)  # 테이블 너비 변경 불가
         self.horizontalHeader().setHighlightSections(False)  # 헤더 font weight 조정
 
-        self.startTimer(300)
+        self.startTimer(600)
         self.index_previously_selected = None
 
     def update_table_items(self, type_, name):

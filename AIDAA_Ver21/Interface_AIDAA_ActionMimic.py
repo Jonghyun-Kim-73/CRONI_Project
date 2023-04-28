@@ -58,7 +58,7 @@ class ActionMimicScene(ABCGraphicsScene):
         """
         저장 화면 불러오기 (Ctrl+L)
         """
-        print('MainMiddle Mimic 화면 Load')
+        # print('MainMiddle Mimic 화면 Load')
         # If any items is added in scene, the items will be removed.
         for item in self.items():
             self.removeItem(item)
@@ -109,8 +109,8 @@ class ActionMimicScene(ABCGraphicsScene):
                     item.move_pos(1, 0)
                 if direction == 'left':
                     item.move_pos(-1, 0)
-
-    def timerEvent(self, a0: 'QTimerEvent') -> None:
+                    
+    def timerEvent(self, a0: QTimerEvent) -> None:
         [item.update_state() for item in self.ItemBox.values()]
         self.draw_alarm_area()
         return super().timerEvent(a0)
