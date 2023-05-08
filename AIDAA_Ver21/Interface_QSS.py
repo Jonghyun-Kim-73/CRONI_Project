@@ -119,6 +119,41 @@ QssMain = ''.join([
     builder('QPushButton', 'MainTopCallEGIS:checked', [f'background-color: {LightBlue};']),
     builder('QWidget', 'MainTabIFAP', [f'background-color: {Gray};']),
     builder('QWidget', 'MainTabEGIS', [f'background-color: {Gray};']),
+    # Interface_AIDAA_Main.py ------------------------------------------------------------------------------------------
+    builder('QWidget', 'AIDAAMain', [
+        f'background-color: {LightGray};',
+        ]),
+    builder('QWidget', 'AIDAAMainTop', [
+        f'background-color: {DarkGray};',
+        'border:0px;',
+        ]),
+    builder('QLabel', 'AIDAAMainTopTime', [
+        f'background-color: {LightWhite};',
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        "qproperty-alignment: 'AlignCenter';",
+        'font-weight: bold;',
+        ]),
+    builder('QLabel', 'AIDAAMainTopSystemName', [
+        f'background-color: {LightWhite};',
+        'border:0px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        "qproperty-alignment: 'AlignCenter';",
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'AIDAAMainTopCallMain', [
+        f'background-color: {LightWhite};',
+        'border:0px;',
+        'border-radius: 5px;',
+        f'color: {Black};'
+        f'font-family: {Global_font};',
+        f'font-size: {Global_font_size};',
+        'font-weight: bold;',
+        ]),
+    builder('QPushButton', 'AIDAAMainTopCallMain:hover', [f'background-color: {LightBlue};']),
+    builder('QPushButton', 'AIDAAMainTopCallMain:checked', [f'background-color: {LightBlue};']),
     # Interface_Alarm.py ------------------------------------------------------------------------------------------
     builder('QWidget', 'MainAlarm', [
         f'background-color: {LightGray};', 

@@ -49,42 +49,44 @@ class AlarmFix(ABCWidget):
     def dis_update_pre_abnormal(self):
         if self.inmem.ShMem.get_para_val('iFixPreAb') == 1 and self.blick == False:
             self.setStyleSheet('background-color: rgb(0, 176, 218);')
-            if self.inmem.widget_ids['MainTopSystemName'].text() != 'IFAP':
-                self.inmem.widget_ids['MainTopCallIFAP'].setStyleSheet('background-color: rgb(0, 176, 218);')
-                self.inmem.widget_ids['MainTabRightPreAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')
-            else:
-                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 255);')
-                self.inmem.widget_ids['MainTabRightPreAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
+        #     if self.inmem.widget_ids['MainTopSystemName'].text() != 'IFAP':
+        #         self.inmem.widget_ids['MainTopCallIFAP'].setStyleSheet('background-color: rgb(0, 176, 218);')
+        #         self.inmem.widget_ids['MainTabRightPreAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')
+        #     else:
+        #         self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 255);')
+        #         self.inmem.widget_ids['MainTabRightPreAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = True
         elif self.inmem.ShMem.get_para_val('iFixPreAb') == 1:  # 1값이 아닐때 영향받음
             self.setStyleSheet('background-color: rgb(0, 176, 86);')
-            self.inmem.widget_ids['MainTopCallIFAP'].setStyleSheet('background-color: rgb(255, 255, 255);')
-            self.inmem.widget_ids['MainTabRightPreAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
+        #     self.inmem.widget_ids['MainTopCallIFAP'].setStyleSheet('background-color: rgb(255, 255, 255);')
+        #     self.inmem.widget_ids['MainTabRightPreAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = False
+        pass
 
     def dis_ws_enable(self):
-        if self.inmem.ShMem.get_para_val('iFixPreAb') == 1 and \
-            self.inmem.ShMem.get_para_val('iFixPreTrip') == 0 and \
-            self.inmem.ShMem.get_para_val('iFixTrip') == 0:
-            self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(False)
-            self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(True)
-            self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(True)
-        elif (self.inmem.ShMem.get_para_val('iFixPreAb') == 1 or self.inmem.ShMem.get_para_val('iFixPreAb') == 0) and \
-            self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 and \
-            self.inmem.ShMem.get_para_val('iFixTrip') == 0:
-            self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(False)
-            self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(False)
-            self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(True)
-        elif (self.inmem.ShMem.get_para_val('iFixPreAb') == 1 or self.inmem.ShMem.get_para_val('iFixPreAb') == 0) and \
-            (self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 or self.inmem.ShMem.get_para_val('iFixPreTrip') == 0) and \
-            self.inmem.ShMem.get_para_val('iFixTrip') == 0:
-            self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(False)
-            self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(False)
-            self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(False)
-        else:
-            self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(True)
-            self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(True)
-            self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(True)
+        # if self.inmem.ShMem.get_para_val('iFixPreAb') == 1 and \
+        #     self.inmem.ShMem.get_para_val('iFixPreTrip') == 0 and \
+        #     self.inmem.ShMem.get_para_val('iFixTrip') == 0:
+        #     self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(False)
+        #     self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(True)
+        #     self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(True)
+        # elif (self.inmem.ShMem.get_para_val('iFixPreAb') == 1 or self.inmem.ShMem.get_para_val('iFixPreAb') == 0) and \
+        #     self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 and \
+        #     self.inmem.ShMem.get_para_val('iFixTrip') == 0:
+        #     self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(False)
+        #     self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(False)
+        #     self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(True)
+        # elif (self.inmem.ShMem.get_para_val('iFixPreAb') == 1 or self.inmem.ShMem.get_para_val('iFixPreAb') == 0) and \
+        #     (self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 or self.inmem.ShMem.get_para_val('iFixPreTrip') == 0) and \
+        #     self.inmem.ShMem.get_para_val('iFixTrip') == 0:
+        #     self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(False)
+        #     self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(False)
+        #     self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(False)
+        # else:
+        #     self.inmem.widget_ids['MainTabRightPreAbnormalW'].diable_widget(True)
+        #     self.inmem.widget_ids['MainTabRightAbnormalW'].diable_widget(True)
+        #     self.inmem.widget_ids['MainTabRightEmergencyW'].diable_widget(True)
+        pass
 class AlarmFixPreTrip(ABCPushButton):
     def __init__(self, parent, width):
         super(AlarmFixPreTrip, self).__init__(parent)
@@ -100,22 +102,23 @@ class AlarmFixPreTrip(ABCPushButton):
         """
         if self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 and self.blick == False:
             self.setStyleSheet('background-color: rgb(0, 176, 218);')
-            if self.inmem.widget_ids['MainTopSystemName'].text() != 'AIDAA':
-                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(0, 176, 218);')
-                self.inmem.widget_ids['MainTabRightAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')
-            else:
-                self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 255);')
-                self.inmem.widget_ids['MainTabRightAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
+            # if self.inmem.widget_ids['MainTopSystemName'].text() != 'AIDAA':
+            #     self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(0, 176, 218);')
+            #     self.inmem.widget_ids['MainTabRightAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')
+            # else:
+            #     self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 255);')
+            #     self.inmem.widget_ids['MainTabRightAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = True
         elif self.inmem.ShMem.get_para_val('iFixPreTrip') == 1:  # 1값이 아닐때 영향받음
             self.setStyleSheet('background-color: rgb(0, 176, 86);')
-            self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 255);')
-            self.inmem.widget_ids['MainTabRightAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
+            # self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(255, 255, 255);')
+            # self.inmem.widget_ids['MainTabRightAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = False
 
     def change_main_display(self):
-        self.inmem.widget_ids['MainTopSystemName'].setText('AIDAA')
-        self.inmem.widget_ids['MainTab'].change_system_page('PreTrip')
+        # self.inmem.widget_ids['MainTopSystemName'].setText('AIDAA')
+        # self.inmem.widget_ids['MainTab'].change_system_page('PreTrip')
+        pass
 class AlarmFixTrip(ABCLabel):
     def __init__(self, parent, width):
         super(AlarmFixTrip, self).__init__(parent)
@@ -127,17 +130,17 @@ class AlarmFixTrip(ABCLabel):
     def dis_update(self):
         if self.inmem.ShMem.get_para_val('iFixTrip') == 1 and self.blick == False:
             self.setStyleSheet('background-color: rgb(0, 176, 218);')
-            if self.inmem.widget_ids['MainTopSystemName'].text() != 'EGIS':
-                self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(0, 176, 218);')
-                self.inmem.widget_ids['MainTabRightEmergencyW'].gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')
-            else:
-                self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(255, 255, 255);')
-                self.inmem.widget_ids['MainTabRightEmergencyW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
+            # if self.inmem.widget_ids['MainTopSystemName'].text() != 'EGIS':
+            #     self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(0, 176, 218);')
+            #     self.inmem.widget_ids['MainTabRightEmergencyW'].gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')
+            # else:
+            #     self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(255, 255, 255);')
+            #     self.inmem.widget_ids['MainTabRightEmergencyW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = True
         elif self.inmem.ShMem.get_para_val('iFixTrip') == 1:
             self.setStyleSheet('background-color: rgb(0, 176, 86);')
-            self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(255, 255, 255);')
-            self.inmem.widget_ids['MainTabRightEmergencyW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
+            # self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(255, 255, 255);')
+            # self.inmem.widget_ids['MainTabRightEmergencyW'].gotobtn.setStyleSheet('background-color: rgb(255, 255, 255);')
             self.blick = False
 class AlignDelegate(QStyledItemDelegate):
     def initStyleOption(self, option, index):

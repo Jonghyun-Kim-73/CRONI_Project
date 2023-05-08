@@ -13,6 +13,7 @@ from AIDAA_Ver21.Function_Mem_ShMem import ShMem
 from AIDAA_Ver21.Interface_Main import Main
 from AIDAA_Ver21.Function_Simulator_CNS import CNS
 from AIDAA_Ver21.Interface_EGIS_Main import *
+from AIDAA_Ver21.Interface_AIDAA_Main import *
 
 class Run:
     def __init__(self):
@@ -27,20 +28,30 @@ class Run:
 
     def start_process(self):
         """ MainProcess 동작 """
-        t = time.time()
+        # t = time.time()
         mem = self.make_shmem()
-        print(time.time() - t)
-        p_list = [InterfaceRun_CNS(mem), InterfaceRun(mem), InterfaceRun_EGIS(mem)]
+        # print(time.time() - t)
+        p_list = [InterfaceRun_CNS(mem), InterfaceRun_Main(mem), InterfaceRun_AIDAA(mem), InterfaceRun_EGIS(mem)]
         [pr_.start() for pr_ in p_list]
         [pr_.join() for pr_ in p_list]  # finished at the same time
 
-class InterfaceRun(Process):
+class InterfaceRun_Main(Process):
     def __init__(self, mem):
-        super(InterfaceRun, self).__init__()
+        super(InterfaceRun_Main, self).__init__()
         self.mem = mem
     def run(self) -> None:
         app = QApplication(sys.argv)
         w = Main(self.mem)
+        w.show()
+        sys.exit(app.exec_())
+class InterfaceRun_AIDAA(Process):
+    def __init__(self, mem):
+        super(InterfaceRun_AIDAA, self).__init__()
+        self.mem = mem
+    def run(self) -> None:
+        pass
+        app = QApplication(sys.argv)
+        w = AIDAAMain(self.mem)
         w.show()
         sys.exit(app.exec_())
 class InterfaceRun_CNS(Process):
@@ -57,11 +68,10 @@ class InterfaceRun_EGIS(Process):
         super().__init__()
         self.mem = mem
     def run(self) -> None:
-        pass
-        # app = QApplication(sys.argv)
-        # egis = EGISmain(self)
-        # egis.show()
-        # sys.exit(app.exec_())
+        app = QApplication(sys.argv)
+        egis = EGISmain(self.mem)
+        egis.show()
+        sys.exit(app.exec_())
 
 if __name__ == '__main__':
     MainProcess = Run()

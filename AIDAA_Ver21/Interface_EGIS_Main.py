@@ -12,9 +12,10 @@ EGISui = "UI_EGISwidget7.ui"
 SIASui = "UI_SIASdialog.ui"
 HPSIui = "UI_HPSIdialog.ui"
 DAui = "UI_DA.ui"
-class EGISmain(ABCWidget):
-    def __init__(self, parent, widget_name=''):
-        super().__init__(parent, widget_name)
+class EGISmain(QWidget):
+    def __init__(self, ShMem):
+        super().__init__()
+        self.inmem:InterfaceMem = InterfaceMem(ShMem, self)
         uic.loadUi(EGISui, self)
         self.initUI()
         self.SIASpushButton.clicked.connect(self.SIASclicked)

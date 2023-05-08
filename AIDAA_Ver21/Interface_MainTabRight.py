@@ -34,7 +34,7 @@ class MainTabRightPreAbnormalW(ABCWidget):
 
         self.gotobtn = MainTabRightPreAbnormalWBTN(self, 'Go to IFAP')
         self.gotobtn.setFixedSize(254, 51)
-        self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallIFAP'].dis_update)
+        # self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallIFAP'].dis_update)
 
         self.w_contents = MainTabRightPreAbnormalWContent(self, 'IFAP information')
         self.w_contents.setContentsMargins(10, 0, 0, 0)
@@ -80,7 +80,7 @@ class MainTabRightAbnormalW(ABCWidget):
 
         self.gotobtn = MainTabRightAbnormalWBTN(self, 'AIDAA')
         self.gotobtn.setFixedSize(254, 51)
-        self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallAIDAA'].dis_update)
+        # self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallAIDAA'].dis_update)
 
         self.w_contents = MainTabRightAbnormalWContent(self, '진단 결과: 증기발생기 수위 채널 고장 (고) \n'
                                                              '진단 결과: -')
@@ -127,7 +127,7 @@ class MainTabRightEmergencyW(ABCWidget):
 
         self.gotobtn = MainTabRightEmergencyWBTN(self, 'EGIS')
         self.gotobtn.setFixedSize(254, 51)
-        self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallEGIS'].dis_update)
+        # self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallEGIS'].dis_update)
 
         self.w_contents = MainTabRightAbnormalWContent(self, 'EGIS information')
         self.w_contents.setContentsMargins(10, 0, 0, 0)
