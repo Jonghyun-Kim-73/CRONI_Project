@@ -301,13 +301,13 @@ class InterfaceMem:
                                     range(14)]
         self.access_procedure = []
 
-        # AI Part --------------------------------------------------------------------------------------------------- # 시연용
-        # self.diagnosis_para = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
-        # self.diagnosis_para_des = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
+        # AI Part --------------------------------------------------------------------------------------------------- # 시연용, tensor 안쓰는 진단, XAI 만 들어가있음_from 지훈팍
+        self.diagnosis_para = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
+        self.diagnosis_para_des = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
         # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
-        # self.diagnosis_sclaer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
-        # self.diagnosis_model = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
-        # self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
+        self.diagnosis_sclaer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
+        self.diagnosis_model = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
+        self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
         # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')
 
@@ -317,26 +317,26 @@ class InterfaceMem:
             np.array([self.ShMem.get_para_val(i) for i in self.diagnosis_para]).reshape(1, -1))
 
     def get_diagnosis_result(self):  # 상위 3개의 진단 결과만 출력
-        # self.dis_AI['AI'] = [self.make_raw(max_v, max_i) for (max_v, max_i) in
-        #                      self.GetTop(self.diagnosis_model.predict_proba(self.get_diagnosis_val())[0], 3)] # 시연용
+        self.dis_AI['AI'] = [self.make_raw(max_v, max_i) for (max_v, max_i) in
+                             self.GetTop(self.diagnosis_model.predict_proba(self.get_diagnosis_val())[0], 3)] # 시연용
         pass
 
     def get_explainer_result(self, num):
-        # # self.dis_AI['XAI'] = self.explainer.shap_values(self.get_diagnosis_val())
-        # shap_values = self.explainer.shap_values(np.array(self.get_diagnosis_val()))[num] # 선택한 시나리오에 대한 shap_value 추출
-        # temp1 = pd.DataFrame(shap_values, columns=self.diagnosis_para).T
-        # # sign = []
-        # # for i in range(len(temp1[0])):
-        # #     if np.sign(temp1[0][i]) == 1.0 or np.sign(temp1[0][i]) == 0.0:
-        # #         sign.append('+')
-        # #     elif np.sign(temp1[0][i]) == -1.0:
-        # #         sign.append('-')
-        # prob = [np.round((np.abs(temp1[0][i]) / sum(np.abs(temp1[0]))) * 100, 2) for i in range(len(temp1[0]))]
-        # # temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob, sign], index=['variable', 'describe', 'value', 'probability', 'sign']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
-        # temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob], index=['variable', 'describe', 'value', 'probability']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
-        # temp2 = temp2[temp2['value'] > 0]
-        # self.dis_AI['XAI'] = [[temp2.iloc[i]['describe'], temp2.iloc[i]['probability']] for i in range(5)]
-        pass  # 시연용
+        # self.dis_AI['XAI'] = self.explainer.shap_values(self.get_diagnosis_val())
+        shap_values = self.explainer.shap_values(np.array(self.get_diagnosis_val()))[num] # 선택한 시나리오에 대한 shap_value 추출
+        temp1 = pd.DataFrame(shap_values, columns=self.diagnosis_para).T
+        # sign = []
+        # for i in range(len(temp1[0])):
+        #     if np.sign(temp1[0][i]) == 1.0 or np.sign(temp1[0][i]) == 0.0:
+        #         sign.append('+')
+        #     elif np.sign(temp1[0][i]) == -1.0:
+        #         sign.append('-')
+        prob = [np.round((np.abs(temp1[0][i]) / sum(np.abs(temp1[0]))) * 100, 2) for i in range(len(temp1[0]))]
+        # temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob, sign], index=['variable', 'describe', 'value', 'probability', 'sign']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
+        temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob], index=['variable', 'describe', 'value', 'probability']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
+        temp2 = temp2[temp2['value'] > 0]
+        self.dis_AI['XAI'] = [[temp2.iloc[i]['describe'], temp2.iloc[i]['probability']] for i in range(5)]
+        # pass  # 시연용
 
     def get_train_check_val(self):
         return np.array([np.array([self.ShMem.get_para_list(i) for i in self.train_check_para]).reshape(-1, 46)])

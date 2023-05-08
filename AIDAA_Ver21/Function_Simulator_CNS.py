@@ -54,9 +54,9 @@ class CNS(QWidget):
         call_init_btn = QPushButton('CallInit', self)
         call_init_btn.clicked.connect(lambda x: self.init_cns(1))
         self.my_com_ip = QLabel(f'{self.ShMem.get_udp_my_com_ip()}')
-        self.my_com_port = QLabel('7201')
-        self.cns_com_ip = QLineEdit('192.168.0.179')
-        self.cns_com_port = QLineEdit('7201')
+        self.my_com_port = QLabel('7101')
+        self.cns_com_ip = QLineEdit('192.168.0.181') # YC
+        self.cns_com_port = QLineEdit('7101')
 
         lay4_0.addWidget(QLabel('CNS Mode'))
         lay4_0.addWidget(self.CNSMode)
@@ -91,7 +91,8 @@ class CNS(QWidget):
         self.size_buffer_mem = 46008
         self.want_tick = 5
         self.resv_sock.settimeout(5)
-        self.resv_sock.bind((f'{self.ShMem.get_udp_my_com_ip()}', int(self.my_com_port.text()))) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
+        # self.resv_sock.bind((f'{self.ShMem.get_udp_my_com_ip()}', int(self.my_com_port.text()))) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
+        self.resv_sock.bind(('192.168.0.192', 7101))
         self.ShMem.update_cns_ip_port(self.cns_com_ip.text(), int(self.cns_com_port.text()))
 
     def one_step(self):

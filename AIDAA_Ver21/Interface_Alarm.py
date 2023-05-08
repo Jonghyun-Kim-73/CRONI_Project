@@ -161,11 +161,17 @@ class AlarmScrollArea(ABCScrollArea):
 
         # header item
         self.heading_label = [
-            AlarmHeadingLabel(self, "DESCRIPTION", 442, 'F'),
+            # AlarmHeadingLabel(self, "DESCRIPTION", 442, 'F'),
+            # AlarmHeadingLabel(self, "VALUE", 93, 'M'),
+            # AlarmHeadingLabel(self, "SETPOINT", 142, 'M'),
+            # AlarmHeadingLabel(self, "UNIT", 77, 'M'),
+            # AlarmHeadingLabel(self, "DATE", 78, 'M'),
+            # AlarmHeadingLabel(self, "TIME", 108, 'L') # Total 1640
+            AlarmHeadingLabel(self, "DESCRIPTION", 400, 'F'),
             AlarmHeadingLabel(self, "VALUE", 93, 'M'),
             AlarmHeadingLabel(self, "SETPOINT", 142, 'M'),
             AlarmHeadingLabel(self, "UNIT", 77, 'M'),
-            AlarmHeadingLabel(self, "DATE", 78, 'M'),
+            AlarmHeadingLabel(self, "DATE", 120, 'M'),
             AlarmHeadingLabel(self, "TIME", 108, 'L')
         ]
         [self.headings_layout.addWidget(w) for w in self.heading_label]
@@ -205,7 +211,8 @@ class AlarmTable(ABCTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  # Scroll Bar 설정
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         # self.setRowCount(50)
-        self.column_labels = [(' DESCRIPTION:', 410), ('VALUE', 93), ('SETPOINT', 141), ('UNIT', 77), ('DATE', 77), ('TIME', 109)]
+        # self.column_labels = [(' DESCRIPTION:', 410), ('VALUE', 93), ('SETPOINT', 141), ('UNIT', 77), ('DATE', 77), ('TIME', 109)]
+        self.column_labels = [(' DESCRIPTION:', 350), ('VALUE', 93), ('SETPOINT', 141), ('UNIT', 77), ('DATE', 120), ('TIME', 125)]
         self.setColumnCount(len(self.column_labels))
         self.col_names = []
         for i, (l, w) in enumerate(self.column_labels):
@@ -287,13 +294,14 @@ class AlarmTable(ABCTableWidget):
             # self.time_freeze = datetime.now()  # 현재 시간 Pick 하고 Freeze
             current_time = self.inmem.widget_ids['MainTopTime'].time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
             real_time = current_time.strftime('%y.%m.%d') # Date
+            # real_time = current_time.strftime('%m.%d') # Date
             real_time2 = current_time.strftime("%H:%M:%S") # Time
 
             if type(self.inmem.ShMem.get_alarm_val(alarm_name)) == list:
                 for i in range(2):
                     self.insertRow(0)
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_val(alarm_name)[i])}'))  # Value
-                    self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i])}'))  # Setpoint
+                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_val(alarm_name)[i], 2))}'))  # Value
+                    self.setItem(0, 2, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i], 2))}'))  # Setpoint
                     self.setItem(0, 3, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_unit(alarm_name)[i])}'))  # Unit
                     if i == 1:
                         self.setSpan(0, 0, 2, 1)
@@ -305,8 +313,8 @@ class AlarmTable(ABCTableWidget):
             else:
                 self.insertRow(0)
                 self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                self.setItem(0, 1, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_val(alarm_name))}'))  # Value
-                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_setpoint(alarm_name))}'))  # Setpoint
+                self.setItem(0, 1, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_val(alarm_name), 2))}'))  # Value
+                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_setpoint(alarm_name), 2))}'))  # Setpoint
                 self.setItem(0, 3, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_unit(alarm_name))}'))  # Unit
                 self.setItem(0, 4, QTableWidgetItem(f'{real_time}'))  # Date
                 self.setItem(0, 5, QTableWidgetItem(f'{real_time2}'))  # Time

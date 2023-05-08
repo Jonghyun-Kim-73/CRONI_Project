@@ -171,9 +171,10 @@ class DiagnosisProcedureTable(ABCTableWidget):
             if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
                 self.inmem.get_diagnosis_result()
                 for i in range(3):
-                    # pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
-                    pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
-                    self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
+                    pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
+                    # pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
+                    # self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
+                    self.cellWidget(i, 0).update_item(f' {pro_name}', pro_name, block) # 15자 까지만 보이기
                     self.cellWidget(i, 1).update_item(pro_name, block)
                     self.cellWidget(i, 2).update_item(pro_name, block)
                     self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
@@ -181,9 +182,10 @@ class DiagnosisProcedureTable(ABCTableWidget):
 
             elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 and sum(self.train_check) != 5 or self.inmem.ShMem.get_para_val('iFixTrain') == 2: # 테이블 초기화를 위한 조건
                 for i in range(3):
-                    # pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
-                    pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
-                    self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
+                    pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
+                    # pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
+                    # self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
+                    self.cellWidget(i, 0).update_item(f' {pro_name}', pro_name, block) # 15자 까지만 보이기
                     self.cellWidget(i, 1).update_item(pro_name, block)
                     self.cellWidget(i, 2).update_item(pro_name, block)
                     self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
@@ -486,7 +488,8 @@ class ProcedureCheckTable(ABCTableWidget):
             symptom_des = [symptom[i]["Des"][:4] for i in range(symptom_count)]
             reset_list1 = list(filter(lambda x: symptom_des[x] == '참고사항', range(symptom_count)))
             reset_list2 = list(filter(lambda x: symptom_des[x] == '주의사항', range(symptom_count)))
-            reset_list = reset_list1+reset_list2
+            reset_list3 = list(filter(lambda x: symptom_des[x] == ' 주의사', range(symptom_count)))
+            reset_list = reset_list1+reset_list2+reset_list3
             [self.removeRow(i) for i in reset_list]
 
         if type_ == 'Sys_name':
