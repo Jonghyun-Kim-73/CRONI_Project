@@ -195,7 +195,8 @@ class AlarmTable(ABCTableWidget):
     def __init__(self, parent, type_, widget_name=''):
         super().__init__(parent, widget_name)
         self.rowset = 0
-        if type_ == 'Main':
+        self.type_ = type_
+        if self.type_ == 'Main':
             self.setRowCount(26)
             self.setFixedSize(909, 1035)
         else:
@@ -292,7 +293,11 @@ class AlarmTable(ABCTableWidget):
 
         for alarm_name in new_alarm_list:
             # self.time_freeze = datetime.now()  # 현재 시간 Pick 하고 Freeze
-            current_time = self.inmem.widget_ids['MainTopTime'].time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
+            if self.type_ == 'Main':
+                current_time = self.inmem.widget_ids['MainTopTime'].time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
+            else:
+                current_time = self.inmem.widget_ids['AIDAAMainTopTime'].time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
+            
             real_time = current_time.strftime('%y.%m.%d') # Date
             # real_time = current_time.strftime('%m.%d') # Date
             real_time2 = current_time.strftime("%H:%M:%S") # Time

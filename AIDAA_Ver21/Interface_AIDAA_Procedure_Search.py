@@ -245,7 +245,7 @@ class ProcedureSearchTable(ABCTableWidget):
         if not len(self.selectedItems()) == 0:
             pro_name = self.selectedItems()[0].pro_name
             self.inmem.widget_ids['Procedure'].set_procedure_name(pro_name)
-            self.inmem.widget_ids['MainTab'].change_system_page('Procedure')
+            self.inmem.widget_ids['AIDAAMainTab'].change_system_page('Procedure')
             self.inmem.widget_ids['ProcedureSearch'].close()
         else:
             pass
@@ -491,7 +491,7 @@ class SystemSearchTable(ABCTableWidget):
         if not len(self.selectedItems()) == 0:
             sys_name = self.selectedItems()[0].sys_name
             self.inmem.widget_ids['ActionTitleLabel'].update_text(sys_name)
-            self.inmem.widget_ids['MainTab'].change_system_page('Action')
+            self.inmem.widget_ids['AIDAAMainTab'].change_system_page('Action')
             self.inmem.widget_ids['SystemSearch'].close()
         else:
             pass

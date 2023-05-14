@@ -80,7 +80,7 @@ class AIDAAMainTop(ABCWidget):
 
         self.btnGroup.addButton(btn1, 0)
         btn1.setChecked(True)
-
+        lay.addStretch(1)
         lay.addWidget(btn1)
         lay.addWidget(AIDAAMainTopClose(self))
 class AIDAAMainTopTime(ABCLabel):
@@ -108,7 +108,8 @@ class AIDAAMainTopCallMain(ABCPushButton):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.setText('Main')
-        self.setFixedSize(218, 36)
+        # self.setFixedSize(218, 36)
+        self.setFixedSize(800, 36)
         self.clicked.connect(self.dis_update)
         self.setCheckable(True)
         self.setChecked(False)
@@ -143,3 +144,11 @@ class AIDAAMainTab(ABCStackWidget):
             system_name (str): Main, IFAP, ...
         """
         self.setCurrentIndex({'AIDAA': 0, 'Procedure': 1, 'Action': 2, 'PreTrip': 3}[system_name])
+        if system_name == 'AIDAA':
+            self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('Main')
+        elif system_name == 'Procedure':
+            self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('Procedure')
+        elif system_name == 'Action':
+            self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('System')
+        elif system_name == 'PreTrip':
+            self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('Prediction')

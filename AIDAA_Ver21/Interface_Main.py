@@ -122,21 +122,21 @@ class MainTopCallIFAP(ABCPushButton):
         super().__init__(parent, widget_name)
         self.setText('Pre-abnormal')
         self.setFixedSize(218, 36)
-        self.setCheckable(True)
+        self.setCheckable(False)
         self.setChecked(False)
 class MainTopCallAIDAA(ABCPushButton):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.setText('Abnormal')
         self.setFixedSize(218, 36)
-        self.setCheckable(True)
+        self.setCheckable(False)
         self.setChecked(False)
 class MainTopCallEGIS(ABCPushButton):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.setText('Emergency')
         self.setFixedSize(218, 36)
-        self.setCheckable(True)
+        self.setCheckable(False)
         self.setChecked(False)
 class MainTopClose(ABCPushButton):
     def __init__(self, parent, widget_name=''):

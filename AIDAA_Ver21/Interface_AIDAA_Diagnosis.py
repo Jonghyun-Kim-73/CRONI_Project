@@ -171,10 +171,12 @@ class DiagnosisProcedureTable(ABCTableWidget):
             if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
                 self.inmem.get_diagnosis_result()
                 for i in range(3):
-                    pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
-                    # pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
-                    # self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
-                    self.cellWidget(i, 0).update_item(f' {pro_name}', pro_name, block) # 15자 까지만 보이기
+                    try:
+                        pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
+                        self.cellWidget(i, 0).update_item(f' {pro_name}', pro_name, block) # 15자 까지만 보이기
+                    except:
+                        pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
+                        self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
                     self.cellWidget(i, 1).update_item(pro_name, block)
                     self.cellWidget(i, 2).update_item(pro_name, block)
                     self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
@@ -182,10 +184,12 @@ class DiagnosisProcedureTable(ABCTableWidget):
 
             elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 and sum(self.train_check) != 5 or self.inmem.ShMem.get_para_val('iFixTrain') == 2: # 테이블 초기화를 위한 조건
                 for i in range(3):
-                    pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
-                    # pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
-                    # self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
-                    self.cellWidget(i, 0).update_item(f' {pro_name}', pro_name, block) # 15자 까지만 보이기
+                    try:
+                        pro_name, urgent_action, radiation, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i] # 시연용
+                        self.cellWidget(i, 0).update_item(f' {pro_name}', pro_name, block) # 15자 까지만 보이기
+                    except:
+                        pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
+                        self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
                     self.cellWidget(i, 1).update_item(pro_name, block)
                     self.cellWidget(i, 2).update_item(pro_name, block)
                     self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
@@ -202,7 +206,7 @@ class DiagnosisProcedureItem(ABCLabel):
     def mouseDoubleClickEvent(self, a0: QMouseEvent) -> None:
         if self.block == 'Off':
             self.inmem.widget_ids['Procedure'].set_procedure_name(self.pro_name)
-            self.inmem.widget_ids['MainTab'].change_system_page('Procedure')
+            self.inmem.widget_ids['AIDAAMainTab'].change_system_page('Procedure')
         return super().mouseDoubleClickEvent(a0)
 
     def mousePressEvent(self, ev: QMouseEvent) -> None:
@@ -226,7 +230,7 @@ class DiagnosisProcedureCheckBox(ABCCheckBox):
     def mouseDoubleClickEvent(self, a0: QMouseEvent) -> None:
         if self.block == 'Off':
             self.inmem.widget_ids['Procedure'].set_procedure_name(self.pro_name)
-            self.inmem.widget_ids['MainTab'].change_system_page('Procedure')
+            self.inmem.widget_ids['AIDAAMainTab'].change_system_page('Procedure')
         return super().mouseDoubleClickEvent(a0)
     
     def mousePressEvent(self, ev: QMouseEvent) -> None:
@@ -373,7 +377,7 @@ class DiagnosisSystemItem(ABCLabel):
     def mouseDoubleClickEvent(self, a0: QMouseEvent) -> None:
         if self.block == 'Off':
             self.inmem.widget_ids['ActionTitleLabel'].update_text(self.sys_name)
-            self.inmem.widget_ids['MainTab'].change_system_page('Action')
+            self.inmem.widget_ids['AIDAAMainTab'].change_system_page('Action')
         return super().mouseDoubleClickEvent(a0)
 
     def mousePressEvent(self, ev: QMouseEvent) -> None:
