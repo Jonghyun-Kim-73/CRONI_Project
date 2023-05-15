@@ -53,11 +53,20 @@ class MainTabRightPreAbnormalW(ABCWidget):
         self.vl.setContentsMargins(0, 0, 0, 0)
         self.vl.addWidget(self.w_title_layout)
         self.vl.addWidget(self.w_contents)
-
+        
+        self.IFAP_msg = ''
+        self.UDP_thread = MainTabRightPreAbnormalWThread(self)
+        self.UDP_thread.start()
+        self.startTimer(600)
+        
     def diable_widget(self, bool_):
         self.w_title.setDisabled(bool_)
         self.w_contents.setDisabled(bool_)
         self.gotobtn.setDisabled(bool_)
+        
+    def timerEvent(self, a0: QTimerEvent) -> None:
+        self.w_contents.setText(f'Counter Test : {self.IFAP_msg}')
+        return super().timerEvent(a0)
 class MainTabRightPreAbnormalWTitle(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
         super().__init__(parent, widget_name)
@@ -70,6 +79,22 @@ class MainTabRightPreAbnormalWContent(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
         super().__init__(parent, widget_name)
         self.setText(text)
+class MainTabRightPreAbnormalWThread(QThread):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.receiver = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.receiver.bind(('127.0.0.1', 7003))
+        self.receiver.settimeout(1.0)
+        self.counter = 0
+    def run(self) -> None:
+        while True:
+            try:
+                message, _ = self.receiver.recvfrom(1000)
+            except:
+                pass
+            self.counter += 1
+            self.parent.IFAP_msg = f'Counter {self.counter}'
 class MainTabRightAbnormalW(ABCWidget):
     def __init__(self, parent):
         super(MainTabRightAbnormalW, self).__init__(parent)
@@ -100,36 +125,11 @@ class MainTabRightAbnormalW(ABCWidget):
         self.vl.setContentsMargins(0, 0, 0, 0)
         self.vl.addWidget(self.w_title_layout)
         self.vl.addWidget(self.w_contents)
-        
-        self.IFAP_msg = ''
-        self.UDP_thread = MainTabRightAbnormalWThread(self)
-        self.UDP_thread.start()
-        self.startTimer(600)
 
     def diable_widget(self, bool_):
         self.w_title.setDisabled(bool_)
         self.w_contents.setDisabled(bool_)
         self.gotobtn.setDisabled(bool_)
-        
-    def timerEvent(self, a0: QTimerEvent) -> None:
-        self.w_contents.setText(f'Counter Test : {self.IFAP_msg}')
-        return super().timerEvent(a0)
-class MainTabRightAbnormalWThread(QThread):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
-        self.receiver = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.receiver.bind(('127.0.0.1', 7003))
-        self.receiver.settimeout(1.0)
-        self.counter = 0
-    def run(self) -> None:
-        while True:
-            try:
-                message, _ = self.receiver.recvfrom(1000)
-            except:
-                pass
-            self.counter += 1
-            self.parent.IFAP_msg = f'Counter {self.counter}'
 class MainTabRightAbnormalWTitle(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
         super().__init__(parent, widget_name)
