@@ -11,6 +11,7 @@ import pickle
 import socket
 from struct import unpack, pack
 
+
 class CNS(QWidget):
     def __init__(self, ShMem):
         super(CNS, self).__init__()
@@ -57,7 +58,7 @@ class CNS(QWidget):
         call_init_btn.clicked.connect(lambda x: self.init_cns(1))
         self.my_com_ip = QLabel(f'{self.ShMem.get_udp_my_com_ip()}')
         self.my_com_port = QLabel('7101')
-        self.cns_com_ip = QLineEdit('192.168.0.176') # YC
+        self.cns_com_ip = QLineEdit('192.168.0.181')  # YC
         self.cns_com_port = QLineEdit('7101')
 
         lay4_0.addWidget(QLabel('CNS Mode'))
@@ -97,17 +98,21 @@ class CNS(QWidget):
         else:
             self.ShMem.change_para_val('KCNTOMS', self.ShMem.get_para_val('KCNTOMS') + 5)
             self.one_step_part()
+
     def one_step_part(self):
         self.ShMem.add_val_to_list()
         self.ShMem.update_alarmdb()
         self.ShMem.update_CVCS()
         self.mes.setText(f'OneStep 진행함. [KCNTOMS: {self.ShMem.get_para_val("KCNTOMS")}][CVCS: {self.ShMem.get_CVCS_para_val("SimTime")}]')
+
     def run_(self):
         self.run_trigger = False if self.run_trigger == True else True
         _ = self.run_btn.setText('Run') if self.run_trigger == True else self.run_btn.setText('Freeze')
+
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         _ = self.one_step() if self.run_trigger else None
         return super().timerEvent(a0)
+
     def change_val(self):
         if self.ShMem.check_para_name(self.paraname.text()):
             self.mes.setText(f'{self.paraname.text()} 변수 있음.')
@@ -122,6 +127,7 @@ class CNS(QWidget):
 
         self.paraname.setText('para_name')
         self.paraval.setText('para_val')
+
     def change_val_cvcs(self):
         if self.ShMem.check_cvcs_para_name(self.paraname_cvcs.text()):
             self.mes_cvcs.setText(f'{self.paraname_cvcs.text()} 변수 있음.')
@@ -136,11 +142,17 @@ class CNS(QWidget):
 
         self.paraname_cvcs.setText('para_name')
         self.paraval_cvcs.setText('para_val')
+
     # ----------------------------------------------------------------------------------------------------------------------
     # CNS 통신용 소켓 및 버퍼 제어 함수
     # ----------------------------------------------------------------------------------------------------------------------
-    def run_freeze_CNS(self):        self.udp_th.call_run_freeze = 1
-    def init_cns(self, initial_nub): self.udp_th.call_init       = initial_nub if self.CNSMode.isChecked() else 0
+    def run_freeze_CNS(self):
+        self.udp_th.call_run_freeze = 1
+
+    def init_cns(self, initial_nub):
+        self.udp_th.call_init = initial_nub if self.CNSMode.isChecked() else 0
+
+
 class UDP_thread(QThread):
     def __init__(self, parent):
         super().__init__(parent)
@@ -153,22 +165,22 @@ class UDP_thread(QThread):
         if self.parent.ShMem.get_udp_my_com_ip() == '192.168.0.192':
             self.resv_sock.bind(('192.168.0.192', 7101))
         else:
-            self.resv_sock.bind((f'{self.parent.ShMem.get_udp_my_com_ip()}', int(self.parent.my_com_port.text()))) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
+            self.resv_sock.bind((f'{self.parent.ShMem.get_udp_my_com_ip()}', int(self.parent.my_com_port.text())))  # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
         self.parent.ShMem.update_cns_ip_port(self.parent.cns_com_ip.text(), int(self.parent.cns_com_port.text()))
-        
+
         self.call_init = 0
         self.call_run_freeze = 0
-        
+
     def run(self):
         while True:
-            if self.call_init != 0: 
+            if self.call_init != 0:
                 break_point = self.init_cns(self.call_init)
                 self.call_init = 0
-            if self.call_run_freeze != 0: 
+            if self.call_run_freeze != 0:
                 break_point = self.run_freeze_CNS()
-                if break_point == 0: self.parent.one_step_part() # CNS가 연결된 경우.
+                if break_point == 0: self.parent.one_step_part()  # CNS가 연결된 경우.
                 self.call_run_freeze = 0
-    
+
     def init_cns(self, initial_nub):
         print(f'Call Init {initial_nub}')
         # UDP 통신에 쌇인 데이터를 새롭게 하는 기능
@@ -188,7 +200,7 @@ class UDP_thread(QThread):
                 self._send_control_signal(['KFZRUN'], [5])
                 pass
         return break_point
-    
+
     def run_freeze_CNS(self):
         mem = self.parent.ShMem.get_mem()
         old_cont = mem['KCNTOMS']['Val'] + self.want_tick
@@ -212,7 +224,7 @@ class UDP_thread(QThread):
             else:
                 pass
         return break_point
-    
+
     def _update_mem(self):
         try:
             data, _ = self.resv_sock.recvfrom(self.size_buffer_mem)
@@ -229,7 +241,7 @@ class UDP_thread(QThread):
         except:
             print('CNS와 연결을 확인하세요...!')
             return 1
-    
+
     def _send_control_signal(self, para, val):
         '''
         조작 필요없음
