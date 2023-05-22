@@ -1,3 +1,5 @@
+import typing
+from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -86,20 +88,12 @@ class CNS(QWidget):
         # ------------------------------------------------------------------
         # CNS 통신용 소켓 및 버퍼
         # ------------------------------------------------------------------
-        self.resv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.size_buffer_mem = 46008
-        self.want_tick = 5
-        self.resv_sock.settimeout(5)
-        if self.ShMem.get_udp_my_com_ip() == '192.168.0.192':
-            self.resv_sock.bind(('192.168.0.192', 7101))
-        else:
-            self.resv_sock.bind((f'{self.ShMem.get_udp_my_com_ip()}', int(self.my_com_port.text()))) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
-        self.ShMem.update_cns_ip_port(self.cns_com_ip.text(), int(self.cns_com_port.text()))
+        self.udp_th = UDP_thread(self)
+        self.udp_th.start()
 
     def one_step(self):
         if self.CNSMode.isChecked():
-            if self.run_freeze_CNS() != 1: self.one_step_part()
+            self.run_freeze_CNS()
         else:
             self.ShMem.change_para_val('KCNTOMS', self.ShMem.get_para_val('KCNTOMS') + 5)
             self.one_step_part()
@@ -145,6 +139,80 @@ class CNS(QWidget):
     # ----------------------------------------------------------------------------------------------------------------------
     # CNS 통신용 소켓 및 버퍼 제어 함수
     # ----------------------------------------------------------------------------------------------------------------------
+    def run_freeze_CNS(self):        self.udp_th.call_run_freeze = 1
+    def init_cns(self, initial_nub): self.udp_th.call_init       = initial_nub if self.CNSMode.isChecked() else 0
+class UDP_thread(QThread):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.resv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.size_buffer_mem = 46008
+        self.want_tick = 5
+        self.resv_sock.settimeout(5)
+        if self.parent.ShMem.get_udp_my_com_ip() == '192.168.0.192':
+            self.resv_sock.bind(('192.168.0.192', 7101))
+        else:
+            self.resv_sock.bind((f'{self.parent.ShMem.get_udp_my_com_ip()}', int(self.parent.my_com_port.text()))) # 절대 중요 이거 바꿔야함. 컨트롤러에서 안바뀜. 절대 안바뀜.
+        self.parent.ShMem.update_cns_ip_port(self.parent.cns_com_ip.text(), int(self.parent.cns_com_port.text()))
+        
+        self.call_init = 0
+        self.call_run_freeze = 0
+        
+    def run(self):
+        while True:
+            if self.call_init != 0: 
+                break_point = self.init_cns(self.call_init)
+                self.call_init = 0
+            if self.call_run_freeze != 0: 
+                break_point = self.run_freeze_CNS()
+                if break_point == 0: self.parent.one_step_part() # CNS가 연결된 경우.
+                self.call_run_freeze = 0
+    
+    def init_cns(self, initial_nub):
+        print(f'Call Init {initial_nub}')
+        # UDP 통신에 쌇인 데이터를 새롭게 하는 기능
+        self._send_control_signal(['KFZRUN', 'KSWO277'], [5, initial_nub])
+        while True:
+            break_point = self._update_mem()
+            if break_point == 1: break
+            mem = self.parent.ShMem.get_mem()
+            if mem['KFZRUN']['Val'] == 6:
+                # initial 상태가 완료되면 6으로 되고, break
+                break
+            elif mem['KFZRUN']['Val'] == 5:
+                # 아직완료가 안된 상태
+                pass
+            else:
+                # 4가 되는 경우: 이전의 에피소드가 끝나고 4인 상태인데
+                self._send_control_signal(['KFZRUN'], [5])
+                pass
+        return break_point
+    
+    def run_freeze_CNS(self):
+        mem = self.parent.ShMem.get_mem()
+        old_cont = mem['KCNTOMS']['Val'] + self.want_tick
+        self._send_control_signal(['KFZRUN'], [self.want_tick + 100])
+        while True:
+            break_point = self._update_mem()
+            if break_point == 1: break
+            mem = self.parent.ShMem.get_mem()
+            new_cont = mem['KCNTOMS']['Val']
+            if old_cont == new_cont:
+                if mem['KFZRUN']['Val'] == 4:
+                    # 1회 run 완료 시 4로 변환
+                    # 데이터가 최신으로 업데이트 되었음으로 val를 List에 append
+                    # 이때 반드시 모든 Val은 업데이트 된 상태이며 Append 및 데이터 로깅도 이부분에서 수행된다.
+                    self.parent.ShMem.change_para_val('cMALA', 1 if mem['cMALT']['Val'] <= mem['KCNTOMS']['Val'] else 0)
+                    self.parnet.ShMem.change_para_val('cMALCA', mem['cMALC']['Val'] if mem['cMALT']['Val'] <= mem['KCNTOMS']['Val'] else 0)
+                    # self.save_line()
+                    break
+                else:
+                    pass
+            else:
+                pass
+        return break_point
+    
     def _update_mem(self):
         try:
             data, _ = self.resv_sock.recvfrom(self.size_buffer_mem)
@@ -156,11 +224,12 @@ class CNS(QWidget):
                 pid, val, sig, idx = unpack(para, data[i:20 + i])
                 pid = pid.decode().rstrip('\x00')  # remove '\x00'
                 if pid != '':
-                    self.ShMem.change_para_val(pid, val)
+                    self.parent.ShMem.change_para_val(pid, val)
             return 0
         except:
             print('CNS와 연결을 확인하세요...!')
             return 1
+    
     def _send_control_signal(self, para, val):
         '''
         조작 필요없음
@@ -168,7 +237,7 @@ class CNS(QWidget):
         :param val:
         :return:
         '''
-        mem = self.ShMem.get_mem()
+        mem = self.parent.ShMem.get_mem()
         for i in range(np.shape(para)[0]):
             mem[para[i]]['Val'] = val[i]
         UDP_header = b'\x00\x00\x00\x10\xa8\x0f'
@@ -190,46 +259,4 @@ class CNS(QWidget):
 
         buffer = UDP_header + pack('h', np.shape(para)[0]) + temp_data + buffer[len(temp_data):]
 
-        self.send_sock.sendto(buffer, (self.cns_com_ip.text(), int(self.cns_com_port.text())))
-    def run_freeze_CNS(self):
-        mem = self.ShMem.get_mem()
-        old_cont = mem['KCNTOMS']['Val'] + self.want_tick
-        self._send_control_signal(['KFZRUN'], [self.want_tick + 100])
-        while True:
-            break_point = self._update_mem()
-            if break_point == 1: break
-            mem = self.ShMem.get_mem()
-            new_cont = mem['KCNTOMS']['Val']
-            if old_cont == new_cont:
-                if mem['KFZRUN']['Val'] == 4:
-                    # 1회 run 완료 시 4로 변환
-                    # 데이터가 최신으로 업데이트 되었음으로 val를 List에 append
-                    # 이때 반드시 모든 Val은 업데이트 된 상태이며 Append 및 데이터 로깅도 이부분에서 수행된다.
-                    self.ShMem.change_para_val('cMALA', 1 if mem['cMALT']['Val'] <= mem['KCNTOMS']['Val'] else 0)
-                    self.ShMem.change_para_val('cMALCA', mem['cMALC']['Val'] if mem['cMALT']['Val'] <= mem['KCNTOMS']['Val'] else 0)
-                    # self.save_line()
-                    break
-                else:
-                    pass
-            else:
-                pass
-        return break_point
-    def init_cns(self, initial_nub):
-        if self.CNSMode.isChecked():
-            print(f'Call Init {initial_nub}')
-            # UDP 통신에 쌇인 데이터를 새롭게 하는 기능
-            self._send_control_signal(['KFZRUN', 'KSWO277'], [5, initial_nub])
-            while True:
-                break_point = self._update_mem()
-                if break_point == 1: break
-                mem = self.ShMem.get_mem()
-                if mem['KFZRUN']['Val'] == 6:
-                    # initial 상태가 완료되면 6으로 되고, break
-                    break
-                elif mem['KFZRUN']['Val'] == 5:
-                    # 아직완료가 안된 상태
-                    pass
-                else:
-                    # 4가 되는 경우: 이전의 에피소드가 끝나고 4인 상태인데
-                    self._send_control_signal(['KFZRUN'], [5])
-                    pass
+        self.send_sock.sendto(buffer, (self.parent.cns_com_ip.text(), int(self.parent.cns_com_port.text())))
