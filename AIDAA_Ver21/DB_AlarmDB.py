@@ -21,7 +21,8 @@ class AlarmDB:
 
             'KLAMPO255': {'Val': 0, 'Value': 'KZROD1', 'Des': 'Two or more rod at bottom', 'Setpoint': 2, 'Unit': 'EA', 'System': '제어봉 제어 계통'},    #다중 변수 확인(Control Rod별 존재)
 
-            'KLAMPO256': {'Val': 0, 'Value': ['CAXOFF', 'CAXOFF'], 'Des': 'Axial power distribution limit', 'Setpoint': ['CAXOFDL', 'CAXOFDL'], 'Unit': ['%', '%'], 'System': '제어봉 제어 계통'},  #Setpoint 값이 서류와 데이터값이 상이합니다. (계산식: CAXOFDL - 0.15)
+            # 'KLAMPO256': {'Val': 0, 'Value': ['CAXOFF', 'CAXOFF'], 'Des': 'Axial power distribution limit', 'Setpoint': ['CAXOFDL', 'CAXOFDL'], 'Unit': ['%', '%'], 'System': '제어봉 제어 계통'},  #Setpoint 값이 서류와 데이터값이 상이합니다. (계산식: CAXOFDL - 0.15)
+            'KLAMPO256': {'Val': 0, 'Value': 'CAXOFF', 'Des': 'Axial power distribution limit', 'Setpoint': 'CAXOFDL', 'Unit': '%', 'System': '제어봉 제어 계통'},  #Setpoint 값이 서류와 데이터값이 상이합니다. (계산식: CAXOFDL - 0.15)
 
             'KLAMPO257': {'Val': 0, 'Value': 'UCCWIN', 'Des': 'CCWS outlet temp hi', 'Setpoint': 'CUCCWH', 'Unit': '℃', 'System': '화학 및 체적 제어계통'},
             'KLAMPO258': {'Val': 0, 'Value': 'PINSTA', 'Des': 'Instrument air press lo', 'Setpoint': 'CINSTP', 'Unit': 'kg/cm²', 'System': '화학 및 체적 제어계통'},
@@ -41,7 +42,9 @@ class AlarmDB:
             'KLAMPO267': {'Val': 0, 'Value': 0, 'Des': 'Not used',  'Setpoint': '', 'Unit': '', 'System': ''}, # Not used
             'KLAMPO268': {'Val': 0, 'Value': 'WNETLD', 'Des': 'L/D HX outlet flow hi', 'Setpoint': 'CWLHXH', 'Unit': 'kg/sec', 'System': '화학 및 체적 제어계통'},
 
-            'KLAMPO269': {'Val': 0, 'Value': ['PPRZN', 'KSAFEI'], 'Des': 'PRZ press lo SI', 'Setpoint': [126.44481, 1], 'Unit': ['kg/cm²',''], 'System': '원자로 냉각재 계통'}, #다중 변수 확인(PRZ,SI 조건 2개), KSAFEI=1 조건2개, 12400000Pa -> kg/cm² 단위 변환
+            # 'KLAMPO269': {'Val': 0, 'Value': ['PPRZN', 'KSAFEI'], 'Des': 'PRZ press lo SI', 'Setpoint': [126.44481, 1], 'Unit': ['kg/cm²',''], 'System': '원자로 냉각재 계통'}, #다중 변수 확인(PRZ,SI 조건 2개), KSAFEI=1 조건2개, 12400000Pa -> kg/cm² 단위 변환
+            'KLAMPO269_1': {'Val': 0, 'Value': 'PPRZN', 'Des': 'PRZ press lo', 'Setpoint': 126.44481, 'Unit': 'kg/cm²', 'System': '원자로 냉각재 계통'}, #다중 변수 확인(PRZ,SI 조건 2개), KSAFEI=1 조건2개, 12400000Pa -> kg/cm² 단위 변환
+            'KLAMPO269_2': {'Val': 0, 'Value': 'KSAFEI', 'Des': 'SI Actuation', 'Setpoint': 1, 'Unit': '', 'System': '원자로 냉각재 계통'}, #다중 변수 확인(PRZ,SI 조건 2개), KSAFEI=1 조건2개, 12400000Pa -> kg/cm² 단위 변환
 
             'KLAMPO270': {'Val': 0, 'Value': 'KCTMTSP', 'Des': 'CTMT spray actuated', 'Setpoint': 1, 'Unit': '', 'System': '잔열 제거 계통'},
             'KLAMPO271': {'Val': 0, 'Value': 'ZVCT', 'Des': 'VCT level hi', 'Setpoint': 'CZVCT6', 'Unit': '%', 'System': '화학 및 체적 제어계통'},
@@ -83,7 +86,9 @@ class AlarmDB:
             'KLAMPO297': {'Val': 0, 'Value': 'UCTMT', 'Des': 'CTMT air temp hi','Setpoint': 'CUCTMT', 'Unit': '℃', 'System': '잔열 제거 계통'},
             'KLAMPO298': {'Val': 0, 'Value': 'HUCTMT', 'Des': 'CTMT moisture hi', 'Setpoint': 'CHCTMT', 'Unit': '%', 'System': '잔열 제거 계통'},
             # ------------------------------------------------------------------------------------------------------------------------------------------------------
-            'KLAMPO301': {'Val': 0, 'Value': ['DCTMT', 'DSECON'], 'Des': 'Rad hi alarm', 'Setpoint': ['CRADHI', 3.9E-3], 'Unit': 'mRem/Hr', 'System': '잔열 제거 계통'},
+            # 'KLAMPO301': {'Val': 0, 'Value': ['DCTMT', 'DSECON'], 'Des': 'Rad hi alarm', 'Setpoint': ['CRADHI', 3.9E-3], 'Unit': 'mRem/Hr', 'System': '잔열 제거 계통'},
+            'KLAMPO301_1': {'Val': 0, 'Value': 'DCTMT', 'Des': 'Containment Rad hi alarm', 'Setpoint': 'CRADHI', 'Unit': 'mRem/Hr', 'System': '잔열 제거 계통'},
+            'KLAMPO301_2': {'Val': 0, 'Value': 'DSECON', 'Des': 'Secondary Rad hi alarm', 'Setpoint': 3.9E-3, 'Unit': 'mRem/Hr', 'System': '잔열 제거 계통'},
 
             'KLAMPO302': {'Val': 0, 'Value': ['PCTMT', 'PAKGCM'], 'Des': 'CTMT press hi 1 alert', 'Setpoint': 0.3515, 'Unit': 'kg/cm²', 'System': '잔열 제거 계통'}, # 계산식
 
@@ -97,13 +102,23 @@ class AlarmDB:
             'KLAMPO308': {'Val': 0, 'Value': 'PPRZ', 'Des': 'PRZ press lo alert', 'Setpoint': 'CPPRZL', 'Unit': 'kg/cm²', 'System': '원자로 냉각재 계통'},
             'KLAMPO309': {'Val': 0, 'Value': 'BPORV', 'Des': 'PRZ PORV opening', 'Setpoint': 0.01, 'Unit': '', 'System': '원자로 냉각재 계통'},
 
-            'KLAMPO310': {'Val': 0, 'Value': ['ZINST63', 'QPRZB'], 'Des': 'PRZ cont level hi heater on', 'Setpoint': ['ZPRZSP', 'CZPRZH', 'CQPRZP'], 'Unit': ['', ''], 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO310': {'Val': 0, 'Value': ['ZINST63', 'QPRZB'], 'Des': 'PRZ cont level hi heater on', 'Setpoint': ['ZPRZSP', 'CZPRZH', 'CQPRZP'], 'Unit': ['', ''], 'System': '원자로 냉각재 계통'},
+            'KLAMPO310': {'Val': 0, 'Value': 'ZINST63', 'Des': 'PRZ cont level hi heater on', 'Setpoint': ['ZPRZSP', 'CZPRZH'], 'Unit': '%', 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO310_1': {'Val': 0, 'Value': 'ZINST63', 'Des': 'PRZ cont level hi', 'Setpoint': ['ZPRZSP', 'CZPRZH'], 'Unit': '', 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO310_2': {'Val': 0, 'Value': 'QPRZB', 'Des': 'PRZ Back-up heater on', 'Setpoint': 'CQPRZP', 'Unit': '', 'System': '원자로 냉각재 계통'},
 
-            'KLAMPO311': {'Val': 0, 'Value': ['ZINST63', 'QPRZ'], 'Des': 'PRZ cont level lo heater off', 'Setpoint': ['CZPRZL', 'CQPRZP'], 'Unit': ['', ''], 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO311': {'Val': 0, 'Value': ['ZINST63', 'QPRZ'], 'Des': 'PRZ cont level lo heater off', 'Setpoint': ['CZPRZL', 'CQPRZP'], 'Unit': ['', ''], 'System': '원자로 냉각재 계통'},
+            'KLAMPO311': {'Val': 0, 'Value': 'ZINST63', 'Des': 'PRZ cont level lo heater off', 'Setpoint': 'CZPRZL', 'Unit': '%', 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO311_1': {'Val': 0, 'Value': 'ZINST63', 'Des': 'PRZ cont level lo', 'Setpoint': 'CZPRZL', 'Unit': '', 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO311_2': {'Val': 0, 'Value': 'QPRZ', 'Des': 'PRZ All heater off', 'Setpoint': 'CQPRZP', 'Unit': '', 'System': '원자로 냉각재 계통'},
 
-            'KLAMPO312': {'Val': 0, 'Value': ['PPRZN', 'KBHON'], 'Des': 'PRZ press lo back-up heater on', 'Setpoint':['CQPRZB', 1], 'Unit': ['kg/cm²', ''], 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO312': {'Val': 0, 'Value': ['PPRZN', 'KBHON'], 'Des': 'PRZ press lo back-up heater on', 'Setpoint':['CQPRZB', 1], 'Unit': ['kg/cm²', ''], 'System': '원자로 냉각재 계통'},
+            'KLAMPO312': {'Val': 0, 'Value': 'PPRZN', 'Des': 'PRZ press lo back-up heater on', 'Setpoint':'CQPRZB', 'Unit': 'kg/cm²', 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO312_1': {'Val': 0, 'Value': 'PPRZN', 'Des': 'PRZ press lo', 'Setpoint':'CQPRZB', 'Unit': 'kg/cm²', 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO312_2': {'Val': 0, 'Value': 'KBHON', 'Des': 'PRZ back-up heater on', 'Setpoint': 1, 'Unit': '', 'System': '원자로 냉각재 계통'},
 
-            'KLAMPO313': {'Val': 0, 'Value': ['UAVLEGS', 'UAVLEGM', 'UAVLEGM', 'UAVLEGS'], 'Des': 'Tref/Auct. Tavg Deviation', 'Setpoint': ['CUTDEV', 'CUTDEV'], 'Unit': ['℃', '℃'], 'System': '원자로 냉각재 계통'},
+            # 'KLAMPO313': {'Val': 0, 'Value': ['UAVLEGS', 'UAVLEGM', 'UAVLEGM', 'UAVLEGS'], 'Des': 'Tref/Auct. Tavg Deviation', 'Setpoint': ['CUTDEV', 'CUTDEV'], 'Unit': ['℃', '℃'], 'System': '원자로 냉각재 계통'},
+            'KLAMPO313': {'Val': 0, 'Value': ['UAVLEGS', 'UAVLEGM'], 'Des': 'Tref/Auct. Tavg Deviation', 'Setpoint': 'CUTDEV', 'Unit': '℃', 'System': '원자로 냉각재 계통'},
 
             # 'KLAMPO314': {'Val': 0, 'Value': 'UAVLEGS', 'Des': 'RCS 1,2,3 Tavg hi', 'Setpoint': '312.78', 'Unit': '℃'}, # 분할 경보, 분할 변수는 없음. (원본 경보)
             'KLAMPO314_1': {'Val': 0, 'Value': 'UAVLEGM', 'Des': 'RCS 1 Tavg hi', 'Setpoint': 'CUTAVG', 'Unit': '℃', 'System': '원자로 냉각재 계통'},  # 분할 경보, 분할 변수는 없음.
@@ -116,9 +131,12 @@ class AlarmDB:
             'KLAMPO315_3': {'Val': 0, 'Value': 'UAVLEG3', 'Des': 'RCS 3 Tavg/auct Tavg hi/lo', 'Setpoint': 'CUAUCT', 'Unit': '℃', 'System': '원자로 냉각재 계통'}, # 분할 경보, 계산식
 
             # 'KLAMPO316': {'Val': 0, 'Value': ['WSGRCP1', 'WSGRCP2', 'WSGRCP3'], 'Des': 'RCS 1,2,3 lo flow alert', 'Setpoint': '92', 'Unit': 'Kg/sec'}, # 분할 경보, setpoint 변수가 있으나 CNS에 변수가 구현되어 있지 않음. (원본 경보)
-            'KLAMPO316_1': {'Val': 0, 'Value': ['WSGRCP1', 'KRCP1'], 'Des': 'RCS 1 lo flow alert', 'Setpoint': [4232, 1], 'Unit': ['Kg/sec', ''], 'System': '원자로 냉각재 계통'},  # 분할 경보
-            'KLAMPO316_2': {'Val': 0, 'Value': ['WSGRCP2', 'KRCP1'], 'Des': 'RCS 2 lo flow alert', 'Setpoint': [4232, 1], 'Unit': ['Kg/sec', ''], 'System': '원자로 냉각재 계통'},  # 분할 경보
-            'KLAMPO316_3': {'Val': 0, 'Value': ['WSGRCP3', 'KRCP1'], 'Des': 'RCS 3 lo flow alert', 'Setpoint': [4232, 1], 'Unit': ['Kg/sec', ''], 'System': '원자로 냉각재 계통'},  # 분할 경보
+            'KLAMPO316_1': {'Val': 0, 'Value': 'WSGRCP1', 'Des': 'RCS 1 lo flow alert', 'Setpoint': 4232, 'Unit': 'Kg/sec', 'System': '원자로 냉각재 계통'},  # 분할 경보
+            'KLAMPO316_2': {'Val': 0, 'Value': 'WSGRCP2', 'Des': 'RCS 2 lo flow alert', 'Setpoint': 4232, 'Unit': 'Kg/sec', 'System': '원자로 냉각재 계통'},  # 분할 경보
+            'KLAMPO316_3': {'Val': 0, 'Value': 'WSGRCP3', 'Des': 'RCS 3 lo flow alert', 'Setpoint': 4232, 'Unit': 'Kg/sec', 'System': '원자로 냉각재 계통'},  # 분할 경보
+            # 'KLAMPO316_4': {'Val': 0, 'Value': 'KRCP1', 'Des': 'RCP 1 Actuation', 'Setpoint': 1, 'Unit': '', 'System': '원자로 냉각재 계통'},  # 분할 경보
+            # 'KLAMPO316_5': {'Val': 0, 'Value': 'KRCP2', 'Des': 'RCP 2 Actuation', 'Setpoint': 1, 'Unit': '', 'System': '원자로 냉각재 계통'},  # 분할 경보
+            # 'KLAMPO316_6': {'Val': 0, 'Value': 'KRCP3', 'Des': 'RCP 3 Actuation', 'Setpoint': 1, 'Unit': '', 'System': '원자로 냉각재 계통'},  # 분할 경보
 
             'KLAMPO317': {'Val': 0, 'Value': 'UPRT', 'Des': 'PRT temp hi', 'Setpoint': 'CUPRT', 'Unit': '℃', 'System': '원자로 냉각재 계통'},
             'KLAMPO318': {'Val': 0, 'Value': 'PPRT', 'Des': 'PRT press hi', 'Setpoint': 'CPPRT', 'Unit': 'kg/cm2', 'System': '원자로 냉각재 계통'},
@@ -149,15 +167,17 @@ class AlarmDB:
 
 
             # 'KLAMPO326': {'Val': 0, 'Value': ['PSGLP', 'PSG1', 'PSG2', 'PSG3'], 'Des': 'MSL press rate hi steam iso', 'Setpoint': '689000', 'Unit': 'Pa/sec'}, # 분할 경보
-            'KLAMPO326_1': {'Val': 0, 'Value': ['PSG1', 'KMSISO'], 'Des': 'MSL 1 press rate hi steam iso', 'Setpoint': ['CMSLH', 1], 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
-            'KLAMPO326_2': {'Val': 0, 'Value': ['PSG2', 'KMSISO'], 'Des': 'MSL 2 press rate hi steam iso', 'Setpoint': ['CMSLH', 1], 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
-            'KLAMPO326_3': {'Val': 0, 'Value': ['PSG3', 'KMSISO'], 'Des': 'MSL 3 press rate hi steam iso', 'Setpoint': ['CMSLH', 1], 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
+            'KLAMPO326_1': {'Val': 0, 'Value': 'PSG1', 'Des': 'MSL 1 press rate hi', 'Setpoint': ['CMSLH', 1], 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
+            'KLAMPO326_2': {'Val': 0, 'Value': 'PSG2', 'Des': 'MSL 2 press rate hi', 'Setpoint': ['CMSLH', 1], 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
+            'KLAMPO326_3': {'Val': 0, 'Value': 'PSG3', 'Des': 'MSL 3 press rate hi', 'Setpoint': ['CMSLH', 1], 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
+            'KLAMPO326_4': {'Val': 0, 'Value': 'KMSISO', 'Des': 'MSL Isolation', 'Setpoint': ['CMSLH', 1], 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
 
 
             # 'KLAMPO327': {'Val': 0, 'Value': ['PSGLP', 'PSG1', 'PSG2', 'PSG3'], 'Des': 'MSL 1,2,3 press rate hi', 'Setpoint': '689000', 'Unit': 'Pa/sec'}, # 분할 경보
-            'KLAMPO327_1': {'Val': 0, 'Value': 'PSG1', 'Des': 'MSL 1 press rate hi', 'Setpoint': 'CMSLH', 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
-            'KLAMPO327_2': {'Val': 0, 'Value': 'PSG2', 'Des': 'MSL 2 press rate hi', 'Setpoint': 'CMSLH', 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
-            'KLAMPO327_3': {'Val': 0, 'Value': 'PSG3', 'Des': 'MSL 3 press rate hi', 'Setpoint': 'CMSLH', 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
+            # 중복 알람
+            # 'KLAMPO327_1': {'Val': 0, 'Value': 'PSG1', 'Des': 'MSL 1 press rate hi', 'Setpoint': 'CMSLH', 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
+            # 'KLAMPO327_2': {'Val': 0, 'Value': 'PSG2', 'Des': 'MSL 2 press rate hi', 'Setpoint': 'CMSLH', 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
+            # 'KLAMPO327_3': {'Val': 0, 'Value': 'PSG3', 'Des': 'MSL 3 press rate hi', 'Setpoint': 'CMSLH', 'Unit': 'Pa/sec', 'System': '주증기 계통'}, # 분할 경보
 
             # 'KLAMPO328': {'Val': 0, 'Value': ['ZINST73', 'ZINST74', 'ZINST75'], 'Des': 'MSL 1,2,3 press low', 'Setpoint': '41.1', 'Unit': 'kg/cm2'}, # 분할 경보
             'KLAMPO328_1': {'Val': 0, 'Value': 'PSG1', 'Des': 'MSL 1 press low', 'Setpoint': 'CPSTML', 'Unit': 'kg/cm2', 'System': '주증기 계통'}, # 분할 경보
@@ -181,15 +201,16 @@ class AlarmDB:
             'KLAMPO334': {'Val': 0, 'Value': 'WCDPO', 'Des': 'Condensate pump flow lo', 'Setpoint': 'CWCDPO', 'Unit': 'kg/s', 'System': '복수 계통'},
             'KLAMPO335': {'Val': 0, 'Value': 'PVAC', 'Des': 'Condenser abs press hi', 'Setpoint': 'CPVACH', 'Unit': 'mmHg', 'System': '복수 계통'},
             'KLAMPO336': {'Val': 0, 'Value': 'ZCOND', 'Des': 'Condenser level hi', 'Setpoint': 'CZCNDH', 'Unit': 'M', 'System': '복수 계통'},
-            'KLAMPO337': {'Val': 0, 'Value': ['KTBTRIP', 'KRXTRIP'], 'Des': 'TBN trip P-4', 'Setpoint': [1, 1], 'Unit': ['', ''], 'System': '터빈 계통'},
+            'KLAMPO337_1': {'Val': 0, 'Value': 'KTBTRIP', 'Des': 'TBN trip P-4 (TBN Trip)', 'Setpoint': 1, 'Unit': '', 'System': '터빈 계통'},
+            'KLAMPO337_2': {'Val': 0, 'Value': 'KRXTRIP', 'Des': 'TBN trip P-4 (Rx Trip)', 'Setpoint': 1, 'Unit': '', 'System': '터빈 계통'},
 
             # 'KLAMPO338': {'Val': 0, 'Value': ['ZSGNOR1', 'ZSGNOR2', 'ZSGNOR3'], 'Des': 'SG 1,2,3 wtr level hi-hi TBN trip', 'Setpoint': '0.78', 'Unit': '-'}, # 분할 경보
             'KLAMPO338_1': {'Val': 0, 'Value': 'ZSGNOR1', 'Des': 'SG 1 wtr level hi-hi TBN trip', 'Setpoint': 0.78, 'Unit': '', 'System': '주증기 계통'}, # 분할 경보
             'KLAMPO338_2': {'Val': 0, 'Value': 'ZSGNOR2', 'Des': 'SG 2 wtr level hi-hi TBN trip', 'Setpoint': 0.78, 'Unit': '', 'System': '주증기 계통'}, # 분할 경보
             'KLAMPO338_3': {'Val': 0, 'Value': 'ZSGNOR3', 'Des': 'SG 3 wtr level hi-hi TBN trip', 'Setpoint': 0.78, 'Unit': '', 'System': '주증기 계통'}, # 분할 경보
 
-            'KLAMPO339': {'Val': 0, 'Value': ['PVAC', 'KTBTRIP'], 'Des': 'Condenser vacuum lo TBN trip', 'Setpoint': [620, 1], 'Unit': ['mmHg', ''], 'System': '복수 계통'},
-            'KLAMPO340': {'Val': 0, 'Value': ['FTURB', 'KTBTRIP'], 'Des': 'TBN overspeed hi TBN trip', 'Setpoint': [1980, 1], 'Unit': ['rpm', ''], 'System': '터빈 계통'},
+            'KLAMPO339': {'Val': 0, 'Value': 'PVAC', 'Des': 'Condenser vacuum lo', 'Setpoint': 620, 'Unit': 'mmHg', 'System': '복수 계통'},
+            'KLAMPO340': {'Val': 0, 'Value': 'FTURB', 'Des': 'TBN overspeed hi', 'Setpoint': 1980, 'Unit': 'rpm', 'System': '터빈 계통'},
             'KLAMPO341': {'Val': 0, 'Value': 'KGENB', 'Des': 'Gen. brk open', 'Setpoint': 0, 'Unit': '', 'System': '전기 계통'},
         }
         return alarm_dict
@@ -347,8 +368,10 @@ class AlarmDB:
         # --------- L6  Axial power distribution limit(3% ~ -12%)
         if (mem['CAXOFF']['Val'] >= mem['CAXOFDL']['Val']) or \
                 (mem['CAXOFF']['Val'] <= (mem['CAXOFDL']['Val'] - 0.75)):
-            alarm_dict['KLAMPO256']['Value'] = [mem['CAXOFF']['Val'], mem['CAXOFF']['Val']]
-            alarm_dict['KLAMPO256']['Setpoint'] = [mem['CAXOFDL']['Val'], mem['CAXOFDL']['Val'] - 0.75]
+            # alarm_dict['KLAMPO256']['Value'] = [mem['CAXOFF']['Val'], mem['CAXOFF']['Val']]
+            alarm_dict['KLAMPO256']['Value'] = mem['CAXOFF']['Val']
+            # alarm_dict['KLAMPO256']['Setpoint'] = [mem['CAXOFDL']['Val'], mem['CAXOFDL']['Val'] - 0.75]
+            alarm_dict['KLAMPO256']['Setpoint'] = mem['CAXOFDL']['Val']
             alarm_dict['KLAMPO256']['Val'] = 1
         else:
             alarm_dict['KLAMPO256']['Val'] = 0
@@ -455,12 +478,25 @@ class AlarmDB:
             alarm_dict['KLAMPO268']['Val'] = 0
         # --------- L19  PRZ press lo SI
         CSAFEI = {1: 124.e5, 2: 40.3e5}
-        if (mem['PPRZN']['Val'] < CSAFEI[1]) and (mem['KSAFEI']['Val'] == 1):
-            alarm_dict['KLAMPO269']['Value'] = [mem['PPRZN']['Val'], mem['KSAFEI']['Val']]
-            alarm_dict['KLAMPO269']['Setpoint'] = [CSAFEI[1], 1]
-            alarm_dict['KLAMPO269']['Val'] = 1
+        # if (mem['PPRZN']['Val'] < CSAFEI[1]) and (mem['KSAFEI']['Val'] == 1):
+        #     alarm_dict['KLAMPO269']['Value'] = [mem['PPRZN']['Val'], mem['KSAFEI']['Val']]
+        #     alarm_dict['KLAMPO269']['Setpoint'] = [CSAFEI[1], 1]
+        #     alarm_dict['KLAMPO269']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO269']['Val'] = 0
+        if mem['PPRZN']['Val'] < CSAFEI[1]:
+            alarm_dict['KLAMPO269_1']['Value'] = mem['PPRZN']['Val']
+            alarm_dict['KLAMPO269_1']['Setpoint'] = CSAFEI[1]
+            alarm_dict['KLAMPO269_1']['Val'] = 1
         else:
-            alarm_dict['KLAMPO269']['Val'] = 0
+            alarm_dict['KLAMPO269_1']['Val'] = 0
+
+        if mem['KSAFEI']['Val'] == 1:
+            alarm_dict['KLAMPO269_2']['Value'] = mem['KSAFEI']['Val']
+            alarm_dict['KLAMPO269_2']['Setpoint'] = 1
+            alarm_dict['KLAMPO269_2']['Val'] = 1
+        else:
+            alarm_dict['KLAMPO269_2']['Val'] = 0
         # --------- L20 CTMT spray actuated
         if mem['KCTMTSP']['Val'] == 1:
             alarm_dict['KLAMPO270']['Value'] = mem['KCTMTSP']['Val']
@@ -535,13 +571,27 @@ class AlarmDB:
         # Right panel
         #
         # --------- R1  Rad hi alarm
-        if (mem['DCTMT']['Val'] > mem['CRADHI']['Val']) or \
-                (mem['DSECON']['Val'] >= 3.9E-3):
-            alarm_dict['KLAMPO301']['Value'] = [mem['DCTMT']['Val'], mem['DSECON']['Val']]
-            alarm_dict['KLAMPO301']['Setpoint'] = [mem['CRADHI']['Val'], 3.9E-3]
-            alarm_dict['KLAMPO301']['Val'] = 1
+        # if (mem['DCTMT']['Val'] > mem['CRADHI']['Val']) or \
+        #         (mem['DSECON']['Val'] >= 3.9E-3):
+        #     alarm_dict['KLAMPO301']['Value'] = [mem['DCTMT']['Val'], mem['DSECON']['Val']]
+        #     alarm_dict['KLAMPO301']['Setpoint'] = [mem['CRADHI']['Val'], 3.9E-3]
+        #     alarm_dict['KLAMPO301']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO301']['Val'] = 0
+
+        if (mem['DCTMT']['Val'] > mem['CRADHI']['Val']):
+            alarm_dict['KLAMPO301_1']['Value'] = mem['DCTMT']['Val']
+            alarm_dict['KLAMPO301_1']['Setpoint'] = mem['CRADHI']['Val']
+            alarm_dict['KLAMPO301_1']['Val'] = 1
         else:
-            alarm_dict['KLAMPO301']['Val'] = 0
+            alarm_dict['KLAMPO301_1']['Val'] = 0
+
+        if mem['DSECON']['Val'] >= 3.9E-3:
+            alarm_dict['KLAMPO301_2']['Value'] = mem['DSECON']['Val']
+            alarm_dict['KLAMPO301_2']['Setpoint'] = 3.9E-3
+            alarm_dict['KLAMPO301_2']['Val'] = 1
+        else:
+            alarm_dict['KLAMPO301_2']['Val'] = 0
         # --------- R2  CTMT press hi 1 alert
         CPCMTH = {1: 0.3515, 2: 1.02, 3: 1.62}
         if mem['PCTMT']['Val'] * mem['PAKGCM']['Val'] > CPCMTH[1]:
@@ -601,32 +651,103 @@ class AlarmDB:
             alarm_dict['KLAMPO309']['Val'] = 0
         # --------- R10 PRZ cont level hi heater on(over 5%) !%deail....
         DEPRZ = mem['ZINST63']['Val'] / 100
+        # if (DEPRZ > (mem['ZPRZSP']['Val'] + mem['CZPRZH']['Val'])) and (
+        #         mem['QPRZB']['Val'] > mem['CQPRZP']['Val']):
+        #     alarm_dict['KLAMPO310']['Value'] = [DEPRZ, mem['QPRZB']['Val']]
+        #     alarm_dict['KLAMPO310']['Setpoint'] = [mem['ZPRZSP']['Val'] + mem['CZPRZH']['Val'], mem['CQPRZP']['Val']]
+        #     alarm_dict['KLAMPO310']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO310']['Val'] = 0
+
         if (DEPRZ > (mem['ZPRZSP']['Val'] + mem['CZPRZH']['Val'])) and (
                 mem['QPRZB']['Val'] > mem['CQPRZP']['Val']):
-            alarm_dict['KLAMPO310']['Value'] = [DEPRZ, mem['QPRZB']['Val']]
-            alarm_dict['KLAMPO310']['Setpoint'] = [mem['ZPRZSP']['Val'] + mem['CZPRZH']['Val'], mem['CQPRZP']['Val']]
+            alarm_dict['KLAMPO310']['Value'] = DEPRZ
+            alarm_dict['KLAMPO310']['Setpoint'] = mem['ZPRZSP']['Val'] + mem['CZPRZH']['Val']
             alarm_dict['KLAMPO310']['Val'] = 1
         else:
             alarm_dict['KLAMPO310']['Val'] = 0
+
+        # if (DEPRZ > (mem['ZPRZSP']['Val'] + mem['CZPRZH']['Val'])):
+        #     alarm_dict['KLAMPO310_1']['Value'] = DEPRZ
+        #     alarm_dict['KLAMPO310_1']['Setpoint'] = mem['ZPRZSP']['Val'] + mem['CZPRZH']['Val']
+        #     alarm_dict['KLAMPO310_1']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO310_1']['Val'] = 0
+        #
+        # if (mem['QPRZB']['Val'] > mem['CQPRZP']['Val']):
+        #     alarm_dict['KLAMPO310_2']['Value'] = mem['QPRZB']['Val']
+        #     alarm_dict['KLAMPO310_2']['Setpoint'] = mem['CQPRZP']['Val']
+        #     alarm_dict['KLAMPO310_2']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO310_2']['Val'] = 0
         # --------- R11  PRZ cont level lo heater off(17%) !%deail....
+        # if (DEPRZ < mem['CZPRZL']['Val']) and (mem['QPRZ']['Val'] >= mem['CQPRZP']['Val']):
+        #     alarm_dict['KLAMPO311']['Value'] = [DEPRZ, mem['QPRZ']['Val']]
+        #     alarm_dict['KLAMPO311']['Setpoint'] = [mem['CZPRZL']['Val'], mem['CQPRZP']['Val']]
+        #     alarm_dict['KLAMPO311']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO311']['Val'] = 0
+
         if (DEPRZ < mem['CZPRZL']['Val']) and (mem['QPRZ']['Val'] >= mem['CQPRZP']['Val']):
-            alarm_dict['KLAMPO311']['Value'] = [DEPRZ, mem['QPRZ']['Val']]
-            alarm_dict['KLAMPO311']['Setpoint'] = [mem['CZPRZL']['Val'], mem['CQPRZP']['Val']]
+            alarm_dict['KLAMPO311']['Value'] = DEPRZ
+            alarm_dict['KLAMPO311']['Setpoint'] = mem['CZPRZL']['Val']
             alarm_dict['KLAMPO311']['Val'] = 1
         else:
             alarm_dict['KLAMPO311']['Val'] = 0
+
+        # if (DEPRZ < mem['CZPRZL']['Val']):
+        #     alarm_dict['KLAMPO311_1']['Value'] = DEPRZ
+        #     alarm_dict['KLAMPO311_1']['Setpoint'] = mem['CZPRZL']['Val']
+        #     alarm_dict['KLAMPO311_1']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO311_1']['Val'] = 0
+        #
+        # if (mem['QPRZ']['Val'] >= mem['CQPRZP']['Val']):
+        #     alarm_dict['KLAMPO311_2']['Value'] = mem['QPRZ']['Val']
+        #     alarm_dict['KLAMPO311_2']['Setpoint'] = mem['CQPRZP']['Val']
+        #     alarm_dict['KLAMPO311_2']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO311_2']['Val'] = 0
         # --------- R12  PRZ press lo back-up heater on(153.6 kg/cm2)
+        # if (mem['PPRZN']['Val'] < mem['CQPRZB']['Val']) and (mem['KBHON']['Val'] == 1):
+        #     alarm_dict['KLAMPO312']['Value'] = [mem['PPRZN']['Val'], mem['KBHON']['Val']]
+        #     alarm_dict['KLAMPO312']['Setpoint'] = [mem['CQPRZB']['Val'], 1]
+        #     alarm_dict['KLAMPO312']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO312']['Val'] = 0
+
         if (mem['PPRZN']['Val'] < mem['CQPRZB']['Val']) and (mem['KBHON']['Val'] == 1):
-            alarm_dict['KLAMPO312']['Value'] = [mem['PPRZN']['Val'], mem['KBHON']['Val']]
-            alarm_dict['KLAMPO312']['Setpoint'] = [mem['CQPRZB']['Val'], 1]
+            alarm_dict['KLAMPO312']['Value'] = mem['PPRZN']['Val']
+            alarm_dict['KLAMPO312']['Setpoint'] = mem['CQPRZB']['Val']
             alarm_dict['KLAMPO312']['Val'] = 1
         else:
             alarm_dict['KLAMPO312']['Val'] = 0
+
+        # if (mem['PPRZN']['Val'] < mem['CQPRZB']['Val']) :
+        #     alarm_dict['KLAMPO312_1']['Value'] = mem['PPRZN']['Val']
+        #     alarm_dict['KLAMPO312_1']['Setpoint'] = mem['CQPRZB']['Val']
+        #     alarm_dict['KLAMPO312_1']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO312_1']['Val'] = 0
+        #
+        # if (mem['KBHON']['Val'] == 1):
+        #     alarm_dict['KLAMPO312_2']['Value'] = mem['KBHON']['Val']
+        #     alarm_dict['KLAMPO312_2']['Setpoint'] = 1
+        #     alarm_dict['KLAMPO312_2']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO312_2']['Val'] = 0
         # --------- R13  Tref/Auct. Tavg Deviation(1.67 deg C)
-        if ((mem['UAVLEGS']['Val'] - mem['UAVLEGM']['Val']) > mem['CUTDEV']['Val']) or \
-                ((mem['UAVLEGM']['Val'] - mem['UAVLEGS']['Val']) > mem['CUTDEV']['Val']):
-            alarm_dict['KLAMPO313']['Value'] = [mem['UAVLEGS']['Val'] - mem['UAVLEGM']['Val'], mem['UAVLEGM']['Val'] - mem['UAVLEGS']['Val']]
-            alarm_dict['KLAMPO313']['Setpoint'] = [mem['CUTDEV']['Val'], mem['CUTDEV']['Val']]
+        # if ((mem['UAVLEGS']['Val'] - mem['UAVLEGM']['Val']) > mem['CUTDEV']['Val']) or \
+        #         ((mem['UAVLEGM']['Val'] - mem['UAVLEGS']['Val']) > mem['CUTDEV']['Val']):
+        #     alarm_dict['KLAMPO313']['Value'] = [mem['UAVLEGS']['Val'] - mem['UAVLEGM']['Val'], mem['UAVLEGM']['Val'] - mem['UAVLEGS']['Val']]
+        #     alarm_dict['KLAMPO313']['Setpoint'] = [mem['CUTDEV']['Val'], mem['CUTDEV']['Val']]
+        #     alarm_dict['KLAMPO313']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO313']['Val'] = 0
+
+        if ((mem['UAVLEGS']['Val'] - mem['UAVLEGM']['Val']) > mem['CUTDEV']['Val']):
+            alarm_dict['KLAMPO313']['Value'] = mem['UAVLEGS']['Val'] - mem['UAVLEGM']['Val']
+            alarm_dict['KLAMPO313']['Setpoint'] = mem['CUTDEV']['Val']
             alarm_dict['KLAMPO313']['Val'] = 1
         else:
             alarm_dict['KLAMPO313']['Val'] = 0
@@ -697,25 +818,46 @@ class AlarmDB:
         #     alarm_dict['KLAMPO316']['Val'] = 0
 
         if (mem['WSGRCP1']['Val'] < CWSGRL[1] and mem['KRCP1']['Val'] == 1):
-            alarm_dict['KLAMPO316_1']['Value'] = [mem['WSGRCP1']['Val'], mem['KRCP1']['Val']]
-            alarm_dict['KLAMPO316_1']['Setpoint'] = [CWSGRL[1], 1]
+            alarm_dict['KLAMPO316_1']['Value'] = mem['WSGRCP1']['Val']
+            alarm_dict['KLAMPO316_1']['Setpoint'] = CWSGRL[1]
             alarm_dict['KLAMPO316_1']['Val'] = 1
         else:
             alarm_dict['KLAMPO316_1']['Val'] = 0
 
         if (mem['WSGRCP2']['Val'] < CWSGRL[1] and mem['KRCP2']['Val'] == 1):
-            alarm_dict['KLAMPO316_2']['Value'] = [mem['WSGRCP2']['Val'], mem['KRCP2']['Val']]
-            alarm_dict['KLAMPO316_2']['Setpoint'] = [CWSGRL[1], 1]
+            alarm_dict['KLAMPO316_2']['Value'] = mem['WSGRCP2']['Val']
+            alarm_dict['KLAMPO316_2']['Setpoint'] = CWSGRL[1]
             alarm_dict['KLAMPO316_2']['Val'] = 1
         else:
             alarm_dict['KLAMPO316_2']['Val'] = 0
 
         if (mem['WSGRCP3']['Val'] < CWSGRL[1] and mem['KRCP3']['Val'] == 1):
-            alarm_dict['KLAMPO316_3']['Value'] = [mem['WSGRCP3']['Val'], mem['KRCP3']['Val']]
-            alarm_dict['KLAMPO316_3']['Setpoint'] = [CWSGRL[1], 1]
+            alarm_dict['KLAMPO316_3']['Value'] = mem['WSGRCP3']['Val']
+            alarm_dict['KLAMPO316_3']['Setpoint'] = CWSGRL[1]
             alarm_dict['KLAMPO316_3']['Val'] = 1
         else:
             alarm_dict['KLAMPO316_3']['Val'] = 0
+
+        # if (mem['KRCP1']['Val'] == 1):
+        #     alarm_dict['KLAMPO316_4']['Value'] = mem['KRCP1']['Val']
+        #     alarm_dict['KLAMPO316_4']['Setpoint'] = 1
+        #     alarm_dict['KLAMPO316_4']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO316_4']['Val'] = 0
+        #
+        # if (mem['KRCP2']['Val'] == 1):
+        #     alarm_dict['KLAMPO316_5']['Value'] = mem['KRCP2']['Val']
+        #     alarm_dict['KLAMPO316_5']['Setpoint'] = 1
+        #     alarm_dict['KLAMPO316_5']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO316_5']['Val'] = 0
+        #
+        # if (mem['KRCP3']['Val'] == 1):
+        #     alarm_dict['KLAMPO316_6']['Value'] = mem['KRCP3']['Val']
+        #     alarm_dict['KLAMPO316_6']['Setpoint'] = 1
+        #     alarm_dict['KLAMPO316_6']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO316_6']['Val'] = 0
         # --------- R17  PRT temp hi(45deg C )
         if mem['UPRT']['Val'] > mem['CUPRT']['Val']:
             alarm_dict['KLAMPO317']['Value'] = mem['UPRT']['Val']
@@ -879,26 +1021,33 @@ class AlarmDB:
             # else:
             #     alarm_dict['KLAMPO326']['Val'] = 0
 
-            if ((RMSLPR[1] >= mem['CMSLH']['Val']) and (mem['KMSISO']['Val'] == 1)):
-                alarm_dict['KLAMPO326_1']['Value'] = [RMSLPR[1], mem['KMSISO']['Val']]
-                alarm_dict['KLAMPO326_1']['Setpoint'] = [mem['CMSLH']['Val'], 1]
+            if (RMSLPR[1] >= mem['CMSLH']['Val']):
+                alarm_dict['KLAMPO326_1']['Value'] = RMSLPR[1]
+                alarm_dict['KLAMPO326_1']['Setpoint'] = mem['CMSLH']['Val']
                 alarm_dict['KLAMPO326_1']['Val'] = 1
             else:
                 alarm_dict['KLAMPO326_1']['Val'] = 0
 
-            if ((RMSLPR[2] >= mem['CMSLH']['Val']) and (mem['KMSISO']['Val'] == 1)):
-                alarm_dict['KLAMPO326_2']['Value'] = [RMSLPR[2], mem['KMSISO']['Val']]
-                alarm_dict['KLAMPO326_2']['Setpoint'] = [mem['CMSLH']['Val'], 1]
+            if (RMSLPR[2] >= mem['CMSLH']['Val']):
+                alarm_dict['KLAMPO326_2']['Value'] = RMSLPR[2]
+                alarm_dict['KLAMPO326_2']['Setpoint'] = mem['CMSLH']['Val']
                 alarm_dict['KLAMPO326_2']['Val'] = 1
             else:
                 alarm_dict['KLAMPO326_2']['Val'] = 0
 
-            if ((RMSLPR[3] >= mem['CMSLH']['Val']) and (mem['KMSISO']['Val'] == 1)):
-                alarm_dict['KLAMPO326_3']['Value'] = [RMSLPR[3], mem['KMSISO']['Val']]
-                alarm_dict['KLAMPO326_3']['Setpoint'] = [mem['CMSLH']['Val'], 1]
+            if (RMSLPR[3] >= mem['CMSLH']['Val']):
+                alarm_dict['KLAMPO326_3']['Value'] = RMSLPR[3]
+                alarm_dict['KLAMPO326_3']['Setpoint'] = mem['CMSLH']['Val']
                 alarm_dict['KLAMPO326_3']['Val'] = 1
             else:
                 alarm_dict['KLAMPO326_3']['Val'] = 0
+
+            if (mem['KMSISO']['Val'] == 1):
+                alarm_dict['KLAMPO326_4']['Value'] = mem['KMSISO']['Val']
+                alarm_dict['KLAMPO326_4']['Setpoint'] = 1
+                alarm_dict['KLAMPO326_4']['Val'] = 1
+            else:
+                alarm_dict['KLAMPO326_4']['Val'] = 0
             # --------- RK27  MSL 1,2,3 press rate hi(-7.03 kg/cm*2/sec = 6.89E5 Pa/sec)
             # if ((RMSLPR[1] >= mem['CMSLH']['Val']) or
             #         (RMSLPR[2] >= mem['CMSLH']['Val']) or
@@ -907,26 +1056,27 @@ class AlarmDB:
             # else:
             #     alarm_dict['KLAMPO327']['Val'] = 0
 
-            if RMSLPR[1] >= mem['CMSLH']['Val']:
-                alarm_dict['KLAMPO327_1']['Value'] = RMSLPR[1]
-                alarm_dict['KLAMPO327_1']['Setpoint'] = mem['CMSLH']['Val']
-                alarm_dict['KLAMPO327_1']['Val'] = 1
-            else:
-                alarm_dict['KLAMPO327_1']['Val'] = 0
-
-            if RMSLPR[2] >= mem['CMSLH']['Val']:
-                alarm_dict['KLAMPO327_2']['Value'] = RMSLPR[2]
-                alarm_dict['KLAMPO327_2']['Setpoint'] = mem['CMSLH']['Val']
-                alarm_dict['KLAMPO327_2']['Val'] = 1
-            else:
-                alarm_dict['KLAMPO327_2']['Val'] = 0
-
-            if RMSLPR[3] >= mem['CMSLH']['Val']:
-                alarm_dict['KLAMPO327_3']['Value'] = RMSLPR[3]
-                alarm_dict['KLAMPO327_3']['Setpoint'] = mem['CMSLH']['Val']
-                alarm_dict['KLAMPO327_3']['Val'] = 1
-            else:
-                alarm_dict['KLAMPO327_3']['Val'] = 0
+            # 중복 알람
+            # if RMSLPR[1] >= mem['CMSLH']['Val']:
+            #     alarm_dict['KLAMPO327_1']['Value'] = RMSLPR[1]
+            #     alarm_dict['KLAMPO327_1']['Setpoint'] = mem['CMSLH']['Val']
+            #     alarm_dict['KLAMPO327_1']['Val'] = 1
+            # else:
+            #     alarm_dict['KLAMPO327_1']['Val'] = 0
+            #
+            # if RMSLPR[2] >= mem['CMSLH']['Val']:
+            #     alarm_dict['KLAMPO327_2']['Value'] = RMSLPR[2]
+            #     alarm_dict['KLAMPO327_2']['Setpoint'] = mem['CMSLH']['Val']
+            #     alarm_dict['KLAMPO327_2']['Val'] = 1
+            # else:
+            #     alarm_dict['KLAMPO327_2']['Val'] = 0
+            #
+            # if RMSLPR[3] >= mem['CMSLH']['Val']:
+            #     alarm_dict['KLAMPO327_3']['Value'] = RMSLPR[3]
+            #     alarm_dict['KLAMPO327_3']['Setpoint'] = mem['CMSLH']['Val']
+            #     alarm_dict['KLAMPO327_3']['Val'] = 1
+            # else:
+            #     alarm_dict['KLAMPO327_3']['Val'] = 0
         # --------- R28  MSL 1,2,3 press low(41.1 kg/cm*2 = 0.403E7 pas)
         # if ((mem['PSG1']['Val'] < mem['CPSTML']['Val']) or
         #         (mem['PSG2']['Val'] < mem['CPSTML']['Val']) or
@@ -1050,12 +1200,26 @@ class AlarmDB:
         else:
             alarm_dict['KLAMPO336']['Val'] = 0
         # --------- R37  TBN trip P-4
-        if (mem['KTBTRIP']['Val'] == 1) and (mem['KRXTRIP']['Val'] == 1):
-            alarm_dict['KLAMPO337']['Value'] = [mem['KTBTRIP']['Val'], mem['KRXTRIP']['Val']]
-            alarm_dict['KLAMPO337']['Setpoint'] = [1, 1]
-            alarm_dict['KLAMPO337']['Val'] = 1
+        # if (mem['KTBTRIP']['Val'] == 1) and (mem['KRXTRIP']['Val'] == 1):
+        #     alarm_dict['KLAMPO337']['Value'] = [mem['KTBTRIP']['Val'], mem['KRXTRIP']['Val']]
+        #     alarm_dict['KLAMPO337']['Setpoint'] = [1, 1]
+        #     alarm_dict['KLAMPO337']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO337']['Val'] = 0
+
+        if (mem['KTBTRIP']['Val'] == 1):
+            alarm_dict['KLAMPO337_1']['Value'] = mem['KTBTRIP']['Val']
+            alarm_dict['KLAMPO337_1']['Setpoint'] = 1
+            alarm_dict['KLAMPO337_1']['Val'] = 1
         else:
-            alarm_dict['KLAMPO337']['Val'] = 0
+            alarm_dict['KLAMPO337_1']['Val'] = 0
+
+        if (mem['KRXTRIP']['Val'] == 1):
+            alarm_dict['KLAMPO337_2']['Value'] = mem['KRXTRIP']['Val']
+            alarm_dict['KLAMPO337_2']['Setpoint'] = 1
+            alarm_dict['KLAMPO337_2']['Val'] = 1
+        else:
+            alarm_dict['KLAMPO337_2']['Val'] = 0
         # --------- R38  SG 1,2,3 wtr level hi-hi TBN trip
         CPERMS8 = 0.78
         # if (mem['ZSGNOR1']['Val'] > CPERMS8) or \
@@ -1086,16 +1250,30 @@ class AlarmDB:
         else:
             alarm_dict['KLAMPO338_3']['Val'] = 0
         # --------- R39 Condenser vacuum lo TBN trip
-        if (mem['PVAC']['Val'] < 620.0) and (mem['KTBTRIP']['Val'] == 1):
-            alarm_dict['KLAMPO339']['Value'] = [mem['PVAC']['Val'], mem['KTBTRIP']['Val']]
-            alarm_dict['KLAMPO339']['Setpoint'] = [620.0, 1]
+        # if (mem['PVAC']['Val'] < 620.0) and (mem['KTBTRIP']['Val'] == 1):
+        #     alarm_dict['KLAMPO339']['Value'] = [mem['PVAC']['Val'], mem['KTBTRIP']['Val']]
+        #     alarm_dict['KLAMPO339']['Setpoint'] = [620.0, 1]
+        #     alarm_dict['KLAMPO339']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO339']['Val'] = 0
+
+        if (mem['PVAC']['Val'] < 620.0):
+            alarm_dict['KLAMPO339']['Value'] = mem['PVAC']['Val']
+            alarm_dict['KLAMPO339']['Setpoint'] = 620.0
             alarm_dict['KLAMPO339']['Val'] = 1
         else:
             alarm_dict['KLAMPO339']['Val'] = 0
         # --------- R40  TBN overspeed hi TBN trip
-        if (mem['FTURB']['Val'] > 1980.0) and (mem['KTBTRIP']['Val'] == 1):
-            alarm_dict['KLAMPO340']['Value'] = [mem['FTURB']['Val'], mem['KTBTRIP']['Val']]
-            alarm_dict['KLAMPO340']['Setpoint'] = [1980.0, 1]
+        # if (mem['FTURB']['Val'] > 1980.0) and (mem['KTBTRIP']['Val'] == 1):
+        #     alarm_dict['KLAMPO340']['Value'] = [mem['FTURB']['Val'], mem['KTBTRIP']['Val']]
+        #     alarm_dict['KLAMPO340']['Setpoint'] = [1980.0, 1]
+        #     alarm_dict['KLAMPO340']['Val'] = 1
+        # else:
+        #     alarm_dict['KLAMPO340']['Val'] = 0
+
+        if (mem['FTURB']['Val'] > 1980.0):
+            alarm_dict['KLAMPO340']['Value'] = mem['FTURB']['Val']
+            alarm_dict['KLAMPO340']['Setpoint'] = 1980.0
             alarm_dict['KLAMPO340']['Val'] = 1
         else:
             alarm_dict['KLAMPO340']['Val'] = 0

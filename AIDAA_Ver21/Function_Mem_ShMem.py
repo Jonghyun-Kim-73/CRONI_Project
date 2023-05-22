@@ -107,6 +107,12 @@ class ShMem:
     def get_alarm_des(self, para):
         return self.AlarmDB.get_alarm_des(para)
 
+    def get_inverse_alarm_des(self):
+        dict = {}
+        for k in self.AlarmDB.init_alarm_db():
+            dict[self.AlarmDB.alarmdb[k]['Des']] = k
+        return dict
+
     def get_on_alarms_unit(self):
         return self.AlarmDB.get_on_alarms_unit()
 
@@ -352,7 +358,7 @@ class InterfaceMem:
     def get_train_check_result(self):  # 데이터 shape: (1,10,46) 강제
         self.dis_AI['Train'] = 0  # 시연용
         # if np.shape(self.get_train_check_val())[1] == 10:
-        #     if np.mean(np.power(self.flatten(self.get_train_check_val()) - self.flatten(self.train_check_model.predict(self.get_train_check_val(), verbose=0)), 2), axis=1)[0] <= 0.00225299:
+        #     if  np.mean(np.power(self.flatten(self.get_train_check_val()) - self.flatten(self.train_check_model.predict(self.get_train_check_val(), verbose=0)), 2), axis=1)[0] <= 0.00225299:
         #         self.dis_AI['Train'] = 0  # 훈련된 시나리오
         #     else:
         #         self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오

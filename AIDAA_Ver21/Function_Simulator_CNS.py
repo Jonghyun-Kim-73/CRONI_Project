@@ -55,7 +55,7 @@ class CNS(QWidget):
         call_init_btn.clicked.connect(lambda x: self.init_cns(1))
         self.my_com_ip = QLabel(f'{self.ShMem.get_udp_my_com_ip()}')
         self.my_com_port = QLabel('7101')
-        self.cns_com_ip = QLineEdit('192.168.0.181') # YC
+        self.cns_com_ip = QLineEdit('192.168.0.176') # YC
         self.cns_com_port = QLineEdit('7101')
 
         lay4_0.addWidget(QLabel('CNS Mode'))

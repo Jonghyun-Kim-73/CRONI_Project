@@ -103,11 +103,11 @@ class AIDAAMainTopSystemName(ABCLabel):
         super().__init__(parent, widget_name)
         self.setFixedSize(465, 36)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setText('Main')
+        self.setText('Abnormal')
 class AIDAAMainTopCallMain(ABCPushButton):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
-        self.setText('Main')
+        self.setText('Abnormal')
         # self.setFixedSize(218, 36)
         self.setFixedSize(800, 36)
         self.clicked.connect(self.dis_update)

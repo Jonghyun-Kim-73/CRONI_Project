@@ -251,6 +251,7 @@ class AlarmTable(ABCTableWidget):
         self.dis_alarm_list = []
 
         self.doubleClicked.connect(self.call_double_click) # 더블 클릭시 PDF 활성화 기능 추가
+        self.alarm_inverse_dict = self.inmem.ShMem.get_inverse_alarm_des()
 
     def paintEvent(self, e: QPaintEvent) -> None:
         super(AlarmTable, self).paintEvent(e)
@@ -298,31 +299,39 @@ class AlarmTable(ABCTableWidget):
             else:
                 current_time = self.inmem.widget_ids['AIDAAMainTopTime'].time_freeze + self.inmem.get_td() # 현재시간 + time_delta()
             
-            real_time = current_time.strftime('%y.%m.%d') # Date
-            # real_time = current_time.strftime('%m.%d') # Date
+            # real_time = current_time.strftime('%y.%m.%d') # Date
+            real_time = current_time.strftime('%m.%d') # Date
             real_time2 = current_time.strftime("%H:%M:%S") # Time
 
-            if type(self.inmem.ShMem.get_alarm_val(alarm_name)) == list:
-                for i in range(2):
-                    self.insertRow(0)
-                    self.setItem(0, 1, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_val(alarm_name)[i], 2))}'))  # Value
-                    self.setItem(0, 2, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i], 2))}'))  # Setpoint
-                    self.setItem(0, 3, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_unit(alarm_name)[i])}'))  # Unit
-                    if i == 1:
-                        self.setSpan(0, 0, 2, 1)
-                        self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                        self.setSpan(0, 4, 2, 1)
-                        self.setItem(0, 4, QTableWidgetItem(f'{real_time}'))  # Date
-                        self.setSpan(0, 5, 2, 1)
-                        self.setItem(0, 5, QTableWidgetItem(f'{real_time2}'))  # Time
-            else:
-                self.insertRow(0)
-                self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
-                self.setItem(0, 1, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_val(alarm_name), 2))}'))  # Value
-                self.setItem(0, 2, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_setpoint(alarm_name), 2))}'))  # Setpoint
-                self.setItem(0, 3, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_unit(alarm_name))}'))  # Unit
-                self.setItem(0, 4, QTableWidgetItem(f'{real_time}'))  # Date
-                self.setItem(0, 5, QTableWidgetItem(f'{real_time2}'))  # Time
+            # if type(self.inmem.ShMem.get_alarm_val(alarm_name)) == list:
+            #     for i in range(2):
+            #         self.insertRow(0)
+            #         self.setItem(0, 1, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_val(alarm_name)[i], 2))}'))  # Value
+            #         self.setItem(0, 2, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_setpoint(alarm_name)[i], 2))}'))  # Setpoint
+            #         self.setItem(0, 3, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_unit(alarm_name)[i])}'))  # Unit
+            #         if i == 1:
+            #             self.setSpan(0, 0, 2, 1)
+            #             self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+            #             self.setSpan(0, 4, 2, 1)
+            #             self.setItem(0, 4, QTableWidgetItem(f'{real_time}'))  # Date
+            #             self.setSpan(0, 5, 2, 1)
+            #             self.setItem(0, 5, QTableWidgetItem(f'{real_time2}'))  # Time
+            # else:
+            self.insertRow(0)
+            self.setItem(0, 0, QTableWidgetItem(f'{" " + self.inmem.ShMem.get_alarm_des(alarm_name)}'))  # Description
+            self.setItem(0, 1, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_val(alarm_name), 2))}'))  # Value
+            self.setItem(0, 2, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_setpoint(alarm_name), 2))}'))  # Setpoint
+            self.setItem(0, 3, QTableWidgetItem(f'{" " + str(self.inmem.ShMem.get_alarm_unit(alarm_name))}'))  # Unit
+            self.setItem(0, 4, QTableWidgetItem(f'{real_time}'))  # Date
+            self.setItem(0, 5, QTableWidgetItem(f'{real_time2}'))  # Time
+
+        rc = self.rowCount()
+        for i in range(rc):
+            try:
+                alarm_info = self.item(i, 0).text()[1:]
+                self.setItem(i, 1, QTableWidgetItem(f'{" " + str(round(self.inmem.ShMem.get_alarm_val(self.alarm_inverse_dict[alarm_info]), 2))}'))  # Value
+            except: pass
+
     def update_dis_alarm_list(self):
         new_alarm_list = []
         for alarm_name in self.inmem.ShMem.get_on_alarms():
@@ -384,16 +393,18 @@ class AlarmSortAIDAABtns(ABCWidget):
         lay = QHBoxLayout(self)
         self.setFixedWidth(940)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(AlarmAIDAA_Suppress_SortPress(self))
-        lay.addWidget(AlarmSystem_Sortsystem_SortPress(self))
+        # lay.addWidget(AlarmAIDAA_Suppress_SortPress(self))
+        # lay.addWidget(AlarmSystem_Sortsystem_SortPress(self))
         lay.setSpacing(10)
-class AlarmAIDAA_Suppress_SortPress(ABCPushButton):
-    def __init__(self, parent, widget_name=''):
-        super().__init__(parent, widget_name)
-        self.setFixedSize(465, 40)
-        self.setText('Sort Press')
-class AlarmSystem_Sortsystem_SortPress(ABCPushButton):
-    def __init__(self, parent, widget_name=''):
-        super().__init__(parent, widget_name)
-        self.setFixedSize(465, 40)
-        self.setText('Sort System')
+
+# class AlarmAIDAA_Suppress_SortPress(ABCPushButton):
+#     def __init__(self, parent, widget_name=''):
+#         super().__init__(parent, widget_name)
+#         self.setFixedSize(465, 40)
+#         self.setText('Sort Press')
+
+# class AlarmSystem_Sortsystem_SortPress(ABCPushButton):
+#     def __init__(self, parent, widget_name=''):
+#         super().__init__(parent, widget_name)
+#         self.setFixedSize(465, 40)
+#         self.setText('Sort System')

@@ -360,6 +360,7 @@ class DiagnosisSystemTable(ABCTableWidget):
             block = 'On'
         self.setProperty('Block', block)
         alarm_condition = self.inmem.ShMem.get_system_alarm_num()
+        # self.inmem.get_system_diagnosis_result()
         for i in range(3):
             sys_name, logic_condition, ai_probability = self.inmem.dis_AI['System'][i]
             self.cellWidget(i, 0).update_item(f' {sys_name}', sys_name, block)
