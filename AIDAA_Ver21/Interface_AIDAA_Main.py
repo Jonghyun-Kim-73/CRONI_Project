@@ -115,7 +115,7 @@ class AIDAAMainTopCallMain(ABCPushButton):
         self.setChecked(False)
     def dis_update(self):
         self.setChecked(True)
-        self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('Main')
+        self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('AIDAA')
         self.inmem.widget_ids['AIDAAMainTab'].change_system_page('AIDAA')
 class AIDAAMainTopClose(ABCPushButton):
     def __init__(self, parent, widget_name=''):
@@ -145,7 +145,7 @@ class AIDAAMainTab(ABCStackWidget):
         """
         self.setCurrentIndex({'AIDAA': 0, 'Procedure': 1, 'Action': 2, 'PreTrip': 3}[system_name])
         if system_name == 'AIDAA':
-            self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('Main')
+            self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('Abnormal')
         elif system_name == 'Procedure':
             self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('Procedure')
         elif system_name == 'Action':

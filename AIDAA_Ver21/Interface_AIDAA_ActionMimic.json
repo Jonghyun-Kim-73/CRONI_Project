@@ -651,16 +651,6 @@
     "arrow": "true",
     "connected_id": []
   },
-  "L37": {
-    "Id": "L37",
-    "CType": "Pipe",
-    "x1": 423.0,
-    "y1": 181.0,
-    "x2": 450.0,
-    "y2": 181.0,
-    "arrow": "true",
-    "connected_id": []
-  },
   "V8": {
     "Id": "V8",
     "CType": "Valve",
@@ -697,18 +687,6 @@
     "para_name": "BHV1",
     "connected_id": []
   },
-  "V9": {
-    "Id": "V9",
-    "CType": "Valve",
-    "x": 438.0,
-    "y": 173.0,
-    "direction": "H",
-    "alarm_name": "A_BLV143",
-    "comp_name": "BLV143",
-    "comp_name_direction": "Bottom",
-    "para_name": "BLV143",
-    "connected_id": []
-  },
   "N3": {
     "Id": "N3",
     "CType": "Img",
@@ -724,9 +702,9 @@
   "L40": {
     "Id": "L40",
     "CType": "Pipe",
-    "x1": 493.0,
+    "x1": 553.0,
     "y1": 181.0,
-    "x2": 550.0,
+    "x2": 422.0,
     "y2": 181.0,
     "arrow": "true",
     "connected_id": []

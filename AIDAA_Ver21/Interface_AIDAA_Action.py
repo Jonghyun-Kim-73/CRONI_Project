@@ -147,13 +147,13 @@ class ActionAlarmAreaTable(ABCTableWidget):
         if in_alarm:
             self.alarm_line[pos][2].update(para) # 'ZVCT')
         else:
-            self.alarm_line[self.stacked_alarm_number][0].setText(alarm_title) # VCT Level Low')
-            self.alarm_line[self.stacked_alarm_number][1].setText(alarm_op_range) #'20~80')
-            self.alarm_line[self.stacked_alarm_number][2].name = name # 'ZVCT_DOWN'
-            self.alarm_line[self.stacked_alarm_number][3].setText(alarm_unit) #'[%]')
-            self.alarm_line[self.stacked_alarm_number][4].setText(f"{self.inmem.widget_ids['MainTopTime'].simtime}")
-            self.stacked_alarm_number -= 1
-
+            if self.stacked_alarm_number != -1:
+                self.alarm_line[self.stacked_alarm_number][0].setText(alarm_title) # VCT Level Low')
+                self.alarm_line[self.stacked_alarm_number][1].setText(alarm_op_range) #'20~80')
+                self.alarm_line[self.stacked_alarm_number][2].name = name # 'ZVCT_DOWN'
+                self.alarm_line[self.stacked_alarm_number][3].setText(alarm_unit) #'[%]')
+                self.alarm_line[self.stacked_alarm_number][4].setText(f"{self.inmem.widget_ids['AIDAAMainTopTime'].simtime}")
+                self.stacked_alarm_number -= 1
     def check_aready_alarm(self, name):
         for key, item in self.alarm_line.items():
             if item[2].name == name:
