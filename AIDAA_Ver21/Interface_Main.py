@@ -5,6 +5,7 @@ from PyQt5.QtGui import *
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 from AIDAA_Ver21.Interface_MainTabMain import *
+from AIDAA_Ver21.Interface_AIDAA_Pretrip import *
 
 from Interface_QSS import qss
 from datetime import datetime
@@ -158,4 +159,4 @@ class MainTab(ABCStackWidget):
         super(MainTab, self).__init__(parent)
         # [self.addWidget(_) for _ in [MainTabMain(self), MainTabIFAP(self), MainTabAIDAA(self), MainTabEGIS(self), Procedure(self), 
         #                              Action(self), PreTrip(self)]]
-        [self.addWidget(_) for _ in [MainTabMain(self)]]
+        [self.addWidget(_) for _ in [MainTabMain(self), PreTrip(self)]]

@@ -116,9 +116,9 @@ class AlarmFixPreTrip(ABCPushButton):
             self.blick = False
 
     def change_main_display(self):
-        # self.inmem.widget_ids['MainTopSystemName'].setText('AIDAA')
-        # self.inmem.widget_ids['MainTab'].change_system_page('PreTrip')
-        pass
+        self.inmem.widget_ids['AIDAAMainTopSystemName'].setText('AIDAA')
+        self.inmem.widget_ids['AIDAAMainTab'].change_system_page('PreTrip')
+        # pass
 class AlarmFixTrip(ABCLabel):
     def __init__(self, parent, width):
         super(AlarmFixTrip, self).__init__(parent)
