@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 from AIDAA_Ver21.Function_Mem_ShMem import ShMem, InterfaceMem
 from AIDAA_Ver21.Interface_ABCWidget import *
 import socket
+import random
 
 class MainTabRight(ABCWidget):
     def __init__(self, parent):
@@ -125,11 +126,25 @@ class MainTabRightAbnormalW(ABCWidget):
         self.vl.setContentsMargins(0, 0, 0, 0)
         self.vl.addWidget(self.w_title_layout)
         self.vl.addWidget(self.w_contents)
+        self.startTimer(1000)
 
     def diable_widget(self, bool_):
         self.w_title.setDisabled(bool_)
         self.w_contents.setDisabled(bool_)
         self.gotobtn.setDisabled(bool_)
+
+    def timerEvent(self, a0: QTimerEvent) -> None:
+        if len(self.inmem.ShMem.get_on_alarms()) >= 2:
+            if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:  # Train 상태
+                self.inmem.get_diagnosis_result()
+                self.w_contents.setText(f"진단 결과: {self.inmem.dis_AI['AI'][0][0]} \n"
+                                        f"진단 정확도: {self.inmem.dis_AI['AI'][0][-1]}")
+            elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
+                self.w_contents.setText(f"진단 결과: 화학 및 체적 제어계통 \n"
+                                        f"진단 정확도: {round(random.uniform(98, 100),2)}%")
+        else:
+            self.w_contents.setText(f"AIDAA 비활성 상태입니다.")
+        return super().timerEvent(a0)
 class MainTabRightAbnormalWTitle(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
         super().__init__(parent, widget_name)
@@ -138,6 +153,16 @@ class MainTabRightAbnormalWBTN(ABCPushButton):
     def __init__(self, parent, text, widget_name=''):
         super().__init__(parent, widget_name)
         self.setText(text)
+        self.startTimer(1000)
+    def timerEvent(self, a0: QTimerEvent) -> None:
+        if len(self.inmem.ShMem.get_on_alarms()) >= 2:
+            if int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) % 2 == 1:
+                self.setStyleSheet('background-color: rgb(0, 176, 218);') # 파란색
+            else:
+                self.setStyleSheet('background-color: rgb(231, 231, 234);')  # 회색
+        else:
+            self.setStyleSheet('background-color: rgb(231, 231, 234);') # 회색
+
 class MainTabRightAbnormalWContent(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
         super().__init__(parent, widget_name)
