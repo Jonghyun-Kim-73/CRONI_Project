@@ -7,11 +7,11 @@ from collections import deque
 import numpy as np
 import pandas as pd
 import pickle
-import socket
 # from tensorflow.keras.models import load_model # 시연용
 # import shap # 시연용
 from struct import unpack, pack
 import socket
+import random
 
 USECVCSMIMIC = False
 
@@ -285,7 +285,7 @@ class InterfaceMem:
                        'Train': 0,
                        'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'],
                                ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
-                       'System': [['화학 및 체적 제어계통', '5', '72%'], ['원자로 냉각재 계통', '3', '16%'], ['주급수 계통', '1', '6%'],
+                       'System': [['화학 및 체적 제어계통', '0', '0%'], ['원자로 냉각재 계통', '0', '0%'], ['주증기 계통', '0', '0%'],
                                   ['제어봉 제어 계통', '1', '3%'], ['잔열 제거 계통', '1', '3%']],
                        'Selected_title': []}  # 정지냉각계통
         # Interface_AIDAA_Procedure.py -------------------------------------------------------------------------------------
@@ -308,17 +308,14 @@ class InterfaceMem:
         self.access_procedure = []
 
         # AI Part --------------------------------------------------------------------------------------------------- # 시연용, tensor 안쓰는 진단, XAI 만 들어가있음_from 지훈팍
-        try:
-            self.diagnosis_para = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
-            self.diagnosis_para_des = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
-            # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
-            self.diagnosis_sclaer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
-            self.diagnosis_model = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
-            self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
-            # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
-        except:
-            pass # 시현용
-            
+        self.diagnosis_para = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
+        self.diagnosis_para_des = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
+        self.diagnosis_sclaer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
+        self.diagnosis_model = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
+        self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
+        self.system_result = pd.read_csv('./AI/System_Diagnosis_result.csv')
+        # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
+        # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')
 
     # 인공지능 전처리 용 ------------------------------------------------------------------------------------------------------
@@ -334,23 +331,12 @@ class InterfaceMem:
             pass # 시현용
 
     def get_explainer_result(self, num):
-        try:
-            # self.dis_AI['XAI'] = self.explainer.shap_values(self.get_diagnosis_val())
-            shap_values = self.explainer.shap_values(np.array(self.get_diagnosis_val()))[num] # 선택한 시나리오에 대한 shap_value 추출
-            temp1 = pd.DataFrame(shap_values, columns=self.diagnosis_para).T
-            # sign = []
-            # for i in range(len(temp1[0])):
-            #     if np.sign(temp1[0][i]) == 1.0 or np.sign(temp1[0][i]) == 0.0:
-            #         sign.append('+')
-            #     elif np.sign(temp1[0][i]) == -1.0:
-            #         sign.append('-')
-            prob = [np.round((np.abs(temp1[0][i]) / sum(np.abs(temp1[0]))) * 100, 2) for i in range(len(temp1[0]))]
-            # temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob, sign], index=['variable', 'describe', 'value', 'probability', 'sign']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
-            temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob], index=['variable', 'describe', 'value', 'probability']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
-            temp2 = temp2[temp2['value'] > 0]
-            self.dis_AI['XAI'] = [[temp2.iloc[i]['describe'], temp2.iloc[i]['probability']] for i in range(5)]
-        except:
-            pass  # 시연용
+        shap_values = self.explainer.shap_values(np.array(self.get_diagnosis_val()))[num] # 선택한 시나리오에 대한 shap_value 추출
+        temp1 = pd.DataFrame(shap_values, columns=self.diagnosis_para).T
+        prob = [np.round((np.abs(temp1[0][i]) / sum(np.abs(temp1[0]))) * 100, 2) for i in range(len(temp1[0]))]
+        temp2 = pd.DataFrame([temp1.index, self.diagnosis_para_des, np.abs(temp1.values), prob], index=['variable', 'describe', 'value', 'probability']).T.sort_values(by='value', ascending=False, axis=0).reset_index(drop=True)
+        temp2 = temp2[temp2['value'] > 0]
+        self.dis_AI['XAI'] = [[temp2.iloc[i]['describe'], temp2.iloc[i]['probability']] for i in range(5)]
 
     def get_train_check_val(self):
         return np.array([np.array([self.ShMem.get_para_list(i) for i in self.train_check_para]).reshape(-1, 46)])
@@ -364,13 +350,6 @@ class InterfaceMem:
         #         self.dis_AI['Train'] = 1  # 훈련되지 않은 시나리오
         # else:
         #     print('Non 10 stack')
-
-    # 단축키 설정 --------------------------------------------------------------------------------------------------------
-    # def Train_Shortcut_key(self):
-    #     if self.ShMem.get_para_val('iFixTrain') == 0:
-    #         self.dis_AI['Train'] = 0
-    #     elif self.ShMem.get_para_val('iFixTrain') == 1:
-    #         self.dis_AI['Train'] = 1
 
     def flatten(self, X):
         '''
@@ -519,3 +498,7 @@ class InterfaceMem:
             self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['des'][
                 self.current_procedure[self.dis_AI['AI'][self.current_table['Procedure']][0]]['num']]][
             content]['Des']
+
+    def get_system_result(self):
+        for i in range(3):
+            self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==self.ShMem.get_para_val('KCNTOMS')].values[0]

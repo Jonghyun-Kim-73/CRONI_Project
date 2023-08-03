@@ -341,7 +341,7 @@ class DiagnosisSystemTable(ABCTableWidget):
             self.setCellWidget(i, 1, DiagnosisSystemItem(self, logic_condition, sys_name))
             self.setCellWidget(i, 2, DiagnosisSystemItem(self, ai_probability, sys_name))
 
-        self.startTimer(600)
+        self.startTimer(1000)
         
     def contextMenuEvent(self, a0: QContextMenuEvent) -> None:
         if self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
@@ -360,12 +360,12 @@ class DiagnosisSystemTable(ABCTableWidget):
             block = 'On'
         self.setProperty('Block', block)
         alarm_condition = self.inmem.ShMem.get_system_alarm_num()
-        # self.inmem.get_system_diagnosis_result()
         for i in range(3):
+            self.inmem.get_system_result()
             sys_name, logic_condition, ai_probability = self.inmem.dis_AI['System'][i]
             self.cellWidget(i, 0).update_item(f' {sys_name}', sys_name, block)
             self.cellWidget(i, 1).update_item(f'{int(len(alarm_condition[sys_name]))}', sys_name, block)
-            self.cellWidget(i, 2).update_item(ai_probability, sys_name, block)
+            self.cellWidget(i, 2).update_item(f'{ai_probability}%', sys_name, block)
         self.style().polish(self)
         return super().timerEvent(event)
 # ----------------------------------------------------------------------------------------------------------------------
@@ -561,7 +561,8 @@ class ProcedureCheckTableItem(ABCLabel):
         self.setToolTip(text)
         self.setProperty('Activate', "On" if activation else "Off")
         if len(text) >= 20:
-            self.setText(text[:20] + ' ...')
+            # self.setText(text[:20] + ' ...')
+            self.setText(text)
         else:
             self.setText(text)
         self.style().polish(self)

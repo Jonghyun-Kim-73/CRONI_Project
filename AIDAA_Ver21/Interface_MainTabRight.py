@@ -126,7 +126,7 @@ class MainTabRightAbnormalW(ABCWidget):
         self.vl.setContentsMargins(0, 0, 0, 0)
         self.vl.addWidget(self.w_title_layout)
         self.vl.addWidget(self.w_contents)
-        self.startTimer(1000)
+        self.startTimer(300)
 
     def diable_widget(self, bool_):
         self.w_title.setDisabled(bool_)
@@ -140,8 +140,9 @@ class MainTabRightAbnormalW(ABCWidget):
                 self.w_contents.setText(f"진단 결과: {self.inmem.dis_AI['AI'][0][0]} \n"
                                         f"진단 정확도: {self.inmem.dis_AI['AI'][0][-1]}")
             elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
+                self.inmem.get_system_result()
                 self.w_contents.setText(f"진단 결과: 화학 및 체적 제어계통 \n"
-                                        f"진단 정확도: {round(random.uniform(98, 100),2)}%")
+                                        f"진단 정확도: {self.inmem.dis_AI['System'][0][-1]}%")
         else:
             self.w_contents.setText(f"AIDAA 비활성 상태입니다.")
         return super().timerEvent(a0)
