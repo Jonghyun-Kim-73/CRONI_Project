@@ -1,5 +1,6 @@
 from turtle import st
 from AIDAA_Ver21.DB_AlarmDB import AlarmDB
+from AIDAA_Ver21.Function_AIDAA_Procedure_symptom_check import ProcedureDB
 from datetime import timedelta
 from AIDAA_Ver21.ab_procedure import ab_pro
 from AIDAA_Ver21.CVCS.Core_mimic import *
@@ -20,6 +21,7 @@ class ShMem:
     def __init__(self):
         self.mem = self.make_cns_mem(max_len=10)
         self.AlarmDB: AlarmDB = AlarmDB(self)
+        self.ProcedureDB: ProcedureDB = ProcedureDB(self)
         self.add_val_to_list()
         # Interface_AIDAA_Action.py -------------------------------------------------------------------------------------
         self.CVCS = CVCS()
@@ -65,6 +67,9 @@ class ShMem:
     def update_alarmdb(self):
         self.AlarmDB.update_alarmdb_from_ShMem()
 
+    def update_proceduredb(self):
+        self.ProcedureDB.update_proceduredb_from_ShMem()
+
     def add_val_to_list(self):
         [self.mem[para]['List'].append(self.mem[para]['Val']) for para in self.mem.keys()]
 
@@ -88,6 +93,15 @@ class ShMem:
 
     def get_alarmdb(self):
         return self.AlarmDB.alarmdb
+
+    def get_proceduredb(self):
+        return self.ProcedureDB.proceduredb
+
+    def get_on_procedures(self, name):
+        return self.ProcedureDB.get_on_procedures(name)
+
+    def get_procedures(self, name):
+        return self.ProcedureDB.get_procedures(name)
 
     def get_alarms(self):
         return self.AlarmDB.get_alarms()
@@ -379,8 +393,9 @@ class InterfaceMem:
         try:
             urgent_action = self.ShMem.get_pro_urgent_act(procedure_name)  # True / False
             radiation = self.ShMem.get_pro_radiation(procedure_name)  # True / False
-            total_symptomc = self.ShMem.get_pro_symptom_count(procedure_name)
-            total_symptoms = self.ShMem.get_pro_symptom_satify(procedure_name)
+            sc = 'Normal' if procedure_name[:6] == 'Normal' else procedure_name[2:7]
+            total_symptomc = self.ShMem.get_procedures(name=sc)
+            total_symptoms = self.ShMem.get_on_procedures(name=sc)
         except:
             urgent_action = False
             radiation = False
@@ -501,4 +516,4 @@ class InterfaceMem:
 
     def get_system_result(self):
         for i in range(3):
-            self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==self.ShMem.get_para_val('KCNTOMS')].values[0]
+            self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)].values[0]

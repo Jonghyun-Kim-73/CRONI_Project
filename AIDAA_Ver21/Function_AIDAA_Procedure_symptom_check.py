@@ -1,506 +1,173 @@
-from AIDAA_Ver21.ab_procedure import ab_pro
-
-class symp_check:
-    def __init__(self, shmem):
-        self.shmem = shmem
-        # print('IF-THEN Rule Test')
-        self.abnormal_procedure_23_01()
-        self.abnormal_procedure_23_03()
-        self.abnormal_procedure_23_06()
-        self.abnormal_procedure_59_02()
-        self.abnormal_procedure_60_02()
-
-    def db_val(self, val):
-        return self.shmem.get_shmem_val(val)
-
-    def db_list(self, val, num):
-        return self.shmem.get_shmem_vallist(val)[num]
-
-    def sym_increase(self, val): # deque의 maxlen이 5일 경우
-        return self.db_list(val, 0) < self.db_list(val, 1) < self.db_list(val, 2) < self.db_list(val, 3) < self.db_list(val, 4)
-
-    def sym_decrease(self, val): # deque의 maxlen이 5일 경우
-        return self.db_list(val, 0) > self.db_list(val, 1) > self.db_list(val, 2) > self.db_list(val, 3) > self.db_list(val, 4)
-
-    def abnormal_procedure_23_01(self):
-        procedure_name = 'Ab23_01: RCS에서 1차기기 냉각수 계통(CCW)으로 누설'
-        '''
-        경보 및 증상 0~7
-        '''
-        # 경보 및 증상 0: 모든 원자로냉각재계통 누설 시 공통적 증상 -> 경보 및 증상 1~3 전체 만족 시
-        if ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] == True:
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 1: PZR 수위 또는 압력 감소
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZINST63') or self.sym_decrease('ZINST63'):
-                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 2: VCT 수위 감소 또는 보충횟수 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZVCT'):
-                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 3: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('WCHGNO'):
-                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 4: CV 대기 방사선감시기(GT-RE211) 또는 격납용기 배기계통 방사선감시기(GT-RE119)의 지시치 증가 및 경보
-        # 추후조치 -> 경보 및 증상 4,5번 통합 고려
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('DCTMT') and (self.db_val('DCTMT') > self.db_val('CRADHI')):
-                ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 5: CV 지역 방사선감시기(GT-RE001, 002, 132, 133, 220)의 지시치증가 및 경보
-        # 추후조치 -> 경보 및 증상 4,5번 통합 고려
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('DCTMT') and (self.db_val('DCTMT') > self.db_val('CRADHI')):
-                ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 6: CV 온도, 습도, 압력이 정상보다 높게 지시
-        if (self.db_val('PCTMT') > 24666.171875) and (self.db_val('UCTMT') > 34.67035675048828):
-            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 7: CV Sump 수위 증가 및 배수조 펌프의 기동횟수 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('ZINST17'):
-                ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        '''
-        자동 동작 사항 0~3
-        '''
-        # 자동 동작 사항 0: 가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.
-        if self.db_val('ZINST63') < 17 and self.db_val('BHV1') == 0 and self.db_val('BHV2') == 0 and self.db_val(
-                'BHV3') == 0 and self.db_val('BLV459') == 0:
-            ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 1: 격납용기 환기차단 계측설비 관련 방사선감시기(GT-RE001/ 002/119/220)의 고방사선경보가 발생되면 격납용기 환기차단신호(CPIS) 및 주제어실 비상환기신호(CREVS)가 발생된다.
-        # 추후조치 -> 격납용기 환기차단 신호 및 주제어실 비상환기신호 미구현
-        if self.db_val('DCTMT') > self.db_val('CRADHI'):
-            ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 2: RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.
-        if self.db_val('KLAMPO9') == 1:
-            ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 3: RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.
-        if self.db_val('KLAMPO6') == 1:
-            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-    def abnormal_procedure_23_03(self):
-        procedure_name = 'Ab23_03: CVCS에서 1차기기 냉각수 계통(CCW)으로 누설'
-        '''
-        경보 및 증상 0~6
-        '''
-        # 경보 및 증상 0: 모든 원자로냉각재계통 누설 시 공통적 증상 -> 경보 및 증상 1~3 전체 만족 시
-        if ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] == True:
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 1: PZR 수위 또는 압력 감소
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZINST63') or self.sym_decrease('ZINST63'):
-                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 2: VCT 수위 감소 또는 보충횟수 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZVCT'):
-                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 3: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('WCHGNO'):
-                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 4: CCW Hx 출구헤더에 설치된 방사선감시기(EG-RE364)의 지시치 증가 및 경보, "NON-1E RAD WARN(UA-901-C2)" 또는 "NON-1E RAD HIGH ALARM(UA-901-C2)"
-        # 추후조치 -> 미구현 증상
-        ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 5: CCW 완충탱크의 수위 증가
-        # 추후조치 -> 미구현 증상
-        ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 6: RCP 열방벽(Thermal Barrier) 열교환기 누설 시 RCP 열방벽 열교환기(RCP T/B Hx) 출구온도(전산값) 증가 및 CCW 유량 증가 경보 발생, “RCP A THER BARR CLG COIL FLOW HI/LO(UA-907-A1)" 또는 “RCP B THER BARR CLG COIL FLOW HI/LO(UA-907-A2)" 또는 “RCP C THER BARR CLG COIL FLOW HI/LO(UA-907-A3)"
-        # 추후조치 -> 미구현 증상
-        ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        '''
-        자동 동작 사항 0~5
-        '''
-        # 자동 동작 사항 0: RCP 열방벽 열교환기 출구 ‘고’ 유량(EG-FI435, 433, 431 : 3.78 ℓ/s) 시 해당 RCP 열방벽 열교환기 출구밸브 자동 닫힘
-        # 추후조치 -> 미구현 증상
-        ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 1: RCP 열방벽 열교환기 출구 밸브(EG-FV435, 433, 431) 닫힘으로 인해 RCP 열방벽 열교환기 압력보호밸브(EG-PSV434, 432, 430) 동작으로 격납용기 배수조 수위 증가
-        # 추후조치 -> 미구현 증상
-        ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 2: RCP 열방벽 열교환기 누설로 인하여 1차기기 냉각수(CCW) 공통회수관의 유량전송기(EG-FT337) ‘고‘ 유량(13.5 ℓ/s) 시 격납용기 내부 CCW 차단밸브(EG-HV337) 자동 닫힘
-        # 추후조치 -> 미구현 증상
-        ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 3: 가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.
-        if self.db_val('ZINST63') < 17 and self.db_val('BHV1') == 0 and self.db_val('BHV2') == 0 and self.db_val('BHV3') == 0 and self.db_val('BLV459') == 0:
-            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 4: RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.
-        if self.db_val('KLAMPO9') == 1:
-            ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 5: RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.
-        if self.db_val('KLAMPO6') == 1:
-            ab_pro[procedure_name]['자동 동작 사항'][5]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['자동 동작 사항'][5]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-    def abnormal_procedure_23_06(self):
-        procedure_name = 'Ab23_06: 증기발생기 전열관 누설'
-        '''
-        경보 및 증상 0~7
-        '''
-        # 경보 및 증상 0: 모든 원자로냉각재계통 누설 시 공통적 증상 -> 경보 및 증상 1~3 전체 만족 시
-        if ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] == True:
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 1: PZR 수위 또는 압력 감소
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5: #deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZINST63') or self.sym_decrease('ZINST63'):
-                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False # IF-THEN dummy 확인용
-
-        # 경보 및 증상 2: VCT 수위 감소 또는 보충횟수 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5: #deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZVCT'):
-                ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 3: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5: #deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('WCHGNO'):
-                ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 4: 복수기 공기추출계통 방사선감시기(CG-RE004/RE013)의 고방사선경보
-        if self.db_val('DSECON') > 3.9E-3:
-            ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 5: 증기발생기 취출수계통 및 시료채취계통 방사선감지기(BM-RE410,RC-RE019/029 /039)의 고방사선경보
-        if self.db_val('DSECON') > 3.9E-3:
-            ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 6: 증기발생기의 급수 및 증기유량 편차 및 경보 발생
-        RSTFWD = {1: self.db_val('WSTM1') * 0.1, 2: self.db_val('WSTM2') * 0.1, 3: self.db_val('WSTM3') * 0.1}
-        if (abs(self.db_val('WSTM1') - self.db_val('WFWLN1')) > RSTFWD[1]) or (abs(self.db_val('WSTM2') - self.db_val('WFWLN2')) > RSTFWD[2]) or (abs(self.db_val('WSTM3') - self.db_val('WFWLN3')) > RSTFWD[3]):
-            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 7: 주증기관 방사선감지기(AB-RE801A/801B/801C)의 고방사선경보
-        if self.db_val('DSECON') > 3.9E-3:
-            ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        '''
-        자동 동작 사항 0~3
-        '''
-        # 자동 동작 사항 0: 가압기 수위가 17％ 이하로 감소할 경우 유출수 밸브가(BG-HV001/002/003, BG-LV459/460 ) 자동으로 차단된다.
-        if self.db_val('ZINST63') < 17 and self.db_val('BHV1') == 0 and self.db_val('BHV2') == 0 and self.db_val('BHV3') == 0 and self.db_val('BLV459') == 0:
-            ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 1: 증기발생기 전열관 누설 시 증기발생기 취출수계통 고방사선경보가 발생하면 증기발생기 취출수 차단밸브(BM-HV103/203/303)와 시료채취 차단밸브(BM-HV107/207/307)가 닫히고 동시에 취출수 방사선감시기 시료채취 차단밸브(BM-RV410)가 자동으로 닫힌다.
-        if (self.db_val('DSECON') > 3.9E-3) and (self.db_val('ZINST116') == 0):
-            ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 2: RCS 압력이 136.78㎏/㎠ 이하가 되면 원자로 트립(Rx Trip)이 발생한다.
-        if self.db_val('KLAMPO9') == 1:
-            ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 3: RCS 압력이 126.57㎏/㎠ 이하가 되면 안전주입(SI)이 발생한다.
-        if self.db_val('KLAMPO6') == 1:
-            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-    def abnormal_procedure_59_02(self):
-        procedure_name = 'Ab59_02: 충전수 유량조절밸즈 후단누설'
-        '''
-        경보 및 증상 0~13
-        '''
-        # 경보 및 증상 0: CHG FLOW CONT FLOW HI/LO(JP005)
-        if self.db_val('WCHGNO') < self.db_val('CWCHGL'):
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = False
-
-        # 경보 및 증상 1: PRZR CONT LEVEL LOW DEVIATION(JP006)
-        ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False # 관련 경보 확인 불가(추후조치)
-
-        # 경보 및 증상 2: VOL CONT TK LEVEL HIGH/LOW(JP005)
-        if self.db_val('ZVCT') > self.db_val('CZVCT6'):
-            ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = False
-
-        # 경보 및 증상 3: REGEN HX LETDN LINE TEMP HIGH(JP005)
-        if self.db_val('URHXUT') > self.db_val('CURHX'):
-            ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = False
-
-        # 경보 및 증상 4: RCP SEAL INJ WTR FLOW LOW(JP005)
-        if (self.db_val('WRCPSI1') < self.db_val('CWRCPS')) or (self.db_val('WRCPSI2') < self.db_val('CWRCPS')) or (self.db_val('WRCPSI3') < self.db_val('CWRCPS')):
-            ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = False
-
-        # 경보 및 증상 5: 1E RAD WARN ＆ HIGH ALARM(JP004)
-        ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False # 관련 경보 확인 불가(추후조치)
-
-        # 경보 및 증상 6: 충전유량 지시계 지시치 증가(BG-FI122A JP001)
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('WCHGNO'): # CNS상 추전유량 지시치가 증가하는것으로 확인, 그러나 데이터에서는 감소하는 경향을 확인(추후조치)
-                ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False
-
-        # 경보 및 증상 7: 가압기 수위 지시계 지시치 감소(BB-LI459A/460/461/460B  JP001/005)
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZINST63'):
-                ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = False
-
-        # 경보 및 증상 8: 체적제어탱크 수위 지시계 지시치 감소(BG-LI115/112A  JP001/005)
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZVCT'):
-                ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = False
-
-        # 경보 및 증상 9: 재생 열교환기 후단 유출수 온도 지시계 지시치 증가(BG-TI140  JP001)
-        # (재생 열교환기 전단 충전수 관로 누설시)
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('URHXUT'): # jupyter에서는 UCHGUT(충전수 출구 온도)로 되어있는데 URHXUT(RHX 출구 온도)가 맞는듯 함(추후조치)
-                ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = False
-
-        # 경보 및 증상 10: 재생 열교환기 후단 충전수 온도 지시계 지시치 감소(BG-TI123  JP001)
-        # (재생 열교환기 후단 충전수 관로 누설시)
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('UCHGUT'):
-                ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = False
-
-        # 경보 및 증상 11: RCP 밀봉수 주입유량 지시계 지시치 감소(BG-FR154A/155A/156A  JP005)
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5: #deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('WRCPSI1') or self.sym_decrease('WRCPSI2') or self.sym_decrease('WRCPSI3'):
-                ab_pro[procedure_name]['경보 및 증상'][11]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][11]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 12: 격납건물 외부에서 누설 시 보조건물 배수조 수위 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('ZSUMP'):
-                ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = False
-
-        # 경보 및 증상 13: 격납건물 내부에서 누설 시 격납건물 배수조 수위 및 온도/습도 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('ZSUMP') and self.sym_increase('UCTMT') and self.sym_increase('HUCTMT'):
-                ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = True
-            else:
-                ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = False
-
-        '''
-        자동 동작 사항 0~7
-        '''
-        # 자동 동작 사항 0: 가압기 수위지시계 및 기록계(BB-LI459A/460, BB-LR459) 지시치 17%이하로 감소되면 다음과 같은 자동 동작이 발생한다.
-        if ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] == True and ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] == True \
-                and ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] == True and ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] == True \
-                and ab_pro[procedure_name]['자동 동작 사항'][5]['AutoClick'] == True and ab_pro[procedure_name]['자동 동작 사항'][6]['AutoClick'] == True \
-                and ab_pro[procedure_name]['자동 동작 사항'][7]['AutoClick'] == True:
-            ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False
-
-        # 자동 동작 사항 1: 모든 가압기 전열기 꺼짐(OFF)
-        if self.db_val('QPRZ') == 0: # QPRZ는 모든 전열기 파워를 나타내는 변수임.
-            ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False
-
-        # 자동 동작 사항 2: 유출수 오리피스차단밸브(BG-HV1/2/3) 자동 닫힘
-        if self.db_val('BHV1') == 0 and self.db_val('BHV2') == 0 and self.db_val('BHV3') == 0:
-            ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False
-
-        # 자동 동작 사항 3: 유출수 차단밸브(BG-LV459/460) 자동 닫힘
-        if self.db_val('BLV459') == 0:
-            ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] = False
-
-        # 자동 동작 사항 4: 충전수 유량 조절밸브(BG-FV122) 완전 열림
-        if self.db_val('BFV122') == 1:
-            ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] = True
-        else: ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] = False
-
-        # 자동 동작 사항 5: 유출수 열교환기 출구온도 증가에 따라 기기냉각수 조절밸브(EG-TV144) 서서히 열림
-        ab_pro[procedure_name]['자동 동작 사항'][5]['AutoClick'] = False # 해당 변수 확인 불가(추후조치)
-
-        # 자동 동작 사항 6: 저압 유출수 압력조절밸브(BG-PV145) 자동 닫힘
-        if self.db_val('BPV145') <= 0.0005: # 완전히 닫히지 않아서 조건문으로 설정(추후조치)
-            ab_pro[procedure_name]['자동 동작 사항'][6]['AutoClick'] = True
-        else:
-            ab_pro[procedure_name]['자동 동작 사항'][6]['AutoClick'] = False
-
-        # 자동 동작 사항 7: 원자로보충수계통의 빈번한 자동 동작
-        ab_pro[procedure_name]['자동 동작 사항'][7]['AutoClick'] = False # (추후조치)
-
-    def abnormal_procedure_60_02(self):
-        procedure_name = 'Ab60_02: 재생열교환기 전단부위 파열'
-        '''
-        경보 및 증상 0~14
-        '''
-        # 경보 및 증상 0: 유출수 유량지시계(BG-FI150) 지시치 감소 및 유출수 열교환기 출구유량 ‘저’ 경보(15㎥/hr) 발생
-        if self.db_val('WNETLD') < self.db_val('CWLHXL'):
-            ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 1: VCT 수위지시계(BG-LI112A/LI115) 지시치 감소 및 다음 증상 발생 -> 경보 및 증상 2~4 전체 만족 시
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5: #deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('ZVCT') and ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] == True and ab_pro[procedure_name]['자동 동작 사항'][3]['AutoClick'] == True and ab_pro[procedure_name]['자동 동작 사항'][4]['AutoClick'] == True:
-                ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 2: VCT 수위 30% 이하시 원자로보충수계통 ‘자동’ 위치에서 자동 보충
-        if self.db_val('ZVCT') < self.db_val('CZVCT3') and self.db_val('KLAMPO86') == 1:
-            ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 3: VCT 수위 20% 이하시 VCT 수위 ‘저’ 경보
-        if self.db_val('ZVCT') < self.db_val('CZVCT2') and self.db_val('KLAMPO263') == 1:
-            ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][3]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 4: VCT 수위 5% 이하시 충전펌프 흡입원이 VCT에서 RWST로 전환 BG-LV115B/LV115D Open, BG-LV115C/LV115E Close
-        if self.db_val('ZVCT') < self.db_val('CZVCT1') and self.db_val('BLV616') != 1 and self.db_val('BLV615') != 0:
-            ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][4]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 5: 가압기 수위 ‘저’ 편차 경보(기준수위 - 5%) 발생 => 추후조치
-        ab_pro[procedure_name]['경보 및 증상'][5]['AutoClick'] = False
-
-        # 경보 및 증상 6: 가압기 압력 ‘저’ 전열기 작동 경보(155.35kg/㎠) 발생
-        if self.db_val('ZINST58') < 155.35 and self.db_val('KBHON') == 1:
-            ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][6]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 7: 가압기 수위 ‘저’ 경보(17%) 및 다음 증상 발생 -> 경보 및 증상 8~9 전체 만족 시
-        if self.db_val('ZINST63') < self.db_val('CPZLOW')*100 and ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] == True and ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] == True:
-            ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][7]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 8: 가압기 모든 전열기 꺼짐 -> 추후조치
-        # 후반에 보조전열기가 켜지나 초반에 꺼져있는 상태를 보고 만족사항으로 나타남.
-        if self.db_val('QPRZB') < 0.001 and self.db_val('QPRZH') < 0.001: # 0으로 도달 안함, 때문에 < 0.001로 표현
-            ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][8]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 9: 유출수 차단발생(BG-LV459/LV460, BG-HV1/HV2/HV3 닫힘)
-        if self.db_val('BLV459') == 0 and self.db_val('BHV1') == 0 and self.db_val('BHV2') == 0 and self.db_val('BHV3') == 0:
-            ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = True
-        else: ab_pro[procedure_name]['경보 및 증상'][9]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 10: 재생 열교환기 후단 유출수 온도(BG-TI140) 감소
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('URHXUT'):
-                ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][10]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 11: 재생 열교환기 후단 충전수 온도(BG-TI123) 감소
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('UCHGUT'):
-                ab_pro[procedure_name]['경보 및 증상'][11]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][11]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 12: 격납용기 배수조 수위 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('ZSUMP'):
-                ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][12]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 13: 격납용기내 방사능준위 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('ZINST22'):
-                ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][13]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 경보 및 증상 14: 격납용기내 습도 증가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('ZINST23'):
-                ab_pro[procedure_name]['경보 및 증상'][14]['AutoClick'] = True
-            else: ab_pro[procedure_name]['경보 및 증상'][14]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        '''
-        자동 동작 사항 0~2
-        '''
-        # 자동 동작 사항 0: 유출수 열교환기 출구 압력지시계(BG-PI145) 지시치 감소 및 압력조절밸브(BG-PV145) 서서히 닫힘.
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('BPV145') and self.sym_decrease('ZINST36'):
-                ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = True
-            else: ab_pro[procedure_name]['자동 동작 사항'][0]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 1: 유출수 열교환기 출구 온도지시계(BG-TI144) 지시치 감소 및 유출수 열교환기 출구 온도 조절밸브(EG-TV144) 서서히 닫힘
-        # 추후조치 -> 유출수 열교환기 출구 온도지시계 지시치 변수 확인 불가
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_decrease('UNRHXUT'):
-                ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = True
-            else: ab_pro[procedure_name]['자동 동작 사항'][1]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-        # 자동 동작 사항 2: 가압기 수위 감소에 따라 충전수 유량제어기(BG-FK122) ‘자동’ 상태에서 충전수 유량 조절밸브(BG-FV122) 서서히 열림
-        # 추후조치 -> 충전수 유량제어기 상태변수 확인 필요
-        if len(self.shmem.get_shmem_vallist('KCNTOMS')) == 5:  # deque 사용시 필요 (5개가 할당되어 있는지 확인)
-            if self.sym_increase('BFV122'):
-                ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = True
-            else: ab_pro[procedure_name]['자동 동작 사항'][2]['AutoClick'] = False  # IF-THEN dummy 확인용
-
-
+class ProcedureDB:
+    def __init__(self, Shmem):
+        self.ShMem = Shmem
+        self.proceduredb = self.init_procedure_db()
+    def update_proceduredb_from_ShMem(self):
+        self.proceduredb = self.update_procedure(self.ShMem.get_mem(), self.proceduredb)
+    def init_procedure_db(self):
+        procedure_dict = {
+            'Normal': {0:{'Des': '정상', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '15_08': {0:{'Des': '해당 ‘SG WTR LEVEL DEVIATION HIGH/LOW’ 경보 발생(NR 50±5 %)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': '해당 ‘SG  WTR LEVELHIGH-HIGH’ 경보 발생(NR 78 %)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': '해당 SG 상태등에서 ‘STM GEN CH LEVEL HI-HI’ 점등 (AE-LT476/486/496 : 해당 SG의 CH C 점등)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': '증기발생기 수위 DCS Monitor에 해당 증기발생기 ‘LVL CH FAIL’ 경보등 점등 및 Buzzer 울림, 경보 프린터 출력', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': '해당 SG MFCV 닫힘 방향으로 진행 및 해당 SG 실제 급수유량 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '해당 ‘SG STM/FW FLOW DEVIATION’ 경보 발생(±10 %)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '해당 SG 실제 수위 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': '해당 ‘SG WATER LEVEL LOW’ 경보 발생(NR 25%)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': '해당 SG WTR LEVEL LOW-LOW(NR 17%)에 의한 원자로정지 발생 가능', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '23_03': {0:{'Des': 'PZR 수위 또는 압력 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': 'VCT 수위 감소 또는 보충횟수 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': 'CCW Hx 출구헤더에 설치된 방사선감시기(EG-RE364)의 지시치 증가 및 관련 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': 'CCW 완충탱크의 수위 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': 'RCP 열방벽(Thermal Barrier) 열교환기 누설 시 RCP 열방벽 열교환기(RCP T/B Hx) 출구온도(전산값) 증가 및 CCW 유량 증가 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '21_01': {0:{'Des': 'PZR ‘고’ 압력 지시(BB-PI444)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': 'PZR 살수밸브(BB-PV444C, 444D) 열림 지시(158.9㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': 'PZR 비례전열기 꺼짐(158.1㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': 'PZR 보조전열기 꺼짐(155.9㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': 'PZR PRESS LOW"(BB-PT445) 경보 발생(153.7㎏/㎠) 및 PZR ‘저’ 압력 지시(BB-PI445, 455, 456, 457)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '"PZR LO PRESS INTERLOCK" 경보발생(153.6㎏/㎠) 및 PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '"PZR PRESS NOT HI(P-11)" 경보 발생(138.5㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': '"PZR PRESS LOW ALERT" 경보 발생(136.8㎏/㎠) 및 Rx 트립 작동', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': '"PZR PRESS LOW SI ALERT" 경보 발생(126.7㎏/㎠) 및 SI 작동', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '20_04': {0:{'Des': 'BB-LI459 ‘저’ 수위 지시', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': '“PZR CONT LVL LOW DEVIATION” 경보 발생(JP006, 기준 수위-5%)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': '“PZR LVL LOW” 및 “PZR CONT LVL LOW HTRS OFF” 경보 발생(JP006, 17%)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': '“LETDN HX OUTLET FLOW LOW” 경보 발생(JP005, 15㎥/hr)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': '“CHARGING LINE FLOW HI/LO” 경보 발생 및 충전 유량 증가 (JP005, Hi. 경보 : 26.57㎥/hr, Lo. 경보 : 4.77㎥/hr)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '건전한 수위지시계(BB-LI460, 461)의 수위 지시치 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '“PZR CONT LVL HIGH HTRS ON” 경보 발생(JP006, 기준 수위+5%)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': '“PZR LVL HIGH” 경보 발생(JP006, 70%)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': '“PZR HI WTR LVL RX TRIP” 경보 발생 및 원자로 정지(JP006, 92%)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '15_07': {0:{'Des': '해당 ‘SG WTR LEVEL DEVIATION HIGH/LOW’ 경보 발생(NR 50±5 %)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': '해당 ‘SG WATER LEVEL LOW’ 경보 발생(NR 25 %)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': '해당 ‘SG  LOOP WTR LEVEL LOW-LOW’ 경보 발생(NR 17 %)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': '해당 SG 상태등에서 ‘STM GEN CH LEVEL LO-LO’ 점등 (AE-LT476/486/496, AE-LT473/483/493 : 해당 SG의 CH C, CH D 점등)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': '증기발생기 수위 DCS Monitor에 해당 증기발생기 ‘LVL CH FAIL’ 경보등 점등 및 Buzzer 울림, 경보 프린터 출력', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '해당 SG MFCV 열림 방향으로 진행 및 해당 SG 실제 급수유량 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '해당 ‘SG STM/FW FLOW DEVIATION’ 경보 발생(±10 %)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': '해당 SG 실제 수위 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': '해당 ‘SG WTR LEVELHIGH-HIGH’에 의한 터빈 정지 및 원자로 정지발생 가능', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '63_04': {0:{'Des': '제어봉 위치 지시계의 바닥 지시등(RB)점등', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': '원자로 출력 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': 'Tavg의 급격한 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': '“RODS AT BOTTOM” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': '“RPI RODDEVIATION 및 ROD DEVIATION” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '“T REF/AUCT T AVG HIGH" 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '“ROD BANKS LOW/LO-LO LIMIT” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': '“TWO OR MORE RODS AT BOTTOM” 경보 발생(2개 이상 제어봉 낙하시)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': '“ROD CONTROL URGENT FAILURE” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      9:{'Des': '“PR UPPER/LOWER HI FLUX DEV/AUTO DEFEAT” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      10:{'Des': '“COMPARATOR PWR RANGE DEVIATION” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      11:{'Des': '“DELTA FLUX” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      12:{'Des': '“RADIAL FLUX” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      13:{'Des': '“NIS HI FLUX RATE PWR RANGE" 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '63_02': {0:{'Des': '제어봉 위치 지시계와 스텝계수기상의 계속적인 제어봉 삽입', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': '원자로 출력 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': '“T REF/AUCT T AVG HIGH” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': '“ROD BANKS LOW/LO-LO LIMIT” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': '“COMPARATOR PWR RANGE DEVIATION” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '“PR UPPER/ LOWER HI FLUX DEV/AUTO DEFEAT” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '“DELTA FLUX” 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '21_12': {0:{'Des': 'PZR PORV(BB-PV444B, 445A, 445B) 열림 지시 및 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': 'PZR PORV 출구 고온 지시(BB-TI463/464/466) 및 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': 'PZR 저압력/보조전열기 켜짐 지시 및 경보 발생(155.4㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': 'PZR 압력 보호채널(BB-PI455, 456, 457) ‘저’ 압력 연동 경보발생(153.6㎏/㎠) 및 PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': 'PZR ‘저’ 압력 지시(BB-PI444, 445, 455, 456, 457) 및 경보발생(153.6㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': 'PRT 고온(45℃), 고압(0.6㎏/㎠), 고수위(85%) 지시 및 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '19_02': {0:{'Des': '가압기 안전밸브 출구 고온 경보(주위온도＋10℃ : JP006)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': '가압기 안전밸브 출구온도 기록계 지시치 증가(BB-TR465 : JP005)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': '가압기 보조전열기 지시등 켜짐 및 경보(155.4㎏/㎠ : JP006)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': '가압기 저압경보(153.7㎏/㎠ : JP006)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': '가압기 압력방출밸브(PORV) 차단 경보(153.7㎏/㎠ : JP004)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '가압기 압력방출탱크(PRT) 고압력 경보(0.6㎏/㎠ : JP006)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '가압기 압력방출탱크(PRT) 고온 경보(45℃ : JP006)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': '가압기 압력방출탱크(PRT) 고수위 경보(85% : JP006)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': '가압기 수위 변화', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      9:{'Des': '충전유량 증가(BG-FI122A : JP001)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      10:{'Des': '체적제어탱크 수위감소 및 원자로보충수 보충횟수 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '21_11': {0:{'Des': 'PZR 살수밸브 ‘열림’ 지시 및 상태 표시등 점등', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': 'PZR 보조전열기 켜짐 지시 및 경보 발생(155.4㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': 'PZR 살수관 온도(BB-TI451/452) 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': 'PZR 저압력 지시(BB-PI444, 445, 455, 456, 457) 및 경보 발생(153.6㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': 'PZR 압력 보호채널(BB-PI455, 456, 457) ‘저’ 압력 연동 경보발생(153.6㎏/㎠) 및 PZR PORV 차단밸브(BB-HV005, 006, 007) 닫힘', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': 'PZR 압력 138.5㎏/㎠(P-11) 이하시 "PZR PRESS NOT HI(P-11)" 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': 'PZR 수위 급격한 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': 'Rx 트립 작동 및 "PZR PRESS LOW ALERT" 경보 발생(136.8㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': 'SI 작동 및 "PZR PRESS LOW SI ALERT" 경보 발생(126.7㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '60_02': {0:{'Des': '유출수 유량지시계(BG-FI150) 지시치 감소 및 유출수 열교환기 출구유량 ‘저’ 경보(15㎥/hr) 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': 'VCT 수위 30% 이하시 원자로보충수계통 ‘자동’ 위치에서 자동 보충', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': 'VCT 수위 20% 이하시 VCT 수위 ‘저’ 경보', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': 'VCT 수위 5% 이하시 충전펌프 흡입원이 VCT에서 RWST로 전환 BG-LV115B/LV115D Open, BG-LV115C/LV115E Close', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': '가압기 수위 ‘저’ 편차 경보(기준수위 - 5%) 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '가압기 압력 ‘저’ 전열기 작동 경보(155.35kg/㎠) 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '가압기 모든 전열기 꺼짐', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': '유출수 차단발생(BG-LV459/LV460, BG-HV1/HV2/HV3 닫힘)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': '재생 열교환기 후단 유출수 온도(BG-TI140) 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      9:{'Des': '재생 열교환기 후단 충전수 온도(BG-TI123) 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      10:{'Des': '격납용기 배수조 수위 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      11:{'Des': '격납용기내 방사능준위 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      12:{'Des': '격납용기내 습도 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '59_02': {0:{'Des': 'CHG FLOW CONT FLOW HI/LO(JP005)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': 'PRZR CONT LEVEL LOW DEVIATION(JP006)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': 'VOL CONT TK LEVEL HIGH/LOW(JP005)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': 'REGEN HX LETDN LINE TEMP HIGH(JP005)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': 'RCP SEAL INJ WTR FLOW LOW(JP005)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': 'RAD WARN ＆ HIGH ALARM(JP004)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '충전유량 지시계 지시치 증가(BG-FI122A  JP001)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      7:{'Des': '가압기 수위 지시계 지시치 감소(BB-LI459A/460/461/460B  JP001/005)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      8:{'Des': '체적제어탱크 수위 지시계 지시치 감소(BG-LI115/112A  JP001/005)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      9:{'Des': '재생 열교환기 후단 유출수 온도 지시계 지시치 증가(BG-TI140  JP001)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      10:{'Des': '재생 열교환기 후단 충전수 온도 지시계 지시치 감소(BG-TI123  JP001)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      11:{'Des': 'RCP 밀봉수 주입유량 지시계 지시치 감소(BG-FR154A/155A/156A  JP005)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      12:{'Des': '격납건물 외부에서 누설 시 보조건물 배수조 수위 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      13:{'Des': '격납건물 내부에서 누설 시 격납건물 배수조 수위 및 온도/습도 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '23_01': {0:{'Des': 'PZR 수위 또는 압력 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': 'VCT 수위 감소 또는 보충횟수 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': 'CV 대기 방사선감시기(GT-RE211) 또는 격납용기 배기계통 방사선감시기(GT-RE119)의 지시치 증가 및 경보', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': 'CV 지역 방사선감시기(GT-RE001, 002, 132, 133, 220)의 지시치증가 및 경보', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': 'CV 온도, 습도, 압력이 정상보다 높게 지시', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': 'CV Sump 수위 증가 및 배수조 펌프의 기동횟수 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '23_06': {0:{'Des': 'PZR 수위 또는 압력 감소', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1:{'Des': 'VCT 수위 감소 또는 보충횟수 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2:{'Des': '발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3:{'Des': '복수기 공기추출계통 방사선감시기(CG-RE004/RE013)의 고방사선경보', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4:{'Des': '증기발생기 취출수계통 및 시료채취계통 방사선감지기(BM-RE410,RC-RE019/029 /039)의 고방사선경보', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      5:{'Des': '증기발생기의 급수 및 증기유량 편차 및 경보 발생', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      6:{'Des': '주증기관 방사선감지기(AB-RE801A/801B/801C)의 고방사선경보', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+
+            '21_02': {0: {'Des': 'PZR ‘저’ 압력 지시(BB-PI444)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      1: {'Des': '"PZR PRESS LO/BACKUP HEATERS ON" 경보 발생(155.4㎏/㎠) 및 PZR 보조전열기 모두 켜짐 지시', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      2: {'Des': '"PZR PRESS HIGH"(BB-PT444B, 445) 경보 발생(162.4㎏/㎠) 및 PZR "고" 압력 지시(BB-PI445, 455, 456, 457)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      3: {'Des': 'PZR PORV(BB-PV444B, 445A, 445B) 열림 지시 및 경보 발생(164.2㎏/㎠)', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False},
+                      4: {'Des': '실제 압력 감소로 PZR PORV(BB-PV444B, 445A, 445B) 닫힘', 'Val': '', 'Setpoint': '', 'Unit': '', 'Auto': False}},
+        }
+        return procedure_dict
+
+    def update_procedure(self, mem, procedure_dict):
+        # procedure_dict['']
+        return procedure_dict
+
+    def get_on_procedures(self, name):
+        # 각 절차서별 만족한 증상 요건 개수 산출
+        return sum([self.proceduredb[name][i]['Auto'] for i in range(len(self.proceduredb[name]))])
+
+    def get_procedures(self, name):
+        # 각 절차서별 전체 증상 요건 개수 산출
+        return len(self.proceduredb[name].keys())

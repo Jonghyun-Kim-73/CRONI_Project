@@ -139,8 +139,8 @@ class DiagnosisProcedureTable(ABCTableWidget):
         for i in range(3): # 초기 테이블 업로드를 위한 더미 파일 활용
             pro_name, logic_condition, ai_probability = self.inmem.dis_AI['AI'][i]
             self.setCellWidget(i, 0, DiagnosisProcedureItem(self, f' {pro_name}', pro_name))
-            self.setCellWidget(i, 1, DiagnosisProcedureCheckBox(self, pro_name, 'Rad'))
-            self.setCellWidget(i, 2, DiagnosisProcedureCheckBox(self, pro_name, 'Urgent'))
+            self.setCellWidget(i, 1, DiagnosisProcedureCheckBox(self, pro_name, 'Urgent'))
+            self.setCellWidget(i, 2, DiagnosisProcedureCheckBox(self, pro_name, 'Rad'))
             self.setCellWidget(i, 3, DiagnosisProcedureItem(self, logic_condition, pro_name))
             self.setCellWidget(i, 4, DiagnosisProcedureItem(self, ai_probability, pro_name))
 
@@ -243,7 +243,8 @@ class DiagnosisProcedureCheckBox(ABCCheckBox):
         self.block = block
         self.pro_name = pro_name
         self.toggle = self.inmem.ShMem.get_pro_radiation(pro_name) if self.type_ == 'Rad' else self.inmem.ShMem.get_pro_urgent_act(pro_name)
-        self.setCheckState(Qt.Checked if self.toggle else Qt.Unchecked)
+        # self.setCheckState(Qt.Checked if self.toggle else Qt.Unchecked)
+        self.setCheckState(Qt.Unchecked if self.toggle else Qt.Checked)
         self.style().polish(self) # 반영이 안되서 직접 수행
 class DiagnosisProcedureTableWidget(ABCWidget):
     def __init__(self, parent, widget_name=''):
@@ -480,22 +481,16 @@ class ProcedureCheckTable(ABCTableWidget):
             out_name = f'{name[:15]} ...'if len(name) >= 15 else name
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 비정상절차서: {out_name}")
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setToolTip(f" 비정상절차서: {name}")
-            symptom = self.inmem.ShMem.get_pro_symptom(name)
-            symptom_count = self.inmem.ShMem.get_pro_symptom_count(name)
+
+            sc = 'Normal' if name[:6]=='Normal' else name[2:7]
+            symptom = self.inmem.ShMem.get_proceduredb()[sc]
+            symptom_count = len(symptom)
             self.setRowCount(symptom_count)
 
-            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {symptom[i]["Des"]}', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
-            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
-            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
-            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' Test...', symptom[i]["SymptomActivate"])) for i in range(symptom_count)]
-
-            # 참고사항 및 주의사항이 들어간 행을 선택한 후, 최종적으로 삭제 처리
-            symptom_des = [symptom[i]["Des"][:4] for i in range(symptom_count)]
-            reset_list1 = list(filter(lambda x: symptom_des[x] == '참고사항', range(symptom_count)))
-            reset_list2 = list(filter(lambda x: symptom_des[x] == '주의사항', range(symptom_count)))
-            reset_list3 = list(filter(lambda x: symptom_des[x] == ' 주의사', range(symptom_count)))
-            reset_list = reset_list1+reset_list2+reset_list3
-            [self.removeRow(i) for i in reset_list]
+            [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {symptom[i]["Des"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
+            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' {symptom[i]["Val"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
+            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' {symptom[i]["Setpoint"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
+            [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' {symptom[i]["Unit"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
 
         if type_ == 'Sys_name':
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 시스템 명: {name[:15]}")

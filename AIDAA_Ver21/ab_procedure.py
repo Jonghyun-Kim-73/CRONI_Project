@@ -64,15 +64,15 @@ ab_pro = {
             },
             9: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '2.5.4',
-                'Des': '해당 ‘SG WTR LEVEL DEVIATION HIGH/LOW’ 경보 (NR 50±5%)',
+                'Des': '해당 ‘SG WTR LEVEL DEVIATION HIGH/LOW’ 경보 발생(NR 50±5%)',
             },
             10: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '2.5.5',
-                'Des': '해당 ‘해당 ‘SG WATER LEVEL LOW’ (NR 25%)',
+                'Des': '해당 ‘해당 ‘SG WATER LEVEL LOW’ 경보 발생(NR 25%)',
             },
             11: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '2.5.6',
-                'Des': '당 SG WTR LEVELLOW-LOW(NR 17%)에 의한 원자로정지 발생 가능',
+                'Des': '해당 SG WTR LEVEL LOW-LOW(NR 17%)에 의한 원자로정지 발생 가능',
             }
         },
         '자동 동작 사항': {

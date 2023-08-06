@@ -106,6 +106,7 @@ class CNS(QWidget):
     def one_step_part(self):
         self.ShMem.add_val_to_list()
         self.ShMem.update_alarmdb()
+        self.ShMem.update_proceduredb()
         self.ShMem.update_CVCS()
         self.mes.setText(f'OneStep 진행함. [KCNTOMS: {self.ShMem.get_para_val("KCNTOMS")}][CVCS: {self.ShMem.get_CVCS_para_val("SimTime")}]')
     def run_(self):
