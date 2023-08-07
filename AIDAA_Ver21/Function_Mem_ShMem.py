@@ -328,6 +328,7 @@ class InterfaceMem:
         self.diagnosis_model = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
         self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
         self.system_result = pd.read_csv('./AI/System_Diagnosis_result.csv')
+        self.prediction_result = pd.read_csv('./AI/Prediction_result_example.csv')
         # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
         # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')
@@ -517,3 +518,6 @@ class InterfaceMem:
     def get_system_result(self):
         for i in range(3):
             self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)].values[0]
+
+    def get_prediction_result(self, id, time):
+        return [self.prediction_result[id][self.prediction_result['Time']==i].values[0] for i in time]
