@@ -9,6 +9,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib import animation
 from matplotlib.figure import Figure
 import numpy as np
+from collections import deque
 
 
 class PreTrip(ABCWidget):
@@ -137,10 +138,10 @@ class Parameter_Graph(ABCWidget):
         self.ax1.plot(x_real, x_real, c=rgb_to_hex(DarkGray), linewidth='2', label='Past values')
         # self.ax1.plot(x, grap[self.id],c=rgb_to_hex(DarkBlue), linewidth = '2',label = 'Prediction results')
         self.ax1.plot(x, x, c=rgb_to_hex(DarkBlue), linewidth='2', label='Prediction results')
-        self.ax1.set_xlim(-7200, 7200)
+        self.ax1.set_xlim(-3600, 7200)
         self.ax1.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth='2')
-        self.ax1.set_xticks([-7200, 0, 7200])
-        self.ax1.set_xticklabels(['-120 min', '0', '120 min'])
+        self.ax1.set_xticks([-3600, 0, 7200])
+        self.ax1.set_xticklabels(['-60 min', '0', '120 min'])
         self.ax1.tick_params(axis='x', direction='in', which='major', labelsize=7)
         self.ax1.tick_params(axis='y', direction='in', which='major', labelsize=7)
         self.ax1.set_ylabel(self.y_label[self.id], fontsize='10')
@@ -156,19 +157,13 @@ class Parameter_Graph(ABCWidget):
         try: # Prediction을 눌러야 widget id에 이름이 등록됨.
             if self.inmem.widget_ids['AIDAAMainTopSystemName'].text() == 'Prediction':
                 tt = int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) - (int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) % 20)
-                self.time = np.arange(1, tt + 1)
                 if tt != 0:
                     # Short-Term Prediction
                     self.ax.cla()
-                    if tt <= 120:
-                        self.ax.plot(self.time, self.inmem.get_prediction_result(id=f'{self.id}', time=self.time), c=rgb_to_hex(DarkBlue), linewidth='2', label='Prediction results')
-                    elif tt > 120:
-                        residual = tt-120
-                        temp = np.array(self.time-residual)
-                        past_time = np.array(temp[temp < 0])
-                        future_time = np.array(temp[temp >= 0])
-                        self.ax.plot(past_time, self.inmem.get_prediction_result(id=f'{self.id}', time=self.time[:residual-1]), c=rgb_to_hex(DarkGray), linewidth='2', label='Past values')
-                        self.ax.plot(future_time, self.inmem.get_prediction_result(id=f'{self.id}', time=self.time[residual-1:]), c=rgb_to_hex(DarkBlue), linewidth='2', label='Prediction results')
+
+                    self.ax.plot(np.arange(-120, 60, 60), self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(17400+tt*5, 18300+tt*5, 300)), c=rgb_to_hex(DarkGray), linewidth='2', label='Past values')
+                    self.ax.plot(np.arange(0, 180, 60), self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000+tt*5, 18900+tt*5, 300)), c=rgb_to_hex(DarkBlue), linewidth='2', label='Prediction results')
+
                     self.ax.set_xlim(-120, 120)
                     self.ax.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth='2')
                     self.ax.set_xticks([-120, 0, 120])
@@ -185,21 +180,14 @@ class Parameter_Graph(ABCWidget):
 
                     # Long-Term Prediction
                     self.ax1.cla()
-                    if tt <= 7200:
-                        self.ax.plot(self.time, self.inmem.get_prediction_result(id=f'{self.id}', time=self.time), c=rgb_to_hex(DarkBlue), linewidth='2', label='Prediction results')
-                    elif tt > 7200:
-                        residual1 = tt - 7200
-                        temp1 = np.array(self.time - residual1)
-                        past_time1 = np.array(temp1[temp1 < 0])
-                        future_time1 = np.array(temp1[temp1 >= 0])
-                        self.ax.plot(past_time1, self.inmem.get_prediction_result(id=f'{self.id}', time=self.time[:residual1 - 1]), c=rgb_to_hex(DarkGray), linewidth='2', label='Past values')
-                        self.ax.plot(future_time1, self.inmem.get_prediction_result(id=f'{self.id}', time=self.time[residual1 - 1:]), c=rgb_to_hex(DarkBlue), linewidth='2', label='Prediction results')
-                    self.ax1.plot(self.time, self.inmem.get_prediction_result(id=f'{self.id}', time=self.time), c=rgb_to_hex(DarkGray), linewidth='2', label='Past values')
-                    self.ax1.plot(self.time, self.inmem.get_prediction_result(id=f'{self.id}', time=self.time), c=rgb_to_hex(DarkBlue), linewidth='2', label='Prediction results')
-                    self.ax1.set_xlim(-7200, 7200)
+
+                    self.ax1.plot(np.arange(-3600, 60, 60), self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(0+tt*5, 18300+tt*5, 300)), c=rgb_to_hex(DarkGray), linewidth='2', label='Past values')
+                    self.ax1.plot(np.arange(0, 7260, 60), self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000+tt*5, 54300+tt*5, 300)), c=rgb_to_hex(DarkBlue), linewidth='2', label='Prediction results')
+
+                    self.ax1.set_xlim(-3600, 7200)
                     self.ax1.axvline(x=0, linestyle='--', c=rgb_to_hex(DarkGray), linewidth='2')
-                    self.ax1.set_xticks([-7200, 0, 7200])
-                    self.ax1.set_xticklabels(['-120 min', '0', '120 min'])
+                    self.ax1.set_xticks([-3600, 0, 7200])
+                    self.ax1.set_xticklabels(['-60 min', '0', '120 min'])
                     self.ax1.tick_params(axis='x', direction='in', which='major', labelsize=7)
                     self.ax1.tick_params(axis='y', direction='in', which='major', labelsize=7)
                     self.ax1.set_ylabel(self.y_label[self.id], fontsize='10')
@@ -212,59 +200,6 @@ class Parameter_Graph(ABCWidget):
         except: pass
         return super().timerEvent(a0)
 
-    def cal_trip_time(self, id):
-        # if len(np.where(np.logical_or(power_mean<25,power_mean>109))[0])==0:
-        #     power_triptime = '00:00:00'
-        # else:
-        #     power_triptime =np.where(np.logical_or(power_mean<25,power_mean>109))[0][0]
-        #
-        # if len(np.where(over_delta_T_mean>1.3)[0])==0:
-        #     over_delta_T_triptime = '00:00:00'
-        # else:
-        #     over_delta_T_triptime =np.where(over_delta_T_mean>1.3)[0][0]
-        #
-        # if len(np.where(np.logical_or(prz_pressure_mean<136.78,prz_pressure_mean>167.72))[0])==0:
-        #     prz_pressure_triptime = '00:00:00'
-        # else:
-        #     prz_pressure_triptime = np.where(np.logical_or(prz_pressure_mean<136.78,prz_pressure_mean>167.72))[0][0]
-        #
-        # if len(np.where(prz_level_mean>92)[0])==0:
-        #     prz_level_triptime = '00:00:00'
-        # else:
-        #     prz_level_triptime =np.where(prz_level_mean>92)[0][0]
-        #
-        # if len(np.where(loop3_flow_mean<90)[0])==0:
-        #     loop3_flow_triptime = '00:00:00'
-        # else:
-        #     loop3_flow_triptime =np.where(loop3_flow_mean<90)[0][0]
-        #
-        # if len(np.where(loop2_flow_mean<90)[0])==0:
-        #     loop2_flow_triptime = '00:00:00'
-        # else:
-        #     loop2_flow_triptime =np.where(loop2_flow_mean<90)[0][0]
-        #
-        # if len(np.where(loop1_flow_mean<90)[0])==0:
-        #     loop1_flow_triptime = '00:00:00'
-        # else:
-        #     loop1_flow_triptime =np.where(loop1_flow_mean<90)[0][0]
-        #
-        # if len(np.where(sg3_level_mean<17)[0])==0:
-        #     sg3_level_triptime = '00:00:00'
-        # else:
-        #     sg3_level_triptime =np.where(sg3_level_mean<17)[0][0]
-        #
-        # if len(np.where(sg2_level_mean<17)[0])==0:
-        #     sg2_level_triptime = '00:00:00'
-        # else:
-        #     sg2_level_triptime =np.where(sg2_level_mean<17)[0][0]
-        #
-        # if len(np.where(sg1_level_mean<17)[0])==0:
-        #     sg1_level_triptime = '00:00:00'
-        # else:
-        #     sg1_level_triptime =np.where(sg1_level_mean<17)[0][0]
-        pass
-
-
 class Parameter_Info(ABCWidget):
     def __init__(self, parent, id=None):
         super(Parameter_Info, self).__init__(parent)
@@ -273,21 +208,51 @@ class Parameter_Info(ABCWidget):
         name = {1: 'POWER RANGE PERCENT POWER', 2: 'OVERTEMPERATURE DELTA-T', 3: 'PRZ PRESSURE', 4: 'PRZ LEVEL',
                 5: 'LOOP 1 FLOW', 6: 'LOOP 2 FLOW', 7: 'LOOP 3 FLOW', 8: 'SG#1 Narrow Range Level',
                 9: 'SG#2 Narrow Range Level', 10: 'SG#3 Narrow Range Level'}
-        # self.Trip_time = {1: '{}'.format(power_triptime), 2: '{}'.format(over_delta_T_triptime), 3: '{}'.format(prz_pressure_triptime), 4:'{}'.format(prz_level_triptime),
-        #              5:'{}'.format(loop1_flow_triptime), 6: '{}'.format(loop2_flow_triptime), 7: '{}'.format(loop3_flow_triptime), 8: '{}'.format(sg1_level_triptime), 9: '{}'.format(sg2_level_triptime), 10: '{}'.format(sg3_level_triptime)}
-        aa = '00:00:00'
-        self.Trip_time = {1: f'{aa}', 2: f'{aa}',
-                          3: f'{aa}', 4: f'{aa}',
-                          5: f'{aa}', 6: f'{aa}',
-                          7: f'{aa}', 8: f'{aa}',
-                          9: f'{aa}', 10: f'{aa}'}
+
+        self.power_triptime = 'None'
+        self.over_delta_T_triptime = 'None'
+        self.prz_pressure_triptime = 'None'
+        self.prz_level_triptime = 'None'
+        self.loop3_flow_triptime = 'None'
+        self.loop2_flow_triptime = 'None'
+        self.loop1_flow_triptime = 'None'
+        self.sg3_level_triptime = 'None'
+        self.sg2_level_triptime = 'None'
+        self.sg1_level_triptime = 'None'
+
+        self.Trip_time = {1: f'{self.power_triptime}', 2: f'{self.over_delta_T_triptime}',
+                          3: f'{self.prz_pressure_triptime}', 4: f'{self.prz_level_triptime}',
+                          5: f'{self.loop3_flow_triptime}', 6: f'{self.loop2_flow_triptime}',
+                          7: f'{self.loop1_flow_triptime}', 8: f'{self.sg3_level_triptime}',
+                          9: f'{self.sg2_level_triptime}', 10: f'{self.sg1_level_triptime}'}
+
         self.blink = False
         self.lay = QHBoxLayout(self)
         self.lay.setContentsMargins(15, 0, 0, 0)
 
         self.parameter_name_w = Parameter_name(self, name[self.id])
         self.trip_time_label_w = TripTimeLabel(self)
-        self.parameter_triptime_w = Parameter_TripTime(self, self.Trip_time[self.id])
+
+        if self.id == 1:
+            self.parameter_triptime_w = Parameter_TripTime1(self, self.Trip_time[self.id])
+        elif self.id == 2:
+            self.parameter_triptime_w = Parameter_TripTime2(self, self.Trip_time[self.id])
+        elif self.id == 3:
+            self.parameter_triptime_w = Parameter_TripTime3(self, self.Trip_time[self.id])
+        elif self.id == 4:
+            self.parameter_triptime_w = Parameter_TripTime4(self, self.Trip_time[self.id])
+        elif self.id == 5:
+            self.parameter_triptime_w = Parameter_TripTime5(self, self.Trip_time[self.id])
+        elif self.id == 6:
+            self.parameter_triptime_w = Parameter_TripTime6(self, self.Trip_time[self.id])
+        elif self.id == 7:
+            self.parameter_triptime_w = Parameter_TripTime7(self, self.Trip_time[self.id])
+        elif self.id == 8:
+            self.parameter_triptime_w = Parameter_TripTime8(self, self.Trip_time[self.id])
+        elif self.id == 9:
+            self.parameter_triptime_w = Parameter_TripTime9(self, self.Trip_time[self.id])
+        elif self.id == 10:
+            self.parameter_triptime_w = Parameter_TripTime10(self, self.Trip_time[self.id])
 
         self.lay.addWidget(self.parameter_name_w)
         self.lay.addWidget(self.trip_time_label_w)
@@ -296,6 +261,8 @@ class Parameter_Info(ABCWidget):
         self.lay.setSpacing(30)
         self.lay.addStretch(1)
 
+        self.counter = deque(maxlen=2)
+
         self.startTimer(600)
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
@@ -303,12 +270,109 @@ class Parameter_Info(ABCWidget):
             self.blink = not self.blink
         else:
             self.blink = False
+        if self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
+            self.inmem.ShMem.change_para_val('iFixTrip', 1)
+
+        self.counter.append(int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5))
+        tt = int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) - (int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) % 20)
+
+        if tt != 0:
+            if self.id == 1:
+                if len(np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 25, self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) > 109))[0]) == 0:
+                    self.inmem.widget_ids['Parameter_TripTime1'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime1'].setText(f"{np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 25, self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) > 109))[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0]+1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 2:
+                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>1.3)[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime2'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime2'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>1.3)[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 3:
+                if len(np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<136.78,self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>167.72))[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime3'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime3'].setText(f"{np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<136.78,self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>167.72))[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 4:
+                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>92)[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime4'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime4'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>92)[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 5:
+                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime5'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime5'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 6:
+                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime6'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime6'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 7:
+                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime7'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime7'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 8:
+                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime8'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime8'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 9:
+                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime9'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime9'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+            elif self.id == 10:
+                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
+                    self.inmem.widget_ids['Parameter_TripTime10'].setText('None')
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                else:
+                    self.inmem.widget_ids['Parameter_TripTime10'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
+                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1]:
+                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+
         self.parameter_name_w.setProperty('Blink', 'True' if self.blink else 'False')
         self.parameter_triptime_w.setProperty('Blink', 'True' if self.blink else 'False')
         self.parameter_name_w.style().polish(self.parameter_name_w)
         self.parameter_triptime_w.style().polish(self.parameter_triptime_w)
         return super().timerEvent(a0)
-
 
 class TripTimeLabel(ABCLabel):
     def __init__(self, parent):
@@ -323,9 +387,62 @@ class Parameter_name(ABCLabel):
         self.setFixedSize(339, 30)
         self.setText(name)
 
+class Parameter_TripTime1(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime1, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
 
-class Parameter_TripTime(ABCLabel):
-    def __init__(self, parent, time=None):
-        super(Parameter_TripTime, self).__init__(parent)
+class Parameter_TripTime2(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime2, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
+
+class Parameter_TripTime3(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime3, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
+
+class Parameter_TripTime4(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime4, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
+
+class Parameter_TripTime5(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime5, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
+
+class Parameter_TripTime6(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime6, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
+
+class Parameter_TripTime7(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime7, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
+
+class Parameter_TripTime8(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime8, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
+
+class Parameter_TripTime9(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime9, self).__init__(parent, widget_name)
+        self.setFixedSize(180, 30)
+        self.setText(time)
+
+class Parameter_TripTime10(ABCLabel):
+    def __init__(self, parent, time=None, widget_name=''):
+        super(Parameter_TripTime10, self).__init__(parent, widget_name)
         self.setFixedSize(180, 30)
         self.setText(time)
