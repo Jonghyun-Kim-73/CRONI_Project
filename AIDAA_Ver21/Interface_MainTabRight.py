@@ -29,13 +29,13 @@ class MainTabRightPreAbnormalW(ABCWidget):
     def __init__(self, parent, widget_name=''):
         super().__init__(parent, widget_name)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setFixedSize(945, 365)
+        self.setFixedSize(945, 324)
         self.w_title_layout = QWidget(self)
         self.w_title_layout.setFixedSize(945, 70)
 
         self.w_title = MainTabRightPreAbnormalWTitle(self, 'Pre-abnormal')
 
-        self.gotobtn = MainTabRightPreAbnormalWBTN(self, 'Go to IFAP')
+        self.gotobtn = MainTabRightPreAbnormalWBTN(self, 'IFAP')
         self.gotobtn.setFixedSize(254, 51)
         # self.gotobtn.clicked.connect(self.inmem.widget_ids['MainTopCallIFAP'].dis_update)
 
@@ -100,7 +100,7 @@ class MainTabRightAbnormalW(ABCWidget):
     def __init__(self, parent):
         super(MainTabRightAbnormalW, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setFixedSize(945, 365)
+        self.setFixedSize(945, 324)
         self.w_title_layout = QWidget(self)
         self.w_title_layout.setFixedSize(945, 70)
 
@@ -172,7 +172,7 @@ class MainTabRightEmergencyW(ABCWidget):
     def __init__(self, parent):
         super(MainTabRightEmergencyW, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setFixedSize(945, 365)
+        self.setFixedSize(945, 324)
         self.w_title_layout = QWidget(self)
         self.w_title_layout.setFixedSize(945, 70)
 

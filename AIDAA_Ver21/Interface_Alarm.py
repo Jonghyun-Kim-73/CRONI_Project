@@ -101,7 +101,7 @@ class AlarmFixPreTrip(ABCPushButton):
         Prediction Blink 시 AIDAA도 blick.
         """
         if self.inmem.ShMem.get_para_val('iFixPreTrip') == 1 and self.blick == False:
-            self.setStyleSheet('background-color: rgb(0, 176, 218);')
+            self.setStyleSheet('background-color: rgb(192, 0, 0);')
             # if self.inmem.widget_ids['MainTopSystemName'].text() != 'AIDAA':
             #     self.inmem.widget_ids['MainTopCallAIDAA'].setStyleSheet('background-color: rgb(0, 176, 218);')
             #     self.inmem.widget_ids['MainTabRightAbnormalW'].gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')
@@ -129,7 +129,7 @@ class AlarmFixTrip(ABCLabel):
 
     def dis_update(self):
         if self.inmem.ShMem.get_para_val('iFixTrip') == 1 and self.blick == False:
-            self.setStyleSheet('background-color: rgb(0, 176, 218);')
+            self.setStyleSheet('background-color: rgb(192, 0, 0);')
             # if self.inmem.widget_ids['MainTopSystemName'].text() != 'EGIS':
             #     self.inmem.widget_ids['MainTopCallEGIS'].setStyleSheet('background-color: rgb(0, 176, 218);')
             #     self.inmem.widget_ids['MainTabRightEmergencyW'].gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')
