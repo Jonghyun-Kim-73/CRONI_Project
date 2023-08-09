@@ -517,7 +517,7 @@ class InterfaceMem:
 
     def get_system_result(self):
         for i in range(3):
-            self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)].values[0]
+            self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)%301].values[0]
 
     def get_prediction_result(self, id, time):
         return np.array([self.prediction_result[id][self.prediction_result['Time']==i].values[0] for i in time])

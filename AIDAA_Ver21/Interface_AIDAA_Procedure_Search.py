@@ -634,12 +634,15 @@ class XAISearchScrollArea(ABCScrollArea):
         lay_heading.setSpacing(0)
         
         lay.addLayout(lay_heading)
+        # col_info = {' 변수 명':500, ' 기여도': self.size().width()-200} # 전체 길이 780
+        col_info = {' 변수 명': 480, ' 기여도': 300}
 
-        col_info = {' 변수 명':500, ' 기여도': self.size().width() - 200}
-
-        lay_heading.addWidget(XAISearchHeadingLabel(self, ' 변수 명', col_info[' 변수 명'], self.heading_height, 'F'))
-        lay_heading.addWidget(XAISearchHeadingLabel(self, ' 기여도', col_info[' 기여도'], self.heading_height, 'L'))
-        
+        self.heading_label = [
+            XAISearchHeadingLabel(self, ' 변수 명', col_info[' 변수 명'], self.heading_height, 'F'),
+            XAISearchHeadingLabel(self, ' 기여도', col_info[' 기여도'], self.heading_height, 'L')]
+        [lay_heading.addWidget(w) for w in self.heading_label]
+        self.heading_label[0].setAlignment(Qt.AlignCenter)
+        self.heading_label[1].setAlignment(Qt.AlignRight and Qt.AlignVCenter)
         lay.addWidget(XAISearchTable(self, col_info))
 
         return super().resizeEvent(a0)

@@ -161,22 +161,18 @@ class AlarmScrollArea(ABCScrollArea):
 
         # header item
         self.heading_label = [
-            # AlarmHeadingLabel(self, "DESCRIPTION", 442, 'F'),
-            # AlarmHeadingLabel(self, "VALUE", 93, 'M'),
-            # AlarmHeadingLabel(self, "SETPOINT", 142, 'M'),
-            # AlarmHeadingLabel(self, "UNIT", 77, 'M'),
-            # AlarmHeadingLabel(self, "DATE", 78, 'M'),
-            # AlarmHeadingLabel(self, "TIME", 108, 'L') # Total 1640
-            AlarmHeadingLabel(self, "DESCRIPTION", 400, 'F'),
-            AlarmHeadingLabel(self, "VALUE", 93, 'M'),
-            AlarmHeadingLabel(self, "SETPOINT", 142, 'M'),
-            AlarmHeadingLabel(self, "UNIT", 77, 'M'),
-            AlarmHeadingLabel(self, "DATE", 120, 'M'),
-            AlarmHeadingLabel(self, "TIME", 108, 'L')
-        ]
+            AlarmHeadingLabel(self, "DESCRIPTION", 385, 'F'),
+            AlarmHeadingLabel(self, "VALUE", 140, 'M'),
+            AlarmHeadingLabel(self, "SETPOINT", 180, 'M'),
+            AlarmHeadingLabel(self, "UNIT", 75, 'M'),
+            AlarmHeadingLabel(self, "DATE", 85, 'M'),
+            AlarmHeadingLabel(self, "TIME", 75, 'L')
+        ] # 전체 940 맞추기
         [self.headings_layout.addWidget(w) for w in self.heading_label]
 
         self.heading_label[0].setAlignment(Qt.AlignLeft and Qt.AlignVCenter)
+        self.heading_label[1].setAlignment(Qt.AlignCenter)
+        self.heading_label[2].setAlignment(Qt.AlignCenter)
         self.heading_label[0].setContentsMargins(5, 0, 0, 0)
 
         # self.headings_layout.addStretch(1)
@@ -212,8 +208,10 @@ class AlarmTable(ABCTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  # Scroll Bar 설정
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         # self.setRowCount(50)
-        # self.column_labels = [(' DESCRIPTION:', 410), ('VALUE', 93), ('SETPOINT', 141), ('UNIT', 77), ('DATE', 77), ('TIME', 109)]
-        self.column_labels = [(' DESCRIPTION:', 350), ('VALUE', 93), ('SETPOINT', 141), ('UNIT', 77), ('DATE', 120), ('TIME', 125)]
+        # self.column_labels = [('DESCRIPTION:', 350), ('VALUE', 93), ('SETPOINT', 141), ('UNIT', 77), ('DATE', 120), ('TIME', 128)] # 총합 909로 맞추기
+        # self.column_labels = [('DESCRIPTION:', 350), ('VALUE', 93), ('SETPOINT', 141), ('UNIT', 77), ('DATE', 100), ('TIME', 138)] # 총합 909로 맞추기
+        self.column_labels = [('DESCRIPTION:', 350), ('VALUE', 150), ('SETPOINT', 150), ('UNIT', 79), ('DATE', 80), ('TIME', 100)] # 총합 909로 맞추기
+        # self.column_labels = [('DESCRIPTION:', 325), ('VALUE', 150), ('SETPOINT', 150), ('UNIT', 89), ('DATE', 90), ('TIME', 105)] # 총합 909로 맞추기
         self.setColumnCount(len(self.column_labels))
         self.col_names = []
         for i, (l, w) in enumerate(self.column_labels):

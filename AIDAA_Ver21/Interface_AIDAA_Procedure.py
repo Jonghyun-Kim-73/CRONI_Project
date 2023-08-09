@@ -178,7 +178,7 @@ class TopBTN(ABCLabel):
         self.setProperty('Condition', 'Off')
         
     def dis_update(self, trigger):
-        self.setProperty('Condition', 'On' if not trigger else 'Off')
+        self.setProperty('Condition', 'Off' if not trigger else 'On') # 긴급 조치 및 방사선비상 색 트리거
         self.style().polish(self)
 class ProcedureInfo(ABCLabel):
     def __init__(self, parent):

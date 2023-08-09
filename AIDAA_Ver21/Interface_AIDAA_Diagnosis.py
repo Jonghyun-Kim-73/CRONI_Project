@@ -116,7 +116,8 @@ class DiagnosisProcedureTable(ABCTableWidget):
         self.setSelectionBehavior(QTableView.SelectRows)    # 테이블 row click
         self.setSelectionMode(QAbstractItemView.SingleSelection)
         
-        self.column_labels = [(' 비정상 절차서 명', 556), ('긴급', 80), ('방사선', 90), ('진입조건', 120), ('AI', 100)]
+        # self.column_labels = [(' 비정상 절차서 명', 556), ('긴급', 80), ('방사선', 90), ('진입조건', 120), ('AI', 100)] # 총합 946 맞추기
+        self.column_labels = [(' 비정상 절차서 명', 556), ('긴급', 80), ('방사선', 80), ('진입조건', 140), ('AI', 90)]
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(3)
         self.col_names = []
@@ -141,7 +142,7 @@ class DiagnosisProcedureTable(ABCTableWidget):
             self.setCellWidget(i, 0, DiagnosisProcedureItem(self, f' {pro_name}', pro_name))
             self.setCellWidget(i, 1, DiagnosisProcedureCheckBox(self, pro_name, 'Urgent'))
             self.setCellWidget(i, 2, DiagnosisProcedureCheckBox(self, pro_name, 'Rad'))
-            self.setCellWidget(i, 3, DiagnosisProcedureItem(self, logic_condition, pro_name))
+            self.setCellWidget(i, 3, DiagnosisProcedureItem(self, f'       {logic_condition}', pro_name))
             self.setCellWidget(i, 4, DiagnosisProcedureItem(self, ai_probability, pro_name))
 
         self.init_time = deque(maxlen=2)
@@ -179,7 +180,7 @@ class DiagnosisProcedureTable(ABCTableWidget):
                         self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
                     self.cellWidget(i, 1).update_item(pro_name, block)
                     self.cellWidget(i, 2).update_item(pro_name, block)
-                    self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
+                    self.cellWidget(i, 3).update_item(f'       {logic_condition}', pro_name, block)
                     self.cellWidget(i, 4).update_item(ai_probability, pro_name, block)
 
             elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 and sum(self.train_check) != 5 or self.inmem.ShMem.get_para_val('iFixTrain') == 2: # 테이블 초기화를 위한 조건
@@ -192,7 +193,7 @@ class DiagnosisProcedureTable(ABCTableWidget):
                         self.cellWidget(i, 0).update_item(f' {pro_name[:20]}...', pro_name, block) # 15자 까지만 보이기
                     self.cellWidget(i, 1).update_item(pro_name, block)
                     self.cellWidget(i, 2).update_item(pro_name, block)
-                    self.cellWidget(i, 3).update_item(logic_condition, pro_name, block)
+                    self.cellWidget(i, 3).update_item(f'       {logic_condition}', pro_name, block)
                     self.cellWidget(i, 4).update_item(ai_probability, pro_name, block)
         self.style().polish(self)
         return super().timerEvent(event)
@@ -280,9 +281,9 @@ class DiagnosisSystemScrollArea(ABCScrollArea):
 
         # header item
         self.heading_label = [
-            DiagnosisProcedureHeadingLabel(self, " 시스템명", 696, 'F', Qt.AlignmentFlag.AlignLeft),
-            DiagnosisProcedureHeadingLabel(self, " 관련 경보", 130, 'M', Qt.AlignmentFlag.AlignCenter),
-            DiagnosisProcedureHeadingLabel(self, " AI", 120, 'L', Qt.AlignmentFlag.AlignCenter),
+            DiagnosisProcedureHeadingLabel(self, " 시스템명", 631, 'F', Qt.AlignmentFlag.AlignLeft),
+            DiagnosisProcedureHeadingLabel(self, " 관련 경보", 135, 'M', Qt.AlignmentFlag.AlignCenter),
+            DiagnosisProcedureHeadingLabel(self, " AI", 180, 'L', Qt.AlignmentFlag.AlignCenter),
         ]
 
         for label in self.heading_label:
@@ -316,7 +317,7 @@ class DiagnosisSystemTable(ABCTableWidget):
         self.setSelectionBehavior(QTableView.SelectRows)    # 테이블 row click
         self.setSelectionMode(QAbstractItemView.SingleSelection)
 
-        self.column_labels = [(' System', 696), ('관련 경보', 120), ('AI 정확도', 120)]
+        self.column_labels = [(' System', 696), ('관련 경보', 125), ('AI 정확도', 125)] # 총합 946 맞춰야 빈 공간 없이 꽉 참.
         self.setColumnCount(len(self.column_labels))
         self.setRowCount(3)
         self.col_names = []
@@ -478,7 +479,7 @@ class ProcedureCheckTable(ABCTableWidget):
         [self.removeRow(0) for _ in range(self.rowCount())]
 
         if type_ == 'Pro_name':
-            out_name = f'{name[:15]} ...'if len(name) >= 15 else name
+            out_name = f'{name[:30]} ...'if len(name) >= 30 else name # 기존 15에서 30으로 늘림
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setText(f" 비정상절차서: {out_name}")
             self.inmem.widget_ids['ProcedureCheckTableScrollArea'].heading_label[0].setToolTip(f" 비정상절차서: {name}")
 
@@ -486,10 +487,9 @@ class ProcedureCheckTable(ABCTableWidget):
             symptom = self.inmem.ShMem.get_proceduredb()[sc]
             symptom_count = len(symptom)
             self.setRowCount(symptom_count)
-
             [self.setCellWidget(i, 0, ProcedureCheckTableItem(self, f' {symptom[i]["Des"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
-            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f' {symptom[i]["Val"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
-            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f' {symptom[i]["Setpoint"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
+            [self.setCellWidget(i, 1, ProcedureCheckTableItem(self, f'  {symptom[i]["Val"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
+            [self.setCellWidget(i, 2, ProcedureCheckTableItem(self, f'       {symptom[i]["Setpoint"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
             [self.setCellWidget(i, 3, ProcedureCheckTableItem(self, f' {symptom[i]["Unit"]}', symptom[i]["Auto"])) for i in range(symptom_count)]
 
         if type_ == 'Sys_name':
@@ -555,9 +555,8 @@ class ProcedureCheckTableItem(ABCLabel):
         super().__init__(parent, widget_name)
         self.setToolTip(text)
         self.setProperty('Activate', "On" if activation else "Off")
-        if len(text) >= 20:
-            # self.setText(text[:20] + ' ...')
-            self.setText(text)
+        if len(text) >= 35:
+            self.setText(text[:35] + ' ...')
         else:
             self.setText(text)
         self.style().polish(self)

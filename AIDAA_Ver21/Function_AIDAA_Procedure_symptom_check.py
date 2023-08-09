@@ -167,24 +167,24 @@ class ProcedureDB:
         procedure_dict['23_01'][0]['MV1'].append(mem['ZINST63']['Val']/100)
         procedure_dict['23_01'][0]['MV2'].append(mem['PPRZN']['Val'])
         if len(procedure_dict['23_01'][0]['MV1']) == 5:
-            procedure_dict['23_01'][0]['Val'] = mem['ZINST63']['Val']/100
-            procedure_dict['23_01'][0]['Setpoint'] = sum(procedure_dict['23_01'][0]['MV1'])/5
+            procedure_dict['23_01'][0]['Val'] = round(mem['ZINST63']['Val']/100, 2)
+            procedure_dict['23_01'][0]['Setpoint'] = round(sum(procedure_dict['23_01'][0]['MV1'])/5, 2)
             procedure_dict['23_01'][0]['Unit'] = '%'
             if mem['ZINST63']['Val']/100 < (sum(procedure_dict['23_01'][0]['MV1'])/5) or mem['PPRZN']['Val'] < (sum(procedure_dict['23_01'][0]['MV2'])/5):
                 procedure_dict['23_01'][0]['Auto'] = True
         # 1: VCT 수위 감소 또는 보충횟수 증가
         procedure_dict['23_01'][1]['MV1'].append(mem['ZVCT']['Val'])
         if len(procedure_dict['23_01'][1]['MV1']) == 5:
-            procedure_dict['23_01'][1]['Val'] = mem['ZVCT']['Val']
-            procedure_dict['23_01'][1]['Setpoint'] = sum(procedure_dict['23_01'][1]['MV1'])/5
+            procedure_dict['23_01'][1]['Val'] = round(mem['ZVCT']['Val'], 2)
+            procedure_dict['23_01'][1]['Setpoint'] = round(sum(procedure_dict['23_01'][1]['MV1'])/5, 2)
             procedure_dict['23_01'][1]['Unit'] = '%'
             if mem['ZVCT']['Val'] < (sum(procedure_dict['23_01'][1]['MV1'])/5):
                 procedure_dict['23_01'][1]['Auto'] = True
         # 2: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
         procedure_dict['23_01'][2]['MV1'].append(mem['WCHGNO']['Val'])
         if len(procedure_dict['23_01'][2]['MV1']) == 5:
-            procedure_dict['23_01'][2]['Val'] = mem['WCHGNO']['Val']
-            procedure_dict['23_01'][2]['Setpoint'] = sum(procedure_dict['23_01'][2]['MV1']) / 5
+            procedure_dict['23_01'][2]['Val'] = round(mem['WCHGNO']['Val'], 2)
+            procedure_dict['23_01'][2]['Setpoint'] = round(sum(procedure_dict['23_01'][2]['MV1']) / 5, 2)
             procedure_dict['23_01'][2]['Unit'] = 'kg/sec'
             if mem['WCHGNO']['Val'] > (sum(procedure_dict['23_01'][2]['MV1']) / 5):
                 procedure_dict['23_01'][2]['Auto'] = True
@@ -192,26 +192,26 @@ class ProcedureDB:
         # 4: CV 지역 방사선감시기(GT-RE001, 002, 132, 133, 220)의 지시치증가 및 경보
         procedure_dict['23_01'][3]['MV1'].append(mem['DCTMT']['Val'])
         if len(procedure_dict['23_01'][3]['MV1']) == 5:
-            procedure_dict['23_01'][3]['Val'] = mem['DCTMT']['Val']
-            procedure_dict['23_01'][4]['Val'] = mem['DCTMT']['Val']
-            procedure_dict['23_01'][3]['Setpoint'] = sum(procedure_dict['23_01'][3]['MV1']) / 5
-            procedure_dict['23_01'][4]['Setpoint'] = sum(procedure_dict['23_01'][3]['MV1']) / 5
+            procedure_dict['23_01'][3]['Val'] = round(mem['DCTMT']['Val'], 2)
+            procedure_dict['23_01'][4]['Val'] = round(mem['DCTMT']['Val'], 2)
+            procedure_dict['23_01'][3]['Setpoint'] = round(sum(procedure_dict['23_01'][3]['MV1']) / 5, 2)
+            procedure_dict['23_01'][4]['Setpoint'] = round(sum(procedure_dict['23_01'][3]['MV1']) / 5, 2)
             procedure_dict['23_01'][3]['Unit'] = 'mRem/Hr'
             procedure_dict['23_01'][4]['Unit'] = 'mRem/Hr'
             if mem['DCTMT']['Val'] > (sum(procedure_dict['23_01'][3]['MV1']) / 5) or mem['DCTMT']['Val'] > mem['CRADHI']['Val']:
                 procedure_dict['23_01'][3]['Auto'] = True
                 procedure_dict['23_01'][4]['Auto'] = True
         # 5: CV 온도, 습도, 압력이 정상보다 높게 지시
-        procedure_dict['23_01'][5]['Val'] = mem['UCTMT']['Val']
-        procedure_dict['23_01'][5]['Setpoint'] = 0 #todo 정상 상태 평균 값 기재
+        procedure_dict['23_01'][5]['Val'] = round(mem['UCTMT']['Val'], 2)
+        procedure_dict['23_01'][5]['Setpoint'] = 34.7
         procedure_dict['23_01'][5]['Unit'] = '℃'
-        if mem['UCTMT']['Val'] > 0 or mem['PCTMT']['Val'] > 0 or mem['HUCTMT']['Val'] > 0:
+        if mem['UCTMT']['Val'] > 34.7 or mem['PCTMT']['Val'] > 0.25 or mem['HUCTMT']['Val'] > 1.0:
             procedure_dict['23_01'][5]['Auto'] = True
         # 6: CV Sump 수위 증가 및 배수조 펌프의 기동횟수 증가
         procedure_dict['23_01'][6]['MV1'].append(mem['ZSUMP']['Val'])
         if len(procedure_dict['23_01'][6]['MV1']) == 5:
-            procedure_dict['23_01'][6]['Val'] = mem['ZSUMP']['Val']
-            procedure_dict['23_01'][6]['Setpoint'] = sum(procedure_dict['23_01'][6]['MV1']) / 5
+            procedure_dict['23_01'][6]['Val'] = round(mem['ZSUMP']['Val'], 2)
+            procedure_dict['23_01'][6]['Setpoint'] = round(sum(procedure_dict['23_01'][6]['MV1']) / 5, 2)
             procedure_dict['23_01'][6]['Unit'] = 'm'
             if mem['ZSUMP']['Val'] > (sum(procedure_dict['23_01'][6]['MV1']) / 5):
                 procedure_dict['23_01'][6]['Auto'] = True
@@ -221,24 +221,24 @@ class ProcedureDB:
         procedure_dict['23_06'][0]['MV1'].append(mem['ZINST63']['Val'] / 100)
         procedure_dict['23_06'][0]['MV2'].append(mem['PPRZN']['Val'])
         if len(procedure_dict['23_06'][0]['MV1']) == 5:
-            procedure_dict['23_06'][0]['Val'] = mem['ZINST63']['Val'] / 100
-            procedure_dict['23_06'][0]['Setpoint'] = sum(procedure_dict['23_06'][0]['MV1']) / 5
+            procedure_dict['23_06'][0]['Val'] = round(mem['ZINST63']['Val'] / 100, 2)
+            procedure_dict['23_06'][0]['Setpoint'] = round(sum(procedure_dict['23_06'][0]['MV1']) / 5, 2)
             procedure_dict['23_06'][0]['Unit'] = '%'
             if mem['ZINST63']['Val'] / 100 < (sum(procedure_dict['23_06'][0]['MV1']) / 5) or mem['PPRZN']['Val'] < (sum(procedure_dict['23_06'][0]['MV2']) / 5):
                 procedure_dict['23_06'][0]['Auto'] = True
         # 1: VCT 수위 감소 또는 보충횟수 증가
         procedure_dict['23_06'][1]['MV1'].append(mem['ZVCT']['Val'])
         if len(procedure_dict['23_06'][1]['MV1']) == 5:
-            procedure_dict['23_06'][1]['Val'] = mem['ZVCT']['Val']
-            procedure_dict['23_06'][1]['Setpoint'] = sum(procedure_dict['23_06'][1]['MV1']) / 5
+            procedure_dict['23_06'][1]['Val'] = round(mem['ZVCT']['Val'], 2)
+            procedure_dict['23_06'][1]['Setpoint'] = round(sum(procedure_dict['23_06'][1]['MV1']) / 5, 2)
             procedure_dict['23_06'][1]['Unit'] = '%'
             if mem['ZVCT']['Val'] < (sum(procedure_dict['23_06'][1]['MV1']) / 5):
                 procedure_dict['23_06'][1]['Auto'] = True
         # 2: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
         procedure_dict['23_06'][2]['MV1'].append(mem['WCHGNO']['Val'])
         if len(procedure_dict['23_06'][2]['MV1']) == 5:
-            procedure_dict['23_06'][2]['Val'] = mem['WCHGNO']['Val']
-            procedure_dict['23_06'][2]['Setpoint'] = sum(procedure_dict['23_06'][2]['MV1']) / 5
+            procedure_dict['23_06'][2]['Val'] = round(mem['WCHGNO']['Val'], 2)
+            procedure_dict['23_06'][2]['Setpoint'] = round(sum(procedure_dict['23_06'][2]['MV1']) / 5, 2)
             procedure_dict['23_06'][2]['Unit'] = 'kg/sec'
             if mem['WCHGNO']['Val'] > (sum(procedure_dict['23_06'][2]['MV1']) / 5):
                 procedure_dict['23_06'][2]['Auto'] = True
