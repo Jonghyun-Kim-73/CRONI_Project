@@ -1,26 +1,36 @@
+
 ab_pro = {
     'Normal: 정상': {
         '긴급조치': False, '방사선': False,
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '정상',
+                'Des': '정상 :    ',
             },
         },
         '경보 및 증상': {
             0: {
-                'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.1',
-                'Des': '정상',
+                'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '2.1',
+                'Des': '정상 :',
             }
         },
         '자동 동작 사항': {
-
+            0: {
+                'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '3.1',
+                'Des': '정상 :',
+            }
         },
         '긴급 조치 사항': {
-
+            0: {
+                'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '4.1',
+                'Des': '정상 : ',
+            }
         },
         '후속 조치 사항': {
-
+            0: {
+                'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '5.1',
+                'Des': '정상 : ',
+            }
         },
     },
     'Ab15_08: 증기발생기 수위 채널 고장 (고)': {
