@@ -22,7 +22,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 SG 수위제어계통의 제어 채널 비정상 발생 시 신속한 조치를 통해 SG 수위를 복구하기 위한 절차임.',
             },
         },
         '경보 및 증상': {
@@ -173,7 +173,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 충전펌프의 충전용량으로 가압기의 수위를 유지할 수 있는 범위 내에서 원자로냉각재계통 누설고장 발생시 해당 증상, 경보, 자동동작사항 및 조치사항을 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -470,7 +470,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 가압기(PZR) 압력 제어계통 및 기기의 비정상 증상, 조치사항과 운전 절차를 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -577,7 +577,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 가압기(PZR) 압력 제어계통 및 기기의 비정상 증상, 조치사항과 운전 절차를 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -660,7 +660,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 가압기 수위제어계통 및 기기의 비정상시 증상, 자동 동작 사항, 조치 사항 및 운전 절차를 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -877,7 +877,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 SG 수위제어계통의 제어 채널 비정상 발생 시 신속한 조치를 통해 SG 수위를 복구하기 위한 절차이다.',
             },
         },
         '경보 및 증상': {
@@ -1024,7 +1024,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 발전소 운전중 제어봉 제어계통이 아래와 같이 비정상적일 때의 증상 및 조치사항에 대하여 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -1274,7 +1274,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 발전소 운전중 제어봉 제어계통이 아래와 같이 비정상적일 때의 증상 및 조치사항에 대하여 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -1371,7 +1371,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 가압기(PZR) 압력 제어계통 및 기기의 비정상 증상, 조치사항과 운전 절차를 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -1471,7 +1471,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 가압기 압력방출밸브(PORV) 및 안전밸브(Safety Valve)의 누설 및 고장 발생시의 증상 및 조치사항을 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -1583,7 +1583,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 가압기(PZR) 압력 제어계통 및 기기의 비정상 증상, 조치사항과 운전 절차를 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -1737,7 +1737,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 정상운전 중 유출수 관로 고장으로 인하여 일어나는 계통의 과도 상태를 기술하고, 그 증상을 확실히 감지하여 신속하고 적절한 조치를 취할 수 있도록 하는데 그 목적이 있다.',
             },
         },
         '경보 및 증상': {
@@ -1881,7 +1881,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 정상운전 중 충전수 관로 및 그 부속계통의 고장으로 인하여 일어나는 계통의 과도상태를 기술하고, 그 증상을 확실히 감지하여 신속하고 적절한 조치를 취할 수 있도록 하는데 그 목적이 있다.',
             },
         },
         '경보 및 증상': {
@@ -2079,7 +2079,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 충전펌프의 충전용량으로 가압기의 수위를 유지할 수 있는 범위 내에서 원자로냉각재계통 누설고장 발생시 해당 증상, 경보, 자동동작사항 및 조치사항을 기술한다.',
             },
         },
         '경보 및 증상': {
@@ -2254,7 +2254,7 @@ ab_pro = {
         '목적': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
-                'Des': '...',
+                'Des': '목적 : 이 절차서는 충전펌프의 충전용량으로 가압기의 수위를 유지할 수 있는 범위 내에서 원자로냉각재계통 누설고장 발생시 해당 증상, 경보, 자동동작사항 및 조치사항을 기술한다.',
             },
         },
         '경보 및 증상': {

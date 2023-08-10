@@ -223,7 +223,7 @@ class ProcedureSequenceTitleBTN(ABCPushButton):
         self.setFixedSize(264, 40)
         self.setText(title_num + title)
         self.blink = False
-        self.setProperty('Blink', 'False')
+        self.setProperty('Blink', 'True')
         self.clicked.connect(self.is_clicked)
         self.title = title
 
@@ -295,7 +295,12 @@ class ProcedureSequenceTitleCond(ABCLabel):
             self.setProperty('Condition', f'{SequenceTitleCondHis[self.title]}')
         elif SequenceTitleCondHis[self.title] == 2:
             self.setProperty('Condition', '0' if self.blink else '2')
-            self.blink = True
+            self.blink = False  # 병행 수정; 기존 한번 깜빡이고 꺼짐 -> 블링크 제거, 계속 표시
+            SequenceTitleCondHis[self.title] == 4
+        elif SequenceTitleCondHis[self.title] == 4:
+            self.setProperty('Condition', '0' if self.blink else '2')
+            self.blink = False  # 병행 수정; 기존 한번 깜빡이고 꺼짐 -> 블링크 제거, 계속 표시
+            SequenceTitleCondHis[self.title] == 2
             SequenceTitleCondHis[self.title] = 4
         elif SequenceTitleCondHis[self.title] == 4:
             self.setProperty('Condition', '0' if self.blink else '2')
@@ -406,6 +411,9 @@ class Procedure_Content(ABCWidget):
         if Nub[0] == '0': # '0.0.0' 에서 첫번째가 '0' 인 경우 주의사항 또는 참고사항
             # 주의 사항 및 참고 사항
             lay.addWidget(Procedure_Content_EM(self, Des, Max_FixedWidth))
+        elif Nub[0] == '1': # '0.0.0' 에서 첫번째가 '1' 인 경우 목적
+            # 목적
+            lay.addWidget(Procedure_Content_OB(self, Des, Max_FixedWidth))
         else:
             # 일반적 내용
             content1_lay.addWidget(Procedure_Content_Nub(self, Nub))
@@ -441,6 +449,28 @@ class Procedure_Content_EM(ABCLabel):
 
         self.label_title.setText("%s" % Des[:4])
         self.label_content.setText("%s" % Des[7:])
+
+# 목적 label
+class Procedure_Content_OB(ABCLabel):
+    def __init__(self, parent, Des, Nub_len):
+        super(Procedure_Content_OB, self).__init__(parent)
+        self.lay = QVBoxLayout(self)
+        self.label_title = QLabel("")
+        self.label_content = QLabel("")
+        self.label_title.setAlignment(Qt.AlignCenter)
+        # self.setObjectName("Notice")
+        self.label_title.setObjectName("label_title")
+        self.label_content.setObjectName("label_content")
+        self.label_content.setWordWrap(True)
+        self.lay.addWidget(self.label_title)
+        self.lay.addWidget(self.label_content)
+        self.lay.addStretch(1)
+        self.setLayout(self.lay)
+        self.setFixedWidth(Nub_len)
+
+        self.label_title.setText("%s" % Des[:2])
+        self.label_content.setText("%s" % Des[5:])
+
 class Procedure_Content_Basic(ABCLabel):
     def __init__(self, parent, Des, Nub_len):
         super(Procedure_Content_Basic, self).__init__(parent)

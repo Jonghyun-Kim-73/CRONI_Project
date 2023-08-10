@@ -488,6 +488,10 @@ QssMain = ''.join([
     builder('QLabel', 'Procedure_Content_EM', [f'background-color: {LightWhite};', f'border:1px solid {DarkRed};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
     builder('QLabel', 'Procedure_Content_EM, QLabel#label_title', [f'color: {DarkRed};', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
     builder('QLabel', 'Procedure_Content_EM, QLabel#label_content', [f'color: {Black};', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'Procedure_Content_OB', [f'background-color: {LightWhite};', f'border:1px solid {Black};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'Procedure_Content_OB, QLabel#label_title', [f'color: {Black};', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+    builder('QLabel', 'Procedure_Content_OB, QLabel#label_content', [f'color: {Black};', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
+
     builder('QLabel', 'Procedure_Content_Basic', [f'background-color: {LightWhite};', 'border:0px;', 'border-radius: 5px;', 'padding-left:5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
     builder('QPushButton', 'Procedure_Content_Check', [f'background-color: {LightWhite};', f'border:1px solid {DarkGray};', 'border-radius: 5px;']),
     builder('QPushButton', 'ProcedureComplete', [f'background-color: {LightWhite};', 'border-radius: 5px;', f'font-family: {Global_font};', f'font-size: {Global_font_size};' 'font-weight: bold;']),
