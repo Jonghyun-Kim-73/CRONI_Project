@@ -172,6 +172,8 @@ class ProcedureDB:
             procedure_dict['23_01'][0]['Unit'] = '%'
             if mem['ZINST63']['Val']/100 < (sum(procedure_dict['23_01'][0]['MV1'])/5) or mem['PPRZN']['Val'] < (sum(procedure_dict['23_01'][0]['MV2'])/5):
                 procedure_dict['23_01'][0]['Auto'] = True
+            else:
+                procedure_dict['23_01'][0]['Auto'] = False
         # 1: VCT 수위 감소 또는 보충횟수 증가
         procedure_dict['23_01'][1]['MV1'].append(mem['ZVCT']['Val'])
         if len(procedure_dict['23_01'][1]['MV1']) == 5:
@@ -180,6 +182,8 @@ class ProcedureDB:
             procedure_dict['23_01'][1]['Unit'] = '%'
             if mem['ZVCT']['Val'] < (sum(procedure_dict['23_01'][1]['MV1'])/5):
                 procedure_dict['23_01'][1]['Auto'] = True
+            else:
+                procedure_dict['23_01'][1]['Auto'] = False
         # 2: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
         procedure_dict['23_01'][2]['MV1'].append(mem['WCHGNO']['Val'])
         if len(procedure_dict['23_01'][2]['MV1']) == 5:
@@ -188,6 +192,8 @@ class ProcedureDB:
             procedure_dict['23_01'][2]['Unit'] = 'kg/sec'
             if mem['WCHGNO']['Val'] > (sum(procedure_dict['23_01'][2]['MV1']) / 5):
                 procedure_dict['23_01'][2]['Auto'] = True
+            else:
+                procedure_dict['23_01'][2]['Auto'] = False
         # 3: CV 대기 방사선감시기(GT-RE211) 또는 격납용기 배기계통 방사선감시기(GT-RE119)의 지시치 증가 및 경보
         # 4: CV 지역 방사선감시기(GT-RE001, 002, 132, 133, 220)의 지시치증가 및 경보
         procedure_dict['23_01'][3]['MV1'].append(mem['DCTMT']['Val'])
@@ -201,12 +207,17 @@ class ProcedureDB:
             if mem['DCTMT']['Val'] > (sum(procedure_dict['23_01'][3]['MV1']) / 5) or mem['DCTMT']['Val'] > mem['CRADHI']['Val']:
                 procedure_dict['23_01'][3]['Auto'] = True
                 procedure_dict['23_01'][4]['Auto'] = True
+            else:
+                procedure_dict['23_01'][3]['Auto'] = False
+                procedure_dict['23_01'][4]['Auto'] = False
         # 5: CV 온도, 습도, 압력이 정상보다 높게 지시
         procedure_dict['23_01'][5]['Val'] = round(mem['UCTMT']['Val'], 2)
         procedure_dict['23_01'][5]['Setpoint'] = 34.7
         procedure_dict['23_01'][5]['Unit'] = '℃'
         if mem['UCTMT']['Val'] > 34.7 or mem['PCTMT']['Val'] > 0.25 or mem['HUCTMT']['Val'] > 1.0:
             procedure_dict['23_01'][5]['Auto'] = True
+        else:
+            procedure_dict['23_01'][5]['Auto'] = False
         # 6: CV Sump 수위 증가 및 배수조 펌프의 기동횟수 증가
         procedure_dict['23_01'][6]['MV1'].append(mem['ZSUMP']['Val'])
         if len(procedure_dict['23_01'][6]['MV1']) == 5:
@@ -215,6 +226,8 @@ class ProcedureDB:
             procedure_dict['23_01'][6]['Unit'] = 'm'
             if mem['ZSUMP']['Val'] > (sum(procedure_dict['23_01'][6]['MV1']) / 5):
                 procedure_dict['23_01'][6]['Auto'] = True
+            else:
+                procedure_dict['23_01'][6]['Auto'] = False
 
         # Ab23_06: 증기발생기 전열관 누설
         # 0: PZR 수위 또는 압력 감소 - 이동평균 활용
@@ -226,6 +239,8 @@ class ProcedureDB:
             procedure_dict['23_06'][0]['Unit'] = '%'
             if mem['ZINST63']['Val'] / 100 < (sum(procedure_dict['23_06'][0]['MV1']) / 5) or mem['PPRZN']['Val'] < (sum(procedure_dict['23_06'][0]['MV2']) / 5):
                 procedure_dict['23_06'][0]['Auto'] = True
+            else:
+                procedure_dict['23_06'][0]['Auto'] = False
         # 1: VCT 수위 감소 또는 보충횟수 증가
         procedure_dict['23_06'][1]['MV1'].append(mem['ZVCT']['Val'])
         if len(procedure_dict['23_06'][1]['MV1']) == 5:
@@ -234,6 +249,8 @@ class ProcedureDB:
             procedure_dict['23_06'][1]['Unit'] = '%'
             if mem['ZVCT']['Val'] < (sum(procedure_dict['23_06'][1]['MV1']) / 5):
                 procedure_dict['23_06'][1]['Auto'] = True
+            else:
+                procedure_dict['23_06'][1]['Auto'] = False
         # 2: 발전소 제반요소의 변동이 없는 상태에서 충전유량의 증가
         procedure_dict['23_06'][2]['MV1'].append(mem['WCHGNO']['Val'])
         if len(procedure_dict['23_06'][2]['MV1']) == 5:
@@ -242,10 +259,82 @@ class ProcedureDB:
             procedure_dict['23_06'][2]['Unit'] = 'kg/sec'
             if mem['WCHGNO']['Val'] > (sum(procedure_dict['23_06'][2]['MV1']) / 5):
                 procedure_dict['23_06'][2]['Auto'] = True
+            else:
+                procedure_dict['23_06'][2]['Auto'] = False
         # 3: 복수기 공기추출계통 방사선감시기(CG-RE004/RE013)의 고방사선경보
+        procedure_dict['23_06'][3]['Val'] = round(mem['DSECON']['Val'], 2)
+        procedure_dict['23_06'][3]['Setpoint'] = 3900
+        procedure_dict['23_06'][3]['Unit'] = 'mRem/hr'
+        if mem['DSECON']['Val'] > 3900:
+            procedure_dict['23_06'][3]['Auto'] = True
+        else:
+            procedure_dict['23_06'][3]['Auto'] = False
         # 4: 증기발생기 취출수계통 및 시료채취계통 방사선감지기(BM-RE410,RC-RE019/029 /039)의 고방사선경보
+        procedure_dict['23_06'][4]['Val'] = round(mem['DSECON']['Val'], 2)
+        procedure_dict['23_06'][4]['Setpoint'] = 3900
+        procedure_dict['23_06'][4]['Unit'] = 'mRem/hr'
+        if mem['DSECON']['Val'] > 3900:
+            procedure_dict['23_06'][4]['Auto'] = True
+        else:
+            procedure_dict['23_06'][4]['Auto'] = False
         # 5: 증기발생기의 급수 및 증기유량 편차 및 경보 발생
+        procedure_dict['23_06'][5]['Val'] = round(mem['WSTM1']['Val'] - mem['WFWLN1']['Val'], 2)
+        procedure_dict['23_06'][5]['Setpoint'] = round(mem['WSTM1']['Val'] * 0.1, 2)
+        procedure_dict['23_06'][5]['Unit'] = 'kg/sec'
+        if mem['WSTM1']['Val'] - mem['WFWLN1']['Val'] > mem['WSTM1']['Val'] * 0.1:
+            procedure_dict['23_06'][5]['Auto'] = True
+        else:
+            procedure_dict['23_06'][5]['Auto'] = False
         # 6: 주증기관 방사선감지기(AB-RE801A/801B/801C)의 고방사선경보
+        procedure_dict['23_06'][6]['Val'] = round(mem['DSECON']['Val'], 2)
+        procedure_dict['23_06'][6]['Setpoint'] = 3900
+        procedure_dict['23_06'][6]['Unit'] = 'mRem/hr'
+        if mem['DSECON']['Val'] > 3900:
+            procedure_dict['23_06'][6]['Auto'] = True
+        else:
+            procedure_dict['23_06'][6]['Auto'] = False
+
+        # Ab21_02: 가압기 압력 채널 고장 '저'
+        # 0: PZR ‘저’ 압력 지시(BB-PI444)
+        procedure_dict['21_02'][0]['Val'] = round(mem['PPRZN']['Val'] / 100, 2)
+        procedure_dict['21_02'][0]['Setpoint'] = 124000
+        procedure_dict['21_02'][0]['Unit'] = 'kg/cm²'
+        if mem['PPRZN']['Val'] < 12400000:
+            procedure_dict['21_02'][0]['Auto'] = True
+        else:
+            procedure_dict['21_02'][0]['Auto'] = False
+        # 1: "PZR PRESS LO/BACKUP HEATERS ON" 경보 발생(155.4㎏/㎠) 및 PZR 보조전열기 모두 켜짐 지시
+        procedure_dict['21_02'][1]['Val'] = mem['KLAMPO312']['Val']
+        procedure_dict['21_02'][1]['Setpoint'] = 0
+        procedure_dict['21_02'][1]['Unit'] = ''
+        if mem['KLAMPO312']['Val'] == 1:
+            procedure_dict['21_02'][1]['Auto'] = True
+        else:
+            procedure_dict['21_02'][1]['Auto'] = False
+        # 2: "PZR PRESS HIGH"(BB-PT444B, 445) 경보 발생(162.4㎏/㎠) 및 PZR "고" 압력 지시(BB-PI445, 455, 456, 457)
+        procedure_dict['21_02'][2]['Val'] = mem['KLAMPO307']['Val']
+        procedure_dict['21_02'][2]['Setpoint'] = 0
+        procedure_dict['21_02'][2]['Unit'] = ''
+        if mem['KLAMPO307']['Val'] == 1:
+            procedure_dict['21_02'][2]['Auto'] = True
+        else:
+            procedure_dict['21_02'][2]['Auto'] = False
+        # 3: PZR PORV(BB-PV444B, 445A, 445B) 열림 지시 및 경보 발생(164.2㎏/㎠)
+        procedure_dict['21_02'][3]['Val'] = round(mem['BPORV']['Val'], 2)
+        procedure_dict['21_02'][3]['Setpoint'] = 0
+        procedure_dict['21_02'][3]['Unit'] = '%'
+        if mem['BPORV']['Val'] > 0:
+            procedure_dict['21_02'][3]['Auto'] = True
+        else:
+            procedure_dict['21_02'][3]['Auto'] = False
+        # 4: 실제 압력 감소로 PZR PORV(BB-PV444B, 445A, 445B) 닫힘
+        procedure_dict['21_02'][4]['Val'] = round(mem['BPORV']['Val'], 2)
+        procedure_dict['21_02'][4]['Setpoint'] = 0
+        procedure_dict['21_02'][4]['Unit'] = '%'
+        if mem['BPORV']['Val'] == 0:
+            procedure_dict['21_02'][4]['Auto'] = True
+        else:
+            procedure_dict['21_02'][4]['Auto'] = False
         return procedure_dict
 
     def get_on_procedures(self, name):
