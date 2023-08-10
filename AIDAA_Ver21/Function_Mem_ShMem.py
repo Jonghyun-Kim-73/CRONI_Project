@@ -157,6 +157,7 @@ class ShMem:
         for name_ in ab_pro.keys():
             if 'Ab' in name_:
                 out.append(name_)
+        out.append('Normal: 정상')
         return out
 
     def get_pro_urgent_act(self, procedure_name):
