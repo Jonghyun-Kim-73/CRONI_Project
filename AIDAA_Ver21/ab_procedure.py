@@ -1,6 +1,12 @@
 ab_pro = {
     'Normal: 정상': {
         '긴급조치': False, '방사선': False,
+        '목적': {
+            0: {
+                'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.0',
+                'Des': '정상',
+            },
+        },
         '경보 및 증상': {
             0: {
                 'SymptomActivate': False, 'ManClick': False, 'AutoClick': False, 'Nub': '1.1',

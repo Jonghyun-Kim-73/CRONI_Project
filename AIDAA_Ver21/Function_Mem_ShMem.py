@@ -297,8 +297,8 @@ class InterfaceMem:
                               ['Ab59_02: 충전수 유량조절밸브 후단누설', '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', '05/14', '1.55%'],
                               ['Ab60_02: 재생열교환기 전단부위 파열', '05/15', '0.76%']],
                        'Train': 0,
-                       'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'],
-                               ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
+                       'XAI': [['Charging Flow Control Valve Position', '41.89%'], ['Letdown Heat Exchanger Outlet Flow', '16.77%'], ['PV145 Valve Position', '15.46%'],
+                               ['PRZ Water Level', '14.02%'], ['SG1 Level (Wide)', '2.36%']],
                        'System': [['화학 및 체적 제어계통', '0', '0%'], ['원자로 냉각재 계통', '0', '0%'], ['주증기 계통', '0', '0%'],
                                   ['제어봉 제어 계통', '1', '3%'], ['잔열 제거 계통', '1', '3%']],
                        'Selected_title': []}  # 정지냉각계통
@@ -329,6 +329,7 @@ class InterfaceMem:
         self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
         self.system_result = pd.read_csv('./AI/System_Diagnosis_result.csv')
         self.prediction_result = pd.read_csv('./AI/Prediction_result.csv')
+        self.system_XAI_result = pd.read_csv('./AI/System_XAI_result.csv')
         # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
         # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')
@@ -519,5 +520,15 @@ class InterfaceMem:
         for i in range(3):
             self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)%301].values[0]
 
+    def get_system_XAI_result(self):
+        XAI_val = {0: 'Charging Flow Control Valve Position', 1: 'Letdown Heat Exchanger Outlet Flow', 2: 'PV145 Valve Position',
+                    3: 'PRZ Water Level (Channel Value)', 4: 'SG1 Level (Wide)'}
+        for i in range(5):
+            self.dis_AI['XAI'][i][0] = XAI_val[i]
+            self.dis_AI['XAI'][i][-1] = self.system_XAI_result[f'{i}'][self.system_XAI_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)%301].values[0]
+
     def get_prediction_result(self, id, time):
-        return np.array([self.prediction_result[id][self.prediction_result['Time']==i].values[0] for i in time])
+        try:
+            return np.array([self.prediction_result[id][self.prediction_result['Time']==int(i%73401)].values[0] for i in time])
+        except:
+            return np.array([30]*len(time))

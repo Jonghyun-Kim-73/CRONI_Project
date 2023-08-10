@@ -455,6 +455,7 @@ class ProcedureCheckTable(ABCTableWidget):
         self.setSelectionBehavior(QTableView.SelectRows)    # 테이블 row click
         self.setSelectionMode(QAbstractItemView.SingleSelection)
 
+        # self.column_labels = [(' 비정상 절차서:', 604), ('Value', 93), ('Set-point', 142), ('Unit', 77)]
         self.column_labels = [(' 비정상 절차서:', 604), ('Value', 93), ('Set-point', 142), ('Unit', 77)]
         self.setColumnCount(len(self.column_labels))
         col_names = []
@@ -530,6 +531,8 @@ class ProcedureCheckTable(ABCTableWidget):
 
 
     def timerEvent(self, event: QTimerEvent) -> None:
+        # if int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) > 120: # 해당 부분에서 특정 시점 고려 (Train / Untrain)
+        #     self.inmem.ShMem.change_para_val('iFixTrain', 2)
         if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
             selected_indexes = self.inmem.widget_ids['DiagnosisProcedureTable'].selectedIndexes()
             self.previously_alarm = [alarm_name for alarm_name in self.inmem.ShMem.get_on_alarms()]
