@@ -322,13 +322,13 @@ class InterfaceMem:
         self.access_procedure = []
 
         # AI Part --------------------------------------------------------------------------------------------------- # 시연용, tensor 안쓰는 진단, XAI 만 들어가있음_from 지훈팍
-        self.diagnosis_para = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
-        self.diagnosis_para_des = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
-        self.diagnosis_sclaer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
-        self.diagnosis_model = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
-        self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
-        self.system_result = pd.read_csv('./AI/System_Diagnosis_result.csv')
-        self.prediction_result = pd.read_csv('./AI/Prediction_result.csv')
+        self.diagnosis_para = pd.read_csv('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
+        self.diagnosis_para_des = pd.read_csv('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
+        self.diagnosis_sclaer = pickle.load(open('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
+        self.diagnosis_model = pickle.load(open('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
+        self.explainer = pickle.load(open('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
+        self.system_result = pd.read_csv('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/System_Diagnosis_result.csv')
+        self.prediction_result = pd.read_csv('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Prediction_result.csv')
         # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
         # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')
@@ -520,4 +520,7 @@ class InterfaceMem:
             self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)%301].values[0]
 
     def get_prediction_result(self, id, time):
-        return np.array([self.prediction_result[id][self.prediction_result['Time']==i].values[0] for i in time])
+        try: 
+            return np.array([self.prediction_result[id][self.prediction_result['Time']==i].values[0] for i in time])
+        except:
+            return np.array([1]*time)
