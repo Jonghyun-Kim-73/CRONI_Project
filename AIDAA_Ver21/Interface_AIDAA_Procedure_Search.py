@@ -708,6 +708,10 @@ class XAISearchTable(ABCTableWidget):
                 self.inmem.get_explainer_result(num=self.text_convert_num[self.inmem.dis_AI['Selected_title']])
                 [self.setCellWidget(i, 0, XAISearchItem(self, f" {self.inmem.dis_AI['XAI'][i][0]}", Qt.AlignmentFlag.AlignCenter, 'F')) for i in range(5)]
                 [self.setCellWidget(i, 1, XAISearchItem(self, f" {self.inmem.dis_AI['XAI'][i][1]}%", Qt.AlignmentFlag.AlignLeft, 'L')) for i in range(5)]
+            elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
+                self.inmem.get_system_XAI_result()
+                [self.setCellWidget(i, 0, XAISearchItem(self, f" {self.inmem.dis_AI['XAI'][i][0]}", Qt.AlignmentFlag.AlignCenter, 'F')) for i in range(5)]
+                [self.setCellWidget(i, 1, XAISearchItem(self, f" {self.inmem.dis_AI['XAI'][i][1]}%", Qt.AlignmentFlag.AlignLeft, 'L')) for i in range(5)]
         return super().timerEvent(event)
 class XAISearchItem(ABCLabel):
     def __init__(self, parent, text, alignment, pos, widget_name=''):

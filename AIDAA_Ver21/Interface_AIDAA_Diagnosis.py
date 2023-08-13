@@ -455,6 +455,7 @@ class ProcedureCheckTable(ABCTableWidget):
         self.setSelectionBehavior(QTableView.SelectRows)    # 테이블 row click
         self.setSelectionMode(QAbstractItemView.SingleSelection)
 
+        # self.column_labels = [(' 비정상 절차서:', 604), ('Value', 93), ('Set-point', 142), ('Unit', 77)]
         self.column_labels = [(' 비정상 절차서:', 604), ('Value', 93), ('Set-point', 142), ('Unit', 77)]
         self.setColumnCount(len(self.column_labels))
         col_names = []
@@ -502,8 +503,8 @@ class ProcedureCheckTable(ABCTableWidget):
                     if type(alarmdb[alarm_name]['Value']) == list:
                         for i in range(2):
                             self.insertRow(0)
-                            self.setCellWidget(0, 1, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Value"][i]}', False))  # Value
-                            self.setCellWidget(0, 2, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Setpoint"][i]}', False))  # Setpoint
+                            self.setCellWidget(0, 1, ProcedureCheckTableItem(self, f' {round(alarmdb[alarm_name]["Value"][i], 2)}', False))  # Value
+                            self.setCellWidget(0, 2, ProcedureCheckTableItem(self, f' {round(alarmdb[alarm_name]["Setpoint"][i], 2)}', False))  # Setpoint
                             self.setCellWidget(0, 3, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Unit"][i]}', False))  # Unit
                             if i == 1:
                                 self.setSpan(0, 0, 2, 1)
@@ -511,8 +512,8 @@ class ProcedureCheckTable(ABCTableWidget):
                     else:
                         self.insertRow(0)
                         self.setCellWidget(0, 0, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Des"]}', False)) # Description
-                        self.setCellWidget(0, 1, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Value"]}', False)) # Value
-                        self.setCellWidget(0, 2, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Setpoint"]}', False)) # Setpoint
+                        self.setCellWidget(0, 1, ProcedureCheckTableItem(self, f' {round(alarmdb[alarm_name]["Value"], 2)}', False)) # Value
+                        self.setCellWidget(0, 2, ProcedureCheckTableItem(self, f' {round(alarmdb[alarm_name]["Setpoint"], 2)}', False)) # Setpoint
                         self.setCellWidget(0, 3, ProcedureCheckTableItem(self, f' {alarmdb[alarm_name]["Unit"]}', False)) # Unit
                         # True: 페인팅 적용, False: 페인팅 미적용
 
@@ -530,6 +531,8 @@ class ProcedureCheckTable(ABCTableWidget):
 
 
     def timerEvent(self, event: QTimerEvent) -> None:
+        if int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) > 120: # 해당 부분에서 특정 시점 고려 (Train / Untrain)
+            self.inmem.ShMem.change_para_val('iFixTrain', 2)
         if self.inmem.dis_AI['Train'] == 0 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 1:# Train 상태
             selected_indexes = self.inmem.widget_ids['DiagnosisProcedureTable'].selectedIndexes()
             self.previously_alarm = [alarm_name for alarm_name in self.inmem.ShMem.get_on_alarms()]

@@ -157,6 +157,7 @@ class ShMem:
         for name_ in ab_pro.keys():
             if 'Ab' in name_:
                 out.append(name_)
+        out.append('Normal: 정상')
         return out
 
     def get_pro_urgent_act(self, procedure_name):
@@ -297,8 +298,8 @@ class InterfaceMem:
                               ['Ab59_02: 충전수 유량조절밸브 후단누설', '05/14', '5.52%'], ['Ab63_04: 제어봉 낙하', '05/14', '1.55%'],
                               ['Ab60_02: 재생열교환기 전단부위 파열', '05/15', '0.76%']],
                        'Train': 0,
-                       'XAI': [['PRZ Level', '82%'], ['PRZ Pressure', '5%'], ['Loop1 Flow', '1%'],
-                               ['Loop2 Flow', '0.5%'], ['Loop3 Flow', '0.3%']],
+                       'XAI': [['Charging Flow Control Valve Position', '41.89%'], ['Letdown Heat Exchanger Outlet Flow', '16.77%'], ['PV145 Valve Position', '15.46%'],
+                               ['PRZ Water Level', '14.02%'], ['SG1 Level (Wide)', '2.36%']],
                        'System': [['화학 및 체적 제어계통', '0', '0%'], ['원자로 냉각재 계통', '0', '0%'], ['주증기 계통', '0', '0%'],
                                   ['제어봉 제어 계통', '1', '3%'], ['잔열 제거 계통', '1', '3%']],
                        'Selected_title': []}  # 정지냉각계통
@@ -322,13 +323,13 @@ class InterfaceMem:
         self.access_procedure = []
 
         # AI Part --------------------------------------------------------------------------------------------------- # 시연용, tensor 안쓰는 진단, XAI 만 들어가있음_from 지훈팍
-        self.diagnosis_para = pd.read_csv('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
-        self.diagnosis_para_des = pd.read_csv('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
-        self.diagnosis_sclaer = pickle.load(open('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
-        self.diagnosis_model = pickle.load(open('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
-        self.explainer = pickle.load(open('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
-        self.system_result = pd.read_csv('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/System_Diagnosis_result.csv')
-        self.prediction_result = pd.read_csv('C:/Users/DaeilLee/Desktop/Code/CRONI_Project/AIDAA_Ver21/AI/Prediction_result.csv')
+        self.diagnosis_para = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['0'].tolist()
+        self.diagnosis_para_des = pd.read_csv('./AI/Abnormal_Scenario_Diagnosis_parameter.csv')['1'].tolist()
+        self.diagnosis_sclaer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Scaler.pkl', 'rb'))
+        self.diagnosis_model = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Model.h5', 'rb'))
+        self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
+        self.system_result = pd.read_csv('./AI/System_Diagnosis_result.csv')
+        self.prediction_result = pd.read_csv('./AI/Prediction_result.csv')
         # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
         # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')
@@ -519,8 +520,12 @@ class InterfaceMem:
         for i in range(3):
             self.dis_AI['System'][i][-1] = self.system_result[f'{i}'][self.system_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)%301].values[0]
 
+    def get_system_XAI_result(self):
+        XAI_val = {0: 'Charging Flow Control Valve Position', 1: 'Letdown Heat Exchanger Outlet Flow', 2: 'PV145 Valve Position',
+                    3: 'PRZ Water Level (Channel Value)', 4: 'SG1 Level (Wide)'}
+        for i in range(5):
+            self.dis_AI['XAI'][i][0] = XAI_val[i]
+            self.dis_AI['XAI'][i][-1] = self.system_XAI_result[f'{i}'][self.system_XAI_result['Time']==int(self.ShMem.get_para_val('KCNTOMS')/5)%301].values[0]
+
     def get_prediction_result(self, id, time):
-        try: 
-            return np.array([self.prediction_result[id][self.prediction_result['Time']==i].values[0] for i in time])
-        except:
-            return np.array([1]*time)
+        return np.array([self.prediction_result[id][self.prediction_result['Time']==i].values[0] for i in time])
