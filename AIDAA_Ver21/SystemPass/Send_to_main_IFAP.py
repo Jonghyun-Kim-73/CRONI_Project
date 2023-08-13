@@ -14,7 +14,7 @@ import time
 send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # 소켓 선언
 
 main_server_ip = '127.0.0.1'
-main_server_port = 7001
+main_server_port = 7003
 
 cns_time = 0 # 테스트 용. while 문을 10번 순회하였을 때, 메세지 전환용.
 while True:

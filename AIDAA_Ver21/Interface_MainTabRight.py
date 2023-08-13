@@ -66,7 +66,7 @@ class MainTabRightPreAbnormalW(ABCWidget):
         self.gotobtn.setDisabled(bool_)
         
     def timerEvent(self, a0: QTimerEvent) -> None:
-        self.w_contents.setText(f'Counter Test : {self.IFAP_msg}')
+        self.w_contents.setText(f'{self.IFAP_msg}')
         return super().timerEvent(a0)
 class MainTabRightPreAbnormalWTitle(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
@@ -87,15 +87,27 @@ class MainTabRightPreAbnormalWThread(QThread):
         self.receiver = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.receiver.bind(('127.0.0.1', 7003))
         self.receiver.settimeout(1.0)
-        self.counter = 0
+        
     def run(self) -> None:
         while True:
             try:
                 message, _ = self.receiver.recvfrom(1000)
+                get_txt = message.decode("utf-8")
+                
+                state1 = get_txt.split(',')[0]
+                info1 = get_txt.split(',')[1]
+                state2 = get_txt.split(',')[2]
+                info2 = get_txt.split(',')[3]
+                state3 = get_txt.split(',')[4]
+                info3 = get_txt.split(',')[5]
+                
+                if state1 == 'True':
+                    self.parent.IFAP_msg = f'진단결과 : {state1} - {info1}\n진단결과 : {state2} - {info2}\n진단결과 : {state3} - {info3}'
+                elif state1 == 'False':
+                    self.parent.IFAP_msg = 'IFAP 비활성 상태입니다.'
             except:
-                pass
-            self.counter += 1
-            self.parent.IFAP_msg = f'Counter {self.counter}'
+                self.parent.IFAP_msg = 'IFAP 비활성 상태입니다.'
+            # self.parent.IFAP_msg = f'Counter {self.counter}'
 class MainTabRightAbnormalW(ABCWidget):
     def __init__(self, parent):
         super(MainTabRightAbnormalW, self).__init__(parent)
