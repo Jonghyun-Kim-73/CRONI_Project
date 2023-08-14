@@ -18,7 +18,7 @@ main_server_port = 7003
 
 cns_time = 0 # 테스트 용. while 문을 10번 순회하였을 때, 메세지 전환용.
 while True:
-    if cns_time < 10:
+    if cns_time < 3:
         # 보내는 메세지 정의
         send_message = 'False,시스템 정상,False,-,False,-,'
         # 받는쪽에서는 메세지 상태(True 또는 False)와 정보(시스템 상태 string 값)을 구분하기 위해서 ',' 쉼표를 사용함.
@@ -28,7 +28,7 @@ while True:
         # MAIN으로 메세지를 보냄.
         send_socket.sendto(send_message.encode('utf-8'), (main_server_ip, main_server_port))
         print(f'IFAP에서 MAIN Server로 메세지[{send_message}]를 보냈습니다.')
-    elif cns_time == 10:
+    elif 3 <= cns_time < 20:
         # 보내는 쪽에서 사고나 사건이 발생하여 새로운 메세지를 보내주는 경우도 위의 보내주는 메세지와 동일함.
         send_message = 'True,이상 탐지,True,밸브 1번 고장,False,-,'
     

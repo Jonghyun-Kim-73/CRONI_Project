@@ -59,6 +59,7 @@ class MainTabRightPreAbnormalW(ABCWidget):
         self.UDP_thread = MainTabRightPreAbnormalWThread(self)
         self.UDP_thread.start()
         self.startTimer(600)
+        self.blick = False
         
     def diable_widget(self, bool_):
         self.w_title.setDisabled(bool_)
@@ -67,6 +68,17 @@ class MainTabRightPreAbnormalW(ABCWidget):
         
     def timerEvent(self, a0: QTimerEvent) -> None:
         self.w_contents.setText(f'{self.IFAP_msg}')
+        if self.gotobtn.isEnabled(): # True
+            if self.blick:
+                self.gotobtn.setStyleSheet('background-color: rgb(0, 176, 218);')  # 파란색
+                self.blick = False
+            else:
+                self.gotobtn.setStyleSheet('background-color: rgb(181, 181, 181);')  # 회색
+                self.blick = True
+        else:
+            self.gotobtn.setStyleSheet('background-color: rgb(181, 181, 181);')  # 회색
+            self.blick = False
+        
         return super().timerEvent(a0)
 class MainTabRightPreAbnormalWTitle(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
@@ -103,10 +115,13 @@ class MainTabRightPreAbnormalWThread(QThread):
                 
                 if state1 == 'True':
                     self.parent.IFAP_msg = f'진단결과 : {state1} - {info1}\n진단결과 : {state2} - {info2}\n진단결과 : {state3} - {info3}'
+                    self.parent.diable_widget(False)
                 elif state1 == 'False':
                     self.parent.IFAP_msg = 'IFAP 비활성 상태입니다.'
+                    self.parent.diable_widget(True)
             except:
                 self.parent.IFAP_msg = 'IFAP 비활성 상태입니다.'
+                self.parent.diable_widget(True)
             # self.parent.IFAP_msg = f'Counter {self.counter}'
 class MainTabRightAbnormalW(ABCWidget):
     def __init__(self, parent):
@@ -151,14 +166,18 @@ class MainTabRightAbnormalW(ABCWidget):
                 self.inmem.get_diagnosis_result()
                 self.w_contents.setText(f"진단 결과: {self.inmem.dis_AI['AI'][0][0]} \n"
                                         f"진단 정확도: {self.inmem.dis_AI['AI'][0][-1]}")
+                self.diable_widget(False)
             elif self.inmem.dis_AI['Train'] == 1 and self.inmem.ShMem.get_para_val('iFixTrain') == 0 or self.inmem.ShMem.get_para_val('iFixTrain') == 2:# Untrain 상태
                 self.inmem.get_system_result()
                 self.w_contents.setText(f"진단 결과: 화학 및 체적 제어계통 \n"
                                         f"진단 정확도: {self.inmem.dis_AI['System'][0][-1]}%")
+                self.diable_widget(False)
         elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
             self.w_contents.setText(f"AIDAA 비활성 상태입니다.")
+            self.diable_widget(True)
         else:
             self.w_contents.setText(f"AIDAA 비활성 상태입니다.")
+            self.diable_widget(True)
         return super().timerEvent(a0)
 class MainTabRightAbnormalWTitle(ABCLabel):
     def __init__(self, parent, text, widget_name=''):
@@ -223,8 +242,10 @@ class MainTabRightEmergencyW(ABCWidget):
     def timerEvent(self, a0: QTimerEvent) -> None:
         if self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
             self.w_contents.setText("EGIS 비활성 상태입니다.")
+            self.diable_widget(True)
         elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
             self.w_contents.setText(f"EGIS 활성 상태입니다.")
+            self.diable_widget(False)
         return super().timerEvent(a0)
 
 class MainTabRightEmergencyWTitle(ABCLabel):
