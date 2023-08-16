@@ -330,6 +330,7 @@ class InterfaceMem:
         self.explainer = pickle.load(open('./AI/Abnormal_Scenario_Diagnosis_Explainer.h5', 'rb'))
         self.system_result = pd.read_csv('./AI/System_Diagnosis_result.csv')
         self.prediction_result = pd.read_csv('./AI/Prediction_result.csv')
+        self.system_XAI_result = pd.read_csv('./AI/System_XAI_result.csv')
         # self.train_check_para = pd.read_csv('./AI/Final_parameter.csv')['0'].tolist()
         # self.train_check_model = load_model('./AI/Train_Untrain_epoch27_[0.00225299]_acc_[0.9724685967462512].h5', compile=False)
         print('인공지능 모델 로드 완료')

@@ -151,12 +151,12 @@ class Parameter_Graph(ABCWidget):
         self.ax1.spines['right'].set_visible(False)
         self.ax1.spines['left'].set_visible(False)
 
-        self.startTimer(1000)
+        # self.startTimer(1000)
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
         try: # Prediction을 눌러야 widget id에 이름이 등록됨.
             if self.inmem.widget_ids['AIDAAMainTopSystemName'].text() == 'Prediction':
-                tt = int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) - (int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) % 20)
+                tt = int(time_ / 5) - (int(time_ / 5) % 20)
                 if tt != 0:
                     # Short-Term Prediction
                     self.ax.cla()
@@ -266,139 +266,142 @@ class Parameter_Info(ABCWidget):
         self.startTimer(600)
 
     def timerEvent(self, a0: 'QTimerEvent') -> None:
-        if self.inmem.ShMem.get_para_val(f'iPreTrip{self.id}') == 1:
-            self.blink = not self.blink
+        time_ = self.inmem.ShMem.get_para_val('KCNTOMS')
+        trip_sig = self.inmem.ShMem.get_para_val('KLAMPO9')
+        
+        if time_ > 20 * 5:
+            self.inmem.ShMem.change_para_val(f'iPreTrip', 1)
+        elif trip_sig == 1:
+            self.inmem.ShMem.change_para_val(f'iPreTrip', 0)
         else:
-            self.blink = False
-        if self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-            self.inmem.ShMem.change_para_val('iFixTrip', 1)
+            self.inmem.ShMem.change_para_val(f'iPreTrip', 0)
+        
+        try: # Prediction을 눌러야 widget id에 이름이 등록됨.
+            if self.inmem.widget_ids['AIDAAMainTopSystemName'].text() == 'Prediction':
+                if self.inmem.ShMem.get_para_val(f'iPreTrip{self.id}') == 1:
+                    self.blink = not self.blink
+                else:
+                    self.blink = False
+                if trip_sig == 1:
+                    self.inmem.ShMem.change_para_val('iFixTrip', 1)
 
-        self.counter.append(int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5))
-        tt = int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) - (int(self.inmem.ShMem.get_para_val('KCNTOMS') / 5) % 20)
+                self.counter.append(int(time_ / 5))
+                tt = int(time_ / 5) - (int(time_ / 5) % 20)
 
-        if tt != 0:
-            if self.id == 1:
-                if len(np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 25, self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) > 109))[0]) == 0:
-                    self.inmem.widget_ids['Parameter_TripTime1'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime1'].setText(f"{np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 25, self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) > 109))[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0]+1 == self.counter[-1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                if tt != 0:
+                    if self.id == 1:
+                        if len(np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 25, self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) > 109))[0]) == 0:
+                            self.inmem.widget_ids['Parameter_TripTime1'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime1'].setText(f"{np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 25, self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) > 109))[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0]+1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
 
-            elif self.id == 2:
-                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>1.3)[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime2'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime2'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>1.3)[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                    elif self.id == 2:
+                        if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>1.3)[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime2'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime2'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>1.3)[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
 
-            elif self.id == 3:
-                if len(np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<136.78,self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>167.72))[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime3'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime3'].setText(f"{np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<136.78,self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>167.72))[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
-            elif self.id == 4:
-                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>92)[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime4'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime4'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>92)[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
-            elif self.id == 5:
-                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime5'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime5'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
-            elif self.id == 6:
-                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime6'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime6'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
-            elif self.id == 7:
-                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime7'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime7'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
-            elif self.id == 8:
-                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime8'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime8'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
-            elif self.id == 9:
-                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime9'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime9'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
-            elif self.id == 10:
-                if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
-                    self.inmem.widget_ids['Parameter_TripTime10'].setText('None')
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
-                else:
-                    self.inmem.widget_ids['Parameter_TripTime10'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
-                    self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
-                    if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[
-                        -1] and self.inmem.ShMem.get_para_val('KLAMPO9') == 0:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
-                    elif self.inmem.ShMem.get_para_val('KLAMPO9') == 1:
-                        self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
-
+                    elif self.id == 3:
+                        if len(np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<136.78,self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>167.72))[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime3'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime3'].setText(f"{np.where(np.logical_or(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<136.78,self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>167.72))[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                    elif self.id == 4:
+                        if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>92)[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime4'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime4'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))>92)[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                    elif self.id == 5:
+                        if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime5'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime5'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                    elif self.id == 6:
+                        if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime6'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime6'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                    elif self.id == 7:
+                        if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<90)[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime7'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime7'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 90)[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                    elif self.id == 8:
+                        if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime8'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime8'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                    elif self.id == 9:
+                        if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime9'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime9'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+                    elif self.id == 10:
+                        if len(np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300))<17)[0])==0:
+                            self.inmem.widget_ids['Parameter_TripTime10'].setText('None')
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 0)
+                        else:
+                            self.inmem.widget_ids['Parameter_TripTime10'].setText(f"{np.where(self.inmem.get_prediction_result(id=f'{self.id}', time=np.arange(18000 + tt * 5, 54300 + tt * 5, 300)) < 17)[0][0]} min")
+                            self.inmem.ShMem.change_para_val(f'iPreTrip{self.id}', 1)
+                            if len(self.counter) == 2 and self.counter[0] + 1 == self.counter[-1] and trip_sig == 0:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 1)
+                            elif trip_sig == 1:
+                                self.inmem.ShMem.change_para_val('iFixPreTrip', 0)
+        except: pass
         self.parameter_name_w.setProperty('Blink', 'True' if self.blink else 'False')
         self.parameter_triptime_w.setProperty('Blink', 'True' if self.blink else 'False')
         self.parameter_name_w.style().polish(self.parameter_name_w)
